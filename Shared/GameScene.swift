@@ -102,7 +102,7 @@ class GameScene: SKScene {
         
         cameraNode.position.y = player.position.y
         if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
-            let road = MVARoadGenerator.tiles(withHeight: 0.0)
+            let road = MVARoadNode.createWith(numberOfLanes: 3, height: self.size.height, andWidth: self.size.width)
             road.position.y = endOfWorld-10
             self.addChild(road)
             endOfWorld += road.size.height-10
