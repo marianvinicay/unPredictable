@@ -7,6 +7,9 @@
 //
 
 import SpriteKit
+import GameplayKit
+import UIKit
+
 #if os(watchOS)
     import WatchKit
     // <rdar://problem/26756207> SKColor typealias does not seem to be exposed on watchOS SpriteKit
@@ -15,55 +18,69 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    private var road: SKSpriteNode!
+    private var cameraNode: SKCameraNode!
+    internal var player: MVACar!
+    internal var bot: MVACar!
+    internal let gameLogic = MVAGameLogic()
+    private var endOfWorld: CGFloat = 0.0
     
-    fileprivate var label : SKLabelNode?
-    fileprivate var spinnyNode : SKShapeNode?
-
-    
-    class func newGameScene() -> GameScene {
+    class func newGameScene(withSize size: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
-        guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
+        //let scene = GameScene(size: size)
+        guard let scene = GameScene(fileNamed: "GameScene") else {
             print("Failed to load GameScene.sks")
             abort()
         }
-        
         // Set the scale mode to scale to fit the window
+        
+        //scene.cameraNode = SKCameraNode()
+        //scene.camera = scene.cameraNode
+        var lastPosition: CGFloat!
+        scene.enumerateChildNodes(withName: "road") { (node: SKNode, err: UnsafeMutablePointer<ObjCBool>) in
+            print(err)
+            lastPosition = (node.position.y+(node as! SKSpriteNode).size.height)
+        }
+        print("xy",lastPosition)
+        scene.endOfWorld = lastPosition
+        
         scene.scaleMode = .aspectFill
+        
+        scene.cameraNode = SKCameraNode()
+        scene.cameraNode.position.x = scene.frame.size.width/2
+        scene.camera = scene.cameraNode
+        let car = MVACar.create(withMindSet: .player)
+        car.position = CGPoint(x: scene.frame.width/2, y: 80)
+        scene.addChild(car)
+        car.zPosition = 1.0
+        let move = SKAction.move(by: CGVector(dx: 0.0, dy: 50), duration: 3.0)
+        car.run(SKAction.repeatForever(move))
+        scene.player = car
+        scene.gameLogic.currentLane = .other
+        
+        let bot = MVACar.create(withMindSet: .bot)
+        bot.zPosition = 1.0
+        bot.position = CGPoint(x: (scene.frame.width/2)-80, y: 69)
+        bot.run(SKAction.repeatForever(move))
+        scene.bot = bot
+        scene.addChild(bot)
         
         return scene
     }
     
+    func startAI() {
+        let goal = GKGoal(toInterceptAgent: player.agent, maxPredictionTime: 0.0)
+        //let avoid = GKGoal(toAvoidAgents: Array(decoys).map({$0.agent!}), maxPredictionTime: 5.0)
+        //let speed = GKGoal(toReachTargetSpeed: player.agent.velocity.y)
+        bot.agent.behavior = GKBehavior(goals: [goal], andWeights: [1.0])
+    }
+    
     func setUpScene() {
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
-        
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-        
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 4.0
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
+        #if os(iOS) || os(tvOS)
+            self.setupSwipes()
+        #elseif os(watchOS)
             
-            #if os(watchOS)
-                // For watch we just periodically create one of these and let it spin
-                // For other platforms we let user touch/mouse events create these
-                spinnyNode.position = CGPoint(x: 0.0, y: 0.0)
-                spinnyNode.strokeColor = SKColor.red
-                self.run(SKAction.repeatForever(SKAction.sequence([SKAction.wait(forDuration: 2.0),
-                                                                   SKAction.run({
-                                                                       let n = spinnyNode.copy() as! SKShapeNode
-                                                                       self.addChild(n)
-                                                                   })])))
-            #endif
-        }
+        #endif
     }
     
     #if os(watchOS)
@@ -75,49 +92,106 @@ class GameScene: SKScene {
         self.setUpScene()
     }
     #endif
-
-    func makeSpinny(at pos: CGPoint, color: SKColor) {
-        if let spinny = self.spinnyNode?.copy() as! SKShapeNode? {
-            spinny.position = pos
-            spinny.strokeColor = color
-            self.addChild(spinny)
-        }
-    }
     
+    private var lastUpdate = 0.0//Double
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        bot.agent.update(deltaTime: currentTime-lastUpdate)
+        player.agent.update(deltaTime: currentTime-lastUpdate)
+        lastUpdate = currentTime
+        
+        cameraNode.position.y = player.position.y
+        if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
+            let road = MVARoadGenerator.tiles(withHeight: 0.0)
+            road.position.y = endOfWorld-10
+            self.addChild(road)
+            endOfWorld += road.size.height-10
+        }
+        //enum!!!
+        enumerateChildNodes(withName: "road") { (node: SKNode, err: UnsafeMutablePointer<ObjCBool>) in
+            let roadPosition = node.position.y+(node as! SKSpriteNode).size.height
+            if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
+                print("remove")
+                node.removeFromParent()
+            }
+        }
     }
 }
 
 #if os(iOS) || os(tvOS)
 // Touch-based event handling
 extension GameScene {
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+    internal func setupSwipes() {
+        let right = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        right.direction = .right
+        let left = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        left.direction = .left
+        let up = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        up.direction = .up
+        let down = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        down.direction = .down
+        self.view?.addGestureRecognizer(right)
+        self.view?.addGestureRecognizer(left)
+        self.view?.addGestureRecognizer(up)
+        self.view?.addGestureRecognizer(down)
+    }
+    func handleSwipe(swipe: UISwipeGestureRecognizer) {
+        if swipe.direction == .up {
+            let boost = SKAction.moveBy(x: 0.0, y: 200.0, duration: 0.5)
+            self.player.run(boost)
+        } else if swipe.direction == .down {
+            startAI()
+            let slow = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.5)
+            self.player.run(slow)
+        } else {
+            switch gameLogic.currentLane! {
+            case .lastLeft:
+                if swipe.direction == .right {
+                    let rightLane = CGFloat(70)
+                    let moveRight = SKAction.moveBy(x: rightLane, y: 0.0, duration: 1.0)
+                    //gameLogic.currentLane = RoadLanes.Middle
+                    player.run(moveRight)
+                }
+            case .other:
+                if swipe.direction == .right {
+                    let rightLane = CGFloat(70)
+                    let moveRight = SKAction.moveBy(x: rightLane, y: 0.0, duration: 1.0)
+                    //gameLogic.currentLane = RoadLanes.Middle
+                    player.run(moveRight)
+                } else {
+                    let leftLane = CGFloat(-70)
+                    let moveLeft = SKAction.moveBy(x: leftLane, y: 0.0, duration: 1.0)
+                    //gameLogic.currentLane = RoadLanes.Left
+                    player.run(moveLeft)
+                }
+            case .lastRight:
+                if swipe.direction == .left {
+                    let leftLane = CGFloat(-70)
+                    let moveLeft = SKAction.moveBy(x: leftLane, y: 0.0, duration: 1.0)
+                    //gameLogic.currentLane = RoadLanes.Left
+                    player.run(moveLeft)
+                }
+            }
         }
-        
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeSpinny(at: t.location(in: self), color: SKColor.green)
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeSpinny(at: t.location(in: self), color: SKColor.blue)
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeSpinny(at: t.location(in: self), color: SKColor.red)
         }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches {
-            self.makeSpinny(at: t.location(in: self), color: SKColor.red)
         }
     }
     
@@ -130,18 +204,12 @@ extension GameScene {
 extension GameScene {
 
     override func mouseDown(with event: NSEvent) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
-        self.makeSpinny(at: event.location(in: self), color: SKColor.green)
     }
     
     override func mouseDragged(with event: NSEvent) {
-        self.makeSpinny(at: event.location(in: self), color: SKColor.blue)
     }
     
     override func mouseUp(with event: NSEvent) {
-        self.makeSpinny(at: event.location(in: self), color: SKColor.red)
     }
 
 }
