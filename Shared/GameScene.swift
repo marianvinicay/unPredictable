@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import GameplayKit
 import UIKit
 
 #if os(watchOS)
@@ -16,14 +15,24 @@ import UIKit
     typealias SKColor = UIColor
 #endif
 
-class GameScene: SKScene {
-    
-    private var road: SKSpriteNode!
-    private var cameraNode: SKCameraNode!
-    internal var player: MVACar!
-    internal var bot: MVACar!
-    internal let gameLogic = MVAGameLogic()
-    private var endOfWorld: CGFloat = 0.0
+enum MVAPhysicsCategory: UInt32 {
+    case car = 1
+    case remover = 2
+    case spawner = 3
+}
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    //internal ?? private ??
+    var road: MVARoadNode!
+    var lanes = [Int:CGFloat]()
+    var cameraNode: SKCameraNode!
+    var player: MVACar!
+    var bots /*Set<MVACar>*/ = [MVACar]()
+    let gameLogic = MVAGameLogic()
+    let intel = MVAMarvinAI()
+    var endOfWorld: CGFloat = 0.0
+    var remover: SKSpriteNode!
+    var spawner: MVACarSpawner!
     
     class func newGameScene(withSize size: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
@@ -36,13 +45,11 @@ class GameScene: SKScene {
         
         //scene.cameraNode = SKCameraNode()
         //scene.camera = scene.cameraNode
-        var lastPosition: CGFloat!
-        scene.enumerateChildNodes(withName: "road") { (node: SKNode, err: UnsafeMutablePointer<ObjCBool>) in
-            print(err)
-            lastPosition = (node.position.y+(node as! SKSpriteNode).size.height)
-        }
-        print("xy",lastPosition)
-        scene.endOfWorld = lastPosition
+        scene.road = MVARoadNode.createWith(numberOfLanes: 3, height: scene.size.height, andWidth: scene.size.width)
+        scene.road.position = CGPoint.zero
+        scene.endOfWorld = (scene.road.position.y+scene.road.size.height)
+        scene.lanes = scene.road.laneXCoordinate
+        scene.addChild(scene.road)
         
         scene.scaleMode = .aspectFill
         
@@ -50,29 +57,114 @@ class GameScene: SKScene {
         scene.cameraNode.position.x = scene.frame.size.width/2
         scene.camera = scene.cameraNode
         let car = MVACar.create(withMindSet: .player)
-        car.position = CGPoint(x: scene.frame.width/2, y: 80)
+        car.physicsBody?.categoryBitMask = 33
+        let lane = Int(arc4random_uniform(scene.road.numberOfLanes))+1
+        car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: 80)
+        car.currentLane = lane
         scene.addChild(car)
         car.zPosition = 1.0
-        let move = SKAction.move(by: CGVector(dx: 0.0, dy: 50), duration: 3.0)
-        car.run(SKAction.repeatForever(move))
+        //let move = SKAction.move(by: CGVector(dx: 0.0, dy: 50), duration: 3.0)
+        //car.run(SKAction.repeatForever(move))
+        scene.intel.entities.insert(car)
+        car.rules.append(.constantSpeed)
+        car.rules.append(.avoid)
+        car.pointsPerSecond = 150
+        car.ruleWeights.append(1)
+        car.color = UIColor.blue
         scene.player = car
-        scene.gameLogic.currentLane = .other
+        scene.gameLogic.currentLane = lane
         
-        let bot = MVACar.create(withMindSet: .bot)
-        bot.zPosition = 1.0
-        bot.position = CGPoint(x: (scene.frame.width/2)-80, y: 69)
-        bot.run(SKAction.repeatForever(move))
-        scene.bot = bot
-        scene.addChild(bot)
+        let spawn = SKAction.run {
+            //scene.spawnDecoy()
+            scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanes)
+        }
+        let wait = SKAction.wait(forDuration: 2.0)
+        scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])))
+        
+        //remover
+        let remover = SKSpriteNode(color: .purple, size: CGSize(width: scene.frame.width, height: 10.0))
+        remover.position.x = scene.frame.width/2
+        scene.addChild(remover)
+        scene.remover = remover
+        remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
+        remover.physicsBody?.affectedByGravity = false
+        remover.physicsBody?.isDynamic = false
+        remover.physicsBody?.categoryBitMask = MVAPhysicsCategory.remover.rawValue
+        remover.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        remover.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        scene.physicsWorld.contactDelegate = scene
+        
+        let spawner = MVACarSpawner.createSpawner(withWidth: scene.frame.width)
+        spawner.anchorPoint.x = 0.0
+        spawner.position = CGPoint(x: 0.0, y: scene.frame.height)
+        scene.addChild(spawner)
+        scene.spawner = spawner
         
         return scene
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        let contactN = [contact.bodyA.categoryBitMask,contact.bodyB.categoryBitMask]
+        if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.remover.rawValue) {
+            if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
+                contact.bodyA.node?.removeFromParent()
+            } else {
+                contact.bodyB.node?.removeFromParent()
+            }
+        } else if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.spawner.rawValue) {
+            print("spawner")
+        }
+    }
+    
+    func getRandomColor() -> UIColor {
+        let randomRed:CGFloat = CGFloat(drand48())
+        let randomGreen:CGFloat = CGFloat(drand48())
+        let randomBlue:CGFloat = CGFloat(drand48())
+        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+    }
+    
+    private func spawnDecoy() {
+        var spawn = true
+        let lane = Int(arc4random_uniform(road.numberOfLanes))+1
+        let position = CGPoint(x: road.laneXCoordinate[lane]!, y: player.position.y+road.frame.height)
+        let car = MVACar.create(withMindSet: .bot)
+        car.currentLane = lane
+        car.position = position
+
+        for child in self.children.filter({ ($0 is MVARoadNode) == false }) {
+            if child.intersects(car) {
+                spawn = false
+            }
+        }
+        if spawn {
+            car.zPosition = 1.0
+            //let move = SKAction.move(by: CGVector(dx: 0.0, dy: 20), duration: 3.0)
+            //car.run(SKAction.repeatForever(move))
+            car.rules.append(.randomSpeed)
+            car.ruleWeights.append(1)
+            car.pointsPerSecond = Double(arc4random_uniform(60)+30)
+            car.color = getRandomColor()
+            bots.append(car)
+            addChild(car)
+            intel.entities.insert(car)
+            //startAI()
+        }
+    }
+    
     func startAI() {
-        let goal = GKGoal(toInterceptAgent: player.agent, maxPredictionTime: 0.0)
-        //let avoid = GKGoal(toAvoidAgents: Array(decoys).map({$0.agent!}), maxPredictionTime: 5.0)
+        /*let goal = GKGoal(toInterceptAgent: player.agent, maxPredictionTime: 10.0)
+        var enemy: [GKPolygonObstacle] {
+            get {
+                return SKNode.obstacles(fromSpriteTextures: bots, accuracy: 1.9)
+            }
+        }
+        let avoid = GKGoal(toAvoid: enemy, maxPredictionTime: 10.0)
+        //GKGoal(toSeparateFrom: <#T##[GKAgent]#>, maxDistance: <#T##Float#>, maxAngle: <#T##Float#>)
         //let speed = GKGoal(toReachTargetSpeed: player.agent.velocity.y)
-        bot.agent.behavior = GKBehavior(goals: [goal], andWeights: [1.0])
+    
+        for dec in bots {
+            dec.agent.behavior = GKBehavior(goals: [goal,avoid], andWeights: [1.0,1.0])
+        }*/
     }
     
     func setUpScene() {
@@ -95,9 +187,15 @@ class GameScene: SKScene {
     
     private var lastUpdate = 0.0//Double
     override func update(_ currentTime: TimeInterval) {
+        if currentTime-lastUpdate < 10 {//???
+            intel.update(withDeltaTime: currentTime-lastUpdate)
+        }
+        /*
         // Called before each frame is rendered
-        bot.agent.update(deltaTime: currentTime-lastUpdate)
         player.agent.update(deltaTime: currentTime-lastUpdate)
+        for dec in bots {
+            dec.agent.update(deltaTime: currentTime-lastUpdate)
+        }*/
         lastUpdate = currentTime
         
         cameraNode.position.y = player.position.y
@@ -107,7 +205,9 @@ class GameScene: SKScene {
             self.addChild(road)
             endOfWorld += road.size.height-10
         }
-        //enum!!!
+        remover.position.y = cameraNode.position.y-self.frame.size.height/2
+        spawner.position.y = cameraNode.position.y+self.frame.size.height/4
+        
         enumerateChildNodes(withName: "road") { (node: SKNode, err: UnsafeMutablePointer<ObjCBool>) in
             let roadPosition = node.position.y+(node as! SKSpriteNode).size.height
             if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
@@ -126,73 +226,53 @@ extension GameScene {
         right.direction = .right
         let left = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
         left.direction = .left
-        let up = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
-        up.direction = .up
-        let down = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
-        down.direction = .down
+        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleBrake(gest:)))
+        brake.minimumPressDuration = 0.1
         self.view?.addGestureRecognizer(right)
         self.view?.addGestureRecognizer(left)
-        self.view?.addGestureRecognizer(up)
-        self.view?.addGestureRecognizer(down)
+        self.view?.addGestureRecognizer(brake)
     }
     func handleSwipe(swipe: UISwipeGestureRecognizer) {
         if swipe.direction == .up {
-            let boost = SKAction.moveBy(x: 0.0, y: 200.0, duration: 0.5)
-            self.player.run(boost)
+            //let boost = SKAction.moveBy(x: 0.0, y: 200.0, dur  ation: 0.5)
+            //self.player.run(boost)
         } else if swipe.direction == .down {
             startAI()
-            let slow = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.5)
+            let slow = SKAction.moveBy(x: 0.0, y: -20.0, duration: 1.0)
             self.player.run(slow)
         } else {
-            switch gameLogic.currentLane! {
-            case .lastLeft:
-                if swipe.direction == .right {
-                    let rightLane = CGFloat(70)
-                    let moveRight = SKAction.moveBy(x: rightLane, y: 0.0, duration: 1.0)
-                    //gameLogic.currentLane = RoadLanes.Middle
-                    player.run(moveRight)
+            switch swipe.direction {
+            case UISwipeGestureRecognizerDirection.right:
+                if player.currentLane+1 <= Int(self.road.numberOfLanes) {
+                    player.change(lane: 1)
                 }
-            case .other:
-                if swipe.direction == .right {
-                    let rightLane = CGFloat(70)
-                    let moveRight = SKAction.moveBy(x: rightLane, y: 0.0, duration: 1.0)
-                    //gameLogic.currentLane = RoadLanes.Middle
-                    player.run(moveRight)
-                } else {
-                    let leftLane = CGFloat(-70)
-                    let moveLeft = SKAction.moveBy(x: leftLane, y: 0.0, duration: 1.0)
-                    //gameLogic.currentLane = RoadLanes.Left
-                    player.run(moveLeft)
+            case UISwipeGestureRecognizerDirection.left:
+                if player.currentLane-1 > 0 {
+                    player.change(lane: -1)
                 }
-            case .lastRight:
-                if swipe.direction == .left {
-                    let leftLane = CGFloat(-70)
-                    let moveLeft = SKAction.moveBy(x: leftLane, y: 0.0, duration: 1.0)
-                    //gameLogic.currentLane = RoadLanes.Left
-                    player.run(moveLeft)
-                }
+            default: break
             }
+        }
+    }
+    func handleBrake(gest: UILongPressGestureRecognizer) {
+        print(gest.state)
+        if gest.state == .began {
+            self.player.pointsPerSecond /= 3
+        } else if gest.state == .ended {
+            self.player.pointsPerSecond *= 3
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches {
-        }
     }
     
    

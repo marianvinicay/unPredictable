@@ -10,7 +10,9 @@ import SpriteKit
 
 class MVARoadNode: SKSpriteNode {
     var numberOfLanes: UInt32 = 0
+    var laneXCoordinate: [Int:CGFloat] = [:]
     
+    ///Minimal numberOfLanes is 2
     class func createWith(numberOfLanes: Int, height: CGFloat, andWidth width: CGFloat) -> MVARoadNode {
         let road = MVARoadNode()
         road.numberOfLanes = UInt32(numberOfLanes)
@@ -26,27 +28,31 @@ class MVARoadNode: SKSpriteNode {
         let fLane = SKSpriteNode(imageNamed: "LeftLane")
         fLane.anchorPoint = CGPoint.zero
         fLane.position = CGPoint(x: lGrass.size.width, y: 0.0)
+        road.laneXCoordinate[1] = fLane.position.x+(fLane.size.width/2)
         road.addChild(fLane)
-        var xEndOflastLane = fLane.position.x+fLane.size.width
+        var xEndOflastLane = Int(fLane.position.x+fLane.size.width)
         
-        for _ in 2..<createLanes {
+        for i in 2..<createLanes {
             let lane = SKSpriteNode(imageNamed: "MiddleLane")
             lane.anchorPoint = CGPoint.zero
-            lane.position = CGPoint(x: xEndOflastLane, y: 0.0)
-            xEndOflastLane += lane.size.width
+            lane.position = CGPoint(x: xEndOflastLane, y: 0)
+            road.laneXCoordinate[i] = lane.position.x+(lane.size.width/2)
+            xEndOflastLane += Int(lane.size.width)
             road.addChild(lane)
         }
+        
         //lastLane
         let lLane = SKSpriteNode(imageNamed: "RightLane")
         lLane.anchorPoint = CGPoint.zero
-        lLane.position = CGPoint(x: xEndOflastLane, y: 0.0)
-        xEndOflastLane += lLane.size.width
+        lLane.position = CGPoint(x: xEndOflastLane, y: 0)
+        road.laneXCoordinate[createLanes] = lLane.position.x+(lLane.size.width/2)
+        xEndOflastLane += Int(lLane.size.width)
         road.addChild(lLane)
         //rightGrass
         let rGrass = SKSpriteNode(imageNamed: "RightGrass")
         rGrass.anchorPoint = CGPoint.zero
-        rGrass.position = CGPoint(x: xEndOflastLane, y: 0.0)
-        xEndOflastLane += rGrass.size.width
+        rGrass.position = CGPoint(x: xEndOflastLane, y: 0)
+        xEndOflastLane += Int(rGrass.size.width)
         road.addChild(rGrass)
         
         road.size = CGSize(width: width, height: height)

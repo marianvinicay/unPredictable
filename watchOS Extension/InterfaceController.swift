@@ -17,10 +17,10 @@ class InterfaceController: WKInterfaceController {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        //let scene = GameScene.newGameScene(withSize: CGSize())
+        let scene = GameScene.newGameScene(withSize: self.contentFrame.size)
         
         // Present the scene
-        //self.skInterface.presentScene(scene)
+        self.skInterface.presentScene(scene)
         
         // Use a preferredFramesPerSecond that will maintain consistent frame rate
         self.skInterface.preferredFramesPerSecond = 30

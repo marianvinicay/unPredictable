@@ -34,12 +34,40 @@
 		2F23E1621D6EF21D00119E4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E10C1D6EF21D00119E4F /* Assets.xcassets */; };
 		2F3E28AB1DC4F65F001DC622 /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */; };
 		2F3E28AC1DC4F660001DC622 /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */; };
+		2F5A56541E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */; };
+		2F5A56551E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */; };
+		2F5A56561E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */; };
+		2F5A56571E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */; };
+		2F5A565E1E116DA500518651 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */; };
+		2F5A565F1E116DB900518651 /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */; };
+		2F5A56601E116E3500518651 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
+		2F5A56611E116E4500518651 /* MVAGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */; };
+		2F5A56631E1281EE00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
+		2F5A56641E1281EE00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
+		2F5A56651E1281EF00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
+		2F5A56661E1281EF00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
+		2F69B4871E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
+		2F69B4881E0C1C0C00B57B01 /* MVAMarvinEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */; };
+		2F69B4891E0C1C0C00B57B01 /* MVAMarvinRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */; };
+		2F69B48A1E0C1C0C00B57B01 /* MVAMindSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */; };
+		2F69B48B1E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
+		2F69B48C1E0C1C0C00B57B01 /* MVAMarvinEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */; };
+		2F69B48D1E0C1C0C00B57B01 /* MVAMarvinRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */; };
+		2F69B48E1E0C1C0C00B57B01 /* MVAMindSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */; };
+		2F69B48F1E0C1C0D00B57B01 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
+		2F69B4901E0C1C0D00B57B01 /* MVAMarvinEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */; };
+		2F69B4911E0C1C0D00B57B01 /* MVAMarvinRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */; };
+		2F69B4921E0C1C0D00B57B01 /* MVAMindSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */; };
 		2F7A089B1DC5D23A005561B9 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */; };
 		2F7A089D1DC5D5DC005561B9 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */; };
 		2F7A089E1DC5D5DC005561B9 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */; };
 		2F7A08A01DC65209005561B9 /* MVAGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */; };
 		2F7A08A21DC652BD005561B9 /* MVAGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */; };
 		2F7A08A31DC652BD005561B9 /* MVAGameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */; };
+		2F7ECFA71DE07C3F00415B8A /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
+		2F7ECFA91DE0EE4600415B8A /* MVAMarvinEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */; };
+		2F7ECFAC1DE0EF7900415B8A /* MVAMindSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */; };
+		2F7ECFAE1DE19B9100415B8A /* MVAMarvinRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */; };
 		2FFD399D1DBA7EAB0091E088 /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */; };
 /* End PBXBuildFile section */
 
@@ -112,8 +140,14 @@
 		2F23E14E1D6EF21D00119E4F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2F23E1511D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMarvinRuleConstantSpeed.swift; path = MarvinAI/MVAMarvinRules/MVAMarvinRuleConstantSpeed.swift; sourceTree = "<group>"; };
+		2F5A56621E1281ED00518651 /* MVACarSpawner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarSpawner.swift; sourceTree = "<group>"; };
 		2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarPlayer.swift; sourceTree = "<group>"; };
 		2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAGameLogic.swift; sourceTree = "<group>"; };
+		2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMarvinAI.swift; path = MarvinAI/MVAMarvinAI.swift; sourceTree = "<group>"; };
+		2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMarvinEntity.swift; path = MarvinAI/MVAMarvinEntity.swift; sourceTree = "<group>"; };
+		2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMindSet.swift; path = MarvinAI/MVAMindSet.swift; sourceTree = "<group>"; };
+		2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMarvinRule.swift; path = MarvinAI/MVAMarvinRule.swift; sourceTree = "<group>"; };
 		2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVARoadNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,8 +199,10 @@
 		2F23E1081D6EF21D00119E4F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				2F7ECFAA1DE0EE5300415B8A /* MVAMarvin */,
 				2F23E10A1D6EF21D00119E4F /* GameScene.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
+				2F5A56621E1281ED00518651 /* MVACarSpawner.swift */,
 				2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */,
 				2F7A089A1DC5D23A005561B9 /* MVACarPlayer.swift */,
 				2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */,
@@ -238,6 +274,26 @@
 				2F23E1531D6EF21D00119E4F /* Info.plist */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		2F5A565D1E0C508000518651 /* MVAMarvinRules */ = {
+			isa = PBXGroup;
+			children = (
+				2F5A56531E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift */,
+			);
+			name = MVAMarvinRules;
+			sourceTree = "<group>";
+		};
+		2F7ECFAA1DE0EE5300415B8A /* MVAMarvin */ = {
+			isa = PBXGroup;
+			children = (
+				2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */,
+				2F5A565D1E0C508000518651 /* MVAMarvinRules */,
+				2F7ECFA81DE0EE4600415B8A /* MVAMarvinEntity.swift */,
+				2F7ECFAD1DE19B9100415B8A /* MVAMarvinRule.swift */,
+				2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */,
+			);
+			name = MVAMarvin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -445,11 +501,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E15B1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F7ECFAC1DE0EF7900415B8A /* MVAMindSet.swift in Sources */,
 				2F7A089B1DC5D23A005561B9 /* MVACarPlayer.swift in Sources */,
 				2F23E1171D6EF21D00119E4F /* GameViewController.swift in Sources */,
+				2F5A56541E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */,
 				2F7A08A01DC65209005561B9 /* MVAGameLogic.swift in Sources */,
 				2F23E1151D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2FFD399D1DBA7EAB0091E088 /* MVARoadNode.swift in Sources */,
+				2F5A56631E1281EE00518651 /* MVACarSpawner.swift in Sources */,
+				2F7ECFAE1DE19B9100415B8A /* MVAMarvinRule.swift in Sources */,
+				2F7ECFA91DE0EE4600415B8A /* MVAMarvinEntity.swift in Sources */,
+				2F7ECFA71DE07C3F00415B8A /* MVAMarvinAI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,8 +519,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F5A56601E116E3500518651 /* GameScene.swift in Sources */,
+				2F5A56611E116E4500518651 /* MVAGameLogic.swift in Sources */,
+				2F5A565F1E116DB900518651 /* MVARoadNode.swift in Sources */,
 				2F23E1361D6EF21D00119E4F /* ExtensionDelegate.swift in Sources */,
+				2F69B48A1E0C1C0C00B57B01 /* MVAMindSet.swift in Sources */,
+				2F69B4871E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */,
+				2F69B4891E0C1C0C00B57B01 /* MVAMarvinRule.swift in Sources */,
+				2F5A565E1E116DA500518651 /* MVACarPlayer.swift in Sources */,
+				2F5A56641E1281EE00518651 /* MVACarSpawner.swift in Sources */,
+				2F69B4881E0C1C0C00B57B01 /* MVAMarvinEntity.swift in Sources */,
 				2F23E1341D6EF21D00119E4F /* InterfaceController.swift in Sources */,
+				2F5A56551E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,11 +539,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E15D1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F69B48B1E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */,
 				2F23E1411D6EF21D00119E4F /* GameViewController.swift in Sources */,
 				2F7A089D1DC5D5DC005561B9 /* MVACarPlayer.swift in Sources */,
+				2F5A56561E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */,
+				2F69B48D1E0C1C0C00B57B01 /* MVAMarvinRule.swift in Sources */,
 				2F7A08A21DC652BD005561B9 /* MVAGameLogic.swift in Sources */,
 				2F23E13F1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
+				2F5A56651E1281EF00518651 /* MVACarSpawner.swift in Sources */,
+				2F69B48C1E0C1C0C00B57B01 /* MVAMarvinEntity.swift in Sources */,
 				2F3E28AB1DC4F65F001DC622 /* MVARoadNode.swift in Sources */,
+				2F69B48E1E0C1C0C00B57B01 /* MVAMindSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,11 +558,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E15E1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F69B48F1E0C1C0D00B57B01 /* MVAMarvinAI.swift in Sources */,
 				2F23E14F1D6EF21D00119E4F /* GameViewController.swift in Sources */,
 				2F7A089E1DC5D5DC005561B9 /* MVACarPlayer.swift in Sources */,
+				2F5A56571E0C506100518651 /* MVAMarvinRuleConstantSpeed.swift in Sources */,
+				2F69B4911E0C1C0D00B57B01 /* MVAMarvinRule.swift in Sources */,
 				2F7A08A31DC652BD005561B9 /* MVAGameLogic.swift in Sources */,
 				2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
+				2F5A56661E1281EF00518651 /* MVACarSpawner.swift in Sources */,
+				2F69B4901E0C1C0D00B57B01 /* MVAMarvinEntity.swift in Sources */,
 				2F3E28AC1DC4F660001DC622 /* MVARoadNode.swift in Sources */,
+				2F69B4921E0C1C0D00B57B01 /* MVAMindSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

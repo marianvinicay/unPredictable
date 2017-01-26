@@ -8,12 +8,6 @@
 
 import SpriteKit
 
-public enum MVACarLane {
-    case lastLeft
-    case lastRight
-    case other
-}
-
 class MVAGameLogic {
-    var currentLane: MVACarLane!
+    var currentLane: Int!
 }
