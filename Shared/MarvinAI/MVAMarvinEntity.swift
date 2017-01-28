@@ -16,6 +16,7 @@ class MVAMarvinEntity: SKSpriteNode {
     var pointsPerSecond = 0.0
     var rules = [MVAMarvinRule]()
     var ruleWeights = [Int]()
+    var doSomethingTime = Double(arc4random_uniform(3)+2)
     
     init(withSize size: CGSize, andMindSet mindSet: MVAMindSet, color: UIColor) {
         self.mindSet = mindSet

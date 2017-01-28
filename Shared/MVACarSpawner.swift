@@ -21,6 +21,8 @@ class MVACarSpawner: SKSpriteNode {
         return spawner
     }
     
+    private var lastLaneSpawn: Int?
+    
     func spawn(withExistingCars cars: [MVACar], roadLanes: [Int:CGFloat]) {
         var intersectingCars = [MVACar]()
         for car in cars {
@@ -30,27 +32,27 @@ class MVACarSpawner: SKSpriteNode {
         }
         if intersectingCars.count < 2 {
             var carLane = Int(arc4random_uniform(3))+1//!!!
-            while intersectingCars.map({ $0.currentLane }).contains(where: { $0 == carLane }) {
+            while intersectingCars.map({ $0.currentLane }).contains(where: { $0 == carLane }) || carLane == lastLaneSpawn {
                 carLane = Int(arc4random_uniform(3))+1
             }
-            let lane = carLane
-            let position = CGPoint(x: roadLanes[lane]!, y: self.position.y)
-            let car = MVACar.create(withMindSet: .bot)
-            car.currentLane = lane
+            lastLaneSpawn = carLane
+            let position = CGPoint(x: roadLanes[carLane]!, y: self.position.y)
+            let car = MVACar(withMindSet: .bot)
+            car.currentLane = carLane
             car.position = position
 
             car.zPosition = 1.0
-            //let move = SKAction.move(by: CGVector(dx: 0.0, dy: 20), duration: 3.0)
-            //car.run(SKAction.repeatForever(move))
+            car.pointsPerSecond = Double(arc4random_uniform(60)+30)
+            let move = SKAction.move(by: CGVector(dx: 0.0, dy: car.pointsPerSecond), duration: 1.0)//???
+            car.run(SKAction.repeatForever(move))
             car.rules.append(.randomSpeed)
             car.ruleWeights.append(1)
-            car.pointsPerSecond = Double(arc4random_uniform(60)+30)
             car.color = (self.parent as? GameScene)?.getRandomColor() ?? UIColor.red
             (self.parent as? GameScene)?.bots.append(car)
             (self.parent as? GameScene)?.addChild(car)
             (self.parent as? GameScene)?.intel.entities.insert(car)
         } else {
-            intersectingCars.removeLast()
+            intersectingCars.removeLast()//???
         }
     }
 

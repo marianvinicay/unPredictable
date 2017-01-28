@@ -24,6 +24,7 @@ enum MVAPhysicsCategory: UInt32 {
 class GameScene: SKScene, SKPhysicsContactDelegate {
     //internal ?? private ??
     var road: MVARoadNode!
+    var roadNodes = Set<MVARoadNode>()
     var lanes = [Int:CGFloat]()
     var cameraNode: SKCameraNode!
     var player: MVACar!
@@ -47,6 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //scene.camera = scene.cameraNode
         scene.road = MVARoadNode.createWith(numberOfLanes: 3, height: scene.size.height, andWidth: scene.size.width)
         scene.road.position = CGPoint.zero
+        scene.roadNodes.insert(scene.road)
         scene.endOfWorld = (scene.road.position.y+scene.road.size.height)
         scene.lanes = scene.road.laneXCoordinate
         scene.addChild(scene.road)
@@ -56,26 +58,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.cameraNode = SKCameraNode()
         scene.cameraNode.position.x = scene.frame.size.width/2
         scene.camera = scene.cameraNode
-        let car = MVACar.create(withMindSet: .player)
+        let car = MVACar(withMindSet: .player)
         car.physicsBody?.categoryBitMask = 33
         let lane = Int(arc4random_uniform(scene.road.numberOfLanes))+1
         car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: 80)
         car.currentLane = lane
         scene.addChild(car)
         car.zPosition = 1.0
-        //let move = SKAction.move(by: CGVector(dx: 0.0, dy: 50), duration: 3.0)
-        //car.run(SKAction.repeatForever(move))
+        car.pointsPerSecond = 150.0
+        let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
+        car.run(SKAction.repeatForever(move), withKey: "move")//???
         scene.intel.entities.insert(car)
         car.rules.append(.constantSpeed)
         car.rules.append(.avoid)
-        car.pointsPerSecond = 150
         car.ruleWeights.append(1)
         car.color = UIColor.blue
         scene.player = car
         scene.gameLogic.currentLane = lane
         
         let spawn = SKAction.run {
-            //scene.spawnDecoy()
             scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanes)
         }
         let wait = SKAction.wait(forDuration: 2.0)
@@ -96,7 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let spawner = MVACarSpawner.createSpawner(withWidth: scene.frame.width)
         spawner.anchorPoint.x = 0.0
-        spawner.position = CGPoint(x: 0.0, y: scene.frame.height)
+        spawner.position = CGPoint(x: 0.0, y: scene.frame.height)//!!!diff from camera move
         scene.addChild(spawner)
         scene.spawner = spawner
         
@@ -107,9 +108,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let contactN = [contact.bodyA.categoryBitMask,contact.bodyB.categoryBitMask]
         if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.remover.rawValue) {
             if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
-                contact.bodyA.node?.removeFromParent()
+                if let node = contact.bodyA.node as? MVAMarvinEntity {
+                    node.removeFromParent()
+                    intel.entities.remove(node)
+                }
             } else {
-                contact.bodyB.node?.removeFromParent()
+                if let node = contact.bodyB.node as? MVAMarvinEntity {
+                    node.removeFromParent()
+                    intel.entities.remove(node)
+                }
             }
         } else if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.spawner.rawValue) {
             print("spawner")
@@ -127,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var spawn = true
         let lane = Int(arc4random_uniform(road.numberOfLanes))+1
         let position = CGPoint(x: road.laneXCoordinate[lane]!, y: player.position.y+road.frame.height)
-        let car = MVACar.create(withMindSet: .bot)
+        let car = MVACar(withMindSet: .bot)
         car.currentLane = lane
         car.position = position
 
@@ -188,7 +195,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var lastUpdate = 0.0//Double
     override func update(_ currentTime: TimeInterval) {
         if currentTime-lastUpdate < 10 {//???
-            intel.update(withDeltaTime: currentTime-lastUpdate)
+            //intel.update(withDeltaTime: currentTime-lastUpdate)
         }
         /*
         // Called before each frame is rendered
@@ -203,16 +210,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let road = MVARoadNode.createWith(numberOfLanes: 3, height: self.size.height, andWidth: self.size.width)
             road.position.y = endOfWorld-10
             self.addChild(road)
+            roadNodes.insert(road)
             endOfWorld += road.size.height-10
         }
         remover.position.y = cameraNode.position.y-self.frame.size.height/2
-        spawner.position.y = cameraNode.position.y+self.frame.size.height/4
+        spawner.position.y = cameraNode.position.y+self.frame.size.height
         
-        enumerateChildNodes(withName: "road") { (node: SKNode, err: UnsafeMutablePointer<ObjCBool>) in
-            let roadPosition = node.position.y+(node as! SKSpriteNode).size.height
+        //then try enumerate nodes with name road
+        for road in roadNodes {
+            let roadPosition = road.position.y+(road as! SKSpriteNode).size.height
             if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
-                print("remove")
-                node.removeFromParent()
+                road.removeFromParent()
             }
         }
     }
@@ -232,6 +240,7 @@ extension GameScene {
         self.view?.addGestureRecognizer(left)
         self.view?.addGestureRecognizer(brake)
     }
+    
     func handleSwipe(swipe: UISwipeGestureRecognizer) {
         if swipe.direction == .up {
             //let boost = SKAction.moveBy(x: 0.0, y: 200.0, dur  ation: 0.5)
@@ -254,12 +263,18 @@ extension GameScene {
             }
         }
     }
+    
     func handleBrake(gest: UILongPressGestureRecognizer) {
-        print(gest.state)
         if gest.state == .began {
             self.player.pointsPerSecond /= 3
+            if let act = self.player.action(forKey: "move") {
+                act.speed /= 3 //??? or new SKAction?
+            }
         } else if gest.state == .ended {
             self.player.pointsPerSecond *= 3
+            if let act = self.player.action(forKey: "move") {
+                act.speed *= 3
+            }
         }
     }
     
