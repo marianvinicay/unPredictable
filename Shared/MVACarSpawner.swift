@@ -37,17 +37,15 @@ class MVACarSpawner: SKSpriteNode {
             }
             lastLaneSpawn = carLane
             let position = CGPoint(x: roadLanes[carLane]!, y: self.position.y)
-            let car = MVACar(withMindSet: .bot)
+            let car = MVACar(withSize: CGSize(), andMindSet: .bot, color: UIColor.getRandomColor())
             car.currentLane = carLane
             car.position = position
 
             car.zPosition = 1.0
             car.pointsPerSecond = Double(arc4random_uniform(60)+30)
             let move = SKAction.move(by: CGVector(dx: 0.0, dy: car.pointsPerSecond), duration: 1.0)//???
-            car.run(SKAction.repeatForever(move))
-            car.rules.append(.randomSpeed)
-            car.ruleWeights.append(1)
-            car.color = (self.parent as? GameScene)?.getRandomColor() ?? UIColor.red
+            car.run(SKAction.repeatForever(move), withKey: "move")
+            car.color = UIColor.getRandomColor()
             (self.parent as? GameScene)?.bots.append(car)
             (self.parent as? GameScene)?.addChild(car)
             (self.parent as? GameScene)?.intel.entities.insert(car)

@@ -1,22 +1,44 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11137" systemVersion="15E58" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11109"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11056"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11508"/>
     </dependencies>
     <scenes>
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModuleProvider="target">
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModule="_un_Predictable" customModuleProvider="target">
                     <items>
-                        <spriteKitScene alignment="left" id="ARY-87-yzO"/>
+                        <spriteKitScene alignment="left" id="ARY-87-yzO">
+                            <gestureRecognizers>
+                                <swipeGestureRecognizer id="yik-yG-APS">
+                                    <connections>
+                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="qpK-2e-RaO"/>
+                                    </connections>
+                                </swipeGestureRecognizer>
+                                <swipeGestureRecognizer direction="2" id="WVM-uH-Rbu">
+                                    <connections>
+                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="sZg-MT-BcU"/>
+                                    </connections>
+                                </swipeGestureRecognizer>
+                                <longPressGestureRecognizer id="DRA-DH-Hdy">
+                                    <connections>
+                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="2WK-KH-69Q"/>
+                                    </connections>
+                                </longPressGestureRecognizer>
+                            </gestureRecognizers>
+                        </spriteKitScene>
                     </items>
                     <connections>
                         <outlet property="skInterface" destination="ARY-87-yzO" id="U6w-Od-uXj"/>
                     </connections>
                 </controller>
             </objects>
+            <point key="canvasLocation" x="35" y="110"/>
         </scene>
     </scenes>
 </document>
