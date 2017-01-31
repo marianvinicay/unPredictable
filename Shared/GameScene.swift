@@ -38,7 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //internal ?? private ??
     var road: MVARoadNode!
     var roadNodes = Set<MVARoadNode>()
-    var lanes = [Int:CGFloat]()
+    var lanePositions = [Int:CGFloat]()
     var cameraNode: SKCameraNode!
     var player: MVACar!
     var bots /*Set<MVACar>*/ = [MVACar]()
@@ -63,7 +63,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.road.position = CGPoint.zero
         scene.roadNodes.insert(scene.road)
         scene.endOfWorld = (scene.road.position.y+scene.road.size.height)
-        scene.lanes = scene.road.laneXCoordinate
+        scene.lanePositions = scene.road.laneXCoordinate
         scene.addChild(scene.road)
         
         scene.scaleMode = .aspectFill
@@ -85,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.gameLogic.currentLane = lane
         
         let spawn = SKAction.run {
-            scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanes)
+            scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanePositions)
         }
         let wait = SKAction.wait(forDuration: 1.0)
         scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])))

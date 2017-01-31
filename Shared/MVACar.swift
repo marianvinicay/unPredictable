@@ -16,42 +16,54 @@ enum MVAPosition {
      –––––––––--
       L | ⍓ | R
      -----------
-     BL | B | BR
+    BL? | B | BR?
      */
     case frontLeft, front, frontRight
     case right, left
-    case backLeft, back, backRight
+    case back//,backLeft, backRight
 }
 
 class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var pointsPerSecond = 0.0
+    var pointsPerSecond = 0.0 {
+        willSet {
+            print(newValue)
+        }
+    }
     var timeToChangeLane = Double.randomWith2Decimals(inRange: 1..<3)
     var timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)
 
+    ///debug func
+    func stampIt() {
+        if self.children.isEmpty {
+        let node = SKSpriteNode(color: .red, size: CGSize(width: 20, height: 20))
+        node.name = "stamp"
+        self.addChild(node)
+        }
+    }
+    
     func timeCountdown(deltaT: Double) {
         timeToChangeLane -= deltaT
         timeToChangeSpeed -= deltaT
         cantMoveForXTime -= deltaT
     }
     
-    private var roadLanes: [Int:CGFloat] {
+    var roadLanePositions: [Int:CGFloat] {
         get {
-            return (self.parent as? GameScene)?.lanes ?? [:]
+            return (self.parent as? GameScene)?.lanePositions ?? [:]
         }
     }
     
     var isMoving = false
-    var checked = false
     
     var currentLane: Int!
     var cantMoveForXTime = 0.0
     var wantsToChangeLane = false
     
-    private var topCenterSensor: CGPoint {
+    private var frontSensor: [CGPoint] {
         get {
-            return CGPoint(x: position.x, y: position.y+(size.height/2)+30.0)
+            return [CGPoint(x: position.x, y: position.y+(size.height/2)+30.0)]
         }
     }
     
@@ -73,32 +85,39 @@ class MVACar: SKSpriteNode {
         }
     }
     
-    private var rightDiagonalSensorRange: [CGPoint] {
+    private var frontRightSensors: [CGPoint] {
         get {
-            let rightDiagUP = CGPoint(x: position.x+(size.width), y: position.y+180)
-            let rightDiagC = CGPoint(x: position.x+(size.width), y: position.y+75)
-            return rightSensors+[rightDiagUP,rightDiagC]
+            let rightDiagUP = CGPoint(x: position.x+(size.width), y: position.y+200)
+            let rightDiagC = CGPoint(x: position.x+(size.width), y: position.y+102)
+            return [rightDiagUP,rightDiagC]
         }
     }
     
-    private var leftDiagonalSensorRange: [CGPoint] {
+    private var frontLeftSensors: [CGPoint] {
         get {
-            let leftDiagUP = CGPoint(x: position.x-(size.width), y: position.y+180)
-            let leftDiagC = CGPoint(x: position.x-(size.width), y: position.y+75)
-            return leftSensors+[leftDiagUP,leftDiagC]
+            let leftDiagUP = CGPoint(x: position.x-(size.width), y: position.y+200)
+            let leftDiagC = CGPoint(x: position.x-(size.width), y: position.y+102)
+            return [leftDiagUP,leftDiagC]
         }
     }
+    
+    private var backSensor: [CGPoint] {
+        get {
+            return [CGPoint(x: position.x, y: position.y-(size.height/2)-30.0)]
+        }
+    }
+    
     //!!! sensors change with width! must be static?
     init(withSize size: CGSize, andMindSet mindSet: MVAMindSet, color: UIColor) {
         self.mindSet = mindSet
         super.init(texture: nil, color: color, size: CGSize(width: 60.0, height: 100.0))
-        if mindSet == .player {
-            for point in rightSensors+leftSensors+[topCenterSensor]+rightDiagonalSensorRange+leftDiagonalSensorRange {
+        /*if mindSet == .player {
+            for point in rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors {
                 let dot = SKSpriteNode(color: .red, size: CGSize(width: 5.0, height: 5.0))
                 dot.position = point
                 addChild(dot)
             }
-        }
+        }*/
         
         physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 60.0, height: 100.0))
         physicsBody?.collisionBitMask = 0
@@ -116,8 +135,8 @@ class MVACar: SKSpriteNode {
     
     func change(lane: Int) {
         let newLane = currentLane+lane
-        if self.roadLanes.keys.contains(newLane) {
-            if let newLaneCoor = roadLanes[newLane] {
+        if self.roadLanePositions.keys.contains(newLane) {
+            if let newLaneCoor = roadLanePositions[newLane] {
                 self.isMoving = true
                 currentLane = newLane
                 let endMoving = SKAction.run({
@@ -129,16 +148,34 @@ class MVACar: SKSpriteNode {
         }
     }
     
-    func carInFront() -> MVACar? {
-        if let nodes = parent?.nodes(at: topCenterSensor).filter({ $0 is MVACar }) {
-            return Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })).first//???
+    func responseFromSensors(inPositions positions: [MVAPosition]) -> Set<MVACar> {
+        var foundCars = Set<MVACar>()
+        for position in positions {
+            switch position {
+            case .frontLeft: foundCars = foundCars.union(carsIntersecting(sensors: frontLeftSensors))
+            case .front: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
+            case .frontRight: foundCars = foundCars.union(carsIntersecting(sensors: frontRightSensors))
+            case .left: foundCars = foundCars.union(carsIntersecting(sensors: leftSensors))
+            case .right: foundCars = foundCars.union(carsIntersecting(sensors: rightSensors))
+            case .back: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
+            }
         }
-        return nil
+        return foundCars
     }
     
+    private func carsIntersecting(sensors: [CGPoint]) -> Set<MVACar> {
+        var intersectingCars = Set<MVACar>()
+        for sensor in sensors {
+            if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
+                intersectingCars = intersectingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
+            }
+        }
+        return intersectingCars
+    }
+    /*
     func diagonalRight() -> Set<MVACar> {
         var collidingCars = Set<MVACar>()
-        for sensor in rightDiagonalSensorRange {
+        for sensor in frontRightSensor {
             if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
                 collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
             }
@@ -148,13 +185,13 @@ class MVACar: SKSpriteNode {
     
     func diagonalLeft() -> Set<MVACar> {
         var collidingCars = Set<MVACar>()
-        for sensor in leftDiagonalSensorRange {
+        for sensor in frontLeftSensor {
             if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
                 collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
             }
         }
         return Set(collidingCars.filter({ $0.mindSet != .player }))
-    }
+    }*
     
     //merge carsOn funcs?
     //maybe private funcs?
@@ -176,6 +213,6 @@ class MVACar: SKSpriteNode {
             }
         }
         return collidingCars
-    }
+    }*/
     
 }

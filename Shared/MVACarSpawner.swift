@@ -42,7 +42,7 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
 
             car.zPosition = 1.0
-            car.pointsPerSecond = Double(arc4random_uniform(50)+40)
+            car.pointsPerSecond = Double(arc4random_uniform(40)+50)
             let move = SKAction.move(by: CGVector(dx: 0.0, dy: car.pointsPerSecond), duration: 1.0)//???
             car.run(SKAction.repeatForever(move), withKey: "move")
             car.color = UIColor.getRandomColor()
