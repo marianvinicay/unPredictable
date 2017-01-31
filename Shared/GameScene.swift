@@ -74,11 +74,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let car = MVACar(withSize: CGSize(), andMindSet: .player, color: .blue)
         car.physicsBody?.categoryBitMask = 33
         let lane = Int(arc4random_uniform(scene.road.numberOfLanes))+1
-        car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: 80)
+        car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: size.height/3)
         car.currentLane = lane
         scene.addChild(car)
         car.zPosition = 1.0
-        car.pointsPerSecond = 150.0
+        car.pointsPerSecond = 200.0
         let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
         car.run(SKAction.repeatForever(move), withKey: "move")//???
         scene.player = car
@@ -87,12 +87,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let spawn = SKAction.run {
             scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanes)
         }
-        let wait = SKAction.wait(forDuration: 2.0)
+        let wait = SKAction.wait(forDuration: 1.0)
         scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])))
         
         //remover
         let remover = SKSpriteNode(color: .purple, size: CGSize(width: scene.frame.width, height: 10.0))
         remover.position.x = scene.frame.width/2
+        remover.position.y = -scene.frame.height
         scene.addChild(remover)
         scene.remover = remover
         remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
@@ -131,22 +132,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func startAI() {
-        /*let goal = GKGoal(toInterceptAgent: player.agent, maxPredictionTime: 10.0)
-        var enemy: [GKPolygonObstacle] {
-            get {
-                return SKNode.obstacles(fromSpriteTextures: bots, accuracy: 1.9)
-            }
-        }
-        let avoid = GKGoal(toAvoid: enemy, maxPredictionTime: 10.0)
-        //GKGoal(toSeparateFrom: <#T##[GKAgent]#>, maxDistance: <#T##Float#>, maxAngle: <#T##Float#>)
-        //let speed = GKGoal(toReachTargetSpeed: player.agent.velocity.y)
-    
-        for dec in bots {
-            dec.agent.behavior = GKBehavior(goals: [goal,avoid], andWeights: [1.0,1.0])
-        }*/
-    }
-    
     func setUpScene() {
         #if os(iOS) || os(tvOS)
             self.setupSwipes()
@@ -178,7 +163,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }*/
         lastUpdate = currentTime
         
-        cameraNode.position.y = player.position.y
+        cameraNode.position.y = player.position.y+size.height/4
         if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
             let road = MVARoadNode.createWith(numberOfLanes: 3, height: self.size.height, andWidth: self.size.width)
             road.position.y = endOfWorld-10
@@ -186,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             roadNodes.insert(road)
             endOfWorld += road.size.height-10
         }
-        remover.position.y = cameraNode.position.y-self.frame.size.height/2
+        remover.position.y = cameraNode.position.y-self.frame.size.height
         spawner.position.y = cameraNode.position.y+self.frame.size.height
         
         //then try enumerate nodes with name road
@@ -215,12 +200,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if started {
             player.pointsPerSecond /= 3
             if let act = player.action(forKey: "move") {
-                act.speed /= 3 //??? or new SKAction?
+                act.speed /= 100 //??? or new SKAction?
             }
         } else if started == false {//??? is == false necessary
             player.pointsPerSecond *= 3
             if let act = player.action(forKey: "move") {
-                act.speed *= 3
+                act.speed *= 100
             }
         }
     }
@@ -228,7 +213,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 #if os(iOS) || os(tvOS)
 // Touch-based event handling
-extension GameScene {
+extension GameScene: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UILongPressGestureRecognizer {
+            return true
+        }
+        return false
+    }
+    
     internal func setupSwipes() {
         let right = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
         right.direction = .right
@@ -236,6 +229,9 @@ extension GameScene {
         left.direction = .left
         let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
         brake.minimumPressDuration = 0.1
+        right.delegate = self
+        left.delegate = self
+        brake.delegate = self
         self.view?.addGestureRecognizer(right)
         self.view?.addGestureRecognizer(left)
         self.view?.addGestureRecognizer(brake)

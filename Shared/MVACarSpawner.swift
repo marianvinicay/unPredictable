@@ -30,7 +30,7 @@ class MVACarSpawner: SKSpriteNode {
                 intersectingCars.append(car)
             }
         }
-        if intersectingCars.count < 2 {
+        if intersectingCars.count < 2 {//!!! even more than 2
             var carLane = Int(arc4random_uniform(3))+1//!!!
             while intersectingCars.map({ $0.currentLane }).contains(where: { $0 == carLane }) || carLane == lastLaneSpawn {
                 carLane = Int(arc4random_uniform(3))+1
@@ -42,7 +42,7 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
 
             car.zPosition = 1.0
-            car.pointsPerSecond = Double(arc4random_uniform(60)+30)
+            car.pointsPerSecond = Double(arc4random_uniform(50)+40)
             let move = SKAction.move(by: CGVector(dx: 0.0, dy: car.pointsPerSecond), duration: 1.0)//???
             car.run(SKAction.repeatForever(move), withKey: "move")
             car.color = UIColor.getRandomColor()
