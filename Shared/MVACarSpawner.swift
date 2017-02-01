@@ -31,9 +31,10 @@ class MVACarSpawner: SKSpriteNode {
             }
         }
         if intersectingCars.count < 2 {//!!! even more than 2
-            var carLane = Int(arc4random_uniform(3))+1//!!!
+            var carLane = Int(arc4random_uniform(3))//!!!
+            //repeat...while
             while intersectingCars.map({ $0.currentLane }).contains(where: { $0 == carLane }) || carLane == lastLaneSpawn {
-                carLane = Int(arc4random_uniform(3))+1
+                carLane = Int(arc4random_uniform(3))
             }
             lastLaneSpawn = carLane
             let position = CGPoint(x: roadLanes[carLane]!, y: self.position.y)

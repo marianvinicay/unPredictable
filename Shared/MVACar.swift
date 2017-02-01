@@ -26,17 +26,13 @@ enum MVAPosition {
 class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var pointsPerSecond = 0.0 {
-        willSet {
-            print(newValue)
-        }
-    }
+    var pointsPerSecond = 0.0
     var timeToChangeLane = Double.randomWith2Decimals(inRange: 1..<3)
     var timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)
 
     ///debug func
     func stampIt() {
-        if self.children.isEmpty {
+        if self.children.count <= 2 {
         let node = SKSpriteNode(color: .red, size: CGSize(width: 20, height: 20))
         node.name = "stamp"
         self.addChild(node)
@@ -46,7 +42,14 @@ class MVACar: SKSpriteNode {
     func timeCountdown(deltaT: Double) {
         timeToChangeLane -= deltaT
         timeToChangeSpeed -= deltaT
-        cantMoveForXTime -= deltaT
+        if cantMoveForXTime > 0 {
+            cantMoveForXTime -= deltaT
+        }
+        if pointsPerSecond == 150.1 {
+            textNode.text = "PRIORITY"
+        } else {
+            textNode.text = cantMoveForXTime <= 0.0 ? "move":"stop"
+        }
     }
     
     var roadLanePositions: [Int:CGFloat] {
@@ -60,6 +63,7 @@ class MVACar: SKSpriteNode {
     var currentLane: Int!
     var cantMoveForXTime = 0.0
     var wantsToChangeLane = false
+    var textNode: SKLabelNode!
     
     private var frontSensor: [CGPoint] {
         get {
@@ -111,6 +115,11 @@ class MVACar: SKSpriteNode {
     init(withSize size: CGSize, andMindSet mindSet: MVAMindSet, color: UIColor) {
         self.mindSet = mindSet
         super.init(texture: nil, color: color, size: CGSize(width: 60.0, height: 100.0))
+        self.textNode = SKLabelNode(text: "0.0")
+        self.textNode.fontSize = 20.0
+        self.textNode.fontName = UIFont.systemFont(ofSize: 20, weight: 5).fontName
+        self.textNode.fontColor = UIColor.white
+        self.addChild(self.textNode)
         /*if mindSet == .player {
             for point in rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors {
                 let dot = SKSpriteNode(color: .red, size: CGSize(width: 5.0, height: 5.0))
@@ -133,9 +142,10 @@ class MVACar: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func change(lane: Int) {
-        let newLane = currentLane+lane
-        if self.roadLanePositions.keys.contains(newLane) {
+    func changeLane(inDirection direction: MVAPosition) -> Bool {
+        let newLane = direction == .left ? currentLane-1:currentLane+1
+        let responseFromSensors = self.mindSet == .player ? true:self.responseFromSensors(inPositions: [direction]).isEmpty
+        if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
             if let newLaneCoor = roadLanePositions[newLane] {
                 self.isMoving = true
                 currentLane = newLane
@@ -144,8 +154,10 @@ class MVACar: SKSpriteNode {
                 })
                 let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
                 self.run(SKAction.sequence([move,endMoving]))
+                return true
             }
         }
+        return false
     }
     
     func responseFromSensors(inPositions positions: [MVAPosition]) -> Set<MVACar> {

@@ -9,10 +9,6 @@
 import SpriteKit
 import UIKit
 
-enum MVASwipeDirection {
-    case right,left
-}
-
 #if os(watchOS)
     import WatchKit
     // <rdar://problem/26756207> SKColor typealias does not seem to be exposed on watchOS SpriteKit
@@ -73,12 +69,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.camera = scene.cameraNode
         let car = MVACar(withSize: CGSize(), andMindSet: .player, color: .blue)
         car.physicsBody?.categoryBitMask = 33
-        let lane = Int(arc4random_uniform(scene.road.numberOfLanes))+1
+        let lane = Int(arc4random_uniform(scene.road.numberOfLanes))
         car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: size.height/3)
         car.currentLane = lane
         scene.addChild(car)
         car.zPosition = 1.0
-        car.pointsPerSecond = 200.0
+        car.pointsPerSecond = 200
         let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
         car.run(SKAction.repeatForever(move), withKey: "move")//???
         scene.player = car
@@ -183,17 +179,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func handleSwipe(swipe: MVASwipeDirection) {
-        switch swipe {
-        case .right:
-            if player.currentLane+1 <= Int(self.road.numberOfLanes) {
-                player.change(lane: 1)
-            }
-        case .left:
-            if player.currentLane-1 > 0 {
-                player.change(lane: -1)
-            }
-        }
+    func handleSwipe(swipe: MVAPosition) {
+        _ = player.changeLane(inDirection: swipe)
     }
     
     func handleBrake(started: Bool) {

@@ -17,7 +17,7 @@ class MVARoadNode: SKSpriteNode {
         let road = MVARoadNode()
         road.numberOfLanes = UInt32(numberOfLanes)
         
-        let createLanes = numberOfLanes
+        let createLanes = numberOfLanes-1
         
         //leftGrass
         let lGrass = SKSpriteNode(imageNamed: "LeftGrass")
@@ -28,11 +28,11 @@ class MVARoadNode: SKSpriteNode {
         let fLane = SKSpriteNode(imageNamed: "LeftLane")
         fLane.anchorPoint = CGPoint.zero
         fLane.position = CGPoint(x: lGrass.size.width, y: 0.0)
-        road.laneXCoordinate[1] = fLane.position.x+(fLane.size.width/2)
+        road.laneXCoordinate[0] = fLane.position.x+(fLane.size.width/2)
         road.addChild(fLane)
         var xEndOflastLane = Int(fLane.position.x+fLane.size.width)
         
-        for i in 2..<createLanes {
+        for i in 1..<createLanes {
             let lane = SKSpriteNode(imageNamed: "MiddleLane")
             lane.anchorPoint = CGPoint.zero
             lane.position = CGPoint(x: xEndOflastLane, y: 0)
