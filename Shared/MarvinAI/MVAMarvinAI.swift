@@ -10,20 +10,66 @@ import Foundation
 import SpriteKit
 
 class MVAMarvinAI {
-    var entities = Set<MVACar>()
+    var player: MVACar!
+    var cars = Set<MVACar>()
+    
+    var checkTime = 0.0
     
     func update(withDeltaTime dTime: TimeInterval) {
-        for car in entities {
+        for car in cars {
+            car.isFirst = false
+        }
+        if checkTime <= 0.0 {
+            checkTime = 0.5
+            let pLane = player.currentLane
+            checkJam(onLane: pLane!)
+        } else {
+            checkTime -= dTime
+        }
+        
+        for car in cars {
             car.timeCountdown(deltaT: dTime)
             //Front Check
             let carInFront = car.responseFromSensors(inPositions: [.front]).first
             if carInFront != nil {
-                car.pointsPerSecond = Double(arc4random_uniform(UInt32(abs(carInFront!.pointsPerSecond-5)))+40)//???
-                let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-                car.removeAction(forKey: "move")
-                car.run(SKAction.repeatForever(move), withKey: "move")
+                if car.getOutOfTheWay {
+                    carInFront!.getOutOfTheWay = true
+                } else {
+                    car.changeSpeed(CGFloat(arc4random_uniform(UInt32(abs(carInFront!.pointsPerSecond-5)))+40))//???
+                }
             }
             
+            if car.getOutOfTheWay {
+                if carInFront == nil {
+                    //speed up
+                    car.changeSpeed(200)
+                    print("speedUp",car.pointsPerSecond)
+                }
+                if arc4random_uniform(2) == 1 {
+                    if car.changeLane(inDirection: .right) == false {
+                        if car.changeLane(inDirection: .left) {
+                            car.getOutOfTheWay = false
+                        }
+                    } else {
+                        car.getOutOfTheWay = false
+                    }
+                    car.cantMoveForXTime = 1.0
+                } else {
+                    if car.changeLane(inDirection: .left) == false {
+                        if car.changeLane(inDirection: .right) {
+                            car.getOutOfTheWay = false
+                        }
+                    } else {
+                        car.getOutOfTheWay = false
+                    }
+                    car.cantMoveForXTime = 1.0
+                }
+                if car.getOutOfTheWay == false {
+                    car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
+                }
+            }
+            
+            /*
             if car.wantsToChangeLane {
                 if arc4random_uniform(2) == 1 {
                     if car.changeLane(inDirection: .right) == false {
@@ -50,92 +96,6 @@ class MVAMarvinAI {
                     car.removeAction(forKey: "move")
                     car.run(SKAction.repeatForever(move), withKey: "move")
                 }
-            }
-            
-            //Diagonal Check
-            let right = Set(car.responseFromSensors(inPositions: [.frontRight,.right]).filter({ $0.mindSet != .player }))
-            let left = Set(car.responseFromSensors(inPositions: [.frontLeft,.left]).filter({ $0.mindSet != .player }))
-            
-            if !right.isEmpty && !left.isEmpty {
-                var setOfCars = Set([car]).union(right).union(left)
-                setOfCars = Set(setOfCars.filter({ $0.cantMoveForXTime <= 0.0 }))//??? and checked in this frame
-                laneIsBlocked(byCars: setOfCars)
-            }
-            
-            
-            /*//Horizontal Check XXX
-     if car.wantsToChangeLane {
-     if car.isMoving == false {
-     if arc4random_uniform(2) == 1 {
-     if car.responseFromSensors(inPositions: [.right]).isEmpty {
-     print("changeLane")
-     car.wantsToChangeLane = false
-     car.change(lane: 1)
-     car.cantMoveForXTime = 2
-     car.pointsPerSecond *= 0.75
-     let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-     car.removeAction(forKey: "move")
-     car.run(SKAction.repeatForever(move), withKey: "move")
-     } else if car.responseFromSensors(inPositions: [.left]).isEmpty {
-     print("changeLane")
-     car.wantsToChangeLane = false
-     car.change(lane: -1)
-     car.cantMoveForXTime = 2
-     car.pointsPerSecond *= 0.75
-     let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-     car.removeAction(forKey: "move")
-     car.run(SKAction.repeatForever(move), withKey: "move")
-     }
-     } else {
-     if car.responseFromSensors(inPositions: [.left]).isEmpty {
-     print("changeLane")
-     car.wantsToChangeLane = false
-     car.change(lane: -1)
-     car.cantMoveForXTime = 2
-     car.pointsPerSecond *= 0.75
-     let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-     car.removeAction(forKey: "move")
-     car.run(SKAction.repeatForever(move), withKey: "move")
-     } else if car.responseFromSensors(inPositions: [.right]).isEmpty {
-     print("changeLane")
-     car.wantsToChangeLane = false
-     car.change(lane: 1)
-     car.cantMoveForXTime = 2
-     car.pointsPerSecond *= 0.75
-     let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-     car.removeAction(forKey: "move")
-     car.run(SKAction.repeatForever(move), withKey: "move")
-     }
-     }
-             car.timeToChangeLane = Double.randomWith2Decimals(inRange: 2..<4)
-             }
-             }
-            let leftCollisions = car.carsOnLeft()
-            let rightCollisions = car.carsOnRight()
-            print("count",leftCollisions.count,rightCollisions.count)
-            if !leftCollisions.isEmpty && !rightCollisions.isEmpty {
-                switch  arc4random_uniform(3) {
-                case 0:
-                    car.pointsPerSecond = Double(arc4random_uniform(100)+80)//ppS to CGFloat
-                    let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-                    car.removeAction(forKey: "move")
-                    car.run(SKAction.repeatForever(move), withKey: "move")
-                case 1:
-                    for ocar in leftCollisions {
-                    ocar.pointsPerSecond = Double(arc4random_uniform(100)+80)//ppS to CGFloat
-                    let move = SKAction.moveBy(x: 0.0, y: CGFloat(ocar.pointsPerSecond), duration: 1.0)
-                    ocar.removeAction(forKey: "move")
-                    ocar.run(SKAction.repeatForever(move), withKey: "move")
-                    }
-                case 2:
-                    for ocar in rightCollisions {
-                    ocar.pointsPerSecond = Double(arc4random_uniform(100)+80)//ppS to CGFloat
-                    let move = SKAction.moveBy(x: 0.0, y: CGFloat(ocar.pointsPerSecond), duration: 1.0)
-                    ocar.removeAction(forKey: "move")
-                    ocar.run(SKAction.repeatForever(move), withKey: "move")
-                    }
-                default: break
-                }
             }*/
             
             //Randomise
@@ -143,7 +103,56 @@ class MVAMarvinAI {
         }
     }
     
-    private func laneIsBlocked(byCars: Set<MVACar>) {
+    private func checkJam(onLane lane: Int) {
+        let carsOnLeft = cars.filter({ $0.currentLane == (lane-1) && player.position.y < $0.position.y }).count
+        let carsInWay = cars.filter({ $0.currentLane == lane && player.position.y < $0.position.y })
+        let carsOnRight = cars.filter({ $0.currentLane == (lane+1) && player.position.y < $0.position.y }).count
+        if let carInWay = carsInWay.sorted(by: { $0.position.y < $1.position.y }).first { //???
+            carInWay.isFirst = true
+            let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight])
+            let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft])
+            let maxLane = carInWay.roadLanePositions.count-1
+            switch (leftSide.isEmpty,rightSide.isEmpty,carInWay.currentLane) {
+            case (false,false,_):
+                //center lane
+                if carInWay.isFreeToMove() {
+                    carInWay.getOutOfTheWay = true
+                } else {
+                    for car in rightSide.union(leftSide).filter({ $0.isFreeToMove() }) {
+                        car.getOutOfTheWay = true
+                    }
+                }
+            case (true,false,0):
+                //left lane
+                if lanesBlocked(byMostLeftCar: carInWay) {
+                    if carInWay.isFreeToMove() {
+                        carInWay.getOutOfTheWay = true
+                    } else {
+                        for car in rightSide.filter({ $0.isFreeToMove() }) {
+                            car.getOutOfTheWay = true
+                        }
+                    }
+                }
+            case (false,true,maxLane):
+                //right lane
+                if lanesBlocked(byMostRightCar: carInWay) {
+                    if carInWay.isFreeToMove() {
+                        carInWay.getOutOfTheWay = true
+                    } else {
+                        for car in leftSide.filter({ $0.isFreeToMove() }) {
+                            car.getOutOfTheWay = true
+                        }
+                    }
+                }
+            default: break
+            }
+            for car in leftSide.union(rightSide) {
+                car.cantMoveForXTime = 1.0
+            }
+        }
+    }
+    
+    /*private func laneIsBlocked(byCars: Set<MVACar>) {
         if  byCars.count > 0 {
         var cars = Array(byCars)
             for car in cars {
@@ -207,33 +216,23 @@ class MVAMarvinAI {
             //centerCar and othe cases
         }
     }
-    
-    private func mostLeftCar(_ car: MVACar, blockedFromRightBy rightCars: Set<MVACar>) {
-        var carsToTheRightOfRightCar = Set<MVACar>()
-        for car in rightCars {
-            carsToTheRightOfRightCar = carsToTheRightOfRightCar.union(car.responseFromSensors(inPositions: [.frontRight,.right]))
+    */
+    private func lanesBlocked(byMostLeftCar leftCar: MVACar) -> Bool {
+        for car in leftCar.responseFromSensors(inPositions: [.frontRight,.right,.backRight]) {
+            if car.responseFromSensors(inPositions: [.frontRight,.right,.backRight,.back]).isEmpty == false {
+                return true
+            }
         }
-        if !carsToTheRightOfRightCar.isEmpty {
-            //blocked again
-            laneIsBlocked(byCars: carsToTheRightOfRightCar)
-            return
-        } else {
-            //???
-        }
+        return false
     }
     
-    private func mostRightCar(_ car: MVACar, blockedFromLeftBy leftCars: Set<MVACar>) {
-        var carsToTheRightOfRightCar = Set<MVACar>()
-        for car in leftCars {
-            carsToTheRightOfRightCar = carsToTheRightOfRightCar.union(car.responseFromSensors(inPositions: [.frontLeft,.left]))
+    private func lanesBlocked(byMostRightCar rightCar: MVACar) -> Bool {
+        for car in rightCar.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft]) {
+            if car.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft,.back]).isEmpty == false {
+                return true
+            }
         }
-        if !carsToTheRightOfRightCar.isEmpty {
-            //blocked again
-            laneIsBlocked(byCars: carsToTheRightOfRightCar)
-            return
-        } else {
-            //???
-        }
+        return false
     }
     
     private func randomiseBehaviour(forCar car: MVACar) {
@@ -258,10 +257,7 @@ class MVAMarvinAI {
             //Speed
             if car.timeToChangeSpeed <= 0.0 {
                 if car.responseFromSensors(inPositions: [.front]).isEmpty {
-                    car.pointsPerSecond = Double(arc4random_uniform(50)+40)//ppS to CGFloat
-                    let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
-                    car.removeAction(forKey: "move")
-                    car.run(SKAction.repeatForever(move), withKey: "move")
+                    car.changeSpeed(CGFloat(arc4random_uniform(50)+40))//ppS to CGFloat
                     car.cantMoveForXTime = 0.5
                 }
                 car.timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)

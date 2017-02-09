@@ -79,6 +79,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         car.run(SKAction.repeatForever(move), withKey: "move")//???
         scene.player = car
         scene.gameLogic.currentLane = lane
+        scene.intel.player = car
         
         let spawn = SKAction.run {
             scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanePositions)
@@ -115,12 +116,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
                 if let node = contact.bodyA.node as? MVACar {
                     node.removeFromParent()
-                    intel.entities.remove(node)
+                    intel.cars.remove(node)
                 }
             } else {
                 if let node = contact.bodyB.node as? MVACar {
                     node.removeFromParent()
-                    intel.entities.remove(node)
+                    intel.cars.remove(node)
                 }
             }
         } else if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.spawner.rawValue) {
@@ -172,7 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //then try enumerate nodes with name road
         for road in roadNodes {
-            let roadPosition = road.position.y+(road as! SKSpriteNode).size.height
+            let roadPosition = road.position.y+road.size.height
             if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
                 road.removeFromParent()
             }

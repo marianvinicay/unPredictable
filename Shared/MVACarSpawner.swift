@@ -43,13 +43,11 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
 
             car.zPosition = 1.0
-            car.pointsPerSecond = Double(arc4random_uniform(40)+50)
-            let move = SKAction.move(by: CGVector(dx: 0.0, dy: car.pointsPerSecond), duration: 1.0)//???
-            car.run(SKAction.repeatForever(move), withKey: "move")
+            car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
             car.color = UIColor.getRandomColor()
             (self.parent as? GameScene)?.bots.append(car)
             (self.parent as? GameScene)?.addChild(car)
-            (self.parent as? GameScene)?.intel.entities.insert(car)
+            (self.parent as? GameScene)?.intel.cars.insert(car)
         } else {
             intersectingCars.removeLast()//???
         }

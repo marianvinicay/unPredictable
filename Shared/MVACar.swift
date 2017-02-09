@@ -20,13 +20,13 @@ enum MVAPosition {
      */
     case frontLeft, front, frontRight
     case right, left
-    case back//,backLeft, backRight
+    case back, backLeft, backRight
 }
 
 class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var pointsPerSecond = 0.0
+    var pointsPerSecond: CGFloat = 0.0
     var timeToChangeLane = Double.randomWith2Decimals(inRange: 1..<3)
     var timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)
 
@@ -39,16 +39,21 @@ class MVACar: SKSpriteNode {
         }
     }
     
+    var isFirst = false
+    
     func timeCountdown(deltaT: Double) {
         timeToChangeLane -= deltaT
         timeToChangeSpeed -= deltaT
         if cantMoveForXTime > 0 {
             cantMoveForXTime -= deltaT
         }
-        if pointsPerSecond == 150.1 {
+        if getOutOfTheWay {
             textNode.text = "PRIORITY"
         } else {
             textNode.text = cantMoveForXTime <= 0.0 ? "move":"stop"
+        }
+        if isFirst {
+            textNode.text! += "\n1st"
         }
     }
     
@@ -62,7 +67,7 @@ class MVACar: SKSpriteNode {
     
     var currentLane: Int!
     var cantMoveForXTime = 0.0
-    var wantsToChangeLane = false
+    var getOutOfTheWay = false
     var textNode: SKLabelNode!
     
     private var frontSensor: [CGPoint] {
@@ -92,7 +97,7 @@ class MVACar: SKSpriteNode {
     private var frontRightSensors: [CGPoint] {
         get {
             let rightDiagUP = CGPoint(x: position.x+(size.width), y: position.y+200)
-            let rightDiagC = CGPoint(x: position.x+(size.width), y: position.y+102)
+            let rightDiagC = CGPoint(x: position.x+(size.width), y: position.y+150)
             return [rightDiagUP,rightDiagC]
         }
     }
@@ -100,14 +105,30 @@ class MVACar: SKSpriteNode {
     private var frontLeftSensors: [CGPoint] {
         get {
             let leftDiagUP = CGPoint(x: position.x-(size.width), y: position.y+200)
-            let leftDiagC = CGPoint(x: position.x-(size.width), y: position.y+102)
+            let leftDiagC = CGPoint(x: position.x-(size.width), y: position.y+150)
             return [leftDiagUP,leftDiagC]
         }
     }
     
     private var backSensor: [CGPoint] {
         get {
-            return [CGPoint(x: position.x, y: position.y-(size.height/2)-30.0)]
+            return [CGPoint(x: position.x, y: position.y-(size.height/2)-100.0)]
+        }
+    }
+    
+    private var backRightSensors: [CGPoint] {
+        get {
+            let rightDiagD = CGPoint(x: position.x+(size.width), y: position.y-200)
+            let rightDiagC = CGPoint(x: position.x+(size.width), y: position.y-150)
+            return [rightDiagD,rightDiagC]
+        }
+    }
+    
+    private var backLeftSensors: [CGPoint] {
+        get {
+            let leftDiagD = CGPoint(x: position.x-(size.width), y: position.y-200)
+            let leftDiagC = CGPoint(x: position.x-(size.width), y: position.y-150)
+            return [leftDiagD,leftDiagC]
         }
     }
     
@@ -121,7 +142,7 @@ class MVACar: SKSpriteNode {
         self.textNode.fontColor = UIColor.white
         self.addChild(self.textNode)
         /*if mindSet == .player {
-            for point in rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors {
+            for point in rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors+backLeftSensors+backRightSensors {
                 let dot = SKSpriteNode(color: .red, size: CGSize(width: 5.0, height: 5.0))
                 dot.position = point
                 addChild(dot)
@@ -144,7 +165,8 @@ class MVACar: SKSpriteNode {
     
     func changeLane(inDirection direction: MVAPosition) -> Bool {
         let newLane = direction == .left ? currentLane-1:currentLane+1
-        let responseFromSensors = self.mindSet == .player ? true:self.responseFromSensors(inPositions: [direction]).isEmpty
+        var carsBlockingDirection = self.responseFromSensors(inPositions: [direction])
+        let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
         if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
             if let newLaneCoor = roadLanePositions[newLane] {
                 self.isMoving = true
@@ -156,6 +178,12 @@ class MVACar: SKSpriteNode {
                 self.run(SKAction.sequence([move,endMoving]))
                 return true
             }
+        } else if self.roadLanePositions.keys.contains(newLane) && responseFromSensors == false {
+            /*carsBlockingDirection = Set(carsBlockingDirection.filter({ $0.mindSet != .player }))
+            if let carToMove = carsBlockingDirection.first {
+                _ = carToMove.changeLane(inDirection: direction)//!!!
+                return false
+            }*/
         }
         return false
     }
@@ -170,6 +198,8 @@ class MVACar: SKSpriteNode {
             case .left: foundCars = foundCars.union(carsIntersecting(sensors: leftSensors))
             case .right: foundCars = foundCars.union(carsIntersecting(sensors: rightSensors))
             case .back: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
+            case .backRight: foundCars = foundCars.union(carsIntersecting(sensors: backRightSensors))
+            case .backLeft: foundCars = foundCars.union(carsIntersecting(sensors: backLeftSensors))
             }
         }
         return foundCars
@@ -183,6 +213,22 @@ class MVACar: SKSpriteNode {
             }
         }
         return intersectingCars
+    }
+    
+    func changeSpeed(_ speed: CGFloat) {
+        if speed != self.pointsPerSecond {
+            self.pointsPerSecond = speed
+            let move = SKAction.moveBy(x: 0.0, y: self.pointsPerSecond, duration: 1.0)
+            self.removeAction(forKey: "move")
+            self.run(SKAction.repeatForever(move), withKey: "move")
+        }
+    }
+    
+    func isFreeToMove() -> Bool {
+        let front = responseFromSensors(inPositions: [.front,.frontLeft,.frontRight]).isEmpty
+        let left = responseFromSensors(inPositions: [.left]).isEmpty
+        let right = responseFromSensors(inPositions: [.right]).isEmpty
+        return front || left || right
     }
     /*
     func diagonalRight() -> Set<MVACar> {
