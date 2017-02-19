@@ -27,6 +27,7 @@ enum MVAPosition {
 class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
+    var test: Int? //???
     var pointsPerSecond: CGFloat = 0.0
     var timeToChangeLane = Double.randomWith2Decimals(inRange: 1..<3)
     var timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)
