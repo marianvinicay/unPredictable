@@ -125,7 +125,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         } else if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.spawner.rawValue) {
-            print("spawner")
         }
     }
     

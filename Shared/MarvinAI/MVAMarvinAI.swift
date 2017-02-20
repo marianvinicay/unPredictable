@@ -27,6 +27,13 @@ class MVAMarvinAI {
             checkTime -= dTime
         }
         
+        if let blockingCars = player.mustStayInCurrentLane() {
+            for car in blockingCars {
+                //!!!
+                car.getOutOfTheWay = true
+            }
+        }
+        
         for car in cars {
             car.timeCountdown(deltaT: dTime)
             //Front Check
@@ -40,10 +47,12 @@ class MVAMarvinAI {
             }
             
             if car.getOutOfTheWay {
+                if player.currentLane != car.currentLane {
+                    car.getOutOfTheWay = false
+                }
                 if carInFront == nil {
                     //speed up
                     car.changeSpeed(200)
-                    print("speedUp",car.pointsPerSecond)
                 }
                 if arc4random_uniform(2) == 1 {
                     if car.changeLane(inDirection: .right) == false {

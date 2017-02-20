@@ -17,7 +17,7 @@ enum MVAPosition {
      –––––––––--
       L | ⍓ | R
      -----------
-    BL? | B | BR?
+     BL | B | BR
      */
     case frontLeft, front, frontRight
     case right, left
@@ -27,7 +27,6 @@ enum MVAPosition {
 class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var test: Int? //???
     var pointsPerSecond: CGFloat = 0.0
     var timeToChangeLane = Double.randomWith2Decimals(inRange: 1..<3)
     var timeToChangeSpeed = Double.randomWith2Decimals(inRange: 1..<2)
@@ -177,6 +176,7 @@ class MVACar: SKSpriteNode {
                     self.isMoving = false
                 })
                 let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
+                move.timingMode = .easeInEaseOut
                 self.run(SKAction.sequence([move,endMoving]))
                 return true
             }
@@ -188,6 +188,25 @@ class MVACar: SKSpriteNode {
             }*/
         }
         return false
+    }
+    
+    func mustStayInCurrentLane() -> Set<MVACar>? {
+        let frontBlocked = !responseFromSensors(inPositions: [.front]).isEmpty
+        if frontBlocked {
+            let leftF = responseFromSensors(inPositions: [.frontLeft])
+            let left = responseFromSensors(inPositions: [.left])
+            let rightF = responseFromSensors(inPositions: [.frontRight])
+            let right = responseFromSensors(inPositions: [.right])
+            let blockedLeft = !leftF.isEmpty && !left.isEmpty
+            let blockedRight = !rightF.isEmpty && !right.isEmpty
+            
+            if blockedLeft {
+                return left.union(leftF)
+            } else if blockedRight {
+                return right.union(rightF)
+            }
+        }
+        return nil
     }
     
     func responseFromSensors(inPositions positions: [MVAPosition]) -> Set<MVACar> {
