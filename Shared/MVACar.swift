@@ -166,7 +166,7 @@ class MVACar: SKSpriteNode {
     
     func changeLane(inDirection direction: MVAPosition) -> Bool {
         let newLane = direction == .left ? currentLane-1:currentLane+1
-        var carsBlockingDirection = self.responseFromSensors(inPositions: [direction])
+        let carsBlockingDirection = self.responseFromSensors(inPositions: [direction])
         let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
         if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
             if let newLaneCoor = roadLanePositions[newLane] {
@@ -236,15 +236,23 @@ class MVACar: SKSpriteNode {
         return intersectingCars
     }
     
-    func changeSpeed(_ speed: CGFloat) {
+    func changeSpeed(_ speed: CGFloat, durationOfChange duration: CGFloat) {
         if speed != self.pointsPerSecond {
+            let oldSpeed = self.pointsPerSecond
+            let speedDifference = abs(speed-oldSpeed)
+            
+            let rateOfSpeedChange = Int(round(speedDifference/duration))
+            
+            for _ in 0..<rateOfSpeedChange {
+                let move = SKAction.moveBy(x: 0.0, y: self.pointsPerSecond, duration: TimeInterval(rateOfSpeedChange))
+                self.removeAction(forKey: "move")
+                self.run(SKAction.repeatForever(move), withKey: "move")
+            }
             self.pointsPerSecond = speed
-            let move = SKAction.moveBy(x: 0.0, y: self.pointsPerSecond, duration: 1.0)
-            self.removeAction(forKey: "move")
-            self.run(SKAction.repeatForever(move), withKey: "move")
         }
     }
     
+    //????
     func isFreeToMove() -> Bool {
         let front = responseFromSensors(inPositions: [.front,.frontLeft,.frontRight]).isEmpty
         let left = responseFromSensors(inPositions: [.left]).isEmpty

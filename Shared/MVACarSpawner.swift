@@ -43,7 +43,7 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
 
             car.zPosition = 1.0
-            car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
+            car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
             car.color = UIColor.getRandomColor()
             (self.parent as? GameScene)?.bots.append(car)
             (self.parent as? GameScene)?.addChild(car)
