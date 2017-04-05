@@ -9,6 +9,14 @@
 import Foundation
 import SpriteKit
 
+extension Set {
+    var isFull: Bool {
+        get {
+            return !self.isEmpty
+        }
+    }
+}
+
 class MVAMarvinAI {
     var player: MVACar!
     var cars = Set<MVACar>()
@@ -16,38 +24,37 @@ class MVAMarvinAI {
     var checkTime = 0.0
     
     func update(withDeltaTime dTime: TimeInterval) {
-        for car in cars {
-            car.isFirst = false
-        }
         if checkTime <= 0.0 {
             checkTime = 0.5
-            let pLane = player.currentLane
-            checkJam(onLane: pLane!)
+            checkJam()
+            //let pLane = player.currentLane
+            //checkJam(onLane: pLane!)
         } else {
             checkTime -= dTime
         }
         
-        //1. player must stay in lane (blocked front & sides)
-        if let blockingCars = player.mustStayInCurrentLane() {
-            for car in blockingCars {
-                //!!!
-                car.getOutOfTheWay = true
-            }
-        }
-        
         for car in cars {
             car.timeCountdown(deltaT: dTime)
-            //2. car in-front (blocked front of car in same lane)
-            let carInFront = car.responseFromSensors(inPositions: [.front]).first
-            if carInFront != nil {
-                if car.getOutOfTheWay {
-                    carInFront!.getOutOfTheWay = true
-                } else {
-                    car.changeSpeed(CGFloat(arc4random_uniform(UInt32(abs(carInFront!.pointsPerSecond-5)))+40), durationOfChange: 1.0)//???
+            //car in-front (blocked front of car)
+            if let carInFront = car.responseFromSensors(inPositions: [.front]).first {
+                //if car.getOutOfTheWay {
+                //    carInFront.getOutOfTheWay = true
+                //} else {
+                if car.canPerformManeuver && arc4random_uniform(2) == 1 {
+                    if car.changeLane(inDirection: .left) == false {
+                        if car.changeLane(inDirection: .right) == false {
+                            let speedDifference = CGFloat(arc4random_uniform(10)+10)
+                            car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)
+                        }
+                    }
+                } else if car.canPerformManeuver {
+                    let speedDifference = CGFloat(arc4random_uniform(10)+10)
+                    car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)//???
                 }
+                //}
             }
             
-            if car.getOutOfTheWay {
+            /*if car.getOutOfTheWay {
                 if player.currentLane != car.currentLane {
                     car.getOutOfTheWay = false
                 }
@@ -78,6 +85,10 @@ class MVAMarvinAI {
                 if car.getOutOfTheWay == false {
                     car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
                 }
+            }*/
+            
+            if car.hasPriority == false && car.pointsPerSecond == 200.0 {
+                car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
             }
             
             //Randomise
@@ -85,29 +96,110 @@ class MVAMarvinAI {
         }
     }
     
-    //3. Check jam (blocked lane smwhere/can't passthrough)
-    private func checkJam(onLane lane: Int) {
-        //let carsOnLeft = cars.filter({ $0.currentLane == (lane-1) && player.position.y < $0.position.y }).count
+    private func checkJam(withCars mCrs: Set<MVACar>) {
+        //var myCars = mCrs
+        var badApples = [MVACar]()
+        for car in cars {
+            if !car.wasChecked {
+                //if is car blocked? !!!! take current lane into account
+                //check lane
+                badApples += carsBlockingCar(car).filter({ $0.mindSet != .player })//return Set -> choose one member and do smt
+            }
+        }
+        for car in cars {
+            car.wasChecked = false
+        }
+    }
+    
+    private func carsBlockingCar(_ car: MVACar) -> Set<MVACar> {
+        let leftF = car.responseFromSensors(inPositions: [.frontLeft])
+        let leftC = car.responseFromSensors(inPositions: [.left])
+        let leftB = car.responseFromSensors(inPositions: [.backLeft])
+        let left = leftF.union(leftC).union(leftB)
+        let rightF = car.responseFromSensors(inPositions: [.frontRight])
+        let rightC = car.responseFromSensors(inPositions: [.right])
+        let rightB = car.responseFromSensors(inPositions: [.backRight])
+        let right = rightF.union(rightC).union(rightB)
+        switch car.currentLane {
+        case 0:
+            if right.isFull {
+                //right consists of middle cars -> check them
+                var badCars = Set<MVACar>()
+                for car in right {
+                    badCars = badCars.union(carsBlockingCar(car))
+                }
+                badCars.remove(car)//???
+                for car in badCars {
+                    car.wasChecked = true
+                }
+                return badCars
+            }
+        case 2:
+            if left.isFull {
+                //left consists of middle cars -> check them
+                var badCars = Set<MVACar>()
+                for car in left {
+                    badCars = badCars.union(carsBlockingCar(car))
+                }
+                badCars.remove(car)//???
+                for car in badCars {
+                    car.wasChecked = true
+                }
+                return badCars
+            }
+        default:
+            if left.isFull && right.isFull {
+                //center car blocked from sides
+                let badCars = left.union(right)
+                for car in badCars {
+                    car.wasChecked = true
+                }
+                return badCars
+            }
+        }
+        return []
+    }
+    
+    private func resolveCars(_ badCars: [MVACar]) {// return true/false
+        let randNum = Int(arc4random_uniform(UInt32(badCars.count-1)))
+        if let randomIndex = badCars.index(badCars.startIndex, offsetBy: randNum, limitedBy: badCars.endIndex) {
+            /*if badCars[randomIndex].changeLane(inDirection: .right) == false {
+                if badCars[randomIndex].changeLane(inDirection: .left) == false {
+                    //badCars[randomIndex].changeSpeed(200, durationOfChange: 1)
+                }
+            }*/
+        }
+    }
+    
+    private func checkJam() {
+        let lane = player.currentLane
         let carsInWay = cars.filter({ $0.currentLane == lane && player.position.y < $0.position.y })
-        //let carsOnRight = cars.filter({ $0.currentLane == (lane+1) && player.position.y < $0.position.y }).count
         if let carInWay = carsInWay.sorted(by: { $0.position.y < $1.position.y }).first { //???
-            carInWay.isFirst = true
-            let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight])
-            let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft])
+            let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight]).filter({ $0 != player })//&& $0.cantMoveForXTime <= 0.0 }
+            let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft]).filter({ $0 != player })
             let maxLane = carInWay.roadLanePositions.count-1
             switch (leftSide.isEmpty,rightSide.isEmpty,carInWay.currentLane) {
             case (false,false,_):
-                //center lane
-                if carInWay.isFreeToMove() {
+                //center lane, blocked from sides
+                print("center")
+                freeTheWay(blockedByCars: rightSide+leftSide+[carInWay]) // + car in centre ???
+                /*if carInWay.isFreeToMove() {
                     carInWay.getOutOfTheWay = true
                 } else {
                     for car in rightSide.union(leftSide).filter({ $0.isFreeToMove() }) {
                         car.getOutOfTheWay = true
                     }
-                }
+                }*/
             case (true,false,0):
-                //left lane
-                if lanesBlocked(byMostLeftCar: carInWay) {
+                //add most right lane !!!
+                //left lane, blocked from right
+                var mostRightCars = Set<MVACar>()
+                for car in rightSide {
+                    //mostRightCars.union(carsBlockingCar(car))???
+                    mostRightCars = mostRightCars.union(car.responseFromSensors(inPositions: [.frontRight,.right,.backRight]))
+                }
+                freeTheWay(blockedByCars: rightSide+Array(mostRightCars))
+                /*if lanesBlocked(byMostLeftCar: carInWay) {
                     if carInWay.isFreeToMove() {
                         carInWay.getOutOfTheWay = true
                     } else {
@@ -115,10 +207,16 @@ class MVAMarvinAI {
                             car.getOutOfTheWay = true
                         }
                     }
-                }
+                }*/
             case (false,true,maxLane):
-                //right lane
-                if lanesBlocked(byMostRightCar: carInWay) {
+                //right lane, blocked from left
+                var mostLeftCars = Set<MVACar>()
+                for car in leftSide {
+                    //mostRightCars.union(carsBlockingCar(car))???
+                    mostLeftCars = mostLeftCars.union(car.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft]))
+                }
+                freeTheWay(blockedByCars: leftSide+Array(mostLeftCars))
+                /*if lanesBlocked(byMostRightCar: carInWay) {
                     if carInWay.isFreeToMove() {
                         carInWay.getOutOfTheWay = true
                     } else {
@@ -126,31 +224,60 @@ class MVAMarvinAI {
                             car.getOutOfTheWay = true
                         }
                     }
-                }
+                }*/
             default: break
             }
-            for car in leftSide.union(rightSide) {
-                car.cantMoveForXTime = 1.0
+            for car in leftSide+rightSide {
+                //car.cantMoveForXTime = 0.5
             }
         }
     }
     
-    private func lanesBlocked(byMostLeftCar leftCar: MVACar) -> Bool {
-        for car in leftCar.responseFromSensors(inPositions: [.frontRight,.right,.backRight]) {
-            if car.responseFromSensors(inPositions: [.frontRight,.right,.backRight,.back]).isEmpty == false {
-                return true
+    private func freeTheWay(blockedByCars cars: [MVACar]) {
+        let carsFreeToMove = cars.filter({ $0.freeToMove().isEmpty == false })
+        let randomIndex = Int(arc4random_uniform(UInt32(carsFreeToMove.count)))
+        if let badCar = carsFreeToMove[safe: randomIndex] {
+            //badCar.hasPriority = true
+            let movePositions = badCar.freeToMove()
+            badCar.hasPriority = true
+            badCar.stampIt()
+            //randomise ˇˇˇ ???
+            if movePositions.contains(.left) {
+                _ = badCar.changeLane(inDirection: .left)
+                badCar.hasPriority = false
+            } else if movePositions.contains(.right) {
+                _ = badCar.changeLane(inDirection: .right)
+                badCar.hasPriority = false
+            } else {//if contains .front ???
+                badCar.changeSpeed(200, durationOfChange: 1.0)
+                //badCar.hasPriority = false
             }
-        }
-        return false
-    }
-    
-    private func lanesBlocked(byMostRightCar rightCar: MVACar) -> Bool {
-        for car in rightCar.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft]) {
-            if car.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft,.back]).isEmpty == false {
-                return true
+            // no more 'collisions' completion -> hasPriority = false
+            
+        /*if arc4random_uniform(2) == 1 {
+            if badCar.changeLane(inDirection: .right) == false {
+                if badCar.changeLane(inDirection: .left) {
+                    badCar.hasPriority = false
+                } else {
+                    badCar.changeSpeed(200, durationOfChange: 1.0)
+                }
+            } else {
+                badCar.hasPriority = false
             }
+            badCar.cantMoveForXTime = 1.0
+        } else {
+            if badCar.changeLane(inDirection: .left) == false {
+                if badCar.changeLane(inDirection: .right) {
+                    badCar.hasPriority = false
+                } else {
+                    badCar.changeSpeed(200, durationOfChange: 1.0)
+                }
+            } else {
+                badCar.hasPriority = false
+            }
+            badCar.cantMoveForXTime = 1.0
+        }*/
         }
-        return false
     }
     
     private func randomiseBehaviour(forCar car: MVACar) {

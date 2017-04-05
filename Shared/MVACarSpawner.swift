@@ -10,7 +10,7 @@ import SpriteKit
 
 class MVACarSpawner: SKSpriteNode {
     class func createSpawner(withWidth width: CGFloat) -> MVACarSpawner {
-        let spawner = MVACarSpawner(color: .red, size: CGSize(width: width, height: 150.0))
+        let spawner = MVACarSpawner(color: .red, size: CGSize(width: width, height: 200.0))
         spawner.physicsBody = SKPhysicsBody(rectangleOf: spawner.size)
         spawner.physicsBody?.affectedByGravity = false
         spawner.physicsBody?.isDynamic = false
