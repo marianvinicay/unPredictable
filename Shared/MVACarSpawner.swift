@@ -14,9 +14,9 @@ class MVACarSpawner: SKSpriteNode {
         spawner.physicsBody = SKPhysicsBody(rectangleOf: spawner.size)
         spawner.physicsBody?.affectedByGravity = false
         spawner.physicsBody?.isDynamic = false
-        spawner.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
-        spawner.physicsBody?.collisionBitMask = 0
-        spawner.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        spawner.physicsBody?.categoryBitMask = MVAPhysicsCategory.spawner.rawValue
+        spawner.physicsBody?.collisionBitMask = MVAPhysicsCategory.spawner.rawValue
+        //spawner.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         
         return spawner
     }
@@ -38,10 +38,17 @@ class MVACarSpawner: SKSpriteNode {
             }
             lastLaneSpawn = carLane
             let position = CGPoint(x: roadLanes[carLane]!, y: self.position.y)
-            let car = MVACar(withSize: CGSize(), andMindSet: .bot, color: UIColor.getRandomColor())
+            var img = "Car"
+            let rand = arc4random_uniform(3)
+            if rand == 1 {
+                img = "Mini_van"
+            } else if rand == 2 {
+                img = "taxi"
+            }
+            let car = MVACar(withSize: CGSize(), andMindSet: .bot, img: img)
             car.currentLane = carLane
             car.position = position
-
+            
             car.zPosition = 1.0
             car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
             car.color = UIColor.getRandomColor()
@@ -52,5 +59,5 @@ class MVACarSpawner: SKSpriteNode {
             intersectingCars.removeLast()//???
         }
     }
-
+    
 }

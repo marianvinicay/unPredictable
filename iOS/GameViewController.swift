@@ -12,9 +12,11 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    private var scene: GameScene?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let scene = GameScene.newGameScene(withSize: self.view.frame.size)
+        scene = GameScene.newGameScene(withSize: self.view.frame.size)
 
         // Present the scene
         let skView = self.view as! SKView
@@ -29,10 +31,26 @@ class GameViewController: UIViewController {
         return true
     }
 
+    @IBAction func newSpawnSpeed(_ sender: UISegmentedControl) {
+        var time = 2.0
+        switch sender.selectedSegmentIndex {
+        case 0: time = 1.0
+        case 1: time = 2.0
+        case 2: time = 5.0
+        default: break
+        }
+        scene?.removeAction(forKey: "spawn")
+        let spawn = SKAction.run {
+            self.scene?.spawner.spawn(withExistingCars: self.scene!.bots, roadLanes: self.scene!.lanePositions)
+        }
+        let wait = SKAction.wait(forDuration: time)
+        scene?.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
+    }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .all
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.

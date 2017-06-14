@@ -34,8 +34,9 @@ extension UIColor {
 
 enum MVAPhysicsCategory: UInt32 {
     case car = 1
-    case remover = 2
-    case spawner = 3
+    case player = 2
+    case remover = 3
+    case spawner = 4
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -75,8 +76,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.cameraNode = SKCameraNode()
         scene.cameraNode.position.x = scene.frame.size.width/2
         scene.camera = scene.cameraNode
-        let car = MVACar(withSize: CGSize(), andMindSet: .player, color: .blue)
-        car.physicsBody?.categoryBitMask = 33
+        let car = MVACar(withSize: CGSize(), andMindSet: .player, img: "Audi")
+        car.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
+        car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        car.physicsBody?.isDynamic = false
         let lane = Int(arc4random_uniform(scene.road.numberOfLanes))
         car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: size.height/3)
         car.currentLane = lane
@@ -92,8 +96,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let spawn = SKAction.run {
             scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanePositions)
         }
-        let wait = SKAction.wait(forDuration: 1.0)
-        scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])))
+        let wait = SKAction.wait(forDuration: 2.0)
+        scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
         
         //remover
         let remover = SKSpriteNode(color: .purple, size: CGSize(width: scene.frame.width, height: 10.0))
@@ -105,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         remover.physicsBody?.affectedByGravity = false
         remover.physicsBody?.isDynamic = false
         remover.physicsBody?.categoryBitMask = MVAPhysicsCategory.remover.rawValue
-        remover.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        remover.physicsBody?.collisionBitMask = MVAPhysicsCategory.remover.rawValue
         remover.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         scene.physicsWorld.contactDelegate = scene
         
@@ -118,9 +122,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return scene
     }
     
+    func gameOver() {
+        if player.childNode(withName: "txt") == nil {
+            let label = SKLabelNode(text: "Game\nOver!")
+            label.name = "txt"
+            label.fontSize += 10	
+            player.addChild(label)
+            label.position.y += size.height/4
+            self.isPaused = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [unowned label] in
+                self.isPaused = false
+                self.player.removeChildren(in: [label])
+            })
+        }
+    }
+    
     func didBegin(_ contact: SKPhysicsContact) {
-        let contactN = [contact.bodyA.categoryBitMask,contact.bodyB.categoryBitMask]
-        if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.remover.rawValue) {
+        let collision = contact.bodyA.categoryBitMask & contact.bodyB.categoryBitMask
+        if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.remover.rawValue {
             if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
                 if let node = contact.bodyA.node as? MVACar {
                     node.removeFromParent()
@@ -132,7 +151,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     intel.cars.remove(node)
                 }
             }
-        } else if contactN.contains(MVAPhysicsCategory.car.rawValue) && contactN.contains(MVAPhysicsCategory.spawner.rawValue) {
+        } else if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.player.rawValue {
+            gameOver()
         }
     }
     
