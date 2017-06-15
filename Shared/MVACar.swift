@@ -46,15 +46,17 @@ public class MVACar: SKSpriteNode {
     
     ///debug func
     func stampIt(withLabel txt: String?) {
-        textNode.text = txt
-        textNode.zPosition = 5
-        if self.children.count <= 3 {
+        if mindSet != .player {
+            textNode.text = txt
+            textNode.zPosition = 5
+        }
+        /*if self.children.count <= 3 {
             let node = SKSpriteNode(color: .red, size: CGSize(width: 20, height: 20))
             //let txt = SKLabelNode(text: txt)
             node.name = "stamp"
             //node.addChild(txt)
             self.addChild(node)
-        }
+        }*/
     }
     
     var isFirst = false
@@ -62,8 +64,8 @@ public class MVACar: SKSpriteNode {
     func timeCountdown(deltaT: Double) {
         timeToChangeLane -= deltaT
         timeToChangeSpeed -= deltaT
-        if cantMoveForXTime > 0 {
-            cantMoveForXTime -= deltaT
+        if cantMoveForTime > 0 {
+            cantMoveForTime -= deltaT
         }
         if hasPriority {
             //textNode.text = "PRIORITY"
@@ -78,23 +80,11 @@ public class MVACar: SKSpriteNode {
         }
     }
     
-    var isMoving = false
-    
     var currentLane: Int!
-    var cantMoveForXTime = 0.0
+    var cantMoveForTime = 0.0
     var hasPriority = false
     var textNode: SKLabelNode!
     var wasChecked = false
-    
-    
-    var canPerformManeuver: Bool {
-        get {
-            if isMoving == false && cantMoveForXTime <= 0.0 {
-                return true
-            }
-            return false
-        }
-    }
     
     private var frontSensor: [CGPoint] {
         get {
@@ -167,13 +157,13 @@ public class MVACar: SKSpriteNode {
         self.textNode.fontName = UIFont.systemFont(ofSize: 20, weight: 5).fontName
         self.textNode.fontColor = UIColor.white
         self.addChild(self.textNode)
-        if mindSet == .player {
-         for point in frontSensor/*rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors+backLeftSensors+backRightSensors*/ {
+        /*if mindSet == .player {
+         for point in frontSensor+leftSensors+rightSensors/*rightSensors+leftSensors+frontSensor+backSensor+frontRightSensors+frontLeftSensors+backLeftSensors+backRightSensors*/ {
          let dot = SKSpriteNode(color: .red, size: CGSize(width: 5.0, height: 5.0))
          dot.position = point
          addChild(dot)
          }
-        }
+        }*/
         
         physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 60.0, height: 100.0))
         physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
@@ -190,20 +180,20 @@ public class MVACar: SKSpriteNode {
     }
     
     func changeLane(inDirection direction: MVAPosition) -> Bool {
-        if isMoving == false {
+        if cantMoveForTime <= 0 {
             let newLane = direction == .left ? currentLane-1:currentLane+1
             let carsBlockingDirection = self.responseFromSensors(inPositions: [direction])
+            carsBlockingDirection.forEach({ $0.stampIt(withLabel: "blocking") })
             let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
             if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
                 if let newLaneCoor = roadLanePositions[newLane] {
-                    self.isMoving = true
                     currentLane = newLane
-                    let endMoving = SKAction.run({
-                        self.isMoving = false
-                    })
                     let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
                     move.timingMode = .easeInEaseOut
-                    self.run(SKAction.sequence([move,endMoving]))
+                    self.run(move)
+                    if mindSet != .player {
+                        cantMoveForTime = 0.3
+                    }
                     return true
                 }
             } else if self.roadLanePositions.keys.contains(newLane) && responseFromSensors == false {
@@ -264,13 +254,15 @@ public class MVACar: SKSpriteNode {
     func freeToMove() -> [MVAPosition] {
         var positions = [MVAPosition]()
         //if responseFromSensors(inPositions: [.backLeft,.backRight]).map({ $0.mindSet }).contains(.player) == false {
-        if responseFromSensors(inPositions: [.front]).isEmpty {
+        let carsAround: [MVAPosition:Set<MVACar>] = [.front:responseFromSensors(inPositions: [.front]),.left:responseFromSensors(inPositions: [.left]),.right:responseFromSensors(inPositions: [.right])]
+        print(carsAround)
+        if carsAround[.front]?.isEmpty == true {
             positions.append(.front)
         }
-        if currentLane == 0 && responseFromSensors(inPositions: [.right]).isEmpty {
+        if /*currentLane == 0 &&*/ carsAround[.right]?.isEmpty == true {
             positions.append(.right)
         }
-        if currentLane == 2/*MAXLANE!!!*/ && responseFromSensors(inPositions: [.left]).isEmpty {
+        if /*currentLane == 2/*MAXLANE!!!*/ &&*/ carsAround[.left]?.isEmpty == true {
             positions.append(.left)
         }
         //}
