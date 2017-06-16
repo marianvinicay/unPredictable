@@ -27,32 +27,35 @@ class MVARoadNode: SKSpriteNode {
         //firstLane
         let fLane = SKSpriteNode(imageNamed: "LeftLane")
         fLane.anchorPoint = CGPoint.zero
-        fLane.position = CGPoint(x: lGrass.size.width, y: 0.0)
+        fLane.position = CGPoint(x: lGrass.size.width-1, y: 0.0)
+        fLane.zPosition = 0.0
         road.laneXCoordinate[0] = fLane.position.x+(fLane.size.width/2)
         road.addChild(fLane)
-        var xEndOflastLane = Int(fLane.position.x+fLane.size.width)
+        var xEndOflastLane = fLane.position.x+fLane.size.width
         
         for i in 1..<createLanes {
             let lane = SKSpriteNode(imageNamed: "MiddleLane")
             lane.anchorPoint = CGPoint.zero
-            lane.position = CGPoint(x: xEndOflastLane, y: 0)
+            lane.zPosition = 0.2
+            lane.position = CGPoint(x: xEndOflastLane-1, y: 0)
             road.laneXCoordinate[i] = lane.position.x+(lane.size.width/2)
-            xEndOflastLane += Int(lane.size.width)
+            xEndOflastLane += lane.size.width-1
             road.addChild(lane)
         }
         
         //lastLane
         let lLane = SKSpriteNode(imageNamed: "RightLane")
         lLane.anchorPoint = CGPoint.zero
-        lLane.position = CGPoint(x: xEndOflastLane, y: 0)
+        lLane.zPosition = 0.0
+        lLane.position = CGPoint(x: xEndOflastLane-1, y: 0)
         road.laneXCoordinate[createLanes] = lLane.position.x+(lLane.size.width/2)
-        xEndOflastLane += Int(lLane.size.width)
+        xEndOflastLane += lLane.size.width-1
         road.addChild(lLane)
         //rightGrass
         let rGrass = SKSpriteNode(imageNamed: "RightGrass")
         rGrass.anchorPoint = CGPoint.zero
         rGrass.position = CGPoint(x: xEndOflastLane, y: 0)
-        xEndOflastLane += Int(rGrass.size.width)
+        xEndOflastLane += rGrass.size.width
         road.addChild(rGrass)
         
         road.size = CGSize(width: width, height: height)

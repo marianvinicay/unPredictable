@@ -255,7 +255,6 @@ public class MVACar: SKSpriteNode {
         var positions = [MVAPosition]()
         //if responseFromSensors(inPositions: [.backLeft,.backRight]).map({ $0.mindSet }).contains(.player) == false {
         let carsAround: [MVAPosition:Set<MVACar>] = [.front:responseFromSensors(inPositions: [.front]),.left:responseFromSensors(inPositions: [.left]),.right:responseFromSensors(inPositions: [.right])]
-        print(carsAround)
         if carsAround[.front]?.isEmpty == true {
             positions.append(.front)
         }

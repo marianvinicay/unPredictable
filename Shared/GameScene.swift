@@ -62,8 +62,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         // Set the scale mode to scale to fit the window
         
-        //scene.cameraNode = SKCameraNode()
-        //scene.camera = scene.cameraNode
         scene.road = MVARoadNode.createWith(numberOfLanes: 3, height: scene.size.height, andWidth: scene.size.width)
         scene.road.position = CGPoint.zero
         scene.roadNodes.insert(scene.road)
