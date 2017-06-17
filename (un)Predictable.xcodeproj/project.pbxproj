@@ -43,6 +43,10 @@
 		2F5A56641E1281EE00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
 		2F5A56651E1281EF00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
 		2F5A56661E1281EF00518651 /* MVACarSpawner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A56621E1281ED00518651 /* MVACarSpawner.swift */; };
+		2F65AA2B1EF3D48600150F32 /* OpeningScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */; };
+		2F65AA2C1EF3D48F00150F32 /* OpeningScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */; };
+		2F65AA2D1EF3D49000150F32 /* OpeningScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */; };
+		2F65AA2E1EF3D49000150F32 /* OpeningScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */; };
 		2F69B4871E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
 		2F69B48A1E0C1C0C00B57B01 /* MVAMindSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFAB1DE0EF7900415B8A /* MVAMindSet.swift */; };
 		2F69B48B1E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */; };
@@ -130,6 +134,7 @@
 		2F23E1511D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F5A56621E1281ED00518651 /* MVACarSpawner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarSpawner.swift; sourceTree = "<group>"; };
+		2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = OpeningScene.sks; sourceTree = "<group>"; };
 		2F7A089A1DC5D23A005561B9 /* MVACar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACar.swift; sourceTree = "<group>"; };
 		2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAGameLogic.swift; sourceTree = "<group>"; };
 		2F7ECFA61DE07C3F00415B8A /* MVAMarvinAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MVAMarvinAI.swift; path = MarvinAI/MVAMarvinAI.swift; sourceTree = "<group>"; };
@@ -192,6 +197,7 @@
 				2F7A089F1DC65209005561B9 /* MVAGameLogic.swift */,
 				2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */,
 				2F23E10C1D6EF21D00119E4F /* Assets.xcassets */,
+				2F65AA2A1EF3D48600150F32 /* OpeningScene.sks */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -428,6 +434,7 @@
 				2F23E1571D6EF21D00119E4F /* GameScene.sks in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F23E11D1D6EF21D00119E4F /* LaunchScreen.storyboard in Resources */,
+				2F65AA2B1EF3D48600150F32 /* OpeningScene.sks in Resources */,
 				2F23E15F1D6EF21D00119E4F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,6 +453,7 @@
 			files = (
 				2F078BB31E3C8E5600959AB0 /* Assets.xcassets in Resources */,
 				2F078BB21E3C8E2100959AB0 /* GameScene.sks in Resources */,
+				2F65AA2C1EF3D48F00150F32 /* OpeningScene.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E1441D6EF21D00119E4F /* Main.storyboard in Resources */,
+				2F65AA2D1EF3D49000150F32 /* OpeningScene.sks in Resources */,
 				2F23E1591D6EF21D00119E4F /* GameScene.sks in Resources */,
 				2F23E1611D6EF21D00119E4F /* Assets.xcassets in Resources */,
 			);
@@ -464,6 +473,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */,
+				2F65AA2E1EF3D49000150F32 /* OpeningScene.sks in Resources */,
 				2F23E15A1D6EF21D00119E4F /* GameScene.sks in Resources */,
 				2F23E1621D6EF21D00119E4F /* Assets.xcassets in Resources */,
 			);

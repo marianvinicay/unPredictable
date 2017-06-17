@@ -53,71 +53,71 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var remover: SKSpriteNode!
     var spawner: MVACarSpawner!
     
-    class func newGameScene(withSize size: CGSize) -> GameScene {
+    class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
         //let scene = GameScene(size: size)
         guard let scene = GameScene(fileNamed: "GameScene") else {
             print("Failed to load GameScene.sks")
             abort()
         }
-        // Set the scale mode to scale to fit the window
+        scene.initiateScene()
+        return scene
+    }
+    
+    private func initiateScene() {
+        road = MVARoadNode.createWith(numberOfLanes: 3, height: size.height, andWidth: size.width)
+        roadNodes.insert(road)
+        endOfWorld = road.position.y+road.size.height
+        lanePositions = road.laneXCoordinate
+        self.addChild(road)
         
-        scene.road = MVARoadNode.createWith(numberOfLanes: 3, height: scene.size.height, andWidth: scene.size.width)
-        scene.road.position = CGPoint.zero
-        scene.roadNodes.insert(scene.road)
-        scene.endOfWorld = (scene.road.position.y+scene.road.size.height)
-        scene.lanePositions = scene.road.laneXCoordinate
-        scene.addChild(scene.road)
+        //???
+        self.scaleMode = .aspectFill
         
-        scene.scaleMode = .aspectFill
+        cameraNode = SKCameraNode()
+        cameraNode.position.x = frame.size.width/2
+        self.camera = cameraNode
         
-        scene.cameraNode = SKCameraNode()
-        scene.cameraNode.position.x = scene.frame.size.width/2
-        scene.camera = scene.cameraNode
         let car = MVACar(withSize: CGSize(), andMindSet: .player, img: "Audi")
         car.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         car.physicsBody?.isDynamic = false
-        let lane = Int(arc4random_uniform(scene.road.numberOfLanes))
-        car.position = CGPoint(x: scene.road.laneXCoordinate[lane]!, y: size.height/3)
+        let lane = Int(arc4random_uniform(road.numberOfLanes))
+        car.position = CGPoint(x: road.laneXCoordinate[lane]!, y: size.height/3)
         car.currentLane = lane
-        scene.addChild(car)
+        self.addChild(car)
         car.zPosition = 1.0
-        car.pointsPerSecond = 200
+        car.pointsPerSecond = 250
         let move = SKAction.moveBy(x: 0.0, y: CGFloat(car.pointsPerSecond), duration: 1.0)
         car.run(SKAction.repeatForever(move), withKey: "move")//???
-        scene.player = car
-        scene.gameLogic.currentLane = lane
-        scene.intel.player = car
+        player = car
+        gameLogic.currentLane = lane
+        intel.player = car
         
+        spawner = MVACarSpawner.createSpawner(withWidth: frame.width)
+        spawner.anchorPoint.x = 0.0
+        spawner.position = CGPoint(x: 0.0, y: frame.height)//!!!diff from camera move
+        self.addChild(spawner)
         let spawn = SKAction.run {
-            scene.spawner.spawn(withExistingCars: scene.bots, roadLanes: scene.lanePositions)
+            self.spawner.spawn(withExistingCars: self.bots, roadLanes: self.lanePositions)
         }
-        let wait = SKAction.wait(forDuration: 2.0)
-        scene.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
+        
+        let wait = SKAction.wait(forDuration: 1.8)
+        self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
         
         //remover
-        let remover = SKSpriteNode(color: .purple, size: CGSize(width: scene.frame.width, height: 10.0))
-        remover.position.x = scene.frame.width/2
-        remover.position.y = -scene.frame.height
-        scene.addChild(remover)
-        scene.remover = remover
+        remover = SKSpriteNode(color: .purple, size: CGSize(width: frame.width, height: 10.0))
+        remover.position.x = frame.width/2
+        remover.position.y = -frame.height
+        self.addChild(remover)
         remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
         remover.physicsBody?.affectedByGravity = false
         remover.physicsBody?.isDynamic = false
         remover.physicsBody?.categoryBitMask = MVAPhysicsCategory.remover.rawValue
         remover.physicsBody?.collisionBitMask = MVAPhysicsCategory.remover.rawValue
         remover.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-        scene.physicsWorld.contactDelegate = scene
-        
-        let spawner = MVACarSpawner.createSpawner(withWidth: scene.frame.width)
-        spawner.anchorPoint.x = 0.0
-        spawner.position = CGPoint(x: 0.0, y: scene.frame.height)//!!!diff from camera move
-        scene.addChild(spawner)
-        scene.spawner = spawner
-        
-        return scene
+        self.physicsWorld.contactDelegate = self
     }
     
     func gameOver() {
@@ -206,7 +206,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func handleSwipe(swipe: MVAPosition) {
-        _ = player.changeLane(inDirection: swipe)
+        _ = player.changeLane(inDirection: swipe, withPlayer: player)
     }
     
     func handleBrake(started: Bool) {

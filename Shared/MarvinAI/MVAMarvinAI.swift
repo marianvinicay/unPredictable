@@ -26,58 +26,49 @@ class MVAMarvinAI {
     private func checkFront(ofCar car: MVACar) {
         //car in-front (blocked front of car)
         if let carInFront = car.responseFromSensors(inPositions: [.front]).filter({ $0.mindSet != .player }).first {
-            if arc4random_uniform(2) == 1 {
-                //RANDOMISE
-                if car.changeLane(inDirection: .left) == false {
-                    if car.changeLane(inDirection: .right) == false {
+            let randomiser = car.hasPriority ? 1:arc4random_uniform(2)
+            if randomiser == 1 {
+                let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
+                if car.changeLane(inDirection: randDir, withPlayer: player) == false {
+                    let nextDir: MVAPosition = randDir == .left ? .right:.left
+                    if car.changeLane(inDirection: nextDir, withPlayer: player) == false {
                         let speedDifference = CGFloat(arc4random_uniform(10)+10)
                         car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)
+                        car.hasPriority = false
                     }
                 }
             } else {
                 let speedDifference = CGFloat(arc4random_uniform(10)+10)
-                car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)//???
+                car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)
+                car.hasPriority = false
             }
         }
     }
     
     func update(withDeltaTime dTime: TimeInterval) {
+        cars.forEach { (car: MVACar) in
+            car.timeCountdown(deltaT: dTime)
+            //CHANGE LANE WHEN PRIORITY
+            if car.hasPriority {
+                freeTheWay(blockedByCars: [car])
+            } else if car.hasPriority == false && car.pointsPerSecond == 200 {
+                car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+                car.stampIt(withLabel: "done")
+            }
+            //car in-front (blocked front of car)
+            checkFront(ofCar: car)
+            
+            //Randomiser
+            if car.cantMoveForTime <= 0 && car.timeToRandomise <= 0 && !car.hasPriority {
+                randomiseBehaviour(forCar: car)
+                car.timeToRandomise = Double.randomWith2Decimals(inRange: 1..<3)
+            }
+        }
         if checkTime <= 0.0 {
             checkTime = 0.5
             checkJam()
         } else {
             checkTime -= dTime
-        }
-        /*
-         Player blocked in front and from sides - check
-         */
-        print(cars.filter({ $0.hasPriority }).count)
-        cars.forEach { (car: MVACar) in
-            car.timeCountdown(deltaT: dTime)
-            //car in-front (blocked front of car)
-            checkFront(ofCar: car)
-            //CHANGE LANE WHEN PRIORITY
-            if car.hasPriority {
-                let movePositions = car.freeToMove()
-                print("hasPriority", movePositions)
-                //Randomise!!!
-                if movePositions.contains(.left) {
-                    if car.changeLane(inDirection: .left) {
-                        car.hasPriority = false
-                        car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
-                        car.stampIt(withLabel: "done")
-                    }
-                } else if movePositions.contains(.right) {
-                    if car.changeLane(inDirection: .right) {
-                        car.hasPriority = false
-                        car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
-                        car.stampIt(withLabel: "done")
-                    }
-                }
-            } else if car.hasPriority == false && car.pointsPerSecond == 200 {
-                car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
-                car.stampIt(withLabel: "done")
-            }
         }
     }
     
@@ -85,6 +76,7 @@ class MVAMarvinAI {
         let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft,.backRight,.right,.frontRight])
         let frontCars = player.responseFromSensors(inPositions: [.front])
         if frontCars.isFull && badCars.count >= 1 { //???
+            badCars.forEach({ $0.stampIt(withLabel: "corn") })
             return Array(badCars.union(frontCars))
         } else {
             return nil
@@ -95,14 +87,14 @@ class MVAMarvinAI {
         let pLane = player.currentLane
         if pLane == 0 || pLane == 2 {
             if let badCars = playerCornered() {
-                print("cornered")
                 freeTheWay(blockedByCars: badCars)
             }
+            return
             //special free the way for center
         }
         
         //if let carInWay = carsInFront.sorted(by: { $0.position.y < $1.position.y }).first {
-        if let carInWay = cars.filter({ $0.currentLane == pLane && player.position.y < $0.position.y && $0.mindSet != .player && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y })[safe: 0] {
+        if let carInWay = cars.filter({ $0.currentLane == pLane && player.position.y < $0.position.y && $0.mindSet != .player && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
             let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight]).filter({ $0 != player && $0.cantMoveForTime <= 0 })
             let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft]).filter({ $0 != player && $0.cantMoveForTime <= 0 })
             let maxLane = carInWay.roadLanePositions.count-1
@@ -137,46 +129,40 @@ class MVAMarvinAI {
     }
     
     private func freeTheWay(blockedByCars cars: [MVACar]) {
-        var carsFreeToMove = [MVACar]()
-        switch arc4random_uniform(3) {
-        case 0: carsFreeToMove = cars.filter({ $0.mindSet != .player })
-        case 1: carsFreeToMove = cars.filter({ $0.mindSet != .player })
-        case 2: carsFreeToMove = cars.filter({ $0.mindSet != .player })
-        default: break
-        }
+        let carsFreeToMove = cars.filter({ $0.mindSet != .player })
         let carIndex = carsFreeToMove.map({ $0.hasPriority }).index(of: true) ?? Int(arc4random_uniform(UInt32(carsFreeToMove.count)))
         if let badCar = carsFreeToMove[safe: carIndex] {
-            let movePositions = Set<MVAPosition>(badCar.freeToMove())
-
-            if movePositions.isSuperset(of: [.left,.right]) {
-                if arc4random_uniform(2) == 1 {
-                    if badCar.changeLane(inDirection: .left) {
-                        badCar.stampIt(withLabel: "Left")
-                        badCar.hasPriority = false
-                    }
-                } else {
-                    if badCar.changeLane(inDirection: .right) {
-                        badCar.stampIt(withLabel: "Right")
-                        badCar.hasPriority = false
-                    }
-                }
-                
-            } else if movePositions.contains(.left) {
-                if badCar.changeLane(inDirection: .left) {
-                    badCar.stampIt(withLabel: "Left")
-                    badCar.hasPriority = false
-                }
-            } else if movePositions.contains(.right) {
-                if badCar.changeLane(inDirection: .right) {
-                    badCar.stampIt(withLabel: "Right")
-                    badCar.hasPriority = false
-                }
-            } else {
+            let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
+            let oppositeDir: MVAPosition = randDir == .left ? .right:.left
+            
+            if badCar.changeLane(inDirection: randDir, withPlayer: player) {
+                badCar.stampIt(withLabel: "Left")
+                badCar.hasPriority = false
+            } else if badCar.changeLane(inDirection: oppositeDir, withPlayer: player) {
+                badCar.stampIt(withLabel: "Right")
+                badCar.hasPriority = false
+            } else if badCar.hasPriority == false {
                 badCar.changeSpeed(200, durationOfChange: 1.0)
+                badCar.priorityTime = 2.0
                 badCar.stampIt(withLabel: "Speed")
                 badCar.hasPriority = true
             }
-            // no more 'collisions' completion -> hasPriority = false
+        }
+    }
+    
+    private func randomiseBehaviour(forCar car: MVACar) {
+        //go into player's lane in more difficult level !!
+        switch arc4random_uniform(3) {
+        case 0 where car.currentLane != player.currentLane:
+            _ = car.changeLane(inDirection: .right, withPlayer: player)
+            car.stampIt(withLabel: "rand")
+        case 1 where car.currentLane != player.currentLane:
+            _ = car.changeLane(inDirection: .left, withPlayer: player)
+            car.stampIt(withLabel: "rand")
+        case 2:
+            car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+            car.stampIt(withLabel: "randSP")
+        default: break
         }
     }
 }
