@@ -24,19 +24,19 @@ class MVAMarvinAI {
                 if car.changeLane(inDirection: randDir, withPlayer: player) == false {
                     let nextDir: MVAPosition = randDir == .left ? .right:.left
                     if car.changeLane(inDirection: nextDir, withPlayer: player) == false {
-                        if car.mindSet == .pseudoPlayer {
+                        if car.hasPriority {
                             carInFront.hasPriority = true
-                            carInFront.changeSpeed(200)
-                            carInFront.priorityTime = 2.0
-                            car.slowTime = 2.0
-                        } else if car.hasPriority {
-                            carInFront.hasPriority = true
-                            carInFront.changeSpeed(200)
-                            carInFront.priorityTime = 2.0
-                            car.priorityTime = 2.0
+                            if carInFront.pointsPerSecond != 220 {
+                                carInFront.priorityTime = 3.0
+                                car.priorityTime = 3.0
+                                carInFront.changeSpeed(220)
+                            }
                         } else {
                             let speedDifference = CGFloat(arc4random_uniform(10)+10)
                             car.changeSpeed(carInFront.pointsPerSecond-speedDifference)
+                            if car.mindSet == .pseudoPlayer {
+                                car.slowTime = 2.0
+                            }
                         }
                     }
                 }
@@ -145,8 +145,8 @@ class MVAMarvinAI {
                 badCar.stampIt(withLabel: "Right")
                 badCar.hasPriority = false
             } else if badCar.hasPriority == false {
-                badCar.changeSpeed(200)
-                badCar.priorityTime = 2.0
+                badCar.changeSpeed(220)
+                badCar.priorityTime = 3.0
                 badCar.stampIt(withLabel: "Speed")
                 badCar.hasPriority = true
             }

@@ -67,10 +67,12 @@ public class MVACar: SKSpriteNode {
                 hasPriority = false
             }
         }
-        if slowTime > 0.0 {
-            slowTime -= deltaT
-        } else if mindSet == .pseudoPlayer && pointsPerSecond != 220 {
-            self.changeSpeed(220)
+        if mindSet == .pseudoPlayer {
+            if slowTime > 0.0 {
+                slowTime -= deltaT
+            } else if pointsPerSecond != 220 {
+                self.changeSpeed(220)
+            }
         }
     }
     
@@ -237,8 +239,8 @@ public class MVACar: SKSpriteNode {
                         self.run(SKAction.group([turnIn,move]), completion: {
                             self.run(turnOut)
                         })
-                        if mindSet != .player {
-                            cantMoveForTime = 1.0
+                        if mindSet == .bot {
+                            cantMoveForTime = 1.2
                         }
                         return true
                     }
@@ -248,12 +250,43 @@ public class MVACar: SKSpriteNode {
         return false
     }
     
+    private func newAction(forSpeed speed: CGFloat) {
+        self.removeAction(forKey: "move")
+        let move = SKAction.moveBy(x: 0.0, y: speed, duration: 1.0)
+        self.run(SKAction.repeatForever(move), withKey: "move")
+        self.pointsPerSecond = speed
+    }
+    
     func changeSpeed(_ speed: CGFloat) {
         if speed != self.pointsPerSecond {
-            self.pointsPerSecond = speed
-            self.removeAction(forKey: "move")
-            let move = SKAction.moveBy(x: 0.0, y: speed, duration: 1.0)
-            self.run(SKAction.repeatForever(move), withKey: "move")
+            if self.pointsPerSecond != 0.0 {
+                let onePercent = self.pointsPerSecond/100
+                let percentage = round(speed/onePercent)/100
+                print(percentage)
+                _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (tmr: Timer) in
+                    if let spd = self.action(forKey: "move") {
+                        if percentage > 1.0 {
+                            if spd.speed < percentage {
+                                spd.speed += 0.1
+                            } else {
+                                spd.speed = percentage
+                                tmr.invalidate()
+                                self.newAction(forSpeed: speed)
+                            }
+                        } else if percentage < 1.0 {
+                            if spd.speed > percentage {
+                                spd.speed -= 0.1
+                            } else {
+                                spd.speed = percentage
+                                tmr.invalidate()
+                                self.newAction(forSpeed: speed)
+                            }
+                        }
+                    }
+                })
+            } else {
+                newAction(forSpeed: speed)
+            }
         }
     }
 }
