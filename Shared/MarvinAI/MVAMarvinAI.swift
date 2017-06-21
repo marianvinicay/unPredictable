@@ -9,14 +9,6 @@
 import Foundation
 import SpriteKit
 
-extension Set {
-    var isFull: Bool {
-        get {
-            return !self.isEmpty
-        }
-    }
-}
-
 class MVAMarvinAI {
     var player: MVACar!
     var cars = Set<MVACar>()
@@ -26,20 +18,31 @@ class MVAMarvinAI {
     private func checkFront(ofCar car: MVACar) {
         //car in-front (blocked front of car)
         if let carInFront = car.responseFromSensors(inPositions: [.front]).filter({ $0.mindSet != .player }).first {
-            let randomiser = car.hasPriority ? 1:arc4random_uniform(2)
+            let randomiser = car.hasPriority || car.mindSet == .pseudoPlayer ? 1:arc4random_uniform(2)
             if randomiser == 1 {
                 let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
                 if car.changeLane(inDirection: randDir, withPlayer: player) == false {
                     let nextDir: MVAPosition = randDir == .left ? .right:.left
                     if car.changeLane(inDirection: nextDir, withPlayer: player) == false {
-                        let speedDifference = CGFloat(arc4random_uniform(10)+10)
-                        car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)
-                        car.hasPriority = false
+                        if car.mindSet == .pseudoPlayer {
+                            carInFront.hasPriority = true
+                            carInFront.changeSpeed(200)
+                            carInFront.priorityTime = 2.0
+                            car.slowTime = 2.0
+                        } else if car.hasPriority {
+                            carInFront.hasPriority = true
+                            carInFront.changeSpeed(200)
+                            carInFront.priorityTime = 2.0
+                            car.priorityTime = 2.0
+                        } else {
+                            let speedDifference = CGFloat(arc4random_uniform(10)+10)
+                            car.changeSpeed(carInFront.pointsPerSecond-speedDifference)
+                        }
                     }
                 }
             } else {
                 let speedDifference = CGFloat(arc4random_uniform(10)+10)
-                car.changeSpeed(carInFront.pointsPerSecond-speedDifference, durationOfChange: 1.0)
+                car.changeSpeed(carInFront.pointsPerSecond-speedDifference)
                 car.hasPriority = false
             }
         }
@@ -52,7 +55,7 @@ class MVAMarvinAI {
             if car.hasPriority {
                 freeTheWay(blockedByCars: [car])
             } else if car.hasPriority == false && car.pointsPerSecond == 200 {
-                car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+                car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
                 car.stampIt(withLabel: "done")
             }
             //car in-front (blocked front of car)
@@ -75,7 +78,7 @@ class MVAMarvinAI {
     private func playerCornered() -> [MVACar]? {
         let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft,.backRight,.right,.frontRight])
         let frontCars = player.responseFromSensors(inPositions: [.front])
-        if frontCars.isFull && badCars.count >= 1 { //???
+        if !frontCars.isEmpty && badCars.count >= 1 { //???
             badCars.forEach({ $0.stampIt(withLabel: "corn") })
             return Array(badCars.union(frontCars))
         } else {
@@ -95,8 +98,8 @@ class MVAMarvinAI {
         
         //if let carInWay = carsInFront.sorted(by: { $0.position.y < $1.position.y }).first {
         if let carInWay = cars.filter({ $0.currentLane == pLane && player.position.y < $0.position.y && $0.mindSet != .player && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
-            let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight]).filter({ $0 != player && $0.cantMoveForTime <= 0 })
-            let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft]).filter({ $0 != player && $0.cantMoveForTime <= 0 })
+            let rightSide = carInWay.responseFromSensors(inPositions: [.backRight,.right,.frontRight]).filter({ $0.mindSet != .player && $0.cantMoveForTime <= 0 })
+            let leftSide = carInWay.responseFromSensors(inPositions: [.backLeft,.left,.frontLeft]).filter({ $0.mindSet != .player && $0.cantMoveForTime <= 0 })
             let maxLane = carInWay.roadLanePositions.count-1
             
             switch (leftSide.isEmpty,rightSide.isEmpty,carInWay.currentLane) {
@@ -104,9 +107,9 @@ class MVAMarvinAI {
                 //left lane, blocked from right
                 var mostRightCars = Set<MVACar>()
                 for car in rightSide {
-                    mostRightCars = mostRightCars.union(car.responseFromSensors(inPositions: [.frontRight,.right,.backRight]).filter({ $0 != player }))
+                    mostRightCars = mostRightCars.union(car.responseFromSensors(inPositions: [.frontRight,.right,.backRight]).filter({ $0.mindSet != .player }))
                 }
-                if mostRightCars.isFull {
+                if !mostRightCars.isEmpty {
                     freeTheWay(blockedByCars: [carInWay]+rightSide+Array(mostRightCars))
                 }
                 
@@ -114,9 +117,9 @@ class MVAMarvinAI {
                 //right lane, blocked from left
                 var mostLeftCars = Set<MVACar>()
                 for car in leftSide {
-                    mostLeftCars = mostLeftCars.union(car.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft]).filter({ $0 != player }))
+                    mostLeftCars = mostLeftCars.union(car.responseFromSensors(inPositions: [.frontLeft,.left,.backLeft]).filter({ $0.mindSet != .player }))
                 }
-                if mostLeftCars.isFull {
+                if !mostLeftCars.isEmpty {
                     freeTheWay(blockedByCars: [carInWay]+leftSide+Array(mostLeftCars))
                 }
                 
@@ -142,7 +145,7 @@ class MVAMarvinAI {
                 badCar.stampIt(withLabel: "Right")
                 badCar.hasPriority = false
             } else if badCar.hasPriority == false {
-                badCar.changeSpeed(200, durationOfChange: 1.0)
+                badCar.changeSpeed(200)
                 badCar.priorityTime = 2.0
                 badCar.stampIt(withLabel: "Speed")
                 badCar.hasPriority = true
@@ -160,7 +163,7 @@ class MVAMarvinAI {
             _ = car.changeLane(inDirection: .left, withPlayer: player)
             car.stampIt(withLabel: "rand")
         case 2:
-            car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+            car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
             car.stampIt(withLabel: "randSP")
         default: break
         }

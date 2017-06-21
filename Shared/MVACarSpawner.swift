@@ -23,11 +23,11 @@ class MVACarSpawner: SKSpriteNode {
     
     private var lastLaneSpawn: Int?
     
-    func spawn(withExistingCars cars: [MVACar], roadLanes: [Int:CGFloat]) {
-        var intersectingCars = [MVACar]()
+    func spawn(withExistingCars cars: Set<MVACar>, roadLanes: [Int:CGFloat]) {
+        var intersectingCars = Set<MVACar>()
         for car in cars {
             if self.intersects(car) {
-                intersectingCars.append(car)
+                intersectingCars.insert(car)
             }
         }
         if intersectingCars.count < 2 {//!!! even more than 2
@@ -50,13 +50,10 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
             
             car.zPosition = 1.0
-            car.changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+            car.changeSpeed(CGFloat(arc4random_uniform(40)+50))
             car.color = UIColor.getRandomColor()
-            (self.parent as? GameScene)?.bots.append(car)
-            (self.parent as? GameScene)?.addChild(car)
-            (self.parent as? GameScene)?.intel.cars.insert(car)
-        } else {
-            intersectingCars.removeLast()//???
+            (self.parent as! GameScene).addChild(car)
+            (self.parent as! GameScene).intel.cars.insert(car)
         }
     }
     

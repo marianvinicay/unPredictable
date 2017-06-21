@@ -1,12 +1,12 @@
 //
-//  MVAGameLogic.swift
+//  Utils.swift
 //  (un)Predictable
 //
 //  Created by Majo on 30/10/2016.
 //  Copyright © 2016 MarVin. All rights reserved.
 //
 
-import SpriteKit
+import Foundation
 
 extension Double {
     static func randomWith2Decimals(inRange range: Range<UInt32>) -> Double {
@@ -14,8 +14,4 @@ extension Double {
         let numb = arc4random_uniform(range.upperBound)+range.lowerBound
         return Double(numb)+decNumb
     }
-}
-
-class MVAGameLogic {
-    var currentLane: Int!
 }

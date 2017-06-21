@@ -10,5 +10,6 @@ import Foundation
 
 enum MVAMindSet {
     case player
+    case pseudoPlayer
     case bot
 }

@@ -15,14 +15,15 @@ enum MVAPosition: CustomStringConvertible {
      
      FL | F | FR
      –––––––––--
-     L | ⍓ | R
+     L  | ⍓ |  R
      -----------
      BL | B | BR
-     */
+    */
     case frontLeft, front, frontRight
     case right, left
     case back, backLeft, backRight
     
+    //DEBUG
     var description: String {
         switch self {
         case .front: return "front"
@@ -40,6 +41,7 @@ enum MVAPosition: CustomStringConvertible {
 public class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
+    var slowTime = 0.0
     var pointsPerSecond: CGFloat = 0.0
     var timeToRandomise = Double.randomWith2Decimals(inRange: 1..<3)
     
@@ -61,9 +63,14 @@ public class MVACar: SKSpriteNode {
         if hasPriority {
             priorityTime -= deltaT
             if priorityTime <= 0 {
-                changeSpeed(CGFloat(arc4random_uniform(40)+50), durationOfChange: 1.0)
+                changeSpeed(CGFloat(arc4random_uniform(40)+50))
                 hasPriority = false
             }
+        }
+        if slowTime > 0.0 {
+            slowTime -= deltaT
+        } else if mindSet == .pseudoPlayer && pointsPerSecond != 220 {
+            self.changeSpeed(220)
         }
     }
     
@@ -181,32 +188,6 @@ public class MVACar: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func changeLane(inDirection dir: MVAPosition, withPlayer player: MVACar) -> Bool {
-        if cantMoveForTime <= 0 {
-            let reactionDistance = player.pointsPerSecond*2
-            let heightDifference = self.mindSet == .player || hasPriority ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !!
-            if heightDifference >= reactionDistance {//???
-                let newLane = dir == .left ? currentLane-1:currentLane+1
-                let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
-                
-                let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
-                if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
-                    if let newLaneCoor = roadLanePositions[newLane] {
-                        currentLane = newLane
-                        let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
-                        move.timingMode = .easeInEaseOut
-                        self.run(move)
-                        if mindSet != .player {
-                            cantMoveForTime = 1.0
-                        }
-                        return true
-                    }
-                }
-            }
-        }
-        return false
-    }
-    
     func responseFromSensors(inPositions positions: [MVAPosition]) -> Set<MVACar> {
         var foundCars = Set<MVACar>()
         for position in positions {
@@ -234,64 +215,45 @@ public class MVACar: SKSpriteNode {
         return intersectingCars
     }
     
-    func changeSpeed(_ speed: CGFloat, durationOfChange duration: CGFloat) {
-        if speed != self.pointsPerSecond {
-            //let oldSpeed = self.pointsPerSecond
-            //let speedDifference = abs(speed-oldSpeed)
-            
-            let rateOfSpeedChange = duration//Int(round(speedDifference/duration))
-            
-            self.pointsPerSecond = speed
-            //for _ in 0..<rateOfSpeedChange {
-            let move = SKAction.moveBy(x: 0.0, y: self.pointsPerSecond, duration: TimeInterval(rateOfSpeedChange))
-            self.removeAction(forKey: "move")
-            self.run(SKAction.repeatForever(move), withKey: "move")
-            //self.cantMoveForXTime = 0.5 !!!
-            //}
+    func changeLane(inDirection dir: MVAPosition, withPlayer player: MVACar) -> Bool {
+        if cantMoveForTime <= 0 {
+            let reactionDistance = player.pointsPerSecond*1.8
+            let heightDifference = self.mindSet == .player || self.mindSet == .pseudoPlayer ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
+            if heightDifference >= reactionDistance {//???
+                let newLane = dir == .left ? currentLane-1:currentLane+1
+                let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
+                
+                let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
+                if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
+                    if let newLaneCoor = roadLanePositions[newLane] {
+                        currentLane = newLane
+                        let angle: CGFloat = dir == .left ? 0.3:-0.3
+                        let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
+                        let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
+                        let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
+                        turnIn.timingMode = .easeInEaseOut
+                        move.timingMode = .easeInEaseOut
+                        turnOut.timingMode = .easeInEaseOut
+                        self.run(SKAction.group([turnIn,move]), completion: {
+                            self.run(turnOut)
+                        })
+                        if mindSet != .player {
+                            cantMoveForTime = 1.0
+                        }
+                        return true
+                    }
+                }
+            }
         }
+        return false
     }
     
-    /*
-     func diagonalRight() -> Set<MVACar> {
-     var collidingCars = Set<MVACar>()
-     for sensor in frontRightSensor {
-     if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
-     collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
-     }
-     }
-     return Set(collidingCars.filter({ $0.mindSet != .player }))
-     }
-     
-     func diagonalLeft() -> Set<MVACar> {
-     var collidingCars = Set<MVACar>()
-     for sensor in frontLeftSensor {
-     if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
-     collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
-     }
-     }
-     return Set(collidingCars.filter({ $0.mindSet != .player }))
-     }*
-     
-     //merge carsOn funcs?
-     //maybe private funcs?
-     func carsOnRight() -> Set<MVACar> {
-     var collidingCars = Set<MVACar>()
-     for sensor in rightSensors {
-     if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
-     collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
-     }
-     }
-     return collidingCars
-     }
-     
-     func carsOnLeft() -> Set<MVACar> {
-     var collidingCars = Set<MVACar>()
-     for sensor in leftSensors {
-     if let nodes = parent?.nodes(at: sensor).filter({ $0 is MVACar }) {
-     collidingCars = collidingCars.union(Set(nodes.map({ $0 as! MVACar }).filter({ $0 != self })))
-     }
-     }
-     return collidingCars
-     }*/
-    
+    func changeSpeed(_ speed: CGFloat) {
+        if speed != self.pointsPerSecond {
+            self.pointsPerSecond = speed
+            self.removeAction(forKey: "move")
+            let move = SKAction.moveBy(x: 0.0, y: speed, duration: 1.0)
+            self.run(SKAction.repeatForever(move), withKey: "move")
+        }
+    }
 }

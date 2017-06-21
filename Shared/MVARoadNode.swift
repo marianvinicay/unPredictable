@@ -39,19 +39,8 @@ class MVARoadNode: SKSpriteNode {
         
         road.size = CGSize(width: width, height: height)
         road.name = "road"
-        road.anchorPoint = .zero
-        //road.position.y -= road.size.height/2
-        
-        /*if height > firstTile.size.height {
-         var lastY = firstTile.size.height
-         do {
-         let tile = SKSpriteNode(imageNamed: "road")
-         tile.anchorPoint = CGPoint.zero
-         tile.position = CGPoint(x: lastY, y: 0)
-         lastY = tile.size.height
-         tiles.addChild(tile)
-         } while
-         }*/
+        //road.anchorPoint = .zero
+
         road.zPosition = -0.1
         return road
     }
