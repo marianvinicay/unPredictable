@@ -41,9 +41,13 @@ enum MVAPosition: CustomStringConvertible {
 public class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var slowTime = 0.0
     var pointsPerSecond: CGFloat = 0.0
     var timeToRandomise = Double.randomWith2Decimals(inRange: 1..<3)
+    var currentLane: Int!
+    var cantMoveForTime = 0.0
+    var hasPriority = false
+    var priorityTime = 0.0
+    var textNode: SKLabelNode!
     
     ///debug func
     func stampIt(withLabel txt: String?) {
@@ -52,8 +56,6 @@ public class MVACar: SKSpriteNode {
             textNode.zPosition = 5
         }*/
     }
-    
-    var isFirst = false
     
     func timeCountdown(deltaT: Double) {
         timeToRandomise -= deltaT
@@ -67,28 +69,8 @@ public class MVACar: SKSpriteNode {
                 hasPriority = false
             }
         }
-        if mindSet == .pseudoPlayer {
-            if slowTime > 0.0 {
-                slowTime -= deltaT
-            } else if pointsPerSecond != 220 {
-                self.changeSpeed(220)
-            }
-        }
     }
-    
-    var roadLanePositions: [Int:CGFloat] {
-        get {
-            return (self.parent as? GameScene)?.lanePositions ?? [:]
-        }
-    }
-    
-    var currentLane: Int!
-    var cantMoveForTime = 0.0
-    var hasPriority = false
-    var priorityTime = 0.0
-    var textNode: SKLabelNode!
-    var wasChecked = false
-    
+
     private var frontSensor: [CGPoint] {
         get {
             return [CGPoint(x: position.x, y: position.y+size.height*1.5)]
@@ -217,33 +199,33 @@ public class MVACar: SKSpriteNode {
         return intersectingCars
     }
     
-    func changeLane(inDirection dir: MVAPosition, withPlayer player: MVACar) -> Bool {
+    func changeLane(inDirection dir: MVAPosition, withLanePositions roadLanePositions: [Int:CGFloat], AndPlayer player: MVACar) -> Bool {
         if cantMoveForTime <= 0 {
             let reactionDistance = player.pointsPerSecond*1.8
-            let heightDifference = self.mindSet == .player || self.mindSet == .pseudoPlayer ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
+            let heightDifference = self.mindSet == .player ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
             if heightDifference >= reactionDistance {//???
                 let newLane = dir == .left ? currentLane-1:currentLane+1
+                let newLaneCoor = roadLanePositions[newLane]
                 let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
-                
                 let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
-                if self.roadLanePositions.keys.contains(newLane) && responseFromSensors {
-                    if let newLaneCoor = roadLanePositions[newLane] {
-                        currentLane = newLane
-                        let angle: CGFloat = dir == .left ? 0.3:-0.3
-                        let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
-                        let move = SKAction.moveTo(x: newLaneCoor, duration: 0.25)
-                        let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
-                        turnIn.timingMode = .easeInEaseOut
-                        move.timingMode = .easeInEaseOut
-                        turnOut.timingMode = .easeInEaseOut
-                        self.run(SKAction.group([turnIn,move]), completion: {
-                            self.run(turnOut)
-                        })
-                        if mindSet == .bot {
-                            cantMoveForTime = 1.2
-                        }
-                        return true
+            
+                if newLaneCoor != nil && responseFromSensors {
+                    currentLane = newLane
+                    let angle: CGFloat = dir == .left ? 0.3:-0.3
+                    let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
+                    let move = SKAction.moveTo(x: newLaneCoor!, duration: 0.25)
+                    let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
+                    turnIn.timingMode = .easeInEaseOut
+                    move.timingMode = .easeInEaseOut
+                    turnOut.timingMode = .easeInEaseOut
+                    self.run(SKAction.group([turnIn,move]), completion: {
+                        self.run(turnOut)
+                    })
+                    if mindSet == .bot {
+                        cantMoveForTime = 1.2
                     }
+                    
+                    return true
                 }
             }
         }
@@ -254,20 +236,19 @@ public class MVACar: SKSpriteNode {
         self.removeAction(forKey: "move")
         let move = SKAction.moveBy(x: 0.0, y: speed, duration: 1.0)
         self.run(SKAction.repeatForever(move), withKey: "move")
-        self.pointsPerSecond = speed
     }
     
     func changeSpeed(_ speed: CGFloat) {
         if speed != self.pointsPerSecond {
             if self.pointsPerSecond != 0.0 {
                 let onePercent = self.pointsPerSecond/100
+                self.pointsPerSecond = speed
                 let percentage = round(speed/onePercent)/100
-                print(percentage)
                 _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (tmr: Timer) in
                     if let spd = self.action(forKey: "move") {
                         if percentage > 1.0 {
                             if spd.speed < percentage {
-                                spd.speed += 0.1
+                                spd.speed += 0.2
                             } else {
                                 spd.speed = percentage
                                 tmr.invalidate()
@@ -275,7 +256,7 @@ public class MVACar: SKSpriteNode {
                             }
                         } else if percentage < 1.0 {
                             if spd.speed > percentage {
-                                spd.speed -= 0.1
+                                spd.speed -= 0.2
                             } else {
                                 spd.speed = percentage
                                 tmr.invalidate()
@@ -285,6 +266,7 @@ public class MVACar: SKSpriteNode {
                     }
                 })
             } else {
+                self.pointsPerSecond = speed
                 newAction(forSpeed: speed)
             }
         }

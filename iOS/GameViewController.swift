@@ -12,7 +12,7 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
-    private var scene: GameScene?
+    private var scene: SKScene?
     
     override func viewDidLoad() {
         super.viewDidLoad()

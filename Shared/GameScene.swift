@@ -10,7 +10,6 @@ import SpriteKit
 import UIKit
 
 extension Collection where Indices.Iterator.Element == Index {
-    
     /// Returns the element at the specified index iff it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Generator.Element? {
         return indices.contains(index) ? self[index] : nil
@@ -41,16 +40,15 @@ enum MVAPhysicsCategory: UInt32 {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     //internal ?? private ??
-    var roadNodes = Set<MVARoadNode>()
-    var lanePositions = [Int:CGFloat]()
-    var cameraNode: SKCameraNode!
-    let intel = MVAMarvinAI()
-    var endOfWorld: CGFloat = 0.0
-    var remover: SKSpriteNode!
-    var spawner: MVACarSpawner!
-    
-    var playBtt: SKLabelNode!
-    
+    private var roadNodes = [MVARoadNode]()
+    private var cameraNode: SKCameraNode!
+    internal let intel = MVAMarvinAI()
+    private var endOfWorld: CGFloat = 0.0
+    private var remover: SKSpriteNode!
+    private var spawner: MVACarSpawner!
+    fileprivate var playBtt: SKLabelNode!
+    private var gameStarted = false
+        
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
         //let scene = GameScene(size: size)
@@ -58,56 +56,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("Failed to load GameScene.sks")
             abort()
         }
-        scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
-        scene.playBtt.position.x = scene.size.width/2
         scene.scaleMode = .aspectFill
+        scene.isPaused = true
+        scene.speed = 0
+        scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
         scene.initiateScene()
         return scene
     }
     
-    private func initiateScene() {
-        let road = MVARoadNode.createWith(numberOfLanes: 3, height: size.height, andWidth: size.width)
-        road.position.x = self.size.width/2
-        roadNodes.insert(road)
+    internal func initiateScene() {
+        let starterNode = self.childNode(withName: "starter") as! MVARoadNode
+        roadNodes.append(starterNode)
+        let road = MVARoadNode.createWith(numberOfLanes: 3, name: "Start2", height: starterNode.size.height, andWidth: starterNode.size.width)
+        road.position.x = starterNode.position.x
+        road.position.y = starterNode.size.height
+        roadNodes.append(road)
         endOfWorld = road.position.y+road.size.height/2
-        lanePositions = road.laneXCoordinate
+        intel.lanePositions = road.laneXCoordinate
         self.addChild(road)
         
         cameraNode = SKCameraNode()
-        cameraNode.position.x = frame.size.width/2
+        cameraNode.position = starterNode.position
         self.camera = cameraNode
         
-        let player = MVACar(withSize: CGSize(), andMindSet: .pseudoPlayer, img: "Audi")
-        player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-        player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        player.physicsBody?.isDynamic = false
-        let lane = Int(arc4random_uniform(road.numberOfLanes))
-        player.position = CGPoint(x: road.laneXCoordinate[lane]!, y: size.height/3)
-        player.currentLane = lane
-        self.addChild(player)
-        player.zPosition = 1.0
-        player.pointsPerSecond = 250
-        let move = SKAction.moveBy(x: 0.0, y: CGFloat(player.pointsPerSecond), duration: 1.0)
-        player.run(SKAction.repeatForever(move), withKey: "move")//???
-        intel.player = player
-        intel.cars.insert(player)
-        
         spawner = MVACarSpawner.createSpawner(withWidth: frame.width)
-        spawner.anchorPoint.x = 0.0
-        spawner.position = CGPoint(x: 0.0, y: frame.height)//!!!diff from camera move
+        spawner.zPosition = 4.0
+        spawner.position = CGPoint(x: 0.0, y: frame.height)
         self.addChild(spawner)
-        let spawn = SKAction.run {
-            self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.lanePositions)
-        }
-        
-        let wait = SKAction.wait(forDuration: 2.5)
-        self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
         
         //remover
         remover = SKSpriteNode(color: .purple, size: CGSize(width: frame.width, height: 10.0))
-        remover.position.x = frame.width/2
-        remover.position.y = -frame.height/3
+        remover.position = CGPoint(x: 0.0/*spawner.size.width/2*/, y: -frame.height)
         remover.zPosition = 4.0
         self.addChild(remover)
         remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
@@ -117,6 +96,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         remover.physicsBody?.collisionBitMask = MVAPhysicsCategory.remover.rawValue
         remover.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         self.physicsWorld.contactDelegate = self
+    }
+    
+    internal func startGame() {
+        if let pSprite = self.childNode(withName: "player") {
+            gameStarted = true
+            let player = MVACar(withSize: CGSize(), andMindSet: .player, img: "Audi")
+            player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
+            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+            player.physicsBody?.isDynamic = false
+            let lane = 1    //Int(arc4random_uniform(road.numberOfLanes))
+            player.position = pSprite.position  //CGPoint(x: road.laneXCoordinate[lane]!, y: size.height/3)
+            player.currentLane = lane
+            self.addChild(player)
+            pSprite.removeFromParent()
+            player.zPosition = 5.0
+            player.pointsPerSecond = 250
+            let move = SKAction.moveBy(x: 0.0, y: CGFloat(player.pointsPerSecond), duration: 1.0)
+            player.run(SKAction.repeatForever(move), withKey: "move")//???
+            intel.player = player
+        }
+        
+        let spawn = SKAction.run {
+            self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.intel.lanePositions)
+        }
+        
+        let wait = SKAction.wait(forDuration: 2.5)
+        self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
     }
     
     private func populateCars() {
@@ -176,64 +183,89 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     #endif
     
     private var lastUpdate = 0.0//Double
+    private var starterCount = 0
     override func update(_ currentTime: TimeInterval) {
-        if currentTime-lastUpdate < 10 {//??? firstLoad run time
+        updateCamera()
+        if gameStarted {
+            //if currentTime-lastUpdate < 10 {//??? firstLoad run time
             intel.update(withDeltaTime: currentTime-lastUpdate)
-        }
-        lastUpdate = currentTime
-        
-        cameraNode.position.y = intel.player.position.y+size.height/4
-        playBtt.position.y = cameraNode.position.y
-        if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
-            let road = MVARoadNode.createWith(numberOfLanes: 3, height: self.size.height, andWidth: self.size.width)
-            road.position.x = self.size.width/2
-            road.position.y = endOfWorld+road.size.height/2
-            self.addChild(road)
-            roadNodes.insert(road)
-            endOfWorld += road.size.height
-        }
-        remover.position.y = -self.frame.size.height
-        spawner.position.y = cameraNode.position.y+self.frame.size.height
-        
-        //then try enumerate nodes with name road
-        for road in roadNodes {
-            let roadPosition = road.position.y+road.size.height
-            if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
-                road.removeFromParent()
+            //}
+            lastUpdate = currentTime
+            
+            if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
+                let spriteName = starterCount < 2 ? "Start2":"road"
+                starterCount += 1
+                let example = roadNodes.last!
+                let road = MVARoadNode.createWith(numberOfLanes: 3, name: spriteName, height: example.size.height, andWidth: example.size.width)
+                road.position.x = example.position.x //self.size.width/2
+                road.position.y = example.position.y+road.size.height //endOfWorld+road.size.height/2
+                self.addChild(road)
+                roadNodes.append(road)
+                endOfWorld += road.size.height
             }
+            
+            //then try enumerate nodes with name road
+            for road in roadNodes {
+                let roadPosition = road.position.y+road.size.height
+                if roadPosition < (self.cameraNode.position.y-self.size.height/2)-10 {
+                    road.removeFromParent()
+                    if let i = roadNodes.index(of: road) {
+                        roadNodes.remove(at: i)
+                    }
+                }
+            }
+        }
+    }
+    
+    fileprivate var playTapped = false
+    private func updateCamera() {
+        if playTapped {
+            spawner.position.y = cameraNode.position.y+self.size.height
+            if intel.player != nil {
+                cameraNode.position.y = intel.player.position.y+size.height/4
+            } else {
+                if let pSprite = self.childNode(withName: "player") {
+                    cameraNode.position.y = pSprite.position.y+size.height/4
+                }
+            }
+            remover.position.y = cameraNode.position.y-self.size.height
         }
     }
     
     func handleSwipe(swipe: MVAPosition) {
-        guard intel.player.mindSet == .player else { return }
-        _ = intel.player.changeLane(inDirection: swipe, withPlayer: intel.player)
+        if gameStarted {
+            guard intel.player.mindSet == .player else { return }
+            _ = intel.player.changeLane(inDirection: swipe, withLanePositions: intel.lanePositions, AndPlayer: intel.player)
+        }
     }
     
     private var brakingTimer: Timer!
     func handleBrake(started: Bool) {
-        guard intel.player.mindSet == .player else { return }
-        if started {
-            brakingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (_: Timer) in
-                if let act = self.intel.player.action(forKey: "move") {
-                    if act.speed > 0.2 {
-                        self.intel.player.pointsPerSecond *= 0.85
-                        act.speed -= 0.2
+        if gameStarted {
+            guard intel.player.mindSet == .player else { return }
+            if started {
+                brakingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (_: Timer) in
+                    if let act = self.intel.player.action(forKey: "move") {
+                        if act.speed > 0.2 {
+                            self.intel.player.pointsPerSecond *= 0.85
+                            act.speed -= 0.2
+                        }
                     }
+                })
+            } else {
+                brakingTimer.invalidate()
+                brakingTimer = nil
+                if let act = intel.player.action(forKey: "move") {
+                    while act.speed < 1.0 {
+                        act.speed += 0.2
+                    }
+                    act.speed = 1.0
+                    intel.player.pointsPerSecond = 250
                 }
-            })
-        } else {
-            brakingTimer.invalidate()
-            brakingTimer = nil
-            if let act = intel.player.action(forKey: "move") {
-                while act.speed < 1.0 {
-                    act.speed += 0.2
-                }
-                act.speed = 1.0
-                intel.player.pointsPerSecond = 250
             }
         }
     }
-    internal var lastPressedXPosition: CGFloat!
+    fileprivate var lastPressedXPosition: CGFloat!
 }
 
 #if os(iOS) || os(tvOS)
@@ -283,17 +315,12 @@ extension GameScene: UIGestureRecognizerDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if playBtt.contains(touches.first!.location(in: self)) {
-            playBtt.run(SKAction.scale(by: 10, duration: 2.0))
-            intel.player.mindSet = .player
-            intel.cars.remove(intel.player)
-            playBtt.removeFromParent()
-            intel.player.changeSpeed(220)
-            self.removeAction(forKey: "spawn")
-            let spawn = SKAction.run {
-                self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.lanePositions)
-            }
-            let wait = SKAction.wait(forDuration: 1.9)
-            self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
+            self.isPaused = false
+            self.speed = 1
+            playTapped = true
+            playBtt.run(SKAction.group([SKAction.scale(by: 1.5, duration: 2.0),SKAction.fadeOut(withDuration: 1.5)]), completion: {
+                self.startGame()
+            })
         }
     }
     

@@ -7,11 +7,28 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension Double {
     static func randomWith2Decimals(inRange range: Range<UInt32>) -> Double {
         let decNumb = Double(arc4random_uniform(98)+1)/100
         let numb = arc4random_uniform(range.upperBound)+range.lowerBound
         return Double(numb)+decNumb
+    }
+    
+    func roundTo(NDecimals dec: UInt8) -> Double {
+        var divisor = 1.0
+        for _ in 1...dec {
+            divisor *= 10
+        }
+        let biggerNum = self*divisor
+        return Darwin.round(biggerNum)/divisor
+    }
+}
+
+extension CGFloat {
+    func roundTo(NDecimals dec: UInt8) -> CGFloat {
+        let roundedNum = Double(self).roundTo(NDecimals: dec)
+        return CGFloat(roundedNum)
     }
 }
