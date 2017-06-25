@@ -7,7 +7,31 @@
 //
 
 import Foundation
-import CoreGraphics
+import UIKit
+
+enum MVAPhysicsCategory: UInt32 {
+    case car = 1
+    case player = 2
+    case remover = 3
+    case spawner = 4
+}
+
+
+extension UIColor {
+    class func getRandomColor() -> UIColor {
+        let randomRed:CGFloat = CGFloat(drand48())
+        let randomGreen:CGFloat = CGFloat(drand48())
+        let randomBlue:CGFloat = CGFloat(drand48())
+        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
+    }
+}
+
+extension Collection where Indices.Iterator.Element == Index {
+    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
 
 extension Double {
     static func randomWith2Decimals(inRange range: Range<UInt32>) -> Double {

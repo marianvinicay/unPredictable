@@ -42,6 +42,9 @@
 		2F5B1DEA1EFD3236006AEA30 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DE91EFD3236006AEA30 /* OpeningScene.swift */; };
 		2F5B1DEC1EFD3236006AEA30 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DE91EFD3236006AEA30 /* OpeningScene.swift */; };
 		2F5B1DED1EFD3236006AEA30 /* OpeningScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DE91EFD3236006AEA30 /* OpeningScene.swift */; };
+		2F5B1DEF1EFFD863006AEA30 /* GameSceneTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */; };
+		2F5B1DF01EFFD863006AEA30 /* GameSceneTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */; };
+		2F5B1DF11EFFD863006AEA30 /* GameSceneTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */; };
 		2F65AA2B1EF3D48600150F32 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* GameScene.sks */; };
 		2F65AA2C1EF3D48F00150F32 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* GameScene.sks */; };
 		2F65AA2D1EF3D49000150F32 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* GameScene.sks */; };
@@ -133,6 +136,7 @@
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F5A56621E1281ED00518651 /* MVACarSpawner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarSpawner.swift; sourceTree = "<group>"; };
 		2F5B1DE91EFD3236006AEA30 /* OpeningScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpeningScene.swift; sourceTree = "<group>"; };
+		2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneTouch.swift; sourceTree = "<group>"; };
 		2F65AA2A1EF3D48600150F32 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		2F7A089A1DC5D23A005561B9 /* MVACar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACar.swift; sourceTree = "<group>"; };
 		2F7A089F1DC65209005561B9 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 				2F7ECFAA1DE0EE5300415B8A /* MVAMarvin */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
+				2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */,
 				2F5A56621E1281ED00518651 /* MVACarSpawner.swift */,
 				2F7A089F1DC65209005561B9 /* Utils.swift */,
 				2FFD399C1DBA7EAB0091E088 /* MVARoadNode.swift */,
@@ -482,6 +487,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E15B1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F5B1DEF1EFFD863006AEA30 /* GameSceneTouch.swift in Sources */,
 				2F7ECFAC1DE0EF7900415B8A /* MVAMindSet.swift in Sources */,
 				2F7A089B1DC5D23A005561B9 /* MVACar.swift in Sources */,
 				2F23E1171D6EF21D00119E4F /* GameViewController.swift in Sources */,
@@ -498,6 +504,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F5B1DF01EFFD863006AEA30 /* GameSceneTouch.swift in Sources */,
 				2F5A56601E116E3500518651 /* GameScene.swift in Sources */,
 				2F5A56611E116E4500518651 /* Utils.swift in Sources */,
 				2F5A565F1E116DB900518651 /* MVARoadNode.swift in Sources */,
@@ -515,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F23E15D1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F5B1DF11EFFD863006AEA30 /* GameSceneTouch.swift in Sources */,
 				2F69B48B1E0C1C0C00B57B01 /* MVAMarvinAI.swift in Sources */,
 				2F23E1411D6EF21D00119E4F /* GameViewController.swift in Sources */,
 				2F7A089D1DC5D5DC005561B9 /* MVACar.swift in Sources */,

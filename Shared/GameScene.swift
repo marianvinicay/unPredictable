@@ -9,45 +9,28 @@
 import SpriteKit
 import UIKit
 
-extension Collection where Indices.Iterator.Element == Index {
-    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
-    subscript (safe index: Index) -> Generator.Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
-
 #if os(watchOS)
     import WatchKit
     // <rdar://problem/26756207> SKColor typealias does not seem to be exposed on watchOS SpriteKit
     typealias SKColor = UIColor
 #endif
 
-extension UIColor {
-    class func getRandomColor() -> UIColor {
-        let randomRed:CGFloat = CGFloat(drand48())
-        let randomGreen:CGFloat = CGFloat(drand48())
-        let randomBlue:CGFloat = CGFloat(drand48())
-        return UIColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
-    }
-}
-
-enum MVAPhysicsCategory: UInt32 {
-    case car = 1
-    case player = 2
-    case remover = 3
-    case spawner = 4
-}
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     //internal ?? private ??
     private var roadNodes = [MVARoadNode]()
     private var cameraNode: SKCameraNode!
-    internal let intel = MVAMarvinAI()
+    let intel = MVAMarvinAI()
     private var endOfWorld: CGFloat = 0.0
     private var remover: SKSpriteNode!
     private var spawner: MVACarSpawner!
-    fileprivate var playBtt: SKLabelNode!
+    var playBtt: SKLabelNode!
     private var gameStarted = false
+    var lastPressedXPosition: CGFloat!
+    var playTapped = false
+    private var brakingTimer: Timer!
+    private var lastUpdate = 0.0//Double
+    private var starterCount = 0
+    
         
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
@@ -64,7 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return scene
     }
     
-    internal func initiateScene() {
+    func initiateScene() {
         let starterNode = self.childNode(withName: "starter") as! MVARoadNode
         roadNodes.append(starterNode)
         let road = MVARoadNode.createWith(numberOfLanes: 3, name: "Start2", height: starterNode.size.height, andWidth: starterNode.size.width)
@@ -98,7 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
     }
     
-    internal func startGame() {
+    func startGame() {
         if let pSprite = self.childNode(withName: "player") {
             gameStarted = true
             let player = MVACar(withSize: CGSize(), andMindSet: .player, img: "Audi")
@@ -182,8 +165,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     #endif
     
-    private var lastUpdate = 0.0//Double
-    private var starterCount = 0
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
@@ -217,7 +198,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    fileprivate var playTapped = false
     private func updateCamera() {
         if playTapped {
             spawner.position.y = cameraNode.position.y+self.size.height
@@ -239,7 +219,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private var brakingTimer: Timer!
     func handleBrake(started: Bool) {
         if gameStarted {
             guard intel.player.mindSet == .player else { return }
@@ -265,76 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    fileprivate var lastPressedXPosition: CGFloat!
 }
-
-#if os(iOS) || os(tvOS)
-// Touch-based event handling
-extension GameScene: UIGestureRecognizerDelegate {
-    
-    internal func setupSwipes() {
-        let right = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
-        right.direction = .right
-        let left = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
-        left.direction = .left
-        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-        brake.minimumPressDuration = 0.1
-        right.delegate = self
-        left.delegate = self
-        brake.delegate = self
-        self.view?.addGestureRecognizer(right)
-        self.view?.addGestureRecognizer(left)
-        self.view?.addGestureRecognizer(brake)
-    }
-    
-    internal func handelUISwipe(swipe: UISwipeGestureRecognizer) {
-        switch swipe.direction {
-        case UISwipeGestureRecognizerDirection.right: self.handleSwipe(swipe: .right)
-        case UISwipeGestureRecognizerDirection.left: self.handleSwipe(swipe: .left)
-        default: break
-        }
-    }
-    //??? what is internal?
-    internal func handleUIBrake(gest: UILongPressGestureRecognizer) {
-        switch gest.state {
-        case .began:
-            self.handleBrake(started: true)
-            lastPressedXPosition = gest.location(in: self.view).x
-        case .changed:
-            if lastPressedXPosition+60 < gest.location(in: self.view).x {
-                self.handleSwipe(swipe: .right)
-                lastPressedXPosition = gest.location(in: self.view).x
-            } else if lastPressedXPosition-60 > gest.location(in: self.view).x {
-                self.handleSwipe(swipe: .left)
-                lastPressedXPosition = gest.location(in: self.view).x
-            }
-        case .ended: self.handleBrake(started: false)
-        default: break
-        }
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if playBtt.contains(touches.first!.location(in: self)) {
-            self.isPaused = false
-            self.speed = 1
-            playTapped = true
-            playBtt.run(SKAction.group([SKAction.scale(by: 1.5, duration: 2.0),SKAction.fadeOut(withDuration: 1.5)]), completion: {
-                self.startGame()
-            })
-        }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    
-}
-#endif
 
 #if os(OSX)
 // Mouse-based event handling
