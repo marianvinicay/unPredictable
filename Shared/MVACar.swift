@@ -213,14 +213,13 @@ public class MVACar: SKSpriteNode {
                     currentLane = newLane
                     let angle: CGFloat = dir == .left ? 0.3:-0.3
                     let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
-                    let move = SKAction.moveTo(x: newLaneCoor!, duration: 0.25)
+                    let move = SKAction.moveTo(x: newLaneCoor!, duration: 0.2)
                     let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
-                    turnIn.timingMode = .easeInEaseOut
-                    move.timingMode = .easeInEaseOut
-                    turnOut.timingMode = .easeInEaseOut
-                    self.run(SKAction.group([turnIn,move]), completion: {
-                        self.run(turnOut)
-                    })
+                    turnIn.timingMode = .easeIn
+                    move.timingMode = .linear
+                    turnOut.timingMode = .easeOut
+                    self.run(SKAction.sequence([SKAction.group([turnIn,move]),turnOut]))
+
                     if mindSet == .bot {
                         cantMoveForTime = 1.2
                     }

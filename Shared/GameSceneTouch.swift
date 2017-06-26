@@ -11,6 +11,11 @@
     
     // Touch-based event handling
     extension GameScene: UIGestureRecognizerDelegate {
+        
+        override func didMove(to view: SKView) {
+            setupSwipes()
+        }
+        
         func setupSwipes() {
             let right = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
             right.direction = .right
@@ -60,8 +65,12 @@
             if playBtt.contains(touches.first!.location(in: self)) {
                 isPaused = false
                 speed = 1
-                playTapped = true
-                playBtt.run(SKAction.group([SKAction.scale(by: 1.5, duration: 2.0),SKAction.fadeOut(withDuration: 1.5)]), completion: {
+                let pSprite = self.childNode(withName: "player")!
+                print(pSprite.hasActions())
+                let mvmnt = SKAction.moveTo(y: 180+size.height/4, duration: 2.5)
+                mvmnt.timingMode = .easeOut
+                cameraNode.run(mvmnt)
+                playBtt.run(SKAction.group([SKAction.scale(by: 1.5, duration: 2.5),SKAction.fadeOut(withDuration: 1.5)]), completion: {
                     self.startGame()
                 })
             }

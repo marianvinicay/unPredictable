@@ -16,22 +16,28 @@ import UIKit
 #endif
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    //internal ?? private ??
-    private var roadNodes = [MVARoadNode]()
-    private var cameraNode: SKCameraNode!
+    // MARK: - Variables
+    // MARK: Gameplay Logic
     let intel = MVAMarvinAI()
-    private var endOfWorld: CGFloat = 0.0
+    private var gameStarted = false
+    
+    // MARK: Buttons
+    var playBtt: SKLabelNode!
+    
+    // MARK: Gameplay Sprites
+    var cameraNode: SKCameraNode!
+    private var roadNodes = [MVARoadNode]()
     private var remover: SKSpriteNode!
     private var spawner: MVACarSpawner!
-    var playBtt: SKLabelNode!
-    private var gameStarted = false
-    var lastPressedXPosition: CGFloat!
-    var playTapped = false
-    private var brakingTimer: Timer!
-    private var lastUpdate = 0.0//Double
-    private var starterCount = 0
     
-        
+    // MARK: Gameplay Helpers
+    var lastPressedXPosition: CGFloat!
+    private var endOfWorld: CGFloat = 0.0
+    private var starterCount: UInt8 = 0
+    private var brakingTimer: Timer!
+    private var lastUpdate: TimeInterval = 0.0
+
+    // MARK: - Init
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
         //let scene = GameScene(size: size)
@@ -61,6 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cameraNode = SKCameraNode()
         cameraNode.position = starterNode.position
         self.camera = cameraNode
+        self.addChild(cameraNode)
         
         spawner = MVACarSpawner.createSpawner(withWidth: frame.width)
         spawner.zPosition = 4.0
@@ -81,6 +88,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
     }
     
+    private func populateCars() {
+        
+    }
+    
+    /*#if os(watchOS)
+    override func sceneDidLoad() {
+        self.setUpScene()
+    }
+    #endif*/
+    
+    // MARK: - Gameplay
     func startGame() {
         if let pSprite = self.childNode(withName: "player") {
             gameStarted = true
@@ -95,9 +113,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(player)
             pSprite.removeFromParent()
             player.zPosition = 5.0
-            player.pointsPerSecond = 250
-            let move = SKAction.moveBy(x: 0.0, y: CGFloat(player.pointsPerSecond), duration: 1.0)
-            player.run(SKAction.repeatForever(move), withKey: "move")//???
+            player.changeSpeed(222)
             intel.player = player
         }
         
@@ -107,10 +123,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let wait = SKAction.wait(forDuration: 2.5)
         self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
-    }
-    
-    private func populateCars() {
-        
     }
     
     private func gameOver() {
@@ -128,43 +140,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func didBegin(_ contact: SKPhysicsContact) {
-        let collision = contact.bodyA.categoryBitMask & contact.bodyB.categoryBitMask
-        if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.remover.rawValue {
-            if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
-                if let node = contact.bodyA.node as? MVACar {
-                    node.removeFromParent()
-                    intel.cars.remove(node)
-                }
-            } else {
-                if let node = contact.bodyB.node as? MVACar {
-                    node.removeFromParent()
-                    intel.cars.remove(node)
-                }
-            }
-        } else if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.player.rawValue {
-            gameOver()
+    func handleSwipe(swipe: MVAPosition) {
+        if gameStarted {
+            guard intel.player.mindSet == .player else { return }
+            _ = intel.player.changeLane(inDirection: swipe, withLanePositions: intel.lanePositions, AndPlayer: intel.player)
         }
     }
     
-    func setUpScene() {
-        #if os(iOS) || os(tvOS)
-            self.setupSwipes()
-        #elseif os(watchOS)
-            
-        #endif
+    func handleBrake(started: Bool) {
+        if gameStarted {
+            guard intel.player.mindSet == .player else { return }
+            if started {
+                brakingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (_: Timer) in
+                    if let act = self.intel.player.action(forKey: "move") {
+                        if act.speed > 0.2 {
+                            self.intel.player.pointsPerSecond *= 0.85
+                            act.speed -= 0.2
+                        }
+                    }
+                })
+            } else {
+                brakingTimer.invalidate()
+                brakingTimer = nil
+                if let act = intel.player.action(forKey: "move") {
+                    while act.speed < 1.0 {
+                        act.speed += 0.2
+                    }
+                    act.speed = 1.0
+                    intel.player.pointsPerSecond = 250
+                }
+            }
+        }
     }
-    
-    #if os(watchOS)
-    override func sceneDidLoad() {
-        self.setUpScene()
-    }
-    #else
-    override func didMove(to view: SKView) {
-        self.setUpScene()
-    }
-    #endif
-    
+
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
@@ -199,49 +207,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func updateCamera() {
-        if playTapped {
-            spawner.position.y = cameraNode.position.y+self.size.height
-            if intel.player != nil {
-                cameraNode.position.y = intel.player.position.y+size.height/4
-            } else {
-                if let pSprite = self.childNode(withName: "player") {
-                    cameraNode.position.y = pSprite.position.y+size.height/4
-                }
-            }
-            remover.position.y = cameraNode.position.y-self.size.height
+        spawner.position.y = cameraNode.position.y+self.size.height
+        if intel.player != nil {
+            let desiredCameraPosition = intel.player.position.y+size.height/4
+            cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.2))
         }
+        remover.position.y = cameraNode.position.y-self.size.height
     }
     
-    func handleSwipe(swipe: MVAPosition) {
-        if gameStarted {
-            guard intel.player.mindSet == .player else { return }
-            _ = intel.player.changeLane(inDirection: swipe, withLanePositions: intel.lanePositions, AndPlayer: intel.player)
-        }
-    }
-    
-    func handleBrake(started: Bool) {
-        if gameStarted {
-            guard intel.player.mindSet == .player else { return }
-            if started {
-                brakingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (_: Timer) in
-                    if let act = self.intel.player.action(forKey: "move") {
-                        if act.speed > 0.2 {
-                            self.intel.player.pointsPerSecond *= 0.85
-                            act.speed -= 0.2
-                        }
-                    }
-                })
+    // MARK: - SKPhysicsContactDelegate
+    func didBegin(_ contact: SKPhysicsContact) {
+        let collision = contact.bodyA.categoryBitMask & contact.bodyB.categoryBitMask
+        if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.remover.rawValue {
+            if contact.bodyA.categoryBitMask == MVAPhysicsCategory.car.rawValue {
+                if let node = contact.bodyA.node as? MVACar {
+                    node.removeFromParent()
+                    intel.cars.remove(node)
+                }
             } else {
-                brakingTimer.invalidate()
-                brakingTimer = nil
-                if let act = intel.player.action(forKey: "move") {
-                    while act.speed < 1.0 {
-                        act.speed += 0.2
-                    }
-                    act.speed = 1.0
-                    intel.player.pointsPerSecond = 250
+                if let node = contact.bodyB.node as? MVACar {
+                    node.removeFromParent()
+                    intel.cars.remove(node)
                 }
             }
+        } else if collision == MVAPhysicsCategory.car.rawValue & MVAPhysicsCategory.player.rawValue {
+            gameOver()
         }
     }
 }
