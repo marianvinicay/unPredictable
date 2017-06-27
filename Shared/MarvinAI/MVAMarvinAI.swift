@@ -11,6 +11,8 @@ import SpriteKit
 
 class MVAMarvinAI {
     var player: MVACar!
+    var distanceTraveled = 0.0 //in KM
+    var currentLevel = 40 //in KM/H
     var cars = Set<MVACar>()
     var lanePositions = [Int:CGFloat]()
     
@@ -47,6 +49,9 @@ class MVAMarvinAI {
     }
     
     func update(withDeltaTime dTime: TimeInterval) {
+        // d = v * t
+        //print((Double(player.pointsPerSecond/2)*dTime/1000),(Double(player.pointsPerSecond/2)*dTime/1000).roundTo(NDecimals: 3))
+        distanceTraveled += (Double(player.pointsPerSecond/2)*dTime.roundTo(NDecimals: 3)/1000).roundTo(NDecimals: 3)
         cars.forEach { (car: MVACar) in
             car.timeCountdown(deltaT: dTime)
             //CHANGE LANE WHEN PRIORITY

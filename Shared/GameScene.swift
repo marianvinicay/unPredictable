@@ -25,6 +25,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playBtt: SKLabelNode!
     
     // MARK: Gameplay Sprites
+    var distanceLabel: SKLabelNode!
+    var levelLabel: SKLabelNode!
     var cameraNode: SKCameraNode!
     private var roadNodes = [MVARoadNode]()
     private var remover: SKSpriteNode!
@@ -35,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var endOfWorld: CGFloat = 0.0
     private var starterCount: UInt8 = 0
     private var brakingTimer: Timer!
-    private var lastUpdate: TimeInterval = 0.0
+    private var lastUpdate: TimeInterval!
 
     // MARK: - Init
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
@@ -49,6 +51,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.isPaused = true
         scene.speed = 0
         scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
+        scene.distanceLabel = scene.childNode(withName: "dist") as! SKLabelNode
+        scene.levelLabel = scene.childNode(withName: "level") as! SKLabelNode
         scene.initiateScene()
         return scene
     }
@@ -176,10 +180,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
+            if lastUpdate == nil {
+                lastUpdate = currentTime
+            } else {
             //if currentTime-lastUpdate < 10 {//??? firstLoad run time
             intel.update(withDeltaTime: currentTime-lastUpdate)
             //}
             lastUpdate = currentTime
+            }
+            
+            var distString = String(intel.distanceTraveled)
+            let ind = distString.index(distString.startIndex, offsetBy: 3)
+            distString = distString.substring(to: ind)
+            distanceLabel.text = distString + " KM"
+            
+            levelLabel.text = String(intel.currentLevel)
             
             if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
                 let spriteName = starterCount < 2 ? "Start2":"road"
@@ -208,6 +223,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func updateCamera() {
         spawner.position.y = cameraNode.position.y+self.size.height
+        distanceLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
+        levelLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
         if intel.player != nil {
             let desiredCameraPosition = intel.player.position.y+size.height/4
             cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.2))
