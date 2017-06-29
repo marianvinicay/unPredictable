@@ -25,8 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playBtt: SKLabelNode!
     
     // MARK: Gameplay Sprites
-    var distanceLabel: SKLabelNode!
-    var levelLabel: SKLabelNode!
+    var hudInfo: HUD!
     var cameraNode: SKCameraNode!
     private var roadNodes = [MVARoadNode]()
     private var remover: SKSpriteNode!
@@ -50,9 +49,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.scaleMode = .aspectFill
         scene.isPaused = true
         scene.speed = 0
+        scene.cameraNode = SKCameraNode()
         scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
-        scene.distanceLabel = scene.childNode(withName: "dist") as! SKLabelNode
-        scene.levelLabel = scene.childNode(withName: "level") as! SKLabelNode
+        let distanceLabel = scene.childNode(withName: "dist") as! SKLabelNode
+        let levelLabel = scene.childNode(withName: "level") as! SKLabelNode
+        distanceLabel.removeFromParent()
+        levelLabel.removeFromParent()
+        scene.hudInfo = HUD(distL: distanceLabel, lvlL: levelLabel)
+        scene.cameraNode.addChild(scene.hudInfo)
         scene.initiateScene()
         return scene
     }
@@ -68,7 +72,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         intel.lanePositions = road.laneXCoordinate
         self.addChild(road)
         
-        cameraNode = SKCameraNode()
         cameraNode.position = starterNode.position
         self.camera = cameraNode
         self.addChild(cameraNode)
@@ -80,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //remover
         remover = SKSpriteNode(color: .purple, size: CGSize(width: frame.width, height: 10.0))
-        remover.position = CGPoint(x: 0.0/*spawner.size.width/2*/, y: -frame.height)
+        remover.position = CGPoint(x: 0.0, y: -frame.height)
         remover.zPosition = 4.0
         self.addChild(remover)
         remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
@@ -106,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func startGame() {
         if let pSprite = self.childNode(withName: "player") {
             gameStarted = true
-            let player = MVACar(withSize: CGSize(), andMindSet: .player, img: "Audi")
+            let player = MVACar(withMindSet: .player, andSkin: "Audi")
             player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
             player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
             player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
@@ -117,29 +120,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(player)
             pSprite.removeFromParent()
             player.zPosition = 5.0
-            player.changeSpeed(222)
+            player.changeSpeed(intel.currentLevel.playerSpeed)
             intel.player = player
         }
         
         let spawn = SKAction.run {
             self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.intel.lanePositions)
         }
-        
-        let wait = SKAction.wait(forDuration: 2.5)
+        print(intel.currentLevel.spawnRate)
+        let wait = SKAction.wait(forDuration: intel.currentLevel.spawnRate)//2.5)
         self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
     }
     
     private func gameOver() {
         if intel.player.childNode(withName: "txt") == nil {
             let label = SKLabelNode(text: "Game\nOver!")
-            label.name = "txt"
-            label.fontSize += 10	
-            intel.player.addChild(label)
-            label.position.y += size.height/4
-            self.isPaused = true
+            label.fontSize += 10
+            label.position = .zero
+            cameraNode.addChild(label)
+            self.isPaused = true //only isPaused???
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { [unowned label] in
                 self.isPaused = false
-                self.intel.player.removeChildren(in: [label])
+                label.removeFromParent()
             })
         }
     }
@@ -171,12 +173,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         act.speed += 0.2
                     }
                     act.speed = 1.0
-                    intel.player.pointsPerSecond = 250
+                    intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
                 }
             }
         }
     }
 
+    private var nextMStone = 3.0
+    
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
@@ -189,12 +193,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             lastUpdate = currentTime
             }
             
-            var distString = String(intel.distanceTraveled)
-            let ind = distString.index(distString.startIndex, offsetBy: 3)
-            distString = distString.substring(to: ind)
-            distanceLabel.text = distString + " KM"
+            hudInfo.setDistance(intel.distanceTraveled)
             
-            levelLabel.text = String(intel.currentLevel)
+            if intel.distanceTraveled > nextMStone {
+                intel.currentLevel.level += 1
+                nextMStone = Double(intel.currentLevel.nextMilestone)
+                intel.player.changeSpeed(intel.currentLevel.playerSpeed)
+                
+                self.removeAction(forKey: "spawn")
+                let spawn = SKAction.run {
+                    self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.intel.lanePositions)
+                }
+                print(intel.currentLevel.spawnRate)
+                let wait = SKAction.wait(forDuration: intel.currentLevel.spawnRate)
+                self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
+            }
+            
+            hudInfo.setLevel(intel.currentLevel.level)
             
             if endOfWorld-50<self.cameraNode.position.y+self.size.height/2 {
                 let spriteName = starterCount < 2 ? "Start2":"road"
@@ -223,11 +238,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func updateCamera() {
         spawner.position.y = cameraNode.position.y+self.size.height
-        distanceLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
-        levelLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
+        //distanceLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
+        //levelLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
         if intel.player != nil {
             let desiredCameraPosition = intel.player.position.y+size.height/4
-            cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.2))
+            cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.1))
+            //cameraNode.position.y = desiredCameraPosition
         }
         remover.position.y = cameraNode.position.y-self.size.height
     }

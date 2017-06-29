@@ -65,8 +65,6 @@
             if playBtt.contains(touches.first!.location(in: self)) {
                 isPaused = false
                 speed = 1
-                let pSprite = self.childNode(withName: "player")!
-                print(pSprite.hasActions())
                 let mvmnt = SKAction.moveTo(y: 180+size.height/4, duration: 2.5)
                 mvmnt.timingMode = .easeOut
                 cameraNode.run(mvmnt)

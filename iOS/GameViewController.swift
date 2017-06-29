@@ -8,12 +8,11 @@
 
 import UIKit
 import SpriteKit
-import GameplayKit
 
 class GameViewController: UIViewController {
 
-    private var scene: SKScene?
-    
+    private var scene: GameScene!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         scene = GameScene.newGameScene(withSize: self.view.frame.size)

@@ -13,6 +13,7 @@ import GameplayKit
 class GameViewController: NSViewController {
 
     override func viewDidLoad() {
+        @IBOutlet weak var strt: UIButton!
         super.viewDidLoad()
         let size = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
         let scene = GameScene.newGameScene(withSize: size)

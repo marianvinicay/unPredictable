@@ -8,18 +8,21 @@
 
 import UIKit
 import SpriteKit
-import GameplayKit
 
 class GameViewController: UIViewController {
+    
+    
+    
+    private var gameScene: GameScene!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = GameScene.newGameScene(withSize: CGSize())
+        gameScene = GameScene.newGameScene(withSize: CGSize())
         
         // Present the scene
         let skView = self.view as! SKView
-        skView.presentScene(scene)
+        skView.presentScene(gameScene)
         
         skView.ignoresSiblingOrder = true
         
