@@ -50,7 +50,7 @@ class MVACarSpawner: SKSpriteNode {
             car.position = position
             
             car.zPosition = 4.0
-            car.changeSpeed(MVAConstants.baseBotSpeed)
+            car.pointsPerSecond = MVAConstants.baseBotSpeed
             (self.parent as! GameScene).addChild(car)
             (self.parent as! GameScene).intel.cars.insert(car)
         }

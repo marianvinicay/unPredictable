@@ -62,6 +62,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func initiateScene() {
+        if let pSprite = self.childNode(withName: "placeholder") {
+            let player = MVACar(withMindSet: .player, andSkin: "Audi")
+            player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
+            player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+            player.physicsBody?.isDynamic = true
+            let lane = 1    //Int(arc4random_uniform(road.numberOfLanes))
+            player.position = pSprite.position  //CGPoint(x: road.laneXCoordinate[lane]!, y: size.height/3)
+            player.currentLane = lane
+            self.addChild(player)
+            pSprite.removeFromParent()
+            player.zPosition = 5.0
+            intel.player = player
+        }
+        
         let starterNode = self.childNode(withName: "starter") as! MVARoadNode
         roadNodes.append(starterNode)
         let road = MVARoadNode.createWith(numberOfLanes: 3, name: "Start2", height: starterNode.size.height, andWidth: starterNode.size.width)
@@ -107,27 +122,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Gameplay
     func startGame() {
-        if let pSprite = self.childNode(withName: "player") {
-            gameStarted = true
-            let player = MVACar(withMindSet: .player, andSkin: "Audi")
-            player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.isDynamic = false
-            let lane = 1    //Int(arc4random_uniform(road.numberOfLanes))
-            player.position = pSprite.position  //CGPoint(x: road.laneXCoordinate[lane]!, y: size.height/3)
-            player.currentLane = lane
-            self.addChild(player)
-            pSprite.removeFromParent()
-            player.zPosition = 5.0
-            player.changeSpeed(intel.currentLevel.playerSpeed)
-            intel.player = player
-        }
-        
+        print("start")
+        gameStarted = true
+        intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         let spawn = SKAction.run {
             self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.intel.lanePositions)
         }
-        print(intel.currentLevel.spawnRate)
         let wait = SKAction.wait(forDuration: intel.currentLevel.spawnRate)//2.5)
         self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
     }
@@ -135,6 +135,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func gameOver() {
         if intel.player.childNode(withName: "txt") == nil {
             let label = SKLabelNode(text: "Game\nOver!")
+            label.fontName = "Helvetica Neue"
             label.fontSize += 10
             label.position = .zero
             cameraNode.addChild(label)
@@ -153,19 +154,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var playerBraking = false
+    
     func handleBrake(started: Bool) {
         if gameStarted {
-            guard intel.player.mindSet == .player else { return }
             if started {
-                brakingTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (_: Timer) in
-                    if let act = self.intel.player.action(forKey: "move") {
-                        if act.speed > 0.2 {
-                            self.intel.player.pointsPerSecond *= 0.85
-                            act.speed -= 0.2
-                        }
-                    }
-                })
+                playerBraking = true
+                //intel.player.pointsPerSecond *= 0.3
+                if intel.player.pointsPerSecond > 50 {
+                    intel.player.pointsPerSecond -= 10
+                }
             } else {
+                playerBraking = false
+                intel.player.pointsPerSecond = intel.currentLevel.playerSpeed//!!!
+                /*playerBraking = false
                 brakingTimer.invalidate()
                 brakingTimer = nil
                 if let act = intel.player.action(forKey: "move") {
@@ -174,12 +176,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     act.speed = 1.0
                     intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
-                }
+                }*/
             }
         }
     }
 
-    private var nextMStone = 3.0
+    private var nextMStone = 1.0
     
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
@@ -193,18 +195,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             lastUpdate = currentTime
             }
             
+            if playerBraking {
+                handleBrake(started: true)
+            }
+            
             hudInfo.setDistance(intel.distanceTraveled)
             
             if intel.distanceTraveled > nextMStone {
                 intel.currentLevel.level += 1
                 nextMStone = Double(intel.currentLevel.nextMilestone)
                 intel.player.changeSpeed(intel.currentLevel.playerSpeed)
-                
+                print(intel.player.pointsPerSecond)
                 self.removeAction(forKey: "spawn")
                 let spawn = SKAction.run {
                     self.spawner.spawn(withExistingCars: self.intel.cars, roadLanes: self.intel.lanePositions)
                 }
-                print(intel.currentLevel.spawnRate)
                 let wait = SKAction.wait(forDuration: intel.currentLevel.spawnRate)
                 self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
             }
@@ -242,8 +247,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //levelLabel.position.y = cameraNode.position.y+(self.size.height/2)-50
         if intel.player != nil {
             let desiredCameraPosition = intel.player.position.y+size.height/4
-            cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.1))
-            //cameraNode.position.y = desiredCameraPosition
+            //cameraNode.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.1))
+            cameraNode.position.y = desiredCameraPosition
         }
         remover.position.y = cameraNode.position.y-self.size.height
     }

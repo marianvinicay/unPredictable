@@ -26,6 +26,7 @@ enum MVAPosition/*: CustomStringConvertible*/ {
     case frontLeft, front, frontRight
     case right, left
     case back, backLeft, backRight
+    case stop
     
     //DEBUG
     /*var description: String {

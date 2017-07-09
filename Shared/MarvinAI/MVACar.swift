@@ -12,7 +12,14 @@ import SpriteKit
 public class MVACar: SKSpriteNode {
     
     var mindSet: MVAMindSet
-    var pointsPerSecond: CGFloat = 0.0
+    var pointsPerSecond: Int {
+        get {
+            return Int(self.physicsBody!.velocity.dy)
+        }
+        set {
+            self.physicsBody!.velocity.dy = CGFloat(newValue)
+        }
+    }
     var timeToRandomise = Double.randomWith2Decimals(inRange: 1..<3)
     var currentLane: Int!
     var cantMoveForTime = 0.0
@@ -39,10 +46,11 @@ public class MVACar: SKSpriteNode {
         if noPriorityForTime > 0 {
             noPriorityForTime -= deltaT
         }
-        
+
         if changingSpeed {
-            changeSpeed(pointsPerSecond)
+            smoothSpeedChange()
         }
+        
         if hasPriority {
             priorityTime -= deltaT
             if priorityTime <= 0 {
@@ -69,12 +77,15 @@ public class MVACar: SKSpriteNode {
         carSize.width = 50
         
         physicsBody = SKPhysicsBody(rectangleOf: carSize)
+        physicsBody?.mass = 2000
+        physicsBody?.density = 0
         physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
         physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue //| MVAPhysicsCategory.remover.rawValue
         physicsBody?.isDynamic = true
+        physicsBody?.linearDamping = 0.0
         physicsBody?.affectedByGravity = false
-        //physicsBody?.allowsRotation = true
+        physicsBody?.allowsRotation = false
     }
     
     /*func drawSensors() {
@@ -99,13 +110,14 @@ public class MVACar: SKSpriteNode {
         for position in positions {
             switch position {
             case .frontLeft: foundCars = foundCars.union(carsIntersecting(sensors: frontLeftSensors))
-            case .front: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
+            case .front: foundCars = foundCars.union(carsIntersecting(sensors: [frontSensor]))
             case .frontRight: foundCars = foundCars.union(carsIntersecting(sensors: frontRightSensors))
             case .left: foundCars = foundCars.union(carsIntersecting(sensors: leftSensors))
             case .right: foundCars = foundCars.union(carsIntersecting(sensors: rightSensors))
-            case .back: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
+            case .back: foundCars = foundCars.union(carsIntersecting(sensors: [backSensor]))
             case .backRight: foundCars = foundCars.union(carsIntersecting(sensors: backRightSensors))
             case .backLeft: foundCars = foundCars.union(carsIntersecting(sensors: backLeftSensors))
+            case .stop: foundCars = foundCars.union(carsIntersecting(sensors: [stopSensor]))
             }
         }
         return foundCars//Set(foundCars.filter({ $0.mindSet != .player }))
@@ -123,17 +135,17 @@ public class MVACar: SKSpriteNode {
     
     func changeLane(inDirection dir: MVAPosition, withLanePositions roadLanePositions: [Int:CGFloat], AndPlayer player: MVACar) -> Bool {
         if cantMoveForTime <= 0 {
-            let reactionDistance = player.pointsPerSecond*1.8
+            let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond)*0.6:CGFloat(player.pointsPerSecond)*1.6
             let heightDifference = self.mindSet == .player ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
-            if heightDifference >= reactionDistance {//???
-                let newLane = dir == .left ? currentLane-1:currentLane+1
+            let newLane = dir == .left ? currentLane-1:currentLane+1
+            if /*newLane != player.currentLane ||*/ heightDifference >= reactionDistance {//???
                 let newLaneCoor = roadLanePositions[newLane]
                 let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
                 let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
             
                 if newLaneCoor != nil && responseFromSensors {
                     currentLane = newLane
-                    let angle: CGFloat = dir == .left ? 0.3:-0.3
+                    let angle: CGFloat = dir == .left ? 0.5:-0.5
                     let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
                     let move = SKAction.moveTo(x: newLaneCoor!, duration: 0.2)
                     let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
@@ -153,79 +165,41 @@ public class MVACar: SKSpriteNode {
         return false
     }
     
-    private func newAction(forSpeed speed: CGFloat) {
-        self.removeAction(forKey: "move")
-        let move = SKAction.moveBy(x: 0.0, y: speed, duration: 1.0)
-        self.run(SKAction.repeatForever(move), withKey: "move")
+    var changingSpeed = false
+    var newSpeedDiff = 0
+    
+    func changeSpeed(_ speed: Int) {
+        if speed != pointsPerSecond {
+            if changingSpeed == false {
+                changingSpeed = true
+                newSpeedDiff = speed-pointsPerSecond
+            }
+            smoothSpeedChange()
+        }
     }
     
-    private var changingSpeed = false
-    private var speedChangePercentage: CGFloat!
-    
-    func changeSpeed(_ speed: CGFloat) {
-        if speed != self.pointsPerSecond || changingSpeed {
-            if self.pointsPerSecond != 0.0 {
-                if !changingSpeed {
-                    let onePercent = self.pointsPerSecond/100
-                    self.pointsPerSecond = speed
-                    speedChangePercentage = round(speed/onePercent)/100
-                    changingSpeed = true
-                }
-                //print("change")
-                if let spd = self.action(forKey: "move") {
-                    if speedChangePercentage > 1.0 {
-                        if spd.speed < speedChangePercentage {
-                            spd.speed += 0.1
-                        } else {
-                            spd.speed = speedChangePercentage
-                            changingSpeed = false
-                            speedChangePercentage = 0.0
-                            self.newAction(forSpeed: speed)
-                        }
-                    } else if speedChangePercentage < 1.0 {
-                        if spd.speed > speedChangePercentage {
-                            spd.speed -= 0.05
-                        } else {
-                            spd.speed = speedChangePercentage
-                            changingSpeed = false
-                            speedChangePercentage = 0.0
-                            self.newAction(forSpeed: speed)
-                        }
-                    }
-                }/*
-                _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (tmr: Timer) in
-                    if let spd = self.action(forKey: "move") {
-                        if percentage > 1.0 {
-                            if spd.speed < percentage {
-                                spd.speed += 0.2
-                            } else {
-                                spd.speed = percentage
-                                tmr.invalidate()
-                                self.newAction(forSpeed: speed)
-                            }
-                        } else if percentage < 1.0 {
-                            if spd.speed > percentage {
-                                spd.speed -= 0.2
-                            } else {
-                                spd.speed = percentage
-                                tmr.invalidate()
-                                self.newAction(forSpeed: speed)
-                            }
-                        }
-                    }
-                })*/
-            } else {
-                self.pointsPerSecond = speed
-                newAction(forSpeed: speed)
-            }
+    func smoothSpeedChange() {
+        if newSpeedDiff > 0 {
+            pointsPerSecond += 5
+            newSpeedDiff -= 5
+        } else if newSpeedDiff < 0 {
+            pointsPerSecond -= 5
+            newSpeedDiff += 5
+        } else {
+            print("endChange")
+            changingSpeed = false
         }
     }
 }
 
 extension MVACar {
     // MARK: MVACar's sensors
-    fileprivate var frontSensor: [CGPoint] {
-        return [CGPoint(x: position.x, y: position.y+size.height*1.6)]
+    fileprivate var frontSensor: CGPoint {
+        return CGPoint(x: position.x, y: position.y+size.height*1.6)
+    }
+    
+    fileprivate var stopSensor: CGPoint {
+        return CGPoint(x: position.x, y: position.y+size.height+10)
     }
     
     fileprivate var rightSensors: [CGPoint] {
@@ -256,8 +230,8 @@ extension MVACar {
         return [leftDiagUP,leftDiagC]
     }
     
-    fileprivate var backSensor: [CGPoint] {
-        return [CGPoint(x: position.x, y: position.y-size.height*1.5)]
+    fileprivate var backSensor: CGPoint {
+        return CGPoint(x: position.x, y: position.y-size.height*1.5)
     }
     
     fileprivate var backRightSensors: [CGPoint] {
