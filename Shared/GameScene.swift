@@ -7,7 +7,9 @@
 //
 
 import SpriteKit
-//import UIKit
+#if os(iOS)
+import UIKit
+#endif
 
 #if os(watchOS)
     import WatchKit
@@ -42,11 +44,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Init
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
-        //let scene = GameScene(size: size)
-        guard let scene = GameScene(fileNamed: "GameScene") else {
+        var gameSceneName = "GameScene"
+        #if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            gameSceneName = "GameSceneiPad"
+        }
+        #endif
+        guard let scene = GameScene(fileNamed: gameSceneName) else {
             print("Failed to load GameScene.sks")
             abort()
         }
+        
         scene.scaleMode = .aspectFill
         scene.isPaused = true
         scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
