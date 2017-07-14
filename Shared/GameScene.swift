@@ -25,12 +25,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameStarted = false
     
     // MARK: Buttons
-    var playBtt: SKLabelNode!
-    var pauseBtt: SKLabelNode!
+    var playBtt: SKSpriteNode!
+    var pauseBtt: SKSpriteNode!
+    var originalPausePosition: CGPoint!
     
     // MARK: Gameplay Sprites
     var speedSign: HUDLabel!
+    var originalSpeedPosition: CGPoint!
     var distanceSign: HUDLabel!
+    var originalDistancePosition: CGPoint!
     private var roadNodes = Set<MVARoadNode>()
     private var remover: SKSpriteNode!
     private var spawner: MVASpawner!
@@ -54,17 +57,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("Failed to load GameScene.sks")
             abort()
         }
-        
         scene.scaleMode = .aspectFill
+        scene.size = deviceSize
         scene.isPaused = true
-        scene.playBtt = scene.childNode(withName: "playBtt") as! SKLabelNode
-        scene.playBtt.fontName = "Futura Medium"
+        scene.playBtt = scene.camera!.childNode(withName: "playBtt") as! SKSpriteNode
+        scene.pauseBtt = scene.camera!.childNode(withName: "stop") as! SKSpriteNode
+        scene.originalPausePosition = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
+        scene.pauseBtt.position = scene.originalPausePosition
         
         scene.speedSign = scene.camera!.childNode(withName: "speed") as! HUDLabel
-        scene.speedSign.position = CGPoint(x: -(scene.size.width/2)+scene.speedSign.size.width/2, y: (scene.size.height/2)-scene.speedSign.size.height/2)
+        scene.originalSpeedPosition = CGPoint(x: -(scene.size.width/2)+scene.speedSign.size.width/2, y: (scene.size.height/2)-scene.speedSign.size.height/2)
+        scene.speedSign.position = scene.originalSpeedPosition
+        scene.camera!.childNode(withName: "spdB")!.position = scene.originalSpeedPosition
         
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! HUDLabel
-        scene.distanceSign.position = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
+        scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
+        scene.distanceSign.position = scene.originalDistancePosition
+        scene.camera!.childNode(withName: "down")!.position = CGPoint(x: 0.0, y: -scene.size.height/2)
         
         scene.setLevelSpeed(0)
         scene.setDistance(MVAWorldConverter.distanceToOdometer(0.0))
@@ -75,18 +84,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func spawnPlayer() {
-        if let pSprite = self.childNode(withName: "placeholder") {
-            let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
-            let player = MVACar(withMindSet: .player, andSkin: pSkin)
-            player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-            player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.isDynamic = true
-            player.position = pSprite.position
-            self.addChild(player)
-            player.zPosition = 5.0
-            intel.player = player
-        }
+        let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
+        let player = MVACar(withMindSet: .player, andSkin: pSkin)
+        player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
+        player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        player.physicsBody?.isDynamic = true
+        player.position = CGPoint(x: 0.0, y: -self.size.height/13)
+        self.addChild(player)
+        player.zPosition = 5.0
+        intel.player = player
     }
     
     private func spawnStartRoad() {
@@ -155,6 +162,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func resetScene() {
+        self.playBtt.setScale(1.0)
+        
         lastUpdate = nil
         gameStarted = false
         playerDistance = "0.0"
@@ -182,7 +191,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Gameplay
     func startGame() {
         self.isPaused = false
-        guard let targetY = self.childNode(withName: "trgt")?.position.y else { abort() }
+        self.physicsWorld.speed = 0.0
+        let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let randLane = Int(arc4random_uniform(3))
         let randLanePos = CGFloat(intel.lanePositions[randLane]!)
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
@@ -194,12 +204,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let turnOut = SKAction.sequence([SKAction.wait(forDuration: 1.85),SKAction.rotate(toAngle: 0, duration: 0.3)])
         intel.player.currentLane = randLane
         intel.player.run(SKAction.group([moveOut,turnIn,moveIn,turnOut]))
-        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(by: 1.5, duration: 1.0),SKAction.fadeOut(withDuration: 1.0),SKAction.run { self.showHUD(); self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 1.0)) }]),SKAction.wait(forDuration: 1.1),SKAction.run({
+        let curtainUp = SKAction.run {
+            self.showHUD()
+            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 1.0))
+        }
+        let start = SKAction.run {
+            self.physicsWorld.speed = 1.0
+            self.isUserInteractionEnabled = true
             self.intel.player.pointsPerSecond = self.intel.currentLevel.playerSpeed
             self.setLevelSpeed(self.intel.currentLevel.playerSpeed)
             self.spawnWithDelay(self.intel.currentLevel.spawnRate)
             self.gameStarted = true
-        })]))
+        }
+        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 1.1),start]))
     }
     
     private func gameOver() {
@@ -212,21 +229,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             camera!.addChild(label)
             let resetAction = SKAction.run {
                 label.removeFromParent()
-                self.playBtt.setScale(1.0)
-                self.playBtt.alpha = 1.0
                 self.resetScene()
             }
-            self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0),resetAction]))
+            let curtainDown = SKAction.run {
+                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+            }
+            self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.0),curtainDown]),resetAction]))
         }
     }
     
     private func nextLevelSign() {
         self.removeAction(forKey: "spawn")
         self.physicsWorld.speed = 0.0
-        let rightPosition = speedSign.position
         let rightScale = speedSign.xScale
         let signIN = SKAction.group([SKAction.scale(to: 0.3, duration: 0.4),SKAction.move(to: CGPoint.zero, duration: 0.4)])
-        let signOUT = SKAction.group([SKAction.scale(to: rightScale, duration: 0.3),SKAction.move(to: rightPosition, duration: 0.3)])
+        let signOUT = SKAction.group([SKAction.scale(to: rightScale, duration: 0.3),SKAction.move(to: originalSpeedPosition, duration: 0.3)])
         speedSign.run(SKAction.sequence([signIN,SKAction.wait(forDuration: 0.6),signOUT]), completion: {
             self.physicsWorld.speed = 1.0
             self.spawnWithDelay(self.intel.currentLevel.spawnRate)

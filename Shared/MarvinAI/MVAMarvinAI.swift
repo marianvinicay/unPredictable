@@ -98,10 +98,10 @@ class MVAMarvinAI {
     }
     
     private func playerCornered() -> [MVACar]? {
-        let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.backRight,.right])//???.frontR/L
-        let frontCars = player.responseFromSensors(inPositions: [.front])
+        let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.backRight,.right]).filter({ $0.hasPriority != true })//???
+        let frontCars = player.responseFromSensors(inPositions: [.front]).filter({ $0.hasPriority != true })
         if !frontCars.isEmpty && badCars.count >= 1 { //???
-            return Array(badCars.union(frontCars))
+            return badCars+frontCars
         } else {
             return nil
         }
@@ -117,7 +117,7 @@ class MVAMarvinAI {
         }
         
         //if let carInWay = carsInFront.sorted(by: { $0.position.y < $1.position.y }).first {
-        if let carInWay = cars.filter({ /*$0.currentLane == pLane &&*/ (player.position.y-player.size.height/2) < ($0.position.y+$0.size.height/2) && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
+        if let carInWay = cars.filter({ /*$0.currentLane == pLane &&*/ player.position.y < $0.position.y && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
             if let blockingCars = carsBlockingCar(carInWay) {
                 freeTheWay(blockedByCars: blockingCars+[carInWay])
             }

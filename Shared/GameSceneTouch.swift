@@ -62,8 +62,28 @@
         }
         
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            if !intel.player.hasActions() && playBtt.contains(touches.first!.location(in: self)) {
+            if !gameStarted /*&& playBtt.contains(touches.first!.location(in: self))*/ {
+                self.isUserInteractionEnabled = false
                 self.startGame()
+            } else if gameStarted && pauseBtt.contains(touches.first!.location(in: self.camera!)) {
+                if !isPaused {
+                    physicsWorld.speed = 0.0
+                    self.playBtt.setScale(0.0)
+                    self.hideHUD(animated: true)
+                    self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+                    self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
+                        self.isPaused = true
+                    })
+                }
+            } else if gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
+                if isPaused {
+                    self.isPaused = false
+                    self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
+                    self.showHUD()
+                    self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
+                        self.physicsWorld.speed = 1.0
+                    })
+                }
             }
         }
     }
