@@ -7,9 +7,9 @@
 //
 
 import SpriteKit
-/*#if os(iOS)
+#if os(iOS)
 import UIKit
-#endif*/
+#endif
 
 #if os(watchOS)
     import WatchKit
@@ -47,12 +47,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Init
     class func newGameScene(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
-        let gameSceneName = "GameScene"
-        /*#if os(iOS)
+        var gameSceneName = "GameScene"
+        #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .pad {
             gameSceneName = "GameSceneiPad"
         }
-        #endif*/
+        #endif
         guard let scene = GameScene(fileNamed: gameSceneName) else {
             print("Failed to load GameScene.sks")
             abort()
@@ -84,18 +84,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func spawnPlayer() {
-        if let pSprite = self.childNode(withName: "placeholder") {
-            let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
-            let player = MVACar(withMindSet: .player, andSkin: pSkin)
-            player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-            player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-            player.physicsBody?.isDynamic = true
-            player.position = pSprite.position
-            self.addChild(player)
-            player.zPosition = 5.0
-            intel.player = player
-        }
+        let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
+        let player = MVACar(withMindSet: .player, andSkin: pSkin)
+        player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
+        player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        player.physicsBody?.isDynamic = true
+        player.position = CGPoint(x: 0.0, y: -self.size.height/13)
+        self.addChild(player)
+        player.zPosition = 5.0
+        intel.player = player
     }
     
     private func spawnStartRoad() {
@@ -193,7 +191,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Gameplay
     func startGame() {
         self.isPaused = false
-        guard let targetY = self.childNode(withName: "trgt")?.position.y else { abort() }
+        self.physicsWorld.speed = 0.0
+        let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let randLane = Int(arc4random_uniform(3))
         let randLanePos = CGFloat(intel.lanePositions[randLane]!)
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
@@ -205,13 +204,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let turnOut = SKAction.sequence([SKAction.wait(forDuration: 1.85),SKAction.rotate(toAngle: 0, duration: 0.3)])
         intel.player.currentLane = randLane
         intel.player.run(SKAction.group([moveOut,turnIn,moveIn,turnOut]))
-        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),SKAction.run { self.showHUD(); self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 1.0)) }]),SKAction.wait(forDuration: 1.1),SKAction.run({
+        let curtainUp = SKAction.run {
+            self.showHUD()
+            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 1.0))
+        }
+        let start = SKAction.run {
+            self.physicsWorld.speed = 1.0
             self.isUserInteractionEnabled = true
             self.intel.player.pointsPerSecond = self.intel.currentLevel.playerSpeed
             self.setLevelSpeed(self.intel.currentLevel.playerSpeed)
             self.spawnWithDelay(self.intel.currentLevel.spawnRate)
             self.gameStarted = true
-        })]))
+        }
+        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 1.1),start]))
     }
     
     private func gameOver() {
@@ -226,7 +231,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 label.removeFromParent()
                 self.resetScene()
             }
-            self.run(SKAction.sequence([SKAction.wait(forDuration: 1.0),resetAction]))
+            let curtainDown = SKAction.run {
+                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+            }
+            self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.0),curtainDown]),resetAction]))
         }
     }
     

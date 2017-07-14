@@ -7,6 +7,9 @@
 //
 
 import SpriteKit
+#if os(iOS)
+import UIKit
+#endif
 
 class MVARoadNode: SKSpriteNode {
     var laneXCoordinate: [Int:Int] = [:]
@@ -14,7 +17,12 @@ class MVARoadNode: SKSpriteNode {
     class func createWith(numberOfLanes: Int, texture: SKTexture, height: CGFloat, andWidth width: CGFloat) -> MVARoadNode {
         let road = MVARoadNode(texture: texture)
         let createLanes = numberOfLanes-1
-        let sidesWidthCombined = width*(1/3)
+        var sidesWidthCombined = (width*(1/3))-20
+        #if os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                sidesWidthCombined = width*(1/4)-20
+            }
+        #endif
         let laneWidth = (width-sidesWidthCombined)/CGFloat(numberOfLanes)
         
         var tempCoordinates = -(width/2)
