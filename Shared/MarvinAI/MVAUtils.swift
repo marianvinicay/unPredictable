@@ -7,6 +7,23 @@
 //
 
 import Foundation
+import SpriteKit
+
+struct MVASkin {
+    let normal: SKTexture
+    let left: SKTexture
+    let right: SKTexture
+    let brake: SKTexture
+    
+    static func createForCar(_ name: String, withAtlas atlas: SKTextureAtlas) -> MVASkin {
+        let textureNames = [
+            name+"Left",
+            name+"Right",
+            name+"Brake",
+            ]
+        return MVASkin(normal: atlas.textureNamed(name), left: atlas.textureNamed(textureNames[0]), right: atlas.textureNamed(textureNames[1]), brake: atlas.textureNamed(textureNames[2]))
+    }
+}
 
 enum MVAMindSet {
     case player
@@ -41,4 +58,11 @@ enum MVAPosition/*: CustomStringConvertible*/ {
         case .backRight: return "backRight"
         }
     }*/
+}
+
+extension CGSize {
+    func adjustSize(toNewWidth newWidth: CGFloat) -> CGSize {
+        let aspectRatio = self.width/self.height
+        return CGSize(width: newWidth, height: newWidth/aspectRatio)
+    }
 }

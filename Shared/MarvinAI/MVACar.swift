@@ -25,6 +25,9 @@ public class MVACar: SKSpriteNode {
     var cantMoveForTime = 0.0
     var hasPriority = false
     var priorityTime = 0.0
+    var useCounter = 0
+    var skin: MVASkin!
+    private var brakeLightTime = 0.5
     //var textNode: SKLabelNode!
     
     var noPriorityForTime = 0.0
@@ -39,6 +42,13 @@ public class MVACar: SKSpriteNode {
     
     func timeCountdown(deltaT: Double) {
         timeToRandomise -= deltaT
+        if brakeLightTime > 0 {
+            brakeLightTime -= deltaT
+            if brakeLightTime <= 0 {
+                self.removeChildren(in: self.children.filter({ $0.name == "brake" }))
+            }
+        }
+        
         if cantMoveForTime > 0 {
             cantMoveForTime -= deltaT
         }
@@ -61,31 +71,33 @@ public class MVACar: SKSpriteNode {
         }
     }
     
-    //!!! sensors change with width! must be static?
-    init(withMindSet mindSet: MVAMindSet, andSkin img: String) {
+    init(withMindSet mindSet: MVAMindSet, andSkin textures: MVASkin) {
         self.mindSet = mindSet
         var carSize = MVAConstants.baseCarSize
-        super.init(texture: SKTexture(imageNamed: img), color: .clear, size: carSize)
+        self.skin = textures
+        super.init(texture: self.skin.normal, color: .clear, size: carSize)
         /*self.textNode = SKLabelNode(text: "")
         self.textNode.fontSize = 20.0
         self.textNode.fontName = UIFont.systemFont(ofSize: 20, weight: 5).fontName
         self.textNode.fontColor = UIColor.white
         self.addChild(self.textNode)
         drawSensors()*/
-        
+        self.zPosition = 4.0
         carSize.height = 90
         carSize.width = 50
         
         physicsBody = SKPhysicsBody(rectangleOf: carSize)
-        physicsBody?.mass = 2000
-        physicsBody?.density = 0
+        physicsBody?.mass = 5
+        physicsBody?.density = 5000.0
+        physicsBody?.friction = 0.0
         physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
         physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue //| MVAPhysicsCategory.remover.rawValue
+        physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         physicsBody?.isDynamic = true
         physicsBody?.linearDamping = 0.0
+        physicsBody?.angularDamping = 0.0
         physicsBody?.affectedByGravity = false
-        physicsBody?.allowsRotation = false
+        physicsBody?.allowsRotation = true
     }
     
     /*func drawSensors() {
@@ -133,26 +145,32 @@ public class MVACar: SKSpriteNode {
         return intersectingCars
     }
     
-    func changeLane(inDirection dir: MVAPosition, withLanePositions roadLanePositions: [Int:CGFloat], AndPlayer player: MVACar) -> Bool {
+    func changeLane(inDirection dir: MVAPosition, withLanePositions roadLanePositions: [Int:Int], AndPlayer player: MVACar) -> Bool {
         if cantMoveForTime <= 0 {
-            let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond)*0.6:CGFloat(player.pointsPerSecond)*1.6
+            let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond):CGFloat(player.pointsPerSecond)*1.3//!!!
             let heightDifference = self.mindSet == .player ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
             let newLane = dir == .left ? currentLane-1:currentLane+1
-            if /*newLane != player.currentLane ||*/ heightDifference >= reactionDistance {//???
-                let newLaneCoor = roadLanePositions[newLane]
+            if heightDifference >= reactionDistance {//???
                 let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
-                let responseFromSensors = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
+                let clearRoadLane = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
             
-                if newLaneCoor != nil && responseFromSensors {
+                if roadLanePositions[newLane] != nil && clearRoadLane {
+                    let newLaneCoor = CGFloat(roadLanePositions[newLane]!)
                     currentLane = newLane
                     let angle: CGFloat = dir == .left ? 0.5:-0.5
                     let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
-                    let move = SKAction.moveTo(x: newLaneCoor!, duration: 0.2)
+                    let move = SKAction.moveTo(x: newLaneCoor, duration: 0.2)
                     let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
                     turnIn.timingMode = .easeIn
                     move.timingMode = .linear
                     turnOut.timingMode = .easeOut
-                    self.run(SKAction.sequence([SKAction.group([turnIn,move]),turnOut]))
+                    
+                    if dir == .left {
+                        leftIndicator()
+                    } else {
+                        rightIndicator()
+                    }
+                    self.run(SKAction.sequence([SKAction.group([turnIn,move]),turnOut]), completion: { self.cancelIndicator() })
 
                     if mindSet == .bot {
                         cantMoveForTime = 1.2
@@ -166,28 +184,113 @@ public class MVACar: SKSpriteNode {
     }
     
     var changingSpeed = false
-    var newSpeedDiff = 0
+    var newSpeed: Int!
+    var speedChange: MVAPosition!
     
     func changeSpeed(_ speed: Int) {
         if speed != pointsPerSecond {
             if changingSpeed == false {
                 changingSpeed = true
-                newSpeedDiff = speed-pointsPerSecond
+                if speed-pointsPerSecond > 0 {
+                    speedChange = .front
+                } else {
+                    speedChange = .back
+                    brakeLight(true)
+                }
+                newSpeed = speed
             }
             smoothSpeedChange()
         }
     }
     
     func smoothSpeedChange() {
-        if newSpeedDiff > 0 {
-            pointsPerSecond += 5
-            newSpeedDiff -= 5
-        } else if newSpeedDiff < 0 {
-            pointsPerSecond -= 5
-            newSpeedDiff += 5
-        } else {
-            print("endChange")
-            changingSpeed = false
+        if speedChange == .front {
+            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*500))
+            if pointsPerSecond > newSpeed {
+                changingSpeed = false
+                speedChange = nil
+                newSpeed = nil
+            }
+        } else if speedChange == .back {
+            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -self.physicsBody!.mass*500))
+            if pointsPerSecond < newSpeed {
+                changingSpeed = false
+                speedChange = nil
+                newSpeed = nil
+                brakeLight(false)
+            }
+        }
+    }
+    
+    private func leftIndicator() {
+        DispatchQueue.main.async {
+        if self.children.filter({ $0.name == "ind" }).isEmpty {
+            let leftNode = SKSpriteNode(texture: self.skin.left)
+            leftNode.size = leftNode.size.adjustSize(toNewWidth: self.size.width/2)
+            leftNode.anchorPoint = CGPoint(x: 1.0, y: 1.0)
+            leftNode.position.y = self.size.height/2
+            leftNode.zPosition = 1.0
+            leftNode.name = "ind"
+            leftNode.alpha = 0.0
+            self.addChild(leftNode)
+            let tOn = SKAction.run {
+                leftNode.alpha = 1.0
+            }
+            let tOff = SKAction.run {
+                leftNode.alpha = 0.0
+            }
+            let order = SKAction.sequence([tOn,SKAction.wait(forDuration: 0.1),tOff])
+            self.run(SKAction.repeatForever(order), withKey: "indic")
+        }
+        }
+    }
+    
+    private func rightIndicator() {
+        DispatchQueue.main.async {
+        if self.children.filter({ $0.name == "ind" }).isEmpty {
+            let rightNode = SKSpriteNode(texture: self.skin.right)
+            rightNode.size = rightNode.size.adjustSize(toNewWidth: self.size.width/2)
+            rightNode.anchorPoint = CGPoint(x: 0.0, y: 1.0)
+            rightNode.position.y = self.size.height/2
+            rightNode.zPosition = 1.0
+            rightNode.name = "ind"
+            rightNode.alpha = 0.0
+            self.addChild(rightNode)
+            let tOn = SKAction.run {
+                rightNode.alpha = 1.0
+            }
+            let tOff = SKAction.run {
+                rightNode.alpha = 0.0
+            }
+            let order = SKAction.sequence([tOn,SKAction.wait(forDuration: 0.1),tOff])
+            self.run(SKAction.repeatForever(order), withKey: "indic")
+        }
+        }
+    }
+    
+    private func cancelIndicator() {
+        self.removeChildren(in: self.children.filter({ $0.name == "ind" }))
+        self.removeAction(forKey: "indic")
+    }
+    
+    func brakeLight(_ flag: Bool) {
+        DispatchQueue.main.async {
+            if flag {
+                if self.children.filter({ $0.name == "brake" }).isEmpty {
+                    let brakeNode = SKSpriteNode(texture: self.skin.brake)
+                    brakeNode.size = brakeNode.size.adjustSize(toNewWidth: self.size.width)
+                    brakeNode.anchorPoint.y = 0.0
+                    brakeNode.position.y = -self.size.height/2
+                    brakeNode.zPosition = 1.0
+                    brakeNode.name = "brake"
+                    self.addChild(brakeNode)
+                    self.brakeLightTime = 0.5
+                }
+            } else {
+                if self.brakeLightTime <= 0 || self.mindSet == .player {
+                    self.removeChildren(in: self.children.filter({ $0.name == "brake" }))
+                }
+            }
         }
     }
 }

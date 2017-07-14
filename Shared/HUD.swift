@@ -8,31 +8,55 @@
 
 import SpriteKit
 
-class HUD: SKNode {
-    private let distanceLabel: SKLabelNode
-    private let levelLabel: SKLabelNode
-    
-    init(distL: SKLabelNode, lvlL: SKLabelNode) {
-        distanceLabel = distL
-        levelLabel = lvlL
-        super.init()
-        self.addChild(distanceLabel)
-        self.addChild(levelLabel)
+class HUDLabel: SKSpriteNode {
+    var label: SKLabelNode {
+        return self.childNode(withName: "label") as! SKLabelNode
+    }
+    var label1: SKLabelNode? {
+        return self.childNode(withName: "label1") as? SKLabelNode
+    }
+    var label2: SKLabelNode? {
+        return self.childNode(withName: "label2") as? SKLabelNode
+    }
+}
+
+extension GameScene {
+    func setDistance(_ numStr: String) {
+        let decIndex = numStr.index(numStr.startIndex, offsetBy: 4)
+        let normalNum = numStr.substring(to: decIndex)
+        let decimNum = numStr.substring(with: decIndex..<numStr.endIndex)
+        distanceSign.label.text = normalNum
+        distanceSign.label1?.text = decimNum
+        if Locale.current.usesMetricSystem {
+            distanceSign.label2?.text = "KM"
+        } else {
+            distanceSign.label2?.text = "MI"
+        }
+        //distanceSign.label1?.text = String(dist-Int(dist))+"."
     }
     
-    func setDistance(_ dist: Double) {
-        var distString = String(dist)
-        let decIndex = distString.range(of: ".")!.lowerBound
-        let ind = distString.index(decIndex, offsetBy: 2)
-        distString = distString.substring(to: ind)
-        distanceLabel.text = distString + " KM"
+    func setLevelSpeed(_ spd: Int) {
+        speedSign.label.text = String(spd/5) //to miles !!!
     }
     
-    func setLevel(_ lvl: Int) {
-        levelLabel.text = String(lvl)
+    func showHUD() {
+        let showAct = SKAction.run {
+            self.distanceSign.run(SKAction.moveTo(y: self.distanceSign.position.y+self.distanceSign.frame.height, duration: 0.8))
+            self.speedSign.run(SKAction.moveTo(y: self.speedSign.position.y-self.speedSign.frame.height, duration: 0.8))
+        }
+        self.run(showAct)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func hideHUD(animated: Bool) {
+        if animated {
+            let hideAct = SKAction.run {
+                self.distanceSign.run(SKAction.moveTo(y: self.distanceSign.position.y-self.distanceSign.frame.height, duration: 0.8))
+                self.speedSign.run(SKAction.moveTo(y: self.speedSign.position.y+self.speedSign.frame.height, duration: 0.8))
+            }
+            self.run(hideAct)
+        } else {
+            self.distanceSign.position.y = self.distanceSign.position.y-self.distanceSign.frame.height
+            self.speedSign.position.y = self.speedSign.position.y+self.speedSign.frame.height
+        }
     }
 }

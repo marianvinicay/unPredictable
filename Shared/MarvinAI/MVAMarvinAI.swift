@@ -14,13 +14,21 @@ class MVAMarvinAI {
     var distanceTraveled = 0.0 //in KM
     var currentLevel = MVALevel(level: 1)
     var cars = Set<MVACar>()
-    var lanePositions = [Int:CGFloat]()
+    var lanePositions = [Int:Int]()
     
-    private var checkTime = 0.0
+    private var checkTime = 0.3
     
+    func reset() {
+        player.removeFromParent()
+        player = nil
+        distanceTraveled = 0.0
+        currentLevel.level = 1
+        cars.forEach({ $0.removeFromParent() })
+        cars.removeAll()
+    }
+    
+    ///car in-front (blocked front of car)
     private func checkFront(ofCar car: MVACar) {
-        //car in-front (blocked front of car)
-        //guard let carInFront = car.responseFromSensors(inPositions: [.front]).first else { return }
         if car.responseFromSensors(inPositions: [.stop]).isEmpty == false {
             car.changeSpeed(0)
         } else if let carInFront = car.responseFromSensors(inPositions: [.front]).first {
@@ -32,32 +40,25 @@ class MVAMarvinAI {
                     if car.changeLane(inDirection: nextDir, withLanePositions: lanePositions, AndPlayer: player) == false {
                         if car.hasPriority && carInFront.mindSet != .player {
                             freeTheWay(blockedByCars: [carInFront])
-                            /*carInFront.hasPriority = true
-                            if carInFront.pointsPerSecond != currentLevel.playerSpeed {
-                                carInFront.priorityTime = MVAConstants.priorityTime
-                                car.priorityTime = MVAConstants.priorityTime
-                                carInFront.changeSpeed(currentLevel.playerSpeed)
-                            }*/
-                        } else if carInFront.pointsPerSecond < player.pointsPerSecond {
+                        } else if carInFront.pointsPerSecond != currentLevel.playerSpeed {
                             let speedDifference = Int(arc4random_uniform(10)+10)
                             car.changeSpeed(carInFront.pointsPerSecond-speedDifference)
                         }
                     }
                 }
-            } else if carInFront.pointsPerSecond < player.pointsPerSecond {
+            } else if carInFront.pointsPerSecond != currentLevel.playerSpeed {
                 let speedDifference = Int(arc4random_uniform(10)+10)
                 car.changeSpeed(carInFront.pointsPerSecond-speedDifference)
                 car.hasPriority = false
             }
         }
     }
-        
+    
     func update(withDeltaTime dTime: TimeInterval) {
         // d = v * t
-        //print((Double(player.pointsPerSecond/2)*dTime/1000),(Double(player.pointsPerSecond/2)*dTime/1000).roundTo(NDecimals: 3))
         let realSpeed = Double(player.pointsPerSecond/5) //in KM/H
-        distanceTraveled += (realSpeed*dTime.roundTo(NDecimals: 3)/1000).roundTo(NDecimals: 3)
-        
+        distanceTraveled += ((realSpeed*dTime)/1000)//.roundTo(NDecimals: 3)
+
         if player.changingSpeed {
             player.smoothSpeedChange()//???
         }
@@ -68,10 +69,9 @@ class MVAMarvinAI {
             //car in-front (blocked front of car)
             checkFront(ofCar: car)
             
-            if car.hasPriority {// free the way -> change lane
-                if carsBlockingCar(car)?.isEmpty == true {
+            if car.hasPriority {
+                if carsBlockingCar(car)?.isEmpty == true || player.position.y < car.position.y {
                     car.hasPriority = false
-                    //no priority ???
                     car.changeSpeed(MVAConstants.baseBotSpeed)
                 } else {
                     freeTheWay(blockedByCars: [car])
@@ -87,12 +87,13 @@ class MVAMarvinAI {
             }
         }
         
-        
-        if checkTime <= 0.0 {
-            checkTime = 0.5
-            checkJam()
-        } else {
-            checkTime -= dTime
+        DispatchQueue.main.async {
+            if self.checkTime <= 0.0 {
+                self.checkTime = 0.3
+                self.checkJam()
+            } else {
+                self.checkTime -= dTime
+            }
         }
     }
     
@@ -113,15 +114,13 @@ class MVAMarvinAI {
                 freeTheWay(blockedByCars: badCars)
             }
             return
-            //special free the way for center
         }
         
         //if let carInWay = carsInFront.sorted(by: { $0.position.y < $1.position.y }).first {
-        if let carInWay = cars.filter({ /*$0.currentLane == pLane &&*/ player.position.y < $0.position.y && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
+        if let carInWay = cars.filter({ /*$0.currentLane == pLane &&*/ (player.position.y-player.size.height/2) < ($0.position.y+$0.size.height/2) && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
             if let blockingCars = carsBlockingCar(carInWay) {
                 freeTheWay(blockedByCars: blockingCars+[carInWay])
             }
-            
         }
     }
     
@@ -192,23 +191,19 @@ class MVAMarvinAI {
     }
     
     private func randomiseBehaviour(forCar car: MVACar) {
-        //go into player's lane in more difficult level !!
-        switch arc4random_uniform(2) {
-        case 0 where car.currentLane != player.currentLane:
-            let firstDir: MVAPosition = arc4random_uniform(2) == 1 ? .right:.left
-            let oppositeDir: MVAPosition = firstDir == .right ? .left:.right
-            if car.changeLane(inDirection: firstDir, withLanePositions: lanePositions, AndPlayer: player) == false {
-                _ = car.changeLane(inDirection: oppositeDir, withLanePositions: lanePositions, AndPlayer: player)
-            }
-        case 2:
+        if car.currentLane == player.currentLane && arc4random_uniform(2) == 0 {//give way to player
             let firstDir: MVAPosition = arc4random_uniform(2) == 1 ? .left:.right
             let oppositeDir: MVAPosition = firstDir == .right ? .left:.right
             if car.changeLane(inDirection: firstDir, withLanePositions: lanePositions, AndPlayer: player) == false {
                 _ = car.changeLane(inDirection: oppositeDir, withLanePositions: lanePositions, AndPlayer: player)
             }
-        case 1:
+        } else if car.currentLane != player.currentLane {//go into player's lane
+            let laneDiff = player.currentLane-car.currentLane
+            let myDir: MVAPosition = laneDiff > 0 ? .right:.left
+            _ = car.changeLane(inDirection: myDir, withLanePositions: lanePositions, AndPlayer: player)
+        }
+        if arc4random_uniform(2) == 1 {
             car.changeSpeed(MVAConstants.baseBotSpeed)
-        default: break
         }
     }
 }

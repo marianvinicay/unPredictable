@@ -8,19 +8,19 @@
 
 import Cocoa
 import SpriteKit
-import GameplayKit
 
 class GameViewController: NSViewController {
 
+    private var gameScene: GameScene!
+    
     override func viewDidLoad() {
-        @IBOutlet weak var strt: UIButton!
         super.viewDidLoad()
         let size = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
-        let scene = GameScene.newGameScene(withSize: size)
+        gameScene = GameScene.newGameScene(withSize: size)
         
         // Present the scene
         let skView = self.view as! SKView
-        skView.presentScene(scene)
+        skView.presentScene(gameScene)
         
         skView.ignoresSiblingOrder = true
         
@@ -28,5 +28,11 @@ class GameViewController: NSViewController {
         skView.showsNodeCount = true
     }
 
+    override func viewWillAppear() {
+        if let oldOrigin = NSApp.mainWindow?.frame.origin {
+            NSApp.mainWindow?.setFrame(NSRect(origin: oldOrigin, size: gameScene.size), display: true)
+        }
+    }
+    
 }
 

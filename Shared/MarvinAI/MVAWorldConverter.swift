@@ -9,7 +9,15 @@
 import Foundation
 
 struct MVAWorldConverter {
-    static func toKMHFromPoints(_ pts: Double) -> Measurement<UnitLength> {
-        return Measurement(value: pts/5, unit: UnitLength.kilometers)
+    static func distanceToOdometer(_ dist: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = nil
+        formatter.decimalSeparator = "."
+        formatter.numberStyle = .decimal
+        formatter.maximumIntegerDigits = 3
+        formatter.minimumIntegerDigits = 3
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 1
+        return formatter.string(from: NSNumber(value: dist))!//String(dist.roundTo(NDecimals: 1))
     }
 }
