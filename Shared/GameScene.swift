@@ -53,7 +53,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.playBtt.fontName = "Futura Medium"
         
         scene.speedSign = scene.camera!.childNode(withName: "speed") as! HUDLabel
+        scene.speedSign.position = CGPoint(x: -(scene.size.width/2)+scene.speedSign.size.width/2, y: (scene.size.height/2)-scene.speedSign.size.height/2)
+        
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! HUDLabel
+        scene.distanceSign.position = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
+        
         scene.setLevelSpeed(0)
         scene.setDistance(MVAWorldConverter.distanceToOdometer(0.0))
         
