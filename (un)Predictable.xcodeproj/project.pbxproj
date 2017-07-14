@@ -78,6 +78,7 @@
 		2FAE02301F054B84004D4EFE /* MVAWorldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */; };
 		2FAE02311F054B84004D4EFE /* MVAWorldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */; };
 		2FB19E391F17A65800506061 /* GameSceneKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */; };
+		2FB19E3C1F18AF7100506061 /* GameSceneiPad.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +162,7 @@
 		2FAE02101F054B84004D4EFE /* MVAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAUtils.swift; sourceTree = "<group>"; };
 		2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWorldConverter.swift; sourceTree = "<group>"; };
 		2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneKeyboard.swift; sourceTree = "<group>"; };
+		2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneiPad.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 			children = (
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
+				2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */,
 				2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */,
@@ -458,6 +461,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FB19E3C1F18AF7100506061 /* GameSceneiPad.sks in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F23E11D1D6EF21D00119E4F /* LaunchScreen.storyboard in Resources */,
 				2F65AA2B1EF3D48600150F32 /* GameScene.sks in Resources */,
