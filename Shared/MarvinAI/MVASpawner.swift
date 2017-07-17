@@ -20,7 +20,7 @@ class MVASpawner: SKSpriteNode {
     private var doubleSpawnLimit = 0
     var usedCars = Set<MVACar>()
         
-    func spawnCar(withExistingCars cars: [MVACar], roadLanes: [Int:Int]) {
+    func spawnCar(withExistingCars cars: [MVACar]) {
         var intersectingCars = [Int]()
         for car in cars {
             if self.intersects(car) {
@@ -34,7 +34,7 @@ class MVASpawner: SKSpriteNode {
             for lane in randomDoubleCombo() {
                 let car = gimmeCar()
                 car.currentLane = lane
-                car.position = CGPoint(x: randomiseXPosition(roadLanes[lane]!), y: self.position.y)
+                car.position = CGPoint(x: randomiseXPosition(lanePositions[lane]!), y: self.position.y)
                 car.pointsPerSecond = MVAConstants.baseBotSpeed
                 cars.append(car)
             }
@@ -50,7 +50,7 @@ class MVASpawner: SKSpriteNode {
             
             let car = gimmeCar()
             car.currentLane = carLane
-            car.position = CGPoint(x: randomiseXPosition(roadLanes[carLane]!), y: self.position.y)
+            car.position = CGPoint(x: randomiseXPosition(lanePositions[carLane]!), y: self.position.y)
             car.pointsPerSecond = MVAConstants.baseBotSpeed
             
             (self.parent as! GameScene).addChild(car)
@@ -94,12 +94,37 @@ class MVASpawner: SKSpriteNode {
         if lastLaneSpawn == playerLane {
             let oldLane = lns.first != nil ? lns.first!:(lastLaneSpawn ?? Int(arc4random_uniform(3)))
             
-            if oldLane == 2 {
-                randomise(f1: { newLane = oldLane-1 }, f2: { newLane = oldLane-2 })
-            } else if oldLane == 0 {
-                randomise(f1: { newLane = oldLane+1 }, f2: { newLane = oldLane+2 })
-            } else {
-                randomise(f1: { newLane = oldLane+1 }, f2: { newLane = oldLane-1 })
+            switch oldLane {
+            case maxLane:
+                var possibleFS = [()->()]()
+                for l in 1...maxLane {
+                    possibleFS.append {
+                        newLane = oldLane-l
+                    }
+                }
+                randomise(possibleFS)
+            case 0:
+                var possibleFS = [()->()]()
+                for l in 1...maxLane {
+                    possibleFS.append {
+                        newLane = oldLane+l
+                    }
+                }
+                randomise(possibleFS)
+            default:
+                var possibleFS = [()->()]()
+                for minusL in 1...oldLane {
+                    possibleFS.append {
+                        newLane = oldLane-minusL
+                    }
+                }
+                for plusL in 1...(maxLane-oldLane) {
+                    possibleFS.append {
+                        newLane = oldLane+plusL
+                    }
+                }
+                print(possibleFS)
+                randomise(possibleFS)
             }
         } else {
             newLane = playerLane
@@ -116,8 +141,9 @@ class MVASpawner: SKSpriteNode {
         }
     }
     
-    private func randomise(f1: ()->(), f2: ()->()) {
-        if arc4random_uniform(2) == 0 { f1() } else { f2() }
+    private func randomise(_ fs: [()->()]) {
+        let randIndex = Int(arc4random_uniform(UInt32(fs.count)))
+        fs[randIndex]()
     }
     
     private func randomiseXPosition(_ posX: Int) -> CGFloat {
@@ -136,7 +162,7 @@ class MVASpawner: SKSpriteNode {
     func spawnRoad(withSize rSize: CGSize) -> MVARoadNode? {
         var road: MVARoadNode!
         if usedRoad.isEmpty {
-            road = MVARoadNode.createWith(numberOfLanes: 3, texture: roadTexture, height: rSize.height, andWidth: rSize.width)
+            road = MVARoadNode.createWith(texture: roadTexture, height: rSize.height, andWidth: rSize.width)
         } else {
             road = usedRoad.removeFirst()
         }

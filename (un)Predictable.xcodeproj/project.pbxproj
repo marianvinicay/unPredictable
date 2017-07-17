@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2765A3141F1CE80D0007B075 /* GameSceneiPad.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */; };
 		2F23E1151D6EF21D00119E4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E1141D6EF21D00119E4F /* AppDelegate.swift */; };
 		2F23E1171D6EF21D00119E4F /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E1161D6EF21D00119E4F /* GameViewController.swift */; };
 		2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E1181D6EF21D00119E4F /* Main.storyboard */; };
@@ -401,6 +402,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2765A3141F1CE80D0007B075 /* GameSceneiPad.sks in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
@@ -667,7 +669,7 @@
 				PRODUCT_NAME = "(un)Predictable";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -688,7 +690,7 @@
 				PRODUCT_NAME = "(un)Predictable";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

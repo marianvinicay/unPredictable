@@ -12,9 +12,13 @@ import UIKit
 #endif
 
 class MVARoadNode: SKSpriteNode {
-    var laneXCoordinate: [Int:Int] = [:]
+    var laneCoordinates: [Int:Int] = [:]
     
-    class func createWith(numberOfLanes: Int, texture: SKTexture, height: CGFloat, andWidth width: CGFloat) -> MVARoadNode {
+    class func createWith(texture: SKTexture, height: CGFloat, andWidth width: CGFloat) -> MVARoadNode {
+        var numberOfLanes = 3
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            numberOfLanes = 4
+        }
         let road = MVARoadNode(texture: texture)
         let createLanes = numberOfLanes-1
         var sidesWidthCombined = (width*(1/3))-20
@@ -29,16 +33,16 @@ class MVARoadNode: SKSpriteNode {
         //leftGrass
         tempCoordinates = (tempCoordinates+sidesWidthCombined/2).roundTo(NDecimals: 2)
         //firstLane
-        road.laneXCoordinate[0] = Int(tempCoordinates+laneWidth/2)
+        road.laneCoordinates[0] = Int(tempCoordinates+laneWidth/2)
         tempCoordinates += laneWidth
         
         for i in 1..<createLanes {
-            road.laneXCoordinate[i] = Int(tempCoordinates+laneWidth/2)
+            road.laneCoordinates[i] = Int(tempCoordinates+laneWidth/2)
             tempCoordinates += laneWidth
         }
         
         //lastLane
-        road.laneXCoordinate[createLanes] = Int(tempCoordinates+laneWidth/2)
+        road.laneCoordinates[createLanes] = Int(tempCoordinates+laneWidth/2)
         
         road.size = CGSize(width: width, height: height)
 

@@ -10,7 +10,6 @@
 import SpriteKit
 
 public class MVACar: SKSpriteNode {
-    
     var mindSet: MVAMindSet
     var pointsPerSecond: Int {
         get {
@@ -55,10 +54,6 @@ public class MVACar: SKSpriteNode {
         
         if noPriorityForTime > 0 {
             noPriorityForTime -= deltaT
-        }
-
-        if changingSpeed {
-            smoothSpeedChange()
         }
         
         if hasPriority {
@@ -143,7 +138,7 @@ public class MVACar: SKSpriteNode {
         return intersectingCars
     }
     
-    func changeLane(inDirection dir: MVAPosition, withLanePositions roadLanePositions: [Int:Int], AndPlayer player: MVACar) -> Bool {
+    func changeLane(inDirection dir: MVAPosition, AndPlayer player: MVACar) -> Bool {
         if cantMoveForTime <= 0 {
             let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond):CGFloat(player.pointsPerSecond)*1.3//!!!
             let heightDifference = self.mindSet == .player ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
@@ -152,8 +147,8 @@ public class MVACar: SKSpriteNode {
                 let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
                 let clearRoadLane = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
             
-                if roadLanePositions[newLane] != nil && clearRoadLane {
-                    let newLaneCoor = CGFloat(roadLanePositions[newLane]!)
+                if lanePositions[newLane] != nil && clearRoadLane {
+                    let newLaneCoor = CGFloat(lanePositions[newLane]!)
                     currentLane = newLane
                     let angle: CGFloat = dir == .left ? 0.5:-0.5
                     let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
@@ -181,22 +176,18 @@ public class MVACar: SKSpriteNode {
         return false
     }
     
-    var changingSpeed = false
     var newSpeed: Int!
-    var speedChange: MVAPosition!
+    var speedChange: MVAPosition?
     
     func changeSpeed(_ speed: Int) {
-        if speed != pointsPerSecond {
-            if changingSpeed == false {
-                changingSpeed = true
-                if speed-pointsPerSecond > 0 {
-                    speedChange = .front
-                } else {
-                    speedChange = .back
-                    brakeLight(true)
-                }
-                newSpeed = speed
+        if speed != pointsPerSecond && speedChange == nil {
+            if speed-pointsPerSecond > 0 {
+                speedChange = .front
+            } else {
+                speedChange = .back
+                brakeLight(true)
             }
+            newSpeed = speed
             smoothSpeedChange()
         }
     }
@@ -204,15 +195,17 @@ public class MVACar: SKSpriteNode {
     func smoothSpeedChange() {
         if speedChange == .front {
             self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*500))
-            if pointsPerSecond > newSpeed {
-                changingSpeed = false
+            if pointsPerSecond < newSpeed {
+                self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)
+            } else {
                 speedChange = nil
                 newSpeed = nil
             }
         } else if speedChange == .back {
             self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -self.physicsBody!.mass*500))
-            if pointsPerSecond < newSpeed {
-                changingSpeed = false
+            if pointsPerSecond > newSpeed {
+                self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)
+            } else {
                 speedChange = nil
                 newSpeed = nil
                 brakeLight(false)

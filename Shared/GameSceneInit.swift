@@ -75,7 +75,7 @@ extension GameScene {
             roadNodes.insert(starterNode)
             endOfWorld = starterNode.position.y+starterNode.size.height
         } else {
-            let starterNode = MVARoadNode.createWith(numberOfLanes: 3, texture: SKTexture(imageNamed: "Start1"), height: self.size.height, andWidth: self.size.width)
+            let starterNode = MVARoadNode.createWith(texture: SKTexture(imageNamed: "Start1"), height: self.size.height, andWidth: self.size.width)
             starterNode.position = .zero
             roadNodes.insert(starterNode)
             endOfWorld = starterNode.position.y+starterNode.size.height
@@ -84,7 +84,7 @@ extension GameScene {
         
         let start2Texture = SKTexture(imageNamed: "Start2")
         for _ in 0..<3 {
-            let road = MVARoadNode.createWith(numberOfLanes: 3, texture: start2Texture, height: self.size.height, andWidth: self.size.width)
+            let road = MVARoadNode.createWith(texture: start2Texture, height: self.size.height, andWidth: self.size.width)
             switch arc4random_uniform(2) {
             case 1:
                 let pSpot = arc4random_uniform(2) == 0 ? SKSpriteNode(imageNamed: "ParkingSpotR"):SKSpriteNode(imageNamed: "ParkingSpotL")
@@ -101,13 +101,13 @@ extension GameScene {
             self.addChild(road)
         }
         
-        let road = MVARoadNode.createWith(numberOfLanes: 3, texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
+        let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
         road.position.x = 0.0
         road.position.y = endOfWorld!+self.size.height*0.25
         roadNodes.insert(road)
         self.addChild(road)
         
-        intel.lanePositions = road.laneXCoordinate
+        lanePositions = road.laneCoordinates
     }
     
     func initiateScene() {
@@ -154,7 +154,6 @@ extension GameScene {
         gameStarted = false
         playerDistance = "0.0"
         playerBraking = false
-        playerAccelerating = false
         newBestDisplayed = false
         roadNodes.forEach({
             $0.removeFromParent()

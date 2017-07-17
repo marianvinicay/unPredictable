@@ -23,9 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let intel = MVAMarvinAI()
     var playerDistance = "0.0"
     var gameStarted = false
-    var newBestDisplayed = false
     var playerBraking = false
-    var playerAccelerating = false
     
     // MARK: Buttons
     var playBtt: SKSpriteNode!
@@ -48,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var brakingTimer: Timer!
     var lastUpdate: TimeInterval!
     let sound = MVASound()
+    var newBestDisplayed = false
     
     // MARK: - Gameplay
     func startGame() {
@@ -55,7 +54,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let randLane = Int(arc4random_uniform(3))
-        let randLanePos = CGFloat(intel.lanePositions[randLane]!)
+        let randLanePos = CGFloat(lanePositions[randLane]!)
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
         let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
         
@@ -143,7 +142,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func spawnWithDelay(_ delay: TimeInterval) {
         self.removeAction(forKey: "spawn")
         let spawn = SKAction.run {
-            self.spawner.spawnCar(withExistingCars: self.intel.cars.filter({ $0.position.y > self.camera!.position.y+self.size.height/3 }), roadLanes: self.intel.lanePositions)
+            self.spawner.spawnCar(withExistingCars: self.intel.cars.filter({ $0.position.y > self.camera!.position.y+self.size.height/3 }))
         }
         let wait = SKAction.wait(forDuration: delay)
         self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
@@ -157,12 +156,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             } else {
                 intel.update(withDeltaTime: currentTime-lastUpdate)
                 lastUpdate = currentTime
-            }
-            
-            if playerBraking {
-                handleBrake(started: true)
-            } else if playerAccelerating {
-                handleBrake(started: false)
             }
             
             DispatchQueue.main.async {
@@ -184,7 +177,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             if endOfWorld != nil && endOfWorld! < self.camera!.position.y {
-                let road = MVARoadNode.createWith(numberOfLanes: 3, texture: spawner.roadTexture, height: self.size.height, andWidth: self.size.width)
+                let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height, andWidth: self.size.width)
                 road.position = .zero
                 road.name = "road"
                 camera!.addChild(road)
@@ -213,7 +206,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard intel.player.mindSet == .player else { return }
             sound.indicate(onNode: intel.player)
-            _ = intel.player.changeLane(inDirection: swipe, withLanePositions: intel.lanePositions, AndPlayer: intel.player)
+            _ = intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player)
         }
     }
     
@@ -225,42 +218,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     spawner.size.height = self.size.height
                     playerBraking = true
                 }
-                if intel.player.pointsPerSecond > MVAConstants.minimalBotSpeed-10 {
-                    intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*600))
-                    intel.player.brakeLight(true)
-                    if intel.player.pointsPerSecond > 150 {
-                        setLevelSpeed(intel.player.pointsPerSecond)
-                    } else {
-                        setLevelSpeed(150)
-                    }
-                    if self.audioEngine.mainMixerNode.outputVolume > 0.4 {
-                        self.audioEngine.mainMixerNode.outputVolume -= 0.1
-                    }
-                }
+                deceleratePlayer()
             } else {
                 if playerBraking == true {
-                    spawnWithDelay(intel.currentLevel.spawnRate)
                     playerBraking = false
-                    playerAccelerating = true
+                    spawnWithDelay(intel.currentLevel.spawnRate)
                     intel.player.brakeLight(false)
                 }
-                
-                if intel.player.pointsPerSecond < intel.currentLevel.playerSpeed {
-                    intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: intel.player.physicsBody!.mass*500))
-                    if intel.player.pointsPerSecond > 150 {
-                        setLevelSpeed(intel.player.pointsPerSecond)
-                    }
-                    if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
-                        self.audioEngine.mainMixerNode.outputVolume += 0.1
-                    }
-                } else {
-                    intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
-                    playerAccelerating = false
-                    setLevelSpeed(intel.currentLevel.playerSpeed)
-                    spawner.size.height = MVAConstants.baseCarSize.height*2.5
-                    self.audioEngine.mainMixerNode.outputVolume = 1.0
-                }
+                acceleratePlayer()
             }
+        }
+    }
+    
+    func acceleratePlayer() {
+        if intel.player.pointsPerSecond < intel.currentLevel.playerSpeed {
+            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: intel.player.physicsBody!.mass*500))
+            if intel.player.pointsPerSecond > 150 {
+                setLevelSpeed(intel.player.pointsPerSecond)
+            }
+            if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
+                self.audioEngine.mainMixerNode.outputVolume += 0.1
+            }
+            self.perform(#selector(acceleratePlayer), with: nil, afterDelay: 0.01)
+        } else {
+            intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+            setLevelSpeed(intel.currentLevel.playerSpeed)
+            spawner.size.height = MVAConstants.baseCarSize.height*2.5
+            self.audioEngine.mainMixerNode.outputVolume = 1.0
+        }
+    }
+    
+    func deceleratePlayer() {
+        if playerBraking && intel.player.pointsPerSecond > MVAConstants.minimalBotSpeed-15 {
+            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*600))
+            intel.player.brakeLight(true)
+            if intel.player.pointsPerSecond > 150 {
+                setLevelSpeed(intel.player.pointsPerSecond)
+            } else {
+                setLevelSpeed(150)
+            }
+            if self.audioEngine.mainMixerNode.outputVolume > 0.4 {
+                self.audioEngine.mainMixerNode.outputVolume -= 0.1
+            }
+            self.perform(#selector(deceleratePlayer), with: nil, afterDelay: 0.01)
         }
     }
     
