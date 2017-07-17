@@ -15,12 +15,10 @@ class MVASound {
     private let crashSound = SKAction.playSoundFileNamed("crash", waitForCompletion: true)
     
     func playerSound(_ car: SKNode) {
-        car.childNode(withName: "brake")?.removeFromParent()
         normalCarSound.isPositional = true
         normalCarSound.position = car.position
         normalCarSound.zPosition = car.zPosition
         normalCarSound.autoplayLooped = true
-        normalCarSound.name = "norm"
         car.addChild(self.normalCarSound)
     }
     

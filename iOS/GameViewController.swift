@@ -16,14 +16,14 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         scene = GameScene.new(withSize: self.view.frame.size)
-        MVAMemory.maxPlayerDistance = 0.5
+        MVAMemory.maxPlayerDistance = 0.3
         // Present the scene
         let skView = self.view as! SKView
         skView.presentScene(scene)
         
-        //skView.ignoresSiblingOrder = true
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
+        //skView.showsFPS = true
+        //skView.showsNodeCount = true
     }
 
     override var shouldAutorotate: Bool {

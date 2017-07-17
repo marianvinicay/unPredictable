@@ -122,8 +122,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         label.fontSize = 20
         label.text = "New Best!"
         label.verticalAlignmentMode = .bottom
-        label.horizontalAlignmentMode = .center
-        label.position = CGPoint(x: (self.size.width/2)/2, y: (-self.size.height/2)+label.frame.height)//???
+        label.horizontalAlignmentMode = .left
+        label.position = CGPoint(x: distanceSign.position.x+distanceSign.size.width+10, y: (-self.size.height/2)+label.frame.height)//???
         label.zPosition = 7.0
         label.name = "nBest"
         let addAct = SKAction.run {
@@ -277,12 +277,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.car.rawValue:
             if let node1 = contact.bodyA.node as? MVACar,
                 let node2 = contact.bodyB.node as? MVACar {
-                if node2.position.y-node2.size.height/2 > self.camera!.position.y+self.size.height/2 {
-                    for car in [node1,node2] {
-                        car.removeFromParent()
-                        intel.cars.remove(car)
-                    }
-                } else {
+                if self.frame.intersects(node1.frame) || self.frame.intersects(node2.frame) {
                     for car in [node1,node2] {
                         car.pointsPerSecond = 0
                         car.removeAllActions()
@@ -291,6 +286,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     sound.crash(onNode: node1)
                     generateSmoke(atPoint: contact.contactPoint)
+                } else {
+                    for car in [node1,node2] {
+                        car.removeFromParent()
+                        intel.cars.remove(car)
+                    }
                 }
             }
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.player.rawValue:

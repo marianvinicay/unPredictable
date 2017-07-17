@@ -88,6 +88,7 @@ extension GameScene {
             switch arc4random_uniform(2) {
             case 1:
                 let pSpot = arc4random_uniform(2) == 0 ? SKSpriteNode(imageNamed: "ParkingSpotR"):SKSpriteNode(imageNamed: "ParkingSpotL")
+                pSpot.anchorPoint.y = 1.0
                 pSpot.size = pSpot.size.adjustSize(toNewWidth: road.size.width)
                 pSpot.position = CGPoint(x: 0.0, y: CGFloat(arc4random_uniform(UInt32(road.size.height-pSpot.size.height))))
                 pSpot.zPosition = 1.0
