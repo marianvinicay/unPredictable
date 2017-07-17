@@ -73,7 +73,7 @@ public class MVACar: SKSpriteNode {
     
     init(withMindSet mindSet: MVAMindSet, andSkin textures: MVASkin) {
         self.mindSet = mindSet
-        var carSize = MVAConstants.baseCarSize
+        let carSize = MVAConstants.baseCarSize
         self.skin = textures
         super.init(texture: self.skin.normal, color: .clear, size: carSize)
         /*self.textNode = SKLabelNode(text: "")
@@ -83,10 +83,8 @@ public class MVACar: SKSpriteNode {
         self.addChild(self.textNode)
         drawSensors()*/
         self.zPosition = 4.0
-        carSize.height = 90
-        carSize.width = 50
         
-        physicsBody = SKPhysicsBody(rectangleOf: carSize)
+        physicsBody = SKPhysicsBody(texture: self.skin.normal, size: carSize)
         physicsBody?.mass = 5
         physicsBody?.density = 5000.0
         physicsBody?.friction = 0.0
@@ -95,7 +93,7 @@ public class MVACar: SKSpriteNode {
         physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         physicsBody?.isDynamic = true
         physicsBody?.linearDamping = 0.0
-        physicsBody?.angularDamping = 0.0
+        physicsBody?.angularDamping = 0.2
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = true
     }
@@ -150,7 +148,7 @@ public class MVACar: SKSpriteNode {
             let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond):CGFloat(player.pointsPerSecond)*1.3//!!!
             let heightDifference = self.mindSet == .player ? reactionDistance:abs(player.position.y-self.position.y)//change difficulty !! hasPriority???
             let newLane = dir == .left ? currentLane-1:currentLane+1
-            if heightDifference >= reactionDistance {//???
+            if heightDifference >= reactionDistance {
                 let carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
                 let clearRoadLane = self.mindSet == .player ? true:carsBlockingDirection.isEmpty
             

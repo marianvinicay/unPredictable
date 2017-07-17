@@ -18,9 +18,9 @@ class MVASpawner: SKSpriteNode {
     private var lastLaneSpawn: Int?
     let textures = SKTextureAtlas(named: "Cars")
     private var doubleSpawnLimit = 0
-    var usedCars = [MVACar]()
-    
-    func spawnCar(withExistingCars cars: [MVACar], roadLanes: [Int:Int]) -> [MVACar] {
+    var usedCars = Set<MVACar>()
+        
+    func spawnCar(withExistingCars cars: [MVACar], roadLanes: [Int:Int]) {
         var intersectingCars = [Int]()
         for car in cars {
             if self.intersects(car) {
@@ -39,7 +39,10 @@ class MVASpawner: SKSpriteNode {
                 cars.append(car)
             }
             doubleSpawnLimit = Int(arc4random_uniform(3))+5
-            return cars
+            for car in cars {
+                (self.parent as! GameScene).addChild(car)
+                (self.parent as! GameScene).intel.cars.insert(car)
+            }
         } else if intersectingCars.count < 2 {//!!! even more than 2
             doubleSpawnLimit -= 1
             let carLane = randomLaneWithLanesOccupied(intersectingCars)
@@ -50,9 +53,9 @@ class MVASpawner: SKSpriteNode {
             car.position = CGPoint(x: randomiseXPosition(roadLanes[carLane]!), y: self.position.y)
             car.pointsPerSecond = MVAConstants.baseBotSpeed
             
-            return [car]
+            (self.parent as! GameScene).addChild(car)
+            (self.parent as! GameScene).intel.cars.insert(car)
         }
-        return []
     }
     
     private func gimmeCar() -> MVACar {
