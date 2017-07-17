@@ -17,7 +17,7 @@ class InterfaceController: WKInterfaceController {
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        let scene = GameScene.newGameScene(withSize: self.contentFrame.size)
+        let scene = GameScene.new(withSize: self.contentFrame.size)
         
         // Present the scene
         self.skInterface.presentScene(scene)

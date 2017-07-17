@@ -32,11 +32,10 @@ extension GameScene {
         } else {
             distanceSign.label2?.text = "MI"
         }
-        //distanceSign.label1?.text = String(dist-Int(dist))+"."
     }
     
     func setLevelSpeed(_ spd: Int) {
-        speedSign.label.text = String(spd/5) //to miles !!!
+        speedSign.label.text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
     }
     
     func showHUD() {

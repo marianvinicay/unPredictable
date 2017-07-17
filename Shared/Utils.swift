@@ -10,10 +10,10 @@ import Foundation
 import CoreGraphics
 
 enum MVAPhysicsCategory: UInt32 {
-    case car = 1
-    case player = 2
-    case remover = 3
-    case spawner = 4
+    case car = 0b1
+    case player = 0b10
+    case remover = 0b100
+    case spawner = 0b1000
 }
 
 extension Collection where Indices.Iterator.Element == Index {

@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,26 +21,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w4U-AV-WPN">
-                                <rect key="frame" x="26" y="30" width="323" height="627"/>
-                                <string key="text">Marian Vinicay                (un)Predictable                                                                               Copyright © 2017 MarVinApps         All rights reserved</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="39"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="p29-ln-pcn">
+                                <rect key="frame" x="37" y="183" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="Lry-m1-PV0"/>
+                                    <constraint firstAttribute="height" constant="300" id="WGV-Uz-gke"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="w4U-AV-WPN" secondAttribute="trailing" constant="10" id="Q8x-h6-Uvs"/>
-                            <constraint firstItem="w4U-AV-WPN" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="10" id="R9s-Cx-2za"/>
-                            <constraint firstItem="w4U-AV-WPN" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="10" id="WLi-lV-bKj"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="w4U-AV-WPN" secondAttribute="bottom" constant="10" id="egp-Xa-LG6"/>
+                            <constraint firstItem="p29-ln-pcn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="XUK-8y-I1K"/>
+                            <constraint firstItem="p29-ln-pcn" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="d6u-8R-5Os"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="logo" width="1024" height="1024"/>
+    </resources>
 </document>
