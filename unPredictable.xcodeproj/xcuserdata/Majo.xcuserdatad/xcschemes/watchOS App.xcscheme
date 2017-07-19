@@ -17,7 +17,7 @@
                BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
                BuildableName = "(un)Predictable.app"
                BlueprintName = "watchOS App"
-               ReferencedContainer = "container:(un)Predictable.xcodeproj">
+               ReferencedContainer = "container:unPredictable.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -30,8 +30,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2F23E1101D6EF21D00119E4F"
                BuildableName = "(un)Predictable.app"
-               BlueprintName = "iOS"
-               ReferencedContainer = "container:(un)Predictable.xcodeproj">
+               BlueprintName = "unPredictable - iOS"
+               ReferencedContainer = "container:unPredictable.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -49,7 +49,7 @@
             BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
             BlueprintName = "watchOS App"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -74,7 +74,7 @@
             BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
             BlueprintName = "watchOS App"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
             BlueprintName = "watchOS App"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -104,7 +104,7 @@
             BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
             BlueprintName = "watchOS App"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </RemoteRunnable>
       <MacroExpansion>
@@ -113,7 +113,7 @@
             BlueprintIdentifier = "2F23E1201D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
             BlueprintName = "watchOS App"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

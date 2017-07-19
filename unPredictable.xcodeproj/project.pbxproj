@@ -101,7 +101,7 @@
 
 /* Begin PBXFileReference section */
 		2F23E10B1D6EF21D00119E4F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		2F23E1111D6EF21D00119E4F /* (un)Predictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "(un)Predictable.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F23E1111D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F23E1141D6EF21D00119E4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F23E1161D6EF21D00119E4F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2F23E1191D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -112,12 +112,12 @@
 		2F23E1331D6EF21D00119E4F /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
 		2F23E1351D6EF21D00119E4F /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		2F23E1371D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2F23E13C1D6EF21D00119E4F /* (un)Predictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "(un)Predictable.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F23E13C1D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F23E13E1D6EF21D00119E4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F23E1401D6EF21D00119E4F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2F23E1431D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F23E1451D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2F23E14A1D6EF21D00119E4F /* (un)Predictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "(un)Predictable.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F23E14A1D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F23E14E1D6EF21D00119E4F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		2F23E1511D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -208,9 +208,9 @@
 		2F23E1121D6EF21D00119E4F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2F23E1111D6EF21D00119E4F /* (un)Predictable.app */,
-				2F23E13C1D6EF21D00119E4F /* (un)Predictable.app */,
-				2F23E14A1D6EF21D00119E4F /* (un)Predictable.app */,
+				2F23E1111D6EF21D00119E4F /* unPredictable.app */,
+				2F23E13C1D6EF21D00119E4F /* unPredictable.app */,
+				2F23E14A1D6EF21D00119E4F /* unPredictable.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -298,9 +298,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2F23E1101D6EF21D00119E4F /* iOS */ = {
+		2F23E1101D6EF21D00119E4F /* unPredictable - iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2F23E16D1D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "iOS" */;
+			buildConfigurationList = 2F23E16D1D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - iOS" */;
 			buildPhases = (
 				2F23E10D1D6EF21D00119E4F /* Sources */,
 				2F23E10E1D6EF21D00119E4F /* Frameworks */,
@@ -311,9 +311,9 @@
 			);
 			dependencies = (
 			);
-			name = iOS;
+			name = "unPredictable - iOS";
 			productName = iOS;
-			productReference = 2F23E1111D6EF21D00119E4F /* (un)Predictable.app */;
+			productReference = 2F23E1111D6EF21D00119E4F /* unPredictable.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2F23E13B1D6EF21D00119E4F /* tvOS */ = {
@@ -330,7 +330,7 @@
 			);
 			name = tvOS;
 			productName = tvOS;
-			productReference = 2F23E13C1D6EF21D00119E4F /* (un)Predictable.app */;
+			productReference = 2F23E13C1D6EF21D00119E4F /* unPredictable.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2F23E1491D6EF21D00119E4F /* macOS */ = {
@@ -347,7 +347,7 @@
 			);
 			name = macOS;
 			productName = macOS;
-			productReference = 2F23E14A1D6EF21D00119E4F /* (un)Predictable.app */;
+			productReference = 2F23E14A1D6EF21D00119E4F /* unPredictable.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -377,7 +377,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2F23E1071D6EF21D00119E4F /* Build configuration list for PBXProject "(un)Predictable" */;
+			buildConfigurationList = 2F23E1071D6EF21D00119E4F /* Build configuration list for PBXProject "unPredictable" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -390,7 +390,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2F23E1101D6EF21D00119E4F /* iOS */,
+				2F23E1101D6EF21D00119E4F /* unPredictable - iOS */,
 				2F23E13B1D6EF21D00119E4F /* tvOS */,
 				2F23E1491D6EF21D00119E4F /* macOS */,
 			);
@@ -666,7 +666,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -687,7 +687,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -708,7 +708,7 @@
 				INFOPLIST_FILE = tvOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
@@ -728,7 +728,7 @@
 				INFOPLIST_FILE = tvOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = appletvos;
 				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
@@ -751,7 +751,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 3.0;
 			};
@@ -772,7 +772,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
-				PRODUCT_NAME = "(un)Predictable";
+				PRODUCT_NAME = unPredictable;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 3.0;
 			};
@@ -781,7 +781,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2F23E1071D6EF21D00119E4F /* Build configuration list for PBXProject "(un)Predictable" */ = {
+		2F23E1071D6EF21D00119E4F /* Build configuration list for PBXProject "unPredictable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2F23E1631D6EF21D00119E4F /* Debug */,
@@ -790,7 +790,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2F23E16D1D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "iOS" */ = {
+		2F23E16D1D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2F23E16E1D6EF21D00119E4F /* Debug */,

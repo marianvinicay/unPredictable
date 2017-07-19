@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
+               BlueprintIdentifier = "2F23E13B1D6EF21D00119E4F"
                BuildableName = "(un)Predictable.app"
-               BlueprintName = "macOS"
-               ReferencedContainer = "container:(un)Predictable.xcodeproj">
+               BlueprintName = "tvOS"
+               ReferencedContainer = "container:unPredictable.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
+            BlueprintIdentifier = "2F23E13B1D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
-            BlueprintName = "macOS"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            BlueprintName = "tvOS"
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
+            BlueprintIdentifier = "2F23E13B1D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
-            BlueprintName = "macOS"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            BlueprintName = "tvOS"
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
+            BlueprintIdentifier = "2F23E13B1D6EF21D00119E4F"
             BuildableName = "(un)Predictable.app"
-            BlueprintName = "macOS"
-            ReferencedContainer = "container:(un)Predictable.xcodeproj">
+            BlueprintName = "tvOS"
+            ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

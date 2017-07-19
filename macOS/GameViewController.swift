@@ -31,7 +31,6 @@ class GameViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
         if let oldOrigin = NSApp.mainWindow?.frame.origin {
-            print("ha")
             NSApp.mainWindow?.setFrame(NSRect(origin: oldOrigin, size: gameScene.size), display: true)
         }
     }

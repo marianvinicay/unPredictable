@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         scene = GameScene.new(withSize: self.view.frame.size)
-        MVAMemory.maxPlayerDistance = 0.3
+
         // Present the scene
         let skView = self.view as! SKView
         skView.presentScene(scene)

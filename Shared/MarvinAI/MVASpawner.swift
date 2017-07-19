@@ -123,7 +123,6 @@ class MVASpawner: SKSpriteNode {
                         newLane = oldLane+plusL
                     }
                 }
-                print(possibleFS)
                 randomise(possibleFS)
             }
         } else {
