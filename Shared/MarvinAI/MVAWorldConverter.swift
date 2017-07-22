@@ -9,6 +9,14 @@
 import Foundation
 
 struct MVAWorldConverter {
+    static var lengthUnit: String {
+        if Locale.current.usesMetricSystem {
+            return "KM"
+        } else {
+            return "MI"
+        }
+    }
+    
     static func pointsSpeedToRealWorld(_ spd: Int) -> Int {
         let kmH = spd/5
         if Locale.current.usesMetricSystem {
@@ -16,6 +24,10 @@ struct MVAWorldConverter {
         } else {
             return Int(Double(kmH)*0.62)
         }
+    }
+    
+    static func milesToKilometers(_ dist: Double) -> Double {
+        return dist/0.62
     }
     
     static func distanceToOdometer(_ dist: Double) -> String {

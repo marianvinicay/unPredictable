@@ -11,7 +11,7 @@ import SpriteKit
 
 class MVAMarvinAI {
     var player: MVACar!
-    var distanceTraveled = 0.0 //in KM
+    var distanceTraveled = 0.0 //in KM/MI accordingly
     var currentLevel = MVALevel(level: 1)
     var cars = Set<MVACar>()
     

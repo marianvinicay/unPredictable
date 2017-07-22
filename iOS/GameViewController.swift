@@ -24,10 +24,21 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
+        NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.AuthenticationCompleted, object: nil)
+        scene.gameCHelper.authenticateLocalPlayer()
     }
 
     override var shouldAutorotate: Bool {
         return true
+    }
+    
+    func showAuthenticationViewController() {
+        if let authenticationViewController =
+            scene.gameCHelper.authenticationViewController {
+            self.present(
+                authenticationViewController,
+                animated: true, completion: nil)
+        }
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -41,5 +52,9 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

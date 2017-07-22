@@ -27,11 +27,7 @@ extension GameScene {
         let decimNum = numStr.substring(with: decIndex..<numStr.endIndex)
         distanceSign.label.text = normalNum
         distanceSign.label1?.text = decimNum
-        if Locale.current.usesMetricSystem {
-            distanceSign.label2?.text = "KM"
-        } else {
-            distanceSign.label2?.text = "MI"
-        }
+        distanceSign.label2?.text = MVAWorldConverter.lengthUnit
     }
     
     func setLevelSpeed(_ spd: Int) {

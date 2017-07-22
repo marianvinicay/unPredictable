@@ -156,7 +156,7 @@ class MVASpawner: SKSpriteNode {
     
     // MARK: - Road Section
     var usedRoad = [MVARoadNode]()
-    var roadTexture = SKTexture(imageNamed: "Road")
+    var roadTexture = SKTexture(imageNamed: "road")
     
     func spawnRoad(withSize rSize: CGSize) -> MVARoadNode? {
         var road: MVARoadNode!

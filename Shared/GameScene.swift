@@ -24,6 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var playerDistance = "0.0"
     var gameStarted = false
     var playerBraking = false
+    let gameCHelper = MVAGameCenterHelper()
     
     // MARK: Buttons
     var playBtt: SKSpriteNode!
@@ -277,7 +278,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.car.rawValue:
             if let node1 = contact.bodyA.node as? MVACar,
                 let node2 = contact.bodyB.node as? MVACar {
-                if self.frame.intersects(node1.frame) || self.frame.intersects(node2.frame) {
+                //if self.frame.intersects(node1.frame) || self.frame.intersects(node2.frame) {
                     for car in [node1,node2] {
                         car.pointsPerSecond = 0
                         car.removeAllActions()
@@ -286,12 +287,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     sound.crash(onNode: node1)
                     generateSmoke(atPoint: contact.contactPoint)
-                } else {
-                    for car in [node1,node2] {
-                        car.removeFromParent()
-                        intel.cars.remove(car)
-                    }
-                }
+                //} else {
+                //    for car in [node1,node2] {
+                //        car.removeFromParent()
+                //        intel.cars.remove(car)
+                //    }
+                //} !!!
             }
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.player.rawValue:
             physicsWorld.speed = 0.0
