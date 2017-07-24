@@ -23,7 +23,6 @@ extension GameScene {
         }
         scene.scaleMode = .aspectFill
         scene.size = deviceSize
-        scene.isPaused = true
         scene.camera = (scene.childNode(withName: "cam") as! SKCameraNode)
         
         scene.playBtt = scene.camera!.childNode(withName: "playBtt") as! SKSpriteNode
@@ -137,7 +136,7 @@ extension GameScene {
         
         self.audioEngine.prepare()
         self.physicsWorld.contactDelegate = self
-        self.physicsWorld.speed = 1.0
+        self.physicsWorld.speed = 0.0
         
         sound.ignite(node: self)
     }
@@ -178,6 +177,6 @@ extension GameScene {
         
         spawner.size.height = MVAConstants.baseCarSize.height*2.5
         remover.position = CGPoint(x: 0.0, y: -frame.height)
-        physicsWorld.speed = 1.0
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleGCBtt, object: nil)
     }
 }

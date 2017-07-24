@@ -10,14 +10,17 @@ import GameKit
 
 class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     var authenticationViewController: UIViewController?
-    static let AuthenticationCompleted = Notification.Name(rawValue: "AuthComp")
+    private let gameCenterViewController = GKGameCenterViewController()
+    
+    static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
+    static let toggleGCBtt = Notification.Name(rawValue: "toggleGCB")
     
     func authenticateLocalPlayer() {
         let localPlayer = GKLocalPlayer.localPlayer()
         localPlayer.authenticateHandler = { (viewController, error) in
             if viewController != nil {
                 self.authenticationViewController = viewController
-                NotificationCenter.default.post(name: MVAGameCenterHelper.AuthenticationCompleted, object: self)
+                NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
             }
         }
     }
@@ -42,7 +45,6 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     
     func showGKGameCenterViewController(viewController: UIViewController) {
         if GKLocalPlayer.localPlayer().isAuthenticated {
-            let gameCenterViewController = GKGameCenterViewController()
             gameCenterViewController.gameCenterDelegate = self
             viewController.present(gameCenterViewController,
                                    animated: true, completion: nil)

@@ -61,10 +61,22 @@
             }
         }
         
+        func pauseGame() {
+            if !isPaused {
+                self.intel.stop = true
+                physicsWorld.speed = 0.0
+                self.playBtt.setScale(0.0)
+                self.hideHUD(animated: true)
+                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+                self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
+                    self.isPaused = true
+                })
+            }
+        }
+        
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             if !gameStarted /*&& playBtt.contains(touches.first!.location(in: self))*/ {
                 self.isUserInteractionEnabled = false
-                //self.gameCHelper.showGKGameCenterViewController(viewController: (self.view!.window!.rootViewController as! GameViewController))
                 self.startGame()
             } else if gameStarted && pauseBtt.contains(touches.first!.location(in: self.camera!)) {
                 if !isPaused {

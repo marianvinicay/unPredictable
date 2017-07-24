@@ -51,7 +51,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - Gameplay
     func startGame() {
-        self.isPaused = false
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let randLane = Int(arc4random_uniform(3))
@@ -59,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
         let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
         
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleGCBtt, object: nil)
         startSound()
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         let turnIn = SKAction.sequence([SKAction.wait(forDuration: 0.6),SKAction.rotate(toAngle: angle, duration: 0.2)])
@@ -219,6 +219,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     spawner.size.height = self.size.height
                     playerBraking = true
                 }
+                generateSmoke(atPoint: intel.player.position)
                 deceleratePlayer()
             } else {
                 if playerBraking == true {
@@ -278,7 +279,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.car.rawValue:
             if let node1 = contact.bodyA.node as? MVACar,
                 let node2 = contact.bodyB.node as? MVACar {
-                //if self.frame.intersects(node1.frame) || self.frame.intersects(node2.frame) {
+                let maxYFrame = self.camera!.position.y+self.size.height/2+MVAConstants.baseCarSize.height
+                let minYFrame = self.camera!.position.y-self.size.height/2-MVAConstants.baseCarSize.height
+                if maxYFrame > contact.contactPoint.y && contact.contactPoint.y > minYFrame {
                     for car in [node1,node2] {
                         car.pointsPerSecond = 0
                         car.removeAllActions()
@@ -287,12 +290,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     sound.crash(onNode: node1)
                     generateSmoke(atPoint: contact.contactPoint)
-                //} else {
-                //    for car in [node1,node2] {
-                //        car.removeFromParent()
-                //        intel.cars.remove(car)
-                //    }
-                //} !!!
+                } else {
+                    for car in [node1,node2] {
+                        scrape(car: car)
+                    }
+                }
             }
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.player.rawValue:
             physicsWorld.speed = 0.0
@@ -317,8 +319,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let particles = SKEmitterNode(fileNamed: "MVAParticle")
         particles?.position = point
         particles?.name = "smoke"
-        particles?.zPosition = 6.0
+        particles?.zPosition = 4.0
         self.addChild(particles!)
+        let remSmoke = SKAction.run {
+            particles?.removeFromParent()
+        }
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 6.0),remSmoke]))
     }
     
     private func scrape(car: MVACar) {

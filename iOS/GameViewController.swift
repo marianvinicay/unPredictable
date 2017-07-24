@@ -11,7 +11,8 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    private var scene: GameScene!
+    @IBOutlet weak var gameCenterBtt: UIButton!
+    var scene: GameScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +25,35 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
-        NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.AuthenticationCompleted, object: nil)
+        //skView.showsPhysics = true
+        NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleGCButton), name: MVAGameCenterHelper.toggleGCBtt, object: nil)
         scene.gameCHelper.authenticateLocalPlayer()
     }
 
     override var shouldAutorotate: Bool {
         return true
+    }
+    
+    func toggleGCButton() {
+        let animSpeed = 0.6
+        if scene.physicsWorld.speed == 0.0 {
+            UIView.animate(withDuration: animSpeed, animations: {
+                self.gameCenterBtt.alpha = 1.0
+            }, completion: { (_: Bool) in
+                self.gameCenterBtt.isHidden = false
+            })
+        } else {
+            UIView.animate(withDuration: animSpeed, animations: {
+                self.gameCenterBtt.alpha = 0.0
+            }, completion: { (_: Bool) in
+                self.gameCenterBtt.isHidden = true
+            })
+        }
+    }
+    
+    @IBAction func showGameCenter(_ sender: UIButton) {
+        scene.gameCHelper.showGKGameCenterViewController(viewController: self)
     }
     
     func showAuthenticationViewController() {
