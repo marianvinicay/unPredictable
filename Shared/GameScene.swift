@@ -88,7 +88,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             label.fontName = "Futura Bold"
             label.fontSize = 40
             label.position = .zero
-            label.zPosition = 6.0
+            label.zPosition = 8.0
             camera!.addChild(label)
             fadeOutVolume()
             
@@ -219,7 +219,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     spawner.size.height = self.size.height
                     playerBraking = true
                 }
-                generateSmoke(atPoint: intel.player.position)
                 deceleratePlayer()
             } else {
                 if playerBraking == true {
@@ -319,12 +318,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let particles = SKEmitterNode(fileNamed: "MVAParticle")
         particles?.position = point
         particles?.name = "smoke"
-        particles?.zPosition = 4.0
+        particles?.zPosition = 5.5
         self.addChild(particles!)
         let remSmoke = SKAction.run {
             particles?.removeFromParent()
         }
-        self.run(SKAction.sequence([SKAction.wait(forDuration: 6.0),remSmoke]))
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 5.0),remSmoke]))
     }
     
     private func scrape(car: MVACar) {

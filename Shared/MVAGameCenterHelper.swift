@@ -35,7 +35,6 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
             // dist in MI convert to KM bc leaderboards are in KM
             gkScore.value = Int64(MVAWorldConverter.milesToKilometers(dist)*10)
         }
-        
         GKScore.report([gkScore], withCompletionHandler: errorHandler)
     }
     

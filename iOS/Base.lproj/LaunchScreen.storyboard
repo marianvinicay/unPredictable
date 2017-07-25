@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -21,18 +21,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="p29-ln-pcn">
-                                <rect key="frame" x="37" y="183" width="300" height="300"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Lry-m1-PV0"/>
-                                    <constraint firstAttribute="height" constant="300" id="WGV-Uz-gke"/>
-                                </constraints>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="INIT" translatesAutoresizingMaskIntoConstraints="NO" id="fXh-ui-Tl3">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="p29-ln-pcn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="XUK-8y-I1K"/>
-                            <constraint firstItem="p29-ln-pcn" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="d6u-8R-5Os"/>
+                            <constraint firstItem="fXh-ui-Tl3" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="9Hc-6b-23a"/>
+                            <constraint firstItem="fXh-ui-Tl3" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="QNl-N5-6cr"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="fXh-ui-Tl3" secondAttribute="bottom" id="cTB-JV-bFM"/>
+                            <constraint firstAttribute="trailing" secondItem="fXh-ui-Tl3" secondAttribute="trailing" id="qYx-fL-wHA"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -42,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo" width="1024" height="1024"/>
+        <image name="INIT" width="414" height="736"/>
     </resources>
 </document>

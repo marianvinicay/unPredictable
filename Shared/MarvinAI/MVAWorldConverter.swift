@@ -22,12 +22,13 @@ struct MVAWorldConverter {
         if Locale.current.usesMetricSystem {
             return kmH
         } else {
-            return Int(Double(kmH)*0.62)
+            let miles = Double(kmH)*0.62
+            return Int(round(miles/10)*10)
         }
     }
     
     static func milesToKilometers(_ dist: Double) -> Double {
-        return dist/0.62
+        return dist/0.63
     }
     
     static func distanceToOdometer(_ dist: Double) -> String {

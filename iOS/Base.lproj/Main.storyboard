@@ -23,10 +23,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1S-qh-hdo">
-                                <rect key="frame" x="309" y="8" width="50" height="50"/>
+                                <rect key="frame" x="319" y="8" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="NWY-KB-GYe"/>
-                                    <constraint firstAttribute="width" constant="50" id="pbb-23-52b"/>
+                                    <constraint firstAttribute="height" constant="40" id="NWY-KB-GYe"/>
+                                    <constraint firstAttribute="width" constant="40" id="pbb-23-52b"/>
                                 </constraints>
                                 <state key="normal" image="Leaderboards"/>
                                 <connections>

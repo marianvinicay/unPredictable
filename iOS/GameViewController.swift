@@ -38,10 +38,9 @@ class GameViewController: UIViewController {
     func toggleGCButton() {
         let animSpeed = 0.6
         if scene.physicsWorld.speed == 0.0 {
+            self.gameCenterBtt.isHidden = false
             UIView.animate(withDuration: animSpeed, animations: {
                 self.gameCenterBtt.alpha = 1.0
-            }, completion: { (_: Bool) in
-                self.gameCenterBtt.isHidden = false
             })
         } else {
             UIView.animate(withDuration: animSpeed, animations: {

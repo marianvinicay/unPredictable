@@ -14,7 +14,7 @@ import UIKit
 
 enum MVAConstants {
     static let basePlayerSpeed: Int = 200
-    static let baseSpawnTime: TimeInterval = 2.3
+    static let baseSpawnTime: TimeInterval = 2.2
     #if os(iOS)
     static var baseCarSize: CGSize {
         switch UIDevice.current.userInterfaceIdiom {

@@ -44,6 +44,8 @@ extension GameScene {
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
         if let best = MVAMemory.maxPlayerDistance?.roundTo(NDecimals: 1) {
             scene.recordDistance.text = "BEST: \(best) \(MVAWorldConverter.lengthUnit)"
+        } else {
+            scene.recordDistance.text = ""
         }
         
         scene.setLevelSpeed(0)
@@ -164,9 +166,10 @@ extension GameScene {
         setDistance(MVAWorldConverter.distanceToOdometer(0.0))
         
         if MVAMemory.maxPlayerDistance ?? 0.0 < intel.distanceTraveled {
-            MVAMemory.maxPlayerDistance = intel.distanceTraveled
-            gameCHelper.reportDistance(intel.distanceTraveled)
-            self.recordDistance.text = "BEST: \(intel.distanceTraveled.roundTo(NDecimals: 1)) \(MVAWorldConverter.lengthUnit)"
+            let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
+            MVAMemory.maxPlayerDistance = maxDist
+            gameCHelper.reportDistance(maxDist)
+            self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             
         }
         intel.reset()
