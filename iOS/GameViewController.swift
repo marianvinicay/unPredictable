@@ -28,7 +28,10 @@ class GameViewController: UIViewController {
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleGCButton), name: MVAGameCenterHelper.toggleGCBtt, object: nil)
-        scene.gameCHelper.authenticateLocalPlayer()
+        
+        if MVAMemory.enableGameCenter != false {
+            scene.gameCHelper.authenticateLocalPlayer()
+        }
     }
 
     override var shouldAutorotate: Bool {

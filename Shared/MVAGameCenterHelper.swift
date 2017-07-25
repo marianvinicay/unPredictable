@@ -10,10 +10,18 @@ import GameKit
 
 class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     var authenticationViewController: UIViewController?
-    private let gameCenterViewController = GKGameCenterViewController()
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
     static let toggleGCBtt = Notification.Name(rawValue: "toggleGCB")
+    
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: NSNotification.Name(rawValue: GKPlayerAuthenticationDidChangeNotificationName), object: nil)
+    }
+    
+    func authDidChange() {
+        MVAMemory.enableGameCenter = GKLocalPlayer.localPlayer().isAuthenticated
+    }
     
     func authenticateLocalPlayer() {
         let localPlayer = GKLocalPlayer.localPlayer()
@@ -21,6 +29,10 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
             if viewController != nil {
                 self.authenticationViewController = viewController
                 NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
+            } else if localPlayer.isAuthenticated {
+                MVAMemory.enableGameCenter = true
+            } else {
+                MVAMemory.enableGameCenter = false
             }
         }
     }
@@ -44,9 +56,16 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     
     func showGKGameCenterViewController(viewController: UIViewController) {
         if GKLocalPlayer.localPlayer().isAuthenticated {
+            let gameCenterViewController = GKGameCenterViewController()
             gameCenterViewController.gameCenterDelegate = self
             viewController.present(gameCenterViewController,
                                    animated: true, completion: nil)
+        } else {
+            authenticateLocalPlayer()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }

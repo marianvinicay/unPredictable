@@ -41,4 +41,12 @@ enum MVAMemory {
             return UserDefaults.standard.value(forKey: "maxPDist") as? Double
         }
     }
+    static var enableGameCenter: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "enGC")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "enGC") as? Bool ?? true
+        }
+    }
 }

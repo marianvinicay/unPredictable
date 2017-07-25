@@ -323,7 +323,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let remSmoke = SKAction.run {
             particles?.removeFromParent()
         }
-        self.run(SKAction.sequence([SKAction.wait(forDuration: 5.0),remSmoke]))
+        self.run(SKAction.sequence([SKAction.wait(forDuration: 8.0),remSmoke]))
     }
     
     private func scrape(car: MVACar) {
