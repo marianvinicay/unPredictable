@@ -50,6 +50,13 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         GKScore.report([gkScore], withCompletionHandler: errorHandler)
     }
     
+    func reportCrashedCar(_ numOfCars: Int64, errorHandler: ((Error?)->Void)? = nil) {
+        guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
+        let gkScore = GKScore(leaderboardIdentifier: "com.mva.unpredictable.crashed_cars")
+        gkScore.value = numOfCars
+        GKScore.report([gkScore], withCompletionHandler: errorHandler)
+    }
+    
     func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
             gameCenterViewController.dismiss(animated: true, completion: nil)
     }

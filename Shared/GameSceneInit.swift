@@ -168,10 +168,14 @@ extension GameScene {
         if MVAMemory.maxPlayerDistance ?? 0.0 < intel.distanceTraveled {
             let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
             MVAMemory.maxPlayerDistance = maxDist
-            gameCHelper.reportDistance(maxDist)
+            intel.gameCHelper.reportDistance(maxDist)
             self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             
         }
+        let newCC = (MVAMemory.crashedCars ?? 0)+Int64(1)
+        MVAMemory.crashedCars = newCC
+        intel.gameCHelper.reportCrashedCar(newCC)
+        
         intel.reset()
         spawnPlayer()
         

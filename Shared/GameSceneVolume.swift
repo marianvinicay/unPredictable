@@ -33,8 +33,8 @@ extension GameScene {
     
     func fadeOutVolume() {
         if self.audioEngine.mainMixerNode.outputVolume > 1.0 {
-            self.audioEngine.mainMixerNode.outputVolume -= 0.2
-            self.perform(#selector(fadeInVolume), with: nil, afterDelay: 0.1)
+            self.audioEngine.mainMixerNode.outputVolume -= 0.1
+            self.perform(#selector(fadeInVolume), with: nil, afterDelay: 0.2)
         } else {
             self.audioEngine.mainMixerNode.outputVolume = 0.0
         }

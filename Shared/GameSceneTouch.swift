@@ -49,14 +49,16 @@
                 handleBrake(started: true)
                 lastPressedXPosition = gest.location(in: view).x
             case .changed:
-                if lastPressedXPosition+75 < gest.location(in: view).x {
-                    handleSwipe(swipe: .right)
-                    lastPressedXPosition = gest.location(in: view).x
-                } else if lastPressedXPosition-75 > gest.location(in: view).x {
-                    handleSwipe(swipe: .left)
-                    lastPressedXPosition = gest.location(in: view).x
+                let change = gest.location(in: view).x - lastPressedXPosition
+                handleBrakingSwipe(fromPositionChange: change)
+                lastPressedXPosition = gest.location(in: view).x
+            case .ended:
+                handleBrake(started: false)
+                let currentLanePos = CGFloat(lanePositions[intel.player.currentLane]!)
+                if intel.player.position.x != currentLanePos {
+                    let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
+                    intel.player.run(actMove)
                 }
-            case .ended: handleBrake(started: false)
             default: break
             }
         }
@@ -66,6 +68,7 @@
                 self.intel.stop = true
                 physicsWorld.speed = 0.0
                 self.hideHUD(animated: anim)
+                self.fadeOutVolume()
                 if anim {
                     self.playBtt.setScale(0.0)
                     self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
@@ -80,6 +83,17 @@
             }
         }
         
+        func resumeGame() {
+            self.isPaused = false
+            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
+            self.showHUD()
+            self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
+                self.physicsWorld.speed = 1.0
+                self.intel.stop = false
+                self.fadeInVolume()
+            })
+        }
+        
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             if !gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
                 self.isUserInteractionEnabled = false
@@ -87,13 +101,7 @@
             } else if gameStarted && pauseBtt.contains(touches.first!.location(in: self.camera!)) {
                 pauseGame(withAnimation: true)
             } else if gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
-                self.isPaused = false
-                self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
-                self.showHUD()
-                self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
-                    self.physicsWorld.speed = 1.0
-                    self.intel.stop = false
-                })
+                resumeGame()
             }
         }
     }

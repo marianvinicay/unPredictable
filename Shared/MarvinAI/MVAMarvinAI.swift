@@ -14,6 +14,9 @@ class MVAMarvinAI {
     var distanceTraveled = 0.0 //in KM/MI accordingly
     var currentLevel = MVALevel(level: 1)
     var cars = Set<MVACar>()
+    let gameCHelper = MVAGameCenterHelper()
+    let healthKHelper = MVAHealthKit()
+    let storeHelper = MVAStore()
     
     var stop = false
     

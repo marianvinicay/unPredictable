@@ -30,8 +30,9 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(toggleGCButton), name: MVAGameCenterHelper.toggleGCBtt, object: nil)
         
         if MVAMemory.enableGameCenter != false {
-            scene.gameCHelper.authenticateLocalPlayer()
+            scene.intel.gameCHelper.authenticateLocalPlayer()
         }
+        scene.intel.healthKHelper.initiateKit()
     }
 
     override var shouldAutorotate: Bool {
@@ -55,12 +56,12 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func showGameCenter(_ sender: UIButton) {
-        scene.gameCHelper.showGKGameCenterViewController(viewController: self)
+        scene.intel.gameCHelper.showGKGameCenterViewController(viewController: self)
     }
     
     func showAuthenticationViewController() {
         if let authenticationViewController =
-            scene.gameCHelper.authenticationViewController {
+            scene.intel.gameCHelper.authenticationViewController {
             self.present(
                 authenticationViewController,
                 animated: true, completion: nil)

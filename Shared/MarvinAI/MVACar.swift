@@ -93,6 +93,21 @@ public class MVACar: SKSpriteNode {
         physicsBody?.allowsRotation = true
     }
     
+    class func resetPhysicsBody(forCar car: MVACar) {
+        car.physicsBody = SKPhysicsBody(texture: car.skin.normal, size: car.size)
+        car.physicsBody?.mass = 5
+        car.physicsBody?.density = 5000.0
+        car.physicsBody?.friction = 0.0
+        car.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
+        car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        car.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        car.physicsBody?.isDynamic = true
+        car.physicsBody?.linearDamping = 0.0
+        car.physicsBody?.angularDamping = 0.2
+        car.physicsBody?.affectedByGravity = false
+        car.physicsBody?.allowsRotation = true
+    }
+    
     /*func drawSensors() {
         if children.map({ $0.name }).contains(where: { $0 == "dot" }) == false {
             for point in frontSensor+leftSensors+rightSensors+backSensor+frontRightSensors+frontLeftSensors+backLeftSensors+backRightSensors {
