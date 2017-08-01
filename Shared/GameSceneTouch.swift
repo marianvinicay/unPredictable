@@ -53,11 +53,13 @@
                 handleBrakingSwipe(fromPositionChange: change)
                 lastPressedXPosition = gest.location(in: view).x
             case .ended:
-                handleBrake(started: false)
-                let currentLanePos = CGFloat(lanePositions[intel.player.currentLane]!)
-                if intel.player.position.x != currentLanePos {
-                    let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
-                    intel.player.run(actMove)
+                if let currentPLane = intel.player.currentLane {
+                    handleBrake(started: false)
+                    let currentLanePos = CGFloat(lanePositions[currentPLane]!)
+                    if intel.player.position.x != currentLanePos {
+                        let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
+                        intel.player.run(actMove)
+                    }
                 }
             default: break
             }

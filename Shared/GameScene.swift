@@ -260,8 +260,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard intel.player.mindSet == .player else { return }
             let newPlayerPos = intel.player.position.x + posCh
-            if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width &&
-                newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width {
+            if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
+                newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
                 intel.player.position.x = newPlayerPos
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key

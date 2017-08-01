@@ -237,6 +237,7 @@
 				2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */,
+				2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */,
 				2F861B961F1CD6F900162EDA /* GameSceneInit.swift */,
 				2F861B681F1CC22B00162EDA /* GameSceneVolume.swift */,
 				2F5B1DEE1EFFD863006AEA30 /* GameSceneTouch.swift */,
@@ -245,7 +246,6 @@
 				2F861B401F1BAB5F00162EDA /* MVAParticle.sks */,
 				2F861B4B1F1BAE7C00162EDA /* Assets.xcassets */,
 				2F7A089F1DC65209005561B9 /* Utils.swift */,
-				2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";

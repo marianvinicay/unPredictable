@@ -122,6 +122,9 @@ class MVAGameOverNode: SKNode {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touchLocation = touches.first!.location(in: self)
+        countD?.removeFromParent()
+        countD = nil
+        
         if yesBtt != nil && noBtt != nil {
             if nodes(at: touchLocation).contains(yesBtt!) {
                 
@@ -129,8 +132,6 @@ class MVAGameOverNode: SKNode {
                 activityInd.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
                 activityInd.startAnimating()
                 scene!.view!.addSubview(activityInd)
-                countD?.removeFromParent()
-                countD = nil
                 
                 store.buy() { (purchased: Bool) in
                     self.activityInd.stopAnimating()
