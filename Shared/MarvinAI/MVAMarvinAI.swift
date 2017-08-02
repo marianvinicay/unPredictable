@@ -19,6 +19,7 @@ class MVAMarvinAI {
     let storeHelper = MVAStore()
     
     var stop = false
+    var updateDist = false
     
     private var checkTime = 0.3
     
@@ -63,9 +64,11 @@ class MVAMarvinAI {
     
     func update(withDeltaTime dTime: TimeInterval) {
         if !stop {
-            // d = v * t
-            let realSpeed = Double(MVAWorldConverter.pointsSpeedToRealWorld(player.pointsPerSecond))
-            distanceTraveled += ((realSpeed*dTime)/1000)
+            if updateDist {
+                // d = v * t
+                let realSpeed = Double(MVAWorldConverter.pointsSpeedToRealWorld(player.pointsPerSecond))
+                distanceTraveled += ((realSpeed*dTime)/1000)
+            }
             
             cars.forEach { (car: MVACar) in
                 if car.pointsPerSecond != 0 {

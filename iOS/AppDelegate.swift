@@ -16,13 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        MVAMemory.tutorialDisplayed = false
         return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
         if let scene = (window?.rootViewController as? GameViewController)?.scene {
             if scene.gameStarted && scene.intel.stop == false {
-                scene.pauseGame(withAnimation: false)
+                scene.pauseGame(withAnimation: true)
             }
         }
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

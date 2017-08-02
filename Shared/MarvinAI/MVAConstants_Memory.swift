@@ -33,22 +33,33 @@ enum MVAConstants {
 }
 
 enum MVAMemory {
-    static var maxPlayerDistance: Double? {
+    static var tutorialDisplayed: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "tutDisp")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "tutDisp") as? Bool ?? false
+        }
+    }
+    
+    static var maxPlayerDistance: Double {
         set {
             UserDefaults.standard.set(newValue, forKey: "maxPDist")
         }
         get {
-            return UserDefaults.standard.value(forKey: "maxPDist") as? Double
+            return UserDefaults.standard.value(forKey: "maxPDist") as? Double ?? 0.0
         }
     }
-    static var crashedCars: Int64? {
+    
+    static var crashedCars: Int64 {
         set {
             UserDefaults.standard.set(newValue, forKey: "crashCars")
         }
         get {
-            return UserDefaults.standard.value(forKey: "crashCars") as? Int64
+            return UserDefaults.standard.value(forKey: "crashCars") as? Int64 ?? Int64(0)
         }
     }
+    
     static var enableGameCenter: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "enGC")

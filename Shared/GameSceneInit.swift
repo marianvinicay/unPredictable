@@ -42,8 +42,9 @@ extension GameScene {
         (scene.camera!.childNode(withName: "over") as! SKSpriteNode).size = scene.size
         
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
-        if let best = MVAMemory.maxPlayerDistance?.roundTo(NDecimals: 1) {
-            scene.recordDistance.text = "BEST: \(best) \(MVAWorldConverter.lengthUnit)"
+        let bestDist = MVAMemory.maxPlayerDistance.roundTo(NDecimals: 1)
+        if bestDist != 0 {
+            scene.recordDistance.text = "BEST: \(bestDist) \(MVAWorldConverter.lengthUnit)"
         } else {
             scene.recordDistance.text = ""
         }
@@ -86,30 +87,35 @@ extension GameScene {
         let start2Texture = SKTexture(imageNamed: "Start2")
         for _ in 0..<3 {
             let road = MVARoadNode.createWith(texture: start2Texture, height: self.size.height, andWidth: self.size.width)
-            switch arc4random_uniform(2) {
-            case 1:
+            if  arc4random_uniform(2) == 1 {
                 let pSpot = arc4random_uniform(2) == 0 ? SKSpriteNode(imageNamed: "ParkingSpotR"):SKSpriteNode(imageNamed: "ParkingSpotL")
                 pSpot.anchorPoint.y = 1.0
                 pSpot.size = pSpot.size.adjustSize(toNewWidth: road.size.width)
-                pSpot.position = CGPoint(x: 0.0, y: CGFloat(arc4random_uniform(UInt32(road.size.height-pSpot.size.height))))
+                var posRange = CGFloat(arc4random_uniform(UInt32((road.size.height/2)-pSpot.size.height)))
+                if arc4random_uniform(2) == 1 {
+                    posRange *= -1
+                }
+                pSpot.position = CGPoint(x: 0.0, y: posRange)
                 pSpot.zPosition = 1.0
                 road.addChild(pSpot)
-            default: break
             }
-            road.position.x = 0.0
-            road.position.y = endOfWorld!
+            road.position = CGPoint(x: 0.0, y: endOfWorld!)
             endOfWorld = road.position.y+road.size.height
             roadNodes.insert(road)
             self.addChild(road)
         }
         
-        let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
-        road.position.x = 0.0
-        road.position.y = endOfWorld!+self.size.height*0.25
-        roadNodes.insert(road)
-        self.addChild(road)
-        
-        lanePositions = road.laneCoordinates
+        if MVAMemory.tutorialDisplayed {
+            for i in 0..<2 {
+                let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
+                road.position = CGPoint(x: 0.0, y: endOfWorld!)
+                if i == 0 {
+                    endOfWorld = road.position.y+road.size.height
+                }
+                roadNodes.insert(road)
+                self.addChild(road)
+            }
+        }
     }
     
     func initiateScene() {
@@ -165,14 +171,14 @@ extension GameScene {
         setLevelSpeed(0)
         setDistance(MVAWorldConverter.distanceToOdometer(0.0))
         
-        if MVAMemory.maxPlayerDistance ?? 0.0 < intel.distanceTraveled {
+        if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
             let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
             MVAMemory.maxPlayerDistance = maxDist
             intel.gameCHelper.reportDistance(maxDist)
             self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             
         }
-        let newCC = (MVAMemory.crashedCars ?? 0)+Int64(1)
+        let newCC = (MVAMemory.crashedCars)+Int64(1)
         MVAMemory.crashedCars = newCC
         intel.gameCHelper.reportCrashedCar(newCC)
         

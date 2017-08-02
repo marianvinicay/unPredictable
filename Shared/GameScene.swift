@@ -42,6 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var spawner: MVASpawner!
     
     // MARK: Gameplay Helpers
+    var tutorialNode: MVATutorialNode?
     var lastPressedXPosition: CGFloat!
     var endOfWorld: CGFloat? = 0.0
     var brakingTimer: Timer!
@@ -70,33 +71,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         intel.player.currentLane = randLane
         intel.player.run(SKAction.group([turnIn,moveIn,turnOut]))
         setLevelSpeed(intel.currentLevel.playerSpeed)
-        spawnWithDelay(intel.currentLevel.spawnRate)
         
         let curtainUp = SKAction.run {
-            self.showHUD()
-            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.9))
-            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 1.0))
+            if MVAMemory.tutorialDisplayed {
+                self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+                self.showHUD()
+            }
+            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
+            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
         }
         
         let start = SKAction.run {
             self.gameStarted = true
-            self.isUserInteractionEnabled = true
-            self.startDate = Date()
+            
+            if MVAMemory.tutorialDisplayed {
+                self.isUserInteractionEnabled = true
+                self.startDate = Date()
+                self.intel.updateDist = true
+            } else {
+                self.tutorialNode = MVATutorialNode.new(size: self.size)
+                self.tutorialNode!.alpha = 0.0
+                self.tutorialNode!.zPosition = 9.0
+                self.camera!.addChild(self.tutorialNode!)
+                self.tutorialNode!.run(SKAction.fadeIn(withDuration: 0.2), completion: { self.isUserInteractionEnabled = true })
+            }
         }
-        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.4),start]))
+        
+        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
     }
     
     private func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
-            if intel.distanceTraveled < 8.0 {
-                timesCrashed += 1
-            }
-            
-            var offP = true//false
-            if timesCrashed >= 3 && intel.distanceTraveled > 1.0 {
-                offP = true
-            } else if MVAMemory.maxPlayerDistance ?? 0.0 > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance ?? 0.0 {
-                offP = true
+            var offP = false
+            if tutorialNode == nil {
+                if intel.distanceTraveled < 8.0 {
+                    timesCrashed += 1
+                }
+                if timesCrashed >= 3 && intel.distanceTraveled > 1.0 {
+                    offP = true
+                } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    offP = true
+                }
+            } else {
+                tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
+                tutorialNode!.removeFromParent()
+                tutorialNode = nil
             }
             
             let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP)
@@ -197,12 +216,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
-            if lastUpdate == nil {
-                lastUpdate = currentTime
-            } else {
+            if lastUpdate != nil {
                 intel.update(withDeltaTime: currentTime-lastUpdate)
-                lastUpdate = currentTime
             }
+            lastUpdate = currentTime
             
             DispatchQueue.main.async {
                 if self.intel.distanceTraveled >= Double(self.intel.currentLevel.nextMilestone) && !self.playerBraking {
@@ -214,7 +231,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 let newDistance = MVAWorldConverter.distanceToOdometer(self.intel.distanceTraveled)
                 if self.playerDistance != newDistance {
-                    if !self.newBestDisplayed && MVAMemory.maxPlayerDistance != nil && (MVAMemory.maxPlayerDistance! <= self.intel.distanceTraveled) {
+                    if !self.newBestDisplayed && MVAMemory.maxPlayerDistance != 0.0 && MVAMemory.maxPlayerDistance <= self.intel.distanceTraveled {
                         self.displayNewBest()
                     }
                     self.playerDistance = newDistance
@@ -222,16 +239,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
-            if endOfWorld != nil && endOfWorld! < self.camera!.position.y {
-                let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height, andWidth: self.size.width)
-                road.position = .zero
-                road.name = "road"
-                camera!.addChild(road)
-                endOfWorld = nil
-                roadNodes.forEach({
-                    $0.removeFromParent()
-                    roadNodes.remove($0)
-                })
+            if endOfWorld != nil {
+                if MVAMemory.tutorialDisplayed && endOfWorld! < self.camera!.position.y {
+                    let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height, andWidth: self.size.width)
+                    road.position = .zero
+                    road.name = "road"
+                    camera!.addChild(road)
+                    endOfWorld = nil
+                    roadNodes.forEach({
+                        $0.removeFromParent()
+                        roadNodes.remove($0)
+                    })
+                } else if MVAMemory.tutorialDisplayed == false && endOfWorld!-self.size.height < self.camera!.position.y {
+                    let road = MVARoadNode.createWith(texture: SKTexture(imageNamed: "Start2"), height: self.size.height, andWidth: self.size.width)
+                    road.position = CGPoint(x: 0.0, y: endOfWorld!)
+                    road.name = "road"
+                    endOfWorld = road.position.y+road.size.height
+                    roadNodes.insert(road)
+                    self.addChild(road)
+                }
             }
         }
     }
@@ -246,13 +272,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         remover.position.y = camera!.position.y-self.size.height
     }
     
+    private func endTutorial() {
+        tutorialNode?.end {
+            self.tutorialNode?.removeFromParent()
+            self.tutorialNode = nil
+            self.intel.updateDist = true
+            self.startDate = Date()
+            self.showHUD()
+            
+            MVAMemory.tutorialDisplayed = true
+            
+            let road = MVARoadNode.createWith(texture: self.spawner.roadTexture, height: self.size.height, andWidth: self.size.width)
+            road.position = CGPoint(x: 0.0, y: self.endOfWorld!)
+            road.name = "road"
+            self.roadNodes.insert(road)
+            self.addChild(road)
+        }
+    }
     
     // MARK: - Controls
     func handleSwipe(swipe: MVAPosition) {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard intel.player.mindSet == .player else { return }
             sound.indicate(onNode: intel.player)
-            _ = intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player)
+            let laneChanged = intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player)
+            
+            if laneChanged && tutorialNode?.stage == 0 {
+                spawnWithDelay(intel.currentLevel.spawnRate)
+                tutorialNode!.continueToBraking()
+            }
         }
     }
     
@@ -265,6 +313,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 intel.player.position.x = newPlayerPos
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
+            }
+            
+            if tutorialNode?.stage == 1 {
+                endTutorial()
             }
         }
     }

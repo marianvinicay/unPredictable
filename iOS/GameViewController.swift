@@ -23,13 +23,13 @@ class GameViewController: UIViewController {
         skView.presentScene(scene)
         
         skView.ignoresSiblingOrder = true
-        //skView.showsFPS = true
-        //skView.showsNodeCount = true
+        skView.showsFPS = true
+        skView.showsNodeCount = true
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleGCButton), name: MVAGameCenterHelper.toggleGCBtt, object: nil)
         
-        if MVAMemory.enableGameCenter != false {
+        if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter != false {
             scene.intel.gameCHelper.authenticateLocalPlayer()
         }
         scene.intel.healthKHelper.initiateKit()
