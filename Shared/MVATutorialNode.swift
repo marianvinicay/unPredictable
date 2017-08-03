@@ -46,8 +46,6 @@ class MVATutorialNode: SKNode {
         gradient.zPosition = -1
         newNode.addChild(gradient)
         
-        //newNode.isUserInteractionEnabled = true
-        
         return newNode
     }
     
@@ -55,38 +53,41 @@ class MVATutorialNode: SKNode {
         let labels = children.filter({ $0.name == "swipe" })
         labels.forEach({ $0.run(SKAction.fadeOut(withDuration: 0.1), completion: { self.removeChildren(in: labels) }) })
         
+        if children.filter({ $0.name == "done" }).isEmpty {
         let wellDLabel = MVATutorialNode.label(withText: "👍", andName: nil)
-        wellDLabel.verticalAlignmentMode = .top
-        wellDLabel.fontSize = 66
-        wellDLabel.position = CGPoint(x: 0.0, y: dispSize.height/2.3)
-        wellDLabel.alpha = 0.0
-        addChild(wellDLabel)
-        
-        let presentBrakeInstructs = SKAction.run {
-            let bNode = SKNode()
-            bNode.name = "brake"
+            wellDLabel.verticalAlignmentMode = .top
+            wellDLabel.fontSize = 66
+            wellDLabel.position = CGPoint(x: 0.0, y: dispSize.height/2.3)
+            wellDLabel.alpha = 0.0
+            wellDLabel.name = "done"
+            addChild(wellDLabel)
             
-            let brakeLabel = MVATutorialNode.label(withText: "Long press to brake", andName: nil)
-            brakeLabel.position = CGPoint(x: 0.0, y: self.dispSize.height/2.3)
-            bNode.addChild(brakeLabel)
+            let presentBrakeInstructs = SKAction.run {
+                let bNode = SKNode()
+                bNode.name = "brake"
+                
+                let brakeLabel = MVATutorialNode.label(withText: "Touch and hold to brake", andName: nil)
+                brakeLabel.position = CGPoint(x: 0.0, y: self.dispSize.height/2.3)
+                bNode.addChild(brakeLabel)
+                
+                let brake2ndLabel = MVATutorialNode.label(withText: "and drag", andName: nil)
+                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-20)
+                bNode.addChild(brake2ndLabel)
+                
+                let brake3ndLabel = MVATutorialNode.label(withText: "to change direction", andName: nil)
+                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-20)
+                bNode.addChild(brake3ndLabel)
+                
+                bNode.alpha = 0.0
+                self.addChild(bNode)
+                bNode.run(SKAction.fadeIn(withDuration: 0.1), completion: { self.stage = 1 })
+            }
             
-            let brake2ndLabel = MVATutorialNode.label(withText: "and move finger", andName: nil)
-            brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-20)
-            bNode.addChild(brake2ndLabel)
-            
-            let brake3ndLabel = MVATutorialNode.label(withText: "to change direction", andName: nil)
-            brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-20)
-            bNode.addChild(brake3ndLabel)
-            
-            bNode.alpha = 0.0
-            self.addChild(bNode)
-            bNode.run(SKAction.fadeIn(withDuration: 0.1), completion: { self.stage = 1 })
+            wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
+                                              SKAction.wait(forDuration: 1.5),
+                                              SKAction.fadeOut(withDuration: 0.1),
+                                              presentBrakeInstructs]))
         }
-            
-        wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
-                                          SKAction.wait(forDuration: 1.5),
-                                          SKAction.fadeOut(withDuration: 0.1),
-                                          presentBrakeInstructs]))
     }
     
     func end(_ completion: @escaping (()->())) {

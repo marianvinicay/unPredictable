@@ -42,6 +42,15 @@ enum MVAMemory {
         }
     }
     
+    static var audioMuted: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "audioM")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "audioM") as? Bool ?? false
+        }
+    }
+    
     static var maxPlayerDistance: Double {
         set {
             UserDefaults.standard.set(newValue, forKey: "maxPDist")

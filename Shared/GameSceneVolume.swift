@@ -22,12 +22,22 @@ extension GameScene {
         fadeInVolume()
     }
     
-    func fadeInVolume() {
-        if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
-            self.audioEngine.mainMixerNode.outputVolume += 0.1
-            self.perform(#selector(fadeInVolume), with: nil, afterDelay: 0.2)
+    func setVolume(_ vol: Float) {
+        if !MVAMemory.audioMuted {
+            audioEngine.mainMixerNode.outputVolume = vol
         } else {
-            self.audioEngine.mainMixerNode.outputVolume = 1.0
+            audioEngine.mainMixerNode.outputVolume = 0.0
+        }
+    }
+    
+    func fadeInVolume() {
+        if !MVAMemory.audioMuted {
+            if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
+                self.audioEngine.mainMixerNode.outputVolume += 0.1
+                self.perform(#selector(fadeInVolume), with: nil, afterDelay: 0.2)
+            } else {
+                self.audioEngine.mainMixerNode.outputVolume = 1.0
+            }
         }
     }
     

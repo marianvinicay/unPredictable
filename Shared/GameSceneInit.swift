@@ -176,7 +176,6 @@ extension GameScene {
             MVAMemory.maxPlayerDistance = maxDist
             intel.gameCHelper.reportDistance(maxDist)
             self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
-            
         }
         let newCC = (MVAMemory.crashedCars)+Int64(1)
         MVAMemory.crashedCars = newCC
@@ -190,6 +189,6 @@ extension GameScene {
         
         spawner.size.height = MVAConstants.baseCarSize.height*2.5
         remover.position = CGPoint(x: 0.0, y: -frame.height)
-        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleGCBtt, object: nil)
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
     }
 }

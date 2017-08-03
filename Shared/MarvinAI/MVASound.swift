@@ -23,18 +23,24 @@ class MVASound {
     }
     
     func ignite(node: SKNode) {
-        if node.action(forKey: "iG") == nil {
-            node.run(startCarSound, withKey: "iG")
+        if !MVAMemory.audioMuted {
+            if node.action(forKey: "iG") == nil {
+                node.run(startCarSound, withKey: "iG")
+            }
         }
     }
     
     func indicate(onNode node: SKNode) {
-        if node.action(forKey: "iS") == nil {
-            node.run(indicatorSound, withKey: "iS")
+        if !MVAMemory.audioMuted {
+            if node.action(forKey: "iS") == nil {
+                node.run(indicatorSound, withKey: "iS")
+            }
         }
     }
     
     func crash(onNode node: SKNode) {
-        node.run(crashSound)
+        if !MVAMemory.audioMuted {
+            node.run(crashSound)
+        }
     }
 }

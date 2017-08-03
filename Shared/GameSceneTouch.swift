@@ -24,7 +24,7 @@
             left.direction = .left
             
             let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-            brake.minimumPressDuration = 0.08
+            brake.minimumPressDuration = 0.1
             
             right.delegate = self
             left.delegate = self
@@ -73,22 +73,32 @@
                 self.fadeOutVolume()
                 if anim {
                     self.playBtt.setScale(0.0)
+                    self.recordDistance.setScale(0.0)
                     self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+                    self.recordDistance.run(SKAction.scale(to: 1.0, duration: 0.6))
                     self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
                         self.isPaused = true
                     })
                 } else {
                     self.playBtt.setScale(1.0)
+                    self.recordDistance.setScale(1.0)
                     self.camera!.childNode(withName: "over")?.alpha = 1.0
                     self.isPaused = true
                 }
+                if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
+                    let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
+                    self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
+                }
+                NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
             }
         }
         
         func resumeGame() {
             self.isPaused = false
+            NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
             self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
             self.showHUD()
+            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.6))
             self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
                 self.physicsWorld.speed = 1.0
                 self.intel.stop = false

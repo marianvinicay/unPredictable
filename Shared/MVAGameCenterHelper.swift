@@ -12,7 +12,7 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     var authenticationViewController: UIViewController?
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
-    static let toggleGCBtt = Notification.Name(rawValue: "toggleGCB")
+    static let toggleBtts = Notification.Name(rawValue: "toggleBtts")
     
     override init() {
         super.init()
