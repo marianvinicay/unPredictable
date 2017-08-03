@@ -38,7 +38,7 @@ class MVAMarvinAI {
     ///car in-front (blocked front of car)
     private func checkFront(ofCar car: MVACar) {
         if car.responseFromSensors(inPositions: [.stop]).isEmpty == false {
-            car.changeSpeed(0)
+            car.pointsPerSecond = 5
         } else if let carInFront = car.responseFromSensors(inPositions: [.front]).first {
             let randomiser = car.hasPriority ? 1:arc4random_uniform(2)
             if randomiser == 1 {

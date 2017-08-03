@@ -110,7 +110,7 @@ public class MVACar: SKSpriteNode {
     
     /*func drawSensors() {
         if children.map({ $0.name }).contains(where: { $0 == "dot" }) == false {
-            for point in frontSensor+leftSensors+rightSensors+backSensor+frontRightSensors+frontLeftSensors+backLeftSensors+backRightSensors {
+            for point in frontSensor+stopSensor {
                 let dot = SKSpriteNode(color: .red, size: CGSize(width: 5.0, height: 5.0))
                 dot.zPosition = 1.0
                 dot.name = "dot"
@@ -130,14 +130,14 @@ public class MVACar: SKSpriteNode {
         for position in positions {
             switch position {
             case .frontLeft: foundCars = foundCars.union(carsIntersecting(sensors: frontLeftSensors))
-            case .front: foundCars = foundCars.union(carsIntersecting(sensors: [frontSensor]))
+            case .front: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
             case .frontRight: foundCars = foundCars.union(carsIntersecting(sensors: frontRightSensors))
             case .left: foundCars = foundCars.union(carsIntersecting(sensors: leftSensors))
             case .right: foundCars = foundCars.union(carsIntersecting(sensors: rightSensors))
             case .back: foundCars = foundCars.union(carsIntersecting(sensors: [backSensor]))
             case .backRight: foundCars = foundCars.union(carsIntersecting(sensors: backRightSensors))
             case .backLeft: foundCars = foundCars.union(carsIntersecting(sensors: backLeftSensors))
-            case .stop: foundCars = foundCars.union(carsIntersecting(sensors: [stopSensor]))
+            case .stop: foundCars = foundCars.union(carsIntersecting(sensors: stopSensor))
             }
         }
         return foundCars//Set(foundCars.filter({ $0.mindSet != .player }))
@@ -208,8 +208,9 @@ public class MVACar: SKSpriteNode {
     }
     
     func smoothSpeedChange() {
+        let brakingForce = CGFloat((self.pointsPerSecond/5)*11)
         if speedChange == .front {
-            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*500))
+            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*brakingForce))
             if pointsPerSecond < newSpeed {
                 self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)
             } else {
@@ -217,7 +218,7 @@ public class MVACar: SKSpriteNode {
                 newSpeed = nil
             }
         } else if speedChange == .back {
-            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -self.physicsBody!.mass*500))
+            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -self.physicsBody!.mass*brakingForce))
             if pointsPerSecond > newSpeed {
                 self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)
             } else {
@@ -303,12 +304,16 @@ public class MVACar: SKSpriteNode {
 
 extension MVACar {
     // MARK: MVACar's sensors
-    fileprivate var frontSensor: CGPoint {
-        return CGPoint(x: position.x, y: position.y+size.height*1.6)
+    fileprivate var frontSensor: [CGPoint] {
+        return [CGPoint(x: position.x+size.width/2, y: position.y+size.height*1.6),
+                CGPoint(x: position.x-size.width/2, y: position.y+size.height*1.6),
+                CGPoint(x: position.x, y: position.y+size.height*1.6)]
     }
     
-    fileprivate var stopSensor: CGPoint {
-        return CGPoint(x: position.x, y: position.y+size.height+10)
+    fileprivate var stopSensor: [CGPoint] {
+        return [CGPoint(x: position.x+size.width/2, y: position.y+(size.height/2)+23),
+                CGPoint(x: position.x-size.width/2, y: position.y+(size.height/2)+23),
+                CGPoint(x: position.x, y: position.y+(size.height/2)+23)]
     }
     
     fileprivate var rightSensors: [CGPoint] {

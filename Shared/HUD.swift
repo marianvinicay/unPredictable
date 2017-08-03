@@ -31,7 +31,9 @@ extension GameScene {
     }
     
     func setLevelSpeed(_ spd: Int) {
-        speedSign.label.text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
+        if canUpdateSpeed {
+            speedSign.label.text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
+        }
     }
     
     func showHUD() {

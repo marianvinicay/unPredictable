@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2765A3141F1CE80D0007B075 /* GameSceneiPad.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */; };
 		276694BC1F21FF4200E70D15 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 276694BB1F21FF4200E70D15 /* GameKit.framework */; };
 		276694BE1F22048500E70D15 /* MVAGameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */; };
 		276694BF1F22048500E70D15 /* MVAGameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */; };
@@ -169,7 +168,6 @@
 		2FAE02101F054B84004D4EFE /* MVAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAUtils.swift; sourceTree = "<group>"; };
 		2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWorldConverter.swift; sourceTree = "<group>"; };
 		2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneKeyboard.swift; sourceTree = "<group>"; };
-		2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneiPad.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,7 +232,6 @@
 				2F861B951F1CD49F00162EDA /* Sounds */,
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
-				2FB19E3B1F18AF7100506061 /* GameSceneiPad.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */,
 				2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */,
@@ -463,7 +460,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2765A3141F1CE80D0007B075 /* GameSceneiPad.sks in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */,

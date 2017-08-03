@@ -49,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lastUpdate: TimeInterval!
     let sound = MVASound()
     var newBestDisplayed = false
+    var canUpdateSpeed = true
     private var startDate: Date?
     
     // MARK: - Gameplay
@@ -76,6 +77,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if MVAMemory.tutorialDisplayed {
                 self.spawnWithDelay(self.intel.currentLevel.spawnRate)
                 self.showHUD()
+            } else {
+                self.tutorialNode = MVATutorialNode.new(size: self.size)
+                self.tutorialNode!.alpha = 0.0
+                self.tutorialNode!.zPosition = 9.0
+                self.camera!.addChild(self.tutorialNode!)
+                self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
+                                                          SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
             }
             self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
             self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
@@ -88,12 +96,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.isUserInteractionEnabled = true
                 self.startDate = Date()
                 self.intel.updateDist = true
-            } else {
-                self.tutorialNode = MVATutorialNode.new(size: self.size)
-                self.tutorialNode!.alpha = 0.0
-                self.tutorialNode!.zPosition = 9.0
-                self.camera!.addChild(self.tutorialNode!)
-                self.tutorialNode!.run(SKAction.fadeIn(withDuration: 0.2), completion: { self.isUserInteractionEnabled = true })
             }
         }
         
@@ -169,15 +171,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         startSound()
     }
     
-    private func nextLevelSign() {
+    private func nextLevelSign(withCompletion completion: @escaping (()->())) {
         self.removeAction(forKey: "spawn")
         self.physicsWorld.speed = 0.0
+        setLevelSpeed(intel.currentLevel.playerSpeed)
+        self.canUpdateSpeed = false
         let rightScale = speedSign.xScale
         let signIN = SKAction.group([SKAction.scale(to: 0.3, duration: 0.4),SKAction.move(to: CGPoint.zero, duration: 0.4)])
         let signOUT = SKAction.group([SKAction.scale(to: rightScale, duration: 0.3),SKAction.move(to: originalSpeedPosition, duration: 0.3)])
         speedSign.run(SKAction.sequence([signIN,SKAction.wait(forDuration: 0.8),signOUT]), completion: {
             self.physicsWorld.speed = 1.0
-            self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+            self.canUpdateSpeed = true
+            completion()
         })
     }
     
@@ -220,15 +225,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 intel.update(withDeltaTime: currentTime-lastUpdate)
             }
             lastUpdate = currentTime
-            
+
             DispatchQueue.main.async {
-                if self.intel.distanceTraveled >= Double(self.intel.currentLevel.nextMilestone) && !self.playerBraking {
-                    self.intel.currentLevel.level += 1
-                    self.spawnWithDelay(self.intel.currentLevel.spawnRate)
-                    self.intel.player.changeSpeed(self.intel.currentLevel.playerSpeed)
-                    self.setLevelSpeed(self.intel.currentLevel.playerSpeed)
-                    self.nextLevelSign()
-                }
                 let newDistance = MVAWorldConverter.distanceToOdometer(self.intel.distanceTraveled)
                 if self.playerDistance != newDistance {
                     if !self.newBestDisplayed && MVAMemory.maxPlayerDistance != 0.0 && MVAMemory.maxPlayerDistance <= self.intel.distanceTraveled {
@@ -236,6 +234,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     self.playerDistance = newDistance
                     self.setDistance(newDistance)
+                    
+                    if newDistance == MVAWorldConverter.distanceToOdometer(Double(self.intel.currentLevel.nextMilestone)) && !self.playerBraking {
+                        self.intel.currentLevel.level += 1
+                        self.nextLevelSign {
+                            if !self.playerBraking {
+                                self.intel.player.changeSpeed(self.intel.currentLevel.playerSpeed)
+                            }
+                            self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+                        }
+                    }
                 }
             }
             
@@ -348,28 +356,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func acceleratePlayer() {
-        if intel.player.pointsPerSecond < intel.currentLevel.playerSpeed {
-            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: intel.player.physicsBody!.mass*500))
-            if intel.player.pointsPerSecond > 150 {
-                setLevelSpeed(intel.player.pointsPerSecond)
+        if playerBraking == false {
+            if intel.player.pointsPerSecond < intel.currentLevel.playerSpeed {
+                let forForce = CGFloat((intel.currentLevel.playerSpeed/5)*9)
+                intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: intel.player.physicsBody!.mass*forForce))
+                if intel.player.pointsPerSecond > 150 {
+                    setLevelSpeed(intel.player.pointsPerSecond)
+                }
+                if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
+                    setVolume(audioEngine.mainMixerNode.outputVolume+0.1)
+                }
+                self.perform(#selector(acceleratePlayer), with: nil, afterDelay: 0.01)
+            } else {
+                intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+                setLevelSpeed(intel.currentLevel.playerSpeed)
+                spawner.size.height = MVAConstants.baseCarSize.height*2.5
+                setVolume(1.0)
             }
-            if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
-                setVolume(audioEngine.mainMixerNode.outputVolume+0.1)
-            }
-            self.perform(#selector(acceleratePlayer), with: nil, afterDelay: 0.01)
-        } else {
-            intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
-            setLevelSpeed(intel.currentLevel.playerSpeed)
-            spawner.size.height = MVAConstants.baseCarSize.height*2.5
-            setVolume(1.0)
         }
     }
     
     func deceleratePlayer() {
         if playerBraking && intel.player.pointsPerSecond > MVAConstants.minimalBotSpeed-15 {
-            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*600))
+            let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*12)
+            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
             intel.player.brakeLight(true)
-            if intel.player.pointsPerSecond > 150 {
+            var minSpeed = 150
+            if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
+                if carInFront.pointsPerSecond > 35 {
+                    minSpeed = carInFront.pointsPerSecond
+                }
+            }
+            if intel.player.pointsPerSecond > minSpeed {
                 setLevelSpeed(intel.player.pointsPerSecond)
             } else {
                 setLevelSpeed(150)
@@ -404,7 +422,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         car.physicsBody!.isDynamic = false
                     }
                     sound.crash(onNode: node1)
-                    generateSmoke(atPoint: contact.contactPoint, forTime: 8.0)
+                    generateSmoke(atPoint: contact.contactPoint, forTime: 25.0)
                 } else {
                     for car in [node1,node2] {
                         scrape(car: car)

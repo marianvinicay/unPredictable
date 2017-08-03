@@ -76,10 +76,11 @@ class MVASpawner: SKSpriteNode {
     }
     
     private func randomCarSkin() -> MVASkin {
-        switch arc4random_uniform(4) {
+        switch arc4random_uniform(5) {
         case 0: return MVASkin.createForCar("car", withAtlas: self.textures)
         case 1: return MVASkin.createForCar("taxi", withAtlas: self.textures)
         case 2: return MVASkin.createForCar("mini_van", withAtlas: self.textures)
+        case 3: return MVASkin.createForCar("tesla", withAtlas: self.textures)
         default: return MVASkin.createForCar("prius", withAtlas: self.textures)
         }
     }

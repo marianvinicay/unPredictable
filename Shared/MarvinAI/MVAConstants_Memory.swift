@@ -18,7 +18,7 @@ enum MVAConstants {
     #if os(iOS)
     static var baseCarSize: CGSize {
         switch UIDevice.current.userInterfaceIdiom {
-        case .pad: return CGSize(width: 90.0, height: 162.0)
+        case .pad: return CGSize(width: 80.0, height: 144.0)
         default: return CGSize(width: 50.0, height: 90.0)
         }
     }

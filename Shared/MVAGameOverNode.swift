@@ -133,7 +133,10 @@ class MVAGameOverNode: SKNode {
                 activityInd.startAnimating()
                 scene!.view!.addSubview(activityInd)
                 
-                store.buy() { (purchased: Bool) in
+                self.activityInd.stopAnimating()
+                self.activityInd.removeFromSuperview()
+                self.continueInGame()
+                /*store.buy() { (purchased: Bool) in
                     self.activityInd.stopAnimating()
                     self.activityInd.removeFromSuperview()
                     if purchased {
@@ -141,7 +144,7 @@ class MVAGameOverNode: SKNode {
                     } else {
                         self.startNewGame()
                     }
-                }
+                }*/
             } else if nodes(at: touchLocation).contains(noBtt!) {
                 self.startNewGame()
             }

@@ -24,7 +24,7 @@
             left.direction = .left
             
             let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-            brake.minimumPressDuration = 0.1
+            brake.minimumPressDuration = 0.08
             
             right.delegate = self
             left.delegate = self

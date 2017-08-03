@@ -11,13 +11,7 @@ import SpriteKit
 extension GameScene {
     class func new(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
-        var gameSceneName = "GameScene"
-        #if os(iOS)
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                gameSceneName = "GameSceneiPad"
-            }
-        #endif
-        guard let scene = GameScene(fileNamed: gameSceneName) else {
+        guard let scene = GameScene(fileNamed: "GameScene") else {
             print("Failed to load GameScene.sks")
             abort()
         }
@@ -43,7 +37,7 @@ extension GameScene {
         
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
         let bestDist = MVAMemory.maxPlayerDistance.roundTo(NDecimals: 1)
-        if bestDist != 0 {
+        if bestDist != 0.0 {
             scene.recordDistance.text = "BEST: \(bestDist) \(MVAWorldConverter.lengthUnit)"
         } else {
             scene.recordDistance.text = ""

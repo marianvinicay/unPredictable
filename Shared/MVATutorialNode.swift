@@ -71,7 +71,7 @@ class MVATutorialNode: SKNode {
                 bNode.addChild(brakeLabel)
                 
                 let brake2ndLabel = MVATutorialNode.label(withText: "and drag", andName: nil)
-                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-20)
+                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-27)
                 bNode.addChild(brake2ndLabel)
                 
                 let brake3ndLabel = MVATutorialNode.label(withText: "to change direction", andName: nil)
