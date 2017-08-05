@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-#if os(OSX)
+#if os(macOS)
     extension GameScene {
         
         override func keyUp(with event: NSEvent) {
@@ -17,16 +17,30 @@ import SpriteKit
             }
         }
         
+        override func mouseUp(with event: NSEvent) {
+            if playBtt.contains(CGPoint(x: event.absoluteX, y: event.absoluteY)) {
+                startGame()
+            }
+        }
+        
         override func keyDown(with event: NSEvent) {
             interpretKeyEvents([event])
         }
         
         override func moveLeft(_ sender: Any?) {
-            handleSwipe(swipe: .left)
+            if playerBraking {
+                handleBrakingSwipe(fromPositionChange: -10)
+            } else {
+                handleSwipe(swipe: .left)
+            }
         }
         
         override func moveRight(_ sender: Any?) {
-            handleSwipe(swipe: .right)
+            if playerBraking {
+                handleBrakingSwipe(fromPositionChange: 10)
+            } else {
+                handleSwipe(swipe: .right)
+            }
         }
         
         override func moveDown(_ sender: Any?) {

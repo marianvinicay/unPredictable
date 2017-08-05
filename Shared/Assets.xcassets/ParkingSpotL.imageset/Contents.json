@@ -24,6 +24,16 @@
       "idiom" : "ipad",
       "filename" : "PL@2x.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "PL-1.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "PL@2x-1.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

@@ -1,24 +1,23 @@
 //
 //  InterfaceController.swift
-//  watchOS Extension
+//  AWatch Extension
 //
-//  Created by Majo on 25/08/16.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Majo on 04/08/2017.
+//  Copyright © 2017 MarVin. All rights reserved.
 //
 
 import WatchKit
-import Foundation
-
+import SpriteKit
 
 class InterfaceController: WKInterfaceController {
 
     @IBOutlet var skInterface: WKInterfaceSKScene!
+    private var scene: GameScene!
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        let scene = GameScene.new(withSize: self.contentFrame.size)
-        
+        scene = GameScene.new(withSize: self.contentFrame.size)
         // Present the scene
         self.skInterface.presentScene(scene)
         
@@ -29,15 +28,19 @@ class InterfaceController: WKInterfaceController {
     @IBAction func handleGesture(gestureRecognizer : WKGestureRecognizer) {
         if let swipe = gestureRecognizer as? WKSwipeGestureRecognizer {
             if swipe.direction == .right {
-                (skInterface.scene as? GameScene)?.handleSwipe(swipe: .right) //???gamescene as property?
+                scene.handleSwipe(swipe: .right)
             } else if swipe.direction == .left {
-                (skInterface.scene as? GameScene)?.handleSwipe(swipe: .left)
+                scene.handleSwipe(swipe: .left)
             }
         } else if let press = gestureRecognizer as? WKLongPressGestureRecognizer {
             if press.state == .began {
-                (skInterface.scene as? GameScene)?.handleBrake(started: true)
+                scene.handleBrake(started: true)
             } else if press.state == .ended {
-                (skInterface.scene as? GameScene)?.handleBrake(started: false)
+                scene.handleBrake(started: false)
+            }
+        } else if let tap = gestureRecognizer as? WKTapGestureRecognizer {
+            if scene.playBtt.contains(tap.locationInObject())  {
+                scene.startGame()
             }
         }
     }

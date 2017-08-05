@@ -9,8 +9,8 @@
 
 import SpriteKit
 
-public class MVACar: SKSpriteNode {
-    var mindSet: MVAMindSet
+class MVACar: SKSpriteNode {
+    var mindSet: MVAMindSet!
     var pointsPerSecond: Int {
         get {
             return Int(self.physicsBody!.velocity.dy)
@@ -66,31 +66,33 @@ public class MVACar: SKSpriteNode {
         }
     }
     
-    init(withMindSet mindSet: MVAMindSet, andSkin textures: MVASkin) {
-        self.mindSet = mindSet
+    class func new(withMindSet mindSet: MVAMindSet, andSkin textures: MVASkin) -> MVACar {
         let carSize = MVAConstants.baseCarSize
-        self.skin = textures
-        super.init(texture: self.skin.normal, color: .clear, size: carSize)
+        let newCar = MVACar(texture: textures.normal, color: .clear, size: carSize)
+        newCar.mindSet = mindSet
+        newCar.skin = textures
         /*self.textNode = SKLabelNode(text: "")
         self.textNode.fontSize = 20.0
         self.textNode.fontName = UIFont.systemFont(ofSize: 20, weight: 5).fontName
         self.textNode.fontColor = UIColor.white
         self.addChild(self.textNode)
         drawSensors()*/
-        self.zPosition = 4.0
+        newCar.zPosition = 4.0
         
-        physicsBody = SKPhysicsBody(texture: self.skin.normal, size: carSize)
-        physicsBody?.mass = 5
-        physicsBody?.density = 5000.0
-        physicsBody?.friction = 0.0
-        physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.isDynamic = true
-        physicsBody?.linearDamping = 0.0
-        physicsBody?.angularDamping = 0.2
-        physicsBody?.affectedByGravity = false
-        physicsBody?.allowsRotation = true
+        newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: carSize)
+        newCar.physicsBody?.mass = 5
+        newCar.physicsBody?.density = 5000.0
+        newCar.physicsBody?.friction = 0.0
+        newCar.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
+        newCar.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
+        newCar.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
+        newCar.physicsBody?.isDynamic = true
+        newCar.physicsBody?.linearDamping = 0.0
+        newCar.physicsBody?.angularDamping = 0.2
+        newCar.physicsBody?.affectedByGravity = false
+        newCar.physicsBody?.allowsRotation = true
+        
+        return newCar
     }
     
     class func resetPhysicsBody(forCar car: MVACar) {
@@ -98,7 +100,11 @@ public class MVACar: SKSpriteNode {
         car.physicsBody?.mass = 5
         car.physicsBody?.density = 5000.0
         car.physicsBody?.friction = 0.0
-        car.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
+        if car.mindSet == .player {
+            car.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue //???
+        } else {
+            car.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
+        }
         car.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         car.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         car.physicsBody?.isDynamic = true
@@ -119,11 +125,6 @@ public class MVACar: SKSpriteNode {
             }
         }
     }*/
-    
-    //???
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     func responseFromSensors(inPositions positions: [MVAPosition]) -> Set<MVACar> {
         var foundCars = Set<MVACar>()

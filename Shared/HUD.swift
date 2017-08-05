@@ -8,15 +8,17 @@
 
 import SpriteKit
 
-class HUDLabel: SKSpriteNode {
-    var label: SKLabelNode {
-        return self.childNode(withName: "label") as! SKLabelNode
+struct HUDLabel {
+    static func giveMeLabel(fromNode node: SKSpriteNode) -> SKLabelNode {
+        return node.childNode(withName: "label") as! SKLabelNode
     }
-    var label1: SKLabelNode? {
-        return self.childNode(withName: "label1") as? SKLabelNode
+    
+    static func giveMeLabel1(fromNode node: SKSpriteNode) -> SKLabelNode? {
+        return node.childNode(withName: "label1") as? SKLabelNode
     }
-    var label2: SKLabelNode? {
-        return self.childNode(withName: "label2") as? SKLabelNode
+    
+    static func giveMeLabel2(fromNode node: SKSpriteNode) -> SKLabelNode? {
+        return node.childNode(withName: "label2") as? SKLabelNode
     }
 }
 
@@ -25,14 +27,20 @@ extension GameScene {
         let decIndex = numStr.index(numStr.startIndex, offsetBy: 4)
         let normalNum = numStr.substring(to: decIndex)
         let decimNum = numStr.substring(with: decIndex..<numStr.endIndex)
+        HUDLabel.giveMeLabel(fromNode: distanceSign).text = normalNum
+        HUDLabel.giveMeLabel1(fromNode: distanceSign)!.text = decimNum
+        HUDLabel.giveMeLabel2(fromNode: distanceSign)!.text = MVAWorldConverter.lengthUnit
+        /*
         distanceSign.label.text = normalNum
         distanceSign.label1?.text = decimNum
         distanceSign.label2?.text = MVAWorldConverter.lengthUnit
+         */
     }
     
     func setLevelSpeed(_ spd: Int) {
         if canUpdateSpeed {
-            speedSign.label.text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
+            HUDLabel.giveMeLabel(fromNode: speedSign).text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
+            //speedSign.label.text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))
         }
     }
     

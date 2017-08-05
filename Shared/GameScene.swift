@@ -32,9 +32,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var originalPausePosition: CGPoint!
     
     // MARK: Gameplay Sprites
-    var speedSign: HUDLabel!
+    var speedSign: SKSpriteNode!
     var originalSpeedPosition: CGPoint!
-    var distanceSign: HUDLabel!
+    var distanceSign: SKSpriteNode!
     var originalDistancePosition: CGPoint!
     var recordDistance: SKLabelNode!
     var roadNodes = Set<MVARoadNode>()
@@ -193,7 +193,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         label.text = "New Best!"
         label.verticalAlignmentMode = .bottom
         label.horizontalAlignmentMode = .left
-        label.position = CGPoint(x: distanceSign.position.x+distanceSign.size.width+10, y: (-self.size.height/2)+label.frame.height)//???
+        label.position = CGPoint(x: distanceSign.position.x+distanceSign.size.width+10, y: (-self.size.height/2)+label.frame.height)
         label.zPosition = 7.0
         label.name = "nBest"
         let addAct = SKAction.run {
@@ -306,12 +306,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func handleSwipe(swipe: MVAPosition) {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard intel.player.mindSet == .player else { return }
-            sound.indicate(onNode: intel.player)
-            let laneChanged = intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player)
-            
-            if laneChanged && tutorialNode?.stage == 0 {
-                spawnWithDelay(intel.currentLevel.spawnRate)
-                tutorialNode!.continueToBraking()
+            if intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player) {
+                sound.indicate(onNode: intel.player)
+                
+                if tutorialNode?.stage == 0 {
+                    spawnWithDelay(intel.currentLevel.spawnRate)
+                    tutorialNode!.continueToBraking()
+                }
             }
         }
     }
@@ -381,9 +382,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*12)
             intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
             intel.player.brakeLight(true)
+            
             var minSpeed = 150
             if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
-                if carInFront.pointsPerSecond > 35 {
+                if carInFront.pointsPerSecond > 35 && carInFront.pointsPerSecond < 110 {
                     minSpeed = carInFront.pointsPerSecond
                 }
             }

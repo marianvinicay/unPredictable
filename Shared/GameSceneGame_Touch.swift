@@ -5,11 +5,56 @@
 //  Created by Majo on 25/06/2017.
 //  Copyright © 2017 MarVin. All rights reserved.
 //
+import SpriteKit
+
+extension GameScene {
+    func pauseGame(withAnimation anim: Bool) {
+        if !isPaused {
+            self.intel.stop = true
+            physicsWorld.speed = 0.0
+            self.hideHUD(animated: anim)
+            self.fadeOutVolume()
+            if anim {
+                self.playBtt.setScale(0.0)
+                self.recordDistance.setScale(0.0)
+                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+                self.recordDistance.run(SKAction.scale(to: 1.0, duration: 0.6))
+                self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
+                    NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+                    self.isPaused = true
+                })
+            } else {
+                self.playBtt.setScale(1.0)
+                self.recordDistance.setScale(1.0)
+                self.camera!.childNode(withName: "over")?.alpha = 1.0
+                self.isPaused = true
+                NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+            }
+            if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
+                let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
+                self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
+            }
+        }
+    }
+    
+    func resumeGame() {
+        self.isPaused = false
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+        self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
+        self.showHUD()
+        self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.6))
+        self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
+            self.physicsWorld.speed = 1.0
+            self.intel.stop = false
+            self.fadeInVolume()
+        })
+    }
+}
+
 #if os(iOS) || os(tvOS)
-    import SpriteKit
+    // MARK: - Touch handling
     import UIKit
     
-    // Touch-based event handling
     extension GameScene: UIGestureRecognizerDelegate {
         
         override func didMove(to view: SKView) {
@@ -63,47 +108,6 @@
                 }
             default: break
             }
-        }
-        
-        func pauseGame(withAnimation anim: Bool) {
-            if !isPaused {
-                self.intel.stop = true
-                physicsWorld.speed = 0.0
-                self.hideHUD(animated: anim)
-                self.fadeOutVolume()
-                if anim {
-                    self.playBtt.setScale(0.0)
-                    self.recordDistance.setScale(0.0)
-                    self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
-                    self.recordDistance.run(SKAction.scale(to: 1.0, duration: 0.6))
-                    self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
-                        self.isPaused = true
-                    })
-                } else {
-                    self.playBtt.setScale(1.0)
-                    self.recordDistance.setScale(1.0)
-                    self.camera!.childNode(withName: "over")?.alpha = 1.0
-                    self.isPaused = true
-                }
-                if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
-                    let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
-                    self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
-                }
-                NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
-            }
-        }
-        
-        func resumeGame() {
-            self.isPaused = false
-            NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
-            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
-            self.showHUD()
-            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.6))
-            self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
-                self.physicsWorld.speed = 1.0
-                self.intel.stop = false
-                self.fadeInVolume()
-            })
         }
         
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -7,9 +7,14 @@
 //
 
 import GameKit
+#if os(iOS) || os(tvOS)
+    import UIKit
+#endif
 
-class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
-    var authenticationViewController: UIViewController?
+class MVAGameCenterHelper: NSObject {
+    #if os(iOS) || os(tvOS) || os(macOS)
+        var authenticationViewController: GKGameCenterViewController?
+    #endif
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
     static let toggleBtts = Notification.Name(rawValue: "toggleBtts")
@@ -25,16 +30,26 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
     
     func authenticateLocalPlayer() {
         let localPlayer = GKLocalPlayer.localPlayer()
-        localPlayer.authenticateHandler = { (viewController, error) in
-            if viewController != nil {
-                self.authenticationViewController = viewController
-                NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
-            } else if localPlayer.isAuthenticated {
-                MVAMemory.enableGameCenter = true
-            } else {
-                MVAMemory.enableGameCenter = false
+        #if os(iOS) || os(tvOS)
+            localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
+                if viewController != nil {
+                    self.authenticationViewController = viewController as? GKGameCenterViewController
+                    NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
+                } else if localPlayer.isAuthenticated {
+                    MVAMemory.enableGameCenter = true
+                } else {
+                    MVAMemory.enableGameCenter = false
+                }
             }
-        }
+        #elseif os(watchOS)
+            localPlayer.authenticateHandler = { (error: Error?) in
+                if localPlayer.isAuthenticated && error == nil {
+                    MVAMemory.enableGameCenter = true
+                } else {
+                    MVAMemory.enableGameCenter = false
+                }
+            }
+        #endif
     }
     
     func reportDistance(_ dist: Double, errorHandler: ((Error?)->Void)? = nil) {
@@ -57,22 +72,26 @@ class MVAGameCenterHelper: NSObject, GKGameCenterControllerDelegate {
         GKScore.report([gkScore], withCompletionHandler: errorHandler)
     }
     
-    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-            gameCenterViewController.dismiss(animated: true, completion: nil)
-    }
-    
-    func showGKGameCenterViewController(viewController: UIViewController) {
-        if GKLocalPlayer.localPlayer().isAuthenticated {
-            let gameCenterViewController = GKGameCenterViewController()
-            gameCenterViewController.gameCenterDelegate = self
-            viewController.present(gameCenterViewController,
-                                   animated: true, completion: nil)
-        } else {
-            authenticateLocalPlayer()
-        }
-    }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
 }
+//???
+#if os(iOS) || os(tvOS)
+    extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
+        func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+            gameCenterViewController.dismiss(animated: true, completion: nil)
+        }
+        
+        func showGKGameCenterViewController(viewController: UIViewController) {
+            if GKLocalPlayer.localPlayer().isAuthenticated {
+                let gameCenterViewController = GKGameCenterViewController()
+                gameCenterViewController.gameCenterDelegate = self
+                viewController.present(gameCenterViewController,
+                                       animated: true, completion: nil)
+            } else {
+                authenticateLocalPlayer()
+            }
+        }
+    }
+#endif

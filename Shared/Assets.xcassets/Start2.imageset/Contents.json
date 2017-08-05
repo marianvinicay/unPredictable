@@ -24,6 +24,21 @@
       "idiom" : "ipad",
       "filename" : "Start2iPad@2x.png",
       "scale" : "2x"
+    },
+    {
+      "idiom" : "watch",
+      "filename" : "Apple Watch Start2@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Start2iPad-1.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Start2iPad@2x-1.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

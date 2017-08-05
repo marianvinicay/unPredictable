@@ -42,10 +42,10 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
         
+        scene.intel.healthKHelper.initiateKit()
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer()
         }
-        scene.intel.healthKHelper.initiateKit()
     }
 
     override var shouldAutorotate: Bool {

@@ -15,7 +15,8 @@ class GameViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let size = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
+        let size = CGSize(width: 1024, height: 1366)
+        NSApp.mainWindow?.minSize = NSSize(width: 1024, height: 1366)
         gameScene = GameScene.new(withSize: size)
         
         // Present the scene
@@ -30,9 +31,6 @@ class GameViewController: NSViewController {
 
     override func viewDidAppear() {
         super.viewDidAppear()
-        if let oldOrigin = NSApp.mainWindow?.frame.origin {
-            NSApp.mainWindow?.setFrame(NSRect(origin: oldOrigin, size: gameScene.size), display: true)
-        }
     }
     
 }

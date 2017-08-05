@@ -11,6 +11,7 @@ import SpriteKit
 extension GameScene {
     class func new(withSize deviceSize: CGSize) -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
+        
         guard let scene = GameScene(fileNamed: "GameScene") else {
             print("Failed to load GameScene.sks")
             abort()
@@ -24,12 +25,12 @@ extension GameScene {
         scene.originalPausePosition = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
         scene.pauseBtt.position = scene.originalPausePosition
         
-        scene.speedSign = scene.camera!.childNode(withName: "speed") as! HUDLabel
+        scene.speedSign = scene.camera!.childNode(withName: "speed") as! SKSpriteNode
         scene.originalSpeedPosition = CGPoint(x: -(scene.size.width/2)+scene.speedSign.size.width/2, y: (scene.size.height/2)-scene.speedSign.size.height/2)
         scene.speedSign.position = scene.originalSpeedPosition
         scene.camera!.childNode(withName: "spdB")!.position = scene.originalSpeedPosition
         
-        scene.distanceSign = scene.camera!.childNode(withName: "distance") as! HUDLabel
+        scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
         scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
         scene.distanceSign.position = scene.originalDistancePosition
         scene.camera!.childNode(withName: "down")!.position = CGPoint(x: 0.0, y: -scene.size.height/2)
@@ -53,7 +54,7 @@ extension GameScene {
     
     private func spawnPlayer() {
         let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
-        let player = MVACar(withMindSet: .player, andSkin: pSkin)
+        let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
@@ -81,7 +82,7 @@ extension GameScene {
         let start2Texture = SKTexture(imageNamed: "Start2")
         for _ in 0..<3 {
             let road = MVARoadNode.createWith(texture: start2Texture, height: self.size.height, andWidth: self.size.width)
-            if  arc4random_uniform(2) == 1 {
+            if  arc4random_uniform(2) == 3 {
                 let pSpot = arc4random_uniform(2) == 0 ? SKSpriteNode(imageNamed: "ParkingSpotR"):SKSpriteNode(imageNamed: "ParkingSpotL")
                 pSpot.anchorPoint.y = 1.0
                 pSpot.size = pSpot.size.adjustSize(toNewWidth: road.size.width)
@@ -176,10 +177,10 @@ extension GameScene {
         intel.gameCHelper.reportCrashedCar(newCC)
         
         intel.reset()
-        spawnPlayer()
         
         endOfWorld = 0.0
         spawnStartRoad()
+        spawnPlayer()
         
         spawner.size.height = MVAConstants.baseCarSize.height*2.5
         remover.position = CGPoint(x: 0.0, y: -frame.height)

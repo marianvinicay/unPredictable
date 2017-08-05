@@ -8,7 +8,7 @@
 
 import SpriteKit
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 class MVARoadNode: SKSpriteNode {
@@ -18,17 +18,19 @@ class MVARoadNode: SKSpriteNode {
         road.size = CGSize(width: width, height: height)
         
         if lanePositions.isEmpty {
-            var numberOfLanes = 3
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                numberOfLanes = 4
-            }
-            let createLanes = numberOfLanes-1
+            var numberOfLanes = 2
             var sidesWidthCombined = (width*(1/3))-20
-            #if os(iOS)
+            #if os(iOS) || os(tvOS)
+                numberOfLanes = 3
                 if UIDevice.current.userInterfaceIdiom == .pad {
+                    numberOfLanes = 4
                     sidesWidthCombined = width*(1/4)-20
                 }
+            #elseif os(macOS)
+                numberOfLanes = 4
             #endif
+            let createLanes = numberOfLanes-1
+
             let laneWidth = (width-sidesWidthCombined)/CGFloat(numberOfLanes)
             
             var tempCoordinates = -(width/2)
@@ -38,9 +40,11 @@ class MVARoadNode: SKSpriteNode {
             lanePositions[0] = Int(tempCoordinates+laneWidth/2)
             tempCoordinates += laneWidth
             
-            for i in 1..<createLanes {
-                lanePositions[i] = Int(tempCoordinates+laneWidth/2)
-                tempCoordinates += laneWidth
+            if numberOfLanes > 2 {
+                for i in 1..<createLanes {
+                    lanePositions[i] = Int(tempCoordinates+laneWidth/2)
+                    tempCoordinates += laneWidth
+                }
             }
             
             //lastLane

@@ -9,7 +9,7 @@
 import Foundation
 import CoreGraphics
 #if os(iOS)
-import UIKit
+    import UIKit
 #endif
 
 enum MVAConstants {
@@ -22,14 +22,17 @@ enum MVAConstants {
         default: return CGSize(width: 50.0, height: 90.0)
         }
     }
-    #else
-    static let baseCarSize = CGSize(width: 50.0, height: 90.0)
+    #elseif os(watchOS)
+        static let baseCarSize = CGSize(width: 20.0, height: 36.0)
+    #elseif os(macOS)
+        static let baseCarSize = CGSize(width: 80.0, height: 144.0)
     #endif
     static let priorityTime: Double = 2.5
     static var baseBotSpeed: Int {
         return Int(arc4random_uniform(50))+MVAConstants.minimalBotSpeed
     }
     static let minimalBotSpeed: Int = 60
+    static let maxBotSpeed: Int = 110
 }
 
 enum MVAMemory {

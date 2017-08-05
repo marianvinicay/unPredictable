@@ -15,7 +15,7 @@ class MVAGameOverNode: SKNode {
     private var countD: SKLabelNode?
     private var countDown = 6
     
-    weak var store: MVAStore!
+    var store: MVAStore!
     var completion: ((Bool)->())?
     
     class func new(size: CGSize, offerPurchase: Bool) -> MVAGameOverNode {
@@ -118,8 +118,8 @@ class MVAGameOverNode: SKNode {
         removeFromParent()
     }
     
+    #if os(iOS) || os(tvOS)
     private var activityInd: UIActivityIndicatorView!
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touchLocation = touches.first!.location(in: self)
         countD?.removeFromParent()
@@ -152,5 +152,5 @@ class MVAGameOverNode: SKNode {
             startNewGame()
         }
     }
-    
+    #endif
 }
