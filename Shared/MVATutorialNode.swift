@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Crashlytics
 
 class MVATutorialNode: SKNode {
     private var dispSize: CGSize!
@@ -105,6 +106,8 @@ class MVATutorialNode: SKNode {
         let act = SKAction.run {
             self.run(SKAction.fadeOut(withDuration: 0.2), completion: { completion() })
         }
+        
+        Answers.logCustomEvent(withName: "TutorialEnded", customAttributes: nil)
         
         wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
                                           SKAction.wait(forDuration: 1),

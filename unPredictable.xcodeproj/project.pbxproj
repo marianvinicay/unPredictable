@@ -115,6 +115,12 @@
 		2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67C1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67D1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
+		2FAFA6891F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
+		2FAFA68A1F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
+		2FAFA68B1F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
+		2FAFA68C1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
+		2FAFA68D1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
+		2FAFA68E1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
 		2FB19E391F17A65800506061 /* GameSceneKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */; };
 		2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD6CDAF1F34702200FD9B96 /* Interface.storyboard */; };
 		2FD6CDBA1F34702200FD9B96 /* AWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2FD6CDB91F34702200FD9B96 /* AWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -228,6 +234,8 @@
 		2FAFA6741F34C804006645CB /* GameSceneWatch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneWatch.sks; sourceTree = "<group>"; };
 		2FAFA6761F35A2AA006645CB /* StartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
 		2FAFA6781F35A48E006645CB /* Futura.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Futura.ttc; sourceTree = "<group>"; };
+		2FAFA6871F36EC2D006645CB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		2FAFA6881F36EC2D006645CB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneKeyboard.swift; sourceTree = "<group>"; };
 		2FD6CDAD1F34702200FD9B96 /* AWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD6CDB01F34702200FD9B96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -245,7 +253,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FAFA66E1F34B102006645CB /* HealthKit.framework in Frameworks */,
+				2FAFA68C1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 				2FAFA66C1F34B0F9006645CB /* GameKit.framework in Frameworks */,
+				2FAFA6891F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
 				2F71196A1F287E0300FE58A8 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +264,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAFA68A1F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
+				2FAFA68D1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +273,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAFA68B1F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
+				2FAFA68E1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +313,8 @@
 				2F23E13D1D6EF21D00119E4F /* tvOS */,
 				2F23E14B1D6EF21D00119E4F /* macOS */,
 				2F23E1121D6EF21D00119E4F /* Products */,
+				2FAFA6871F36EC2D006645CB /* Crashlytics.framework */,
+				2FAFA6881F36EC2D006645CB /* Fabric.framework */,
 				276694BA1F21FF4200E70D15 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -434,6 +450,7 @@
 				2F23E10E1D6EF21D00119E4F /* Frameworks */,
 				2F23E10F1D6EF21D00119E4F /* Resources */,
 				2F23E16C1D6EF21D00119E4F /* Embed Watch Content */,
+				2FAFA67E1F36EA2A006645CB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -668,6 +685,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2FAFA67E1F36EA2A006645CB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 661d346440292177133f4f55e1db13108211f63d 8f683a7c6859dc7e6a47c42b94eb01a1401f94947d0948a7b5d79807bac01223";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2F23E10D1D6EF21D00119E4F /* Sources */ = {
@@ -934,10 +967,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9K9H4YXRT5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -960,6 +995,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -982,6 +1018,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = tvOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1002,6 +1039,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = tvOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1024,6 +1062,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -1045,6 +1084,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pod",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

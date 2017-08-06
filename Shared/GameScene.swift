@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Crashlytics
 #if os(iOS)
 import UIKit
 #endif
@@ -104,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
-            var offP = false
+            var offP = true//false
             if tutorialNode == nil {
                 if intel.distanceTraveled < 8.0 {
                     timesCrashed += 1
@@ -145,6 +146,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             self.run(curtainDown)
+            
+            Answers.logCustomEvent(withName: "Ended_In_Level_\(intel.currentLevel.level)", customAttributes: nil)
             //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
     }
@@ -379,7 +382,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func deceleratePlayer() {
         if playerBraking && intel.player.pointsPerSecond > MVAConstants.minimalBotSpeed-15 {
-            let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*12)
+            let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*13)
             intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
             intel.player.brakeLight(true)
             

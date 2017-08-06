@@ -167,9 +167,13 @@ class MVACar: SKSpriteNode {
                     let newLaneCoor = CGFloat(lanePositions[newLane]!)
                     currentLane = newLane
                     let angle: CGFloat = dir == .left ? 0.5:-0.5
-                    let turnIn = SKAction.rotate(toAngle: angle, duration: 0.2)
-                    let move = SKAction.moveTo(x: newLaneCoor, duration: 0.2)
-                    let turnOut = SKAction.rotate(toAngle: 0.0, duration: 0.2)
+                    var defTurnTime = 0.2
+                    if pointsPerSecond > 649 {
+                        defTurnTime = 0.15
+                    }
+                    let turnIn = SKAction.rotate(toAngle: angle, duration: defTurnTime)
+                    let move = SKAction.moveTo(x: newLaneCoor, duration: defTurnTime)
+                    let turnOut = SKAction.rotate(toAngle: 0.0, duration: defTurnTime)
                     turnIn.timingMode = .easeIn
                     move.timingMode = .linear
                     turnOut.timingMode = .easeOut

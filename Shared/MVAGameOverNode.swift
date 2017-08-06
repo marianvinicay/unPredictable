@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Crashlytics
 
 class MVAGameOverNode: SKNode {
     
@@ -116,6 +117,12 @@ class MVAGameOverNode: SKNode {
         completion?(true)
         removeAllChildren()
         removeFromParent()
+        Answers.logPurchase(withPrice: 0.49,
+                                     currency: "EUR",
+                                     success: true,
+                                     itemName: "Continue After Crash",
+                                     itemType: "Consumable",
+                                     itemId: nil)
     }
     
     #if os(iOS) || os(tvOS)

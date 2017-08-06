@@ -9,8 +9,8 @@ import SpriteKit
 #if os(iOS) || os(tvOS) || os(macOS)
     class MVASound {
         private let normalCarSound = SKAudioNode(fileNamed: "SUV_steady_low_rpm")
-        private let startCarSound = SKAction.playSoundFileNamed("SUV_ignition_02", waitForCompletion: false)
-        private let indicatorSound = SKAction.playSoundFileNamed("Grand_Tourer_signal_lights_loop", waitForCompletion: false)
+        private let startCarSound = SKAction.playSoundFileNamed("SUV_ignition_02", waitForCompletion: true)
+        private let indicatorSound = SKAction.playSoundFileNamed("Grand_Tourer_signal_lights_loop", waitForCompletion: true)
         private let crashSound = SKAction.playSoundFileNamed("crash", waitForCompletion: false)
         
         func playerSound(_ car: SKNode) {

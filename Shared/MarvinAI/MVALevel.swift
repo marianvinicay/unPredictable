@@ -13,7 +13,12 @@ class MVALevel {
     var level: Int {
         willSet {
             playerSpeed = MVAConstants.basePlayerSpeed+(50*newValue)
-            spawnRate = MVAConstants.baseSpawnTime*(1-Double(newValue-1)*0.2)//??? 0.3
+            let spawnT = abs(MVAConstants.baseSpawnTime-(Double(newValue-1)/2.96))
+            if spawnT < 0.6 {
+                spawnRate = 0.6
+            } else {
+                spawnRate = spawnT
+            }
         }
     }
     

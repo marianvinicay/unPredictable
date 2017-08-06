@@ -33,7 +33,8 @@ extension GameScene {
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
         scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
         scene.distanceSign.position = scene.originalDistancePosition
-        scene.camera!.childNode(withName: "down")!.position = CGPoint(x: 0.0, y: -scene.size.height/2)
+        //scene.camera!.childNode(withName: "down")!.position = CGPoint(x: 0.0, y: -scene.size.height/2)
+        (scene.camera!.childNode(withName: "down") as! SKSpriteNode).size.width = scene.size.width
         (scene.camera!.childNode(withName: "over") as! SKSpriteNode).size = scene.size
         
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
