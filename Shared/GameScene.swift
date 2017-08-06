@@ -105,7 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
-            var offP = true//false
+            var offP = false
             if tutorialNode == nil {
                 if intel.distanceTraveled < 8.0 {
                     timesCrashed += 1

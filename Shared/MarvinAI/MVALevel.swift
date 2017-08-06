@@ -16,6 +16,8 @@ class MVALevel {
             let spawnT = abs(MVAConstants.baseSpawnTime-(Double(newValue-1)/2.96))
             if spawnT < 0.6 {
                 spawnRate = 0.6
+            } else if spawnT > 2.2 {
+                spawnRate = 2.2
             } else {
                 spawnRate = spawnT
             }
@@ -23,7 +25,7 @@ class MVALevel {
     }
     
     var nextMilestone: Int {
-        return Int(pow(Double(level), 2.0))
+        return Int(pow(Double(level), 1.8))
     }
     
     var playerSpeed = MVAConstants.basePlayerSpeed
@@ -32,7 +34,15 @@ class MVALevel {
     
     init(level: Int) {
         playerSpeed = MVAConstants.basePlayerSpeed+(50*level)
-        spawnRate = MVAConstants.baseSpawnTime*(1-Double(level-1)*0.15)
+        let spawnT = abs(MVAConstants.baseSpawnTime-(Double(level-1)/2.96))
+        if spawnT < 0.6 {
+            spawnRate = 0.6
+        } else if spawnT > 2.2 {
+            spawnRate = 2.2
+        } else {
+            spawnRate = spawnT
+        }
+        
         self.level = level
     }
 }
