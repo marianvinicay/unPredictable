@@ -11,6 +11,11 @@ import GameKit
     import UIKit
 #endif
 
+enum MVAAchievements {
+    static let firstCrash: String = "com.mva.unpredictable.first_Crash"
+    static let aroundEarth: String = "com.mva.unpredictable.around_Earth"
+}
+
 class MVAGameCenterHelper: NSObject {
     #if os(iOS) || os(tvOS) || os(macOS)
         var authenticationViewController: GKGameCenterViewController?
@@ -52,7 +57,7 @@ class MVAGameCenterHelper: NSObject {
         #endif
     }
     
-    func reportDistance(_ dist: Double, errorHandler: ((Error?)->Void)? = nil) {
+    func report(distance dist: Double) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
         let gkScore = GKScore(leaderboardIdentifier: "com.mva.unpredictable.distance_traveled")
         if Locale.current.usesMetricSystem {
@@ -62,18 +67,25 @@ class MVAGameCenterHelper: NSObject {
             // dist in MI convert to KM bc leaderboards are in KM
             gkScore.value = Int64(MVAWorldConverter.milesToKilometers(dist)*10)
         }
-        GKScore.report([gkScore], withCompletionHandler: errorHandler)
+        GKScore.report([gkScore], withCompletionHandler: nil)
     }
     
-    func reportCrashedCar(_ numOfCars: Int64, errorHandler: ((Error?)->Void)? = nil) {
+    func report(crashedCars numOfCars: Int64) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
         let gkScore = GKScore(leaderboardIdentifier: "com.mva.unpredictable.crashed_cars")
         gkScore.value = numOfCars
-        GKScore.report([gkScore], withCompletionHandler: errorHandler)
+        GKScore.report([gkScore], withCompletionHandler: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func report(achievement: String) {
+        guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
+        let ach = GKAchievement(identifier: achievement)
+        ach.showsCompletionBanner = true
+        GKAchievement.report([ach], withCompletionHandler: nil)
     }
 }
 //???

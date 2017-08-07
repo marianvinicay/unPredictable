@@ -49,6 +49,31 @@ extension GameScene {
             self.fadeInVolume()
         })
     }
+    
+    func checkAchievements() {
+        if MVAMemory.enableGameCenter {
+            let newDist = MVAMemory.accumulatedDistance + intel.distanceTraveled
+            MVAMemory.accumulatedDistance = newDist
+            if newDist > 12_742 {
+                intel.gameCHelper.report(achievement: MVAAchievements.aroundEarth)
+            }
+            
+            if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
+                let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
+                MVAMemory.maxPlayerDistance = maxDist
+                intel.gameCHelper.report(distance: maxDist)
+                self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
+            }
+            
+            let newCC = MVAMemory.crashedCars+Int64(1)
+            MVAMemory.crashedCars = newCC
+            intel.gameCHelper.report(crashedCars: newCC)
+            switch newCC {
+            case 1: intel.gameCHelper.report(achievement: MVAAchievements.firstCrash)
+            default: break
+            }
+        }
+    }
 }
 
 #if os(iOS) || os(tvOS)

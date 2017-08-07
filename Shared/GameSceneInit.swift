@@ -166,17 +166,6 @@ extension GameScene {
         
         setLevelSpeed(0)
         setDistance(MVAWorldConverter.distanceToOdometer(0.0))
-        
-        if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
-            let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
-            MVAMemory.maxPlayerDistance = maxDist
-            intel.gameCHelper.reportDistance(maxDist)
-            self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
-        }
-        let newCC = (MVAMemory.crashedCars)+Int64(1)
-        MVAMemory.crashedCars = newCC
-        intel.gameCHelper.reportCrashedCar(newCC)
-        
         intel.reset()
         
         endOfWorld = 0.0

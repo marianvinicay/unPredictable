@@ -72,6 +72,15 @@ enum MVAMemory {
         }
     }
     
+    static var accumulatedDistance: Double {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "accDist")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "accDist") as? Double ?? 0.0
+        }
+    }
+    
     static var enableGameCenter: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "enGC")

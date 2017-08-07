@@ -147,6 +147,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.run(curtainDown)
             
+            checkAchievements()
+
             Answers.logCustomEvent(withName: "Ended_In_Level_\(intel.currentLevel.level)", customAttributes: nil)
             //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
@@ -381,24 +383,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func deceleratePlayer() {
-        if playerBraking && intel.player.pointsPerSecond > MVAConstants.minimalBotSpeed-15 {
-            let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*13)
-            intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
-            intel.player.brakeLight(true)
-            
+        if playerBraking {
             var minSpeed = 150
             if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
-                if carInFront.pointsPerSecond > 35 && carInFront.pointsPerSecond < 110 {
+                if carInFront.pointsPerSecond > 35 && carInFront.pointsPerSecond < 111 {
                     minSpeed = carInFront.pointsPerSecond
                 }
             }
+
             if intel.player.pointsPerSecond > minSpeed {
-                setLevelSpeed(intel.player.pointsPerSecond)
-            } else {
-                setLevelSpeed(150)
-            }
-            if self.audioEngine.mainMixerNode.outputVolume > 0.4 {
-                setVolume(audioEngine.mainMixerNode.outputVolume-0.1)
+                let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*13)
+                intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
+                intel.player.brakeLight(true)
+                if intel.player.pointsPerSecond > minSpeed {
+                    setLevelSpeed(intel.player.pointsPerSecond)
+                } else {
+                    setLevelSpeed(150)
+                }
+                if self.audioEngine.mainMixerNode.outputVolume > 0.4 {
+                    setVolume(audioEngine.mainMixerNode.outputVolume-0.1)
+                }
             }
             self.perform(#selector(deceleratePlayer), with: nil, afterDelay: 0.01)
         }

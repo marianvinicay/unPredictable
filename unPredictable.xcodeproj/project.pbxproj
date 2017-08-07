@@ -121,6 +121,11 @@
 		2FAFA68C1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
 		2FAFA68D1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
 		2FAFA68E1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
+		2FAFA6901F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
+		2FAFA6911F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
+		2FAFA6921F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
+		2FAFA6931F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
+		2FAFA6941F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
 		2FB19E391F17A65800506061 /* GameSceneKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */; };
 		2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD6CDAF1F34702200FD9B96 /* Interface.storyboard */; };
 		2FD6CDBA1F34702200FD9B96 /* AWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2FD6CDB91F34702200FD9B96 /* AWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -236,6 +241,7 @@
 		2FAFA6781F35A48E006645CB /* Futura.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Futura.ttc; sourceTree = "<group>"; };
 		2FAFA6871F36EC2D006645CB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		2FAFA6881F36EC2D006645CB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		2FAFA68F1F3897B1006645CB /* ChangeCar.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ChangeCar.sks; sourceTree = "<group>"; };
 		2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneKeyboard.swift; sourceTree = "<group>"; };
 		2FD6CDAD1F34702200FD9B96 /* AWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD6CDB01F34702200FD9B96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -329,6 +335,7 @@
 				2F861B951F1CD49F00162EDA /* Sounds */,
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
+				2FAFA68F1F3897B1006645CB /* ChangeCar.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */,
 				2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */,
@@ -617,6 +624,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAFA6901F3897B1006645CB /* ChangeCar.sks in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
@@ -638,6 +646,7 @@
 				2F861B661F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1441D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B7F1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
+				2FAFA6911F3897B1006645CB /* ChangeCar.sks in Resources */,
 				2F65AA2D1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8E1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2FAFA67A1F35A48E006645CB /* Futura.ttc in Resources */,
@@ -654,6 +663,7 @@
 				2F861B671F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B801F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
+				2FAFA6921F3897B1006645CB /* ChangeCar.sks in Resources */,
 				2F65AA2E1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8F1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */,
@@ -666,6 +676,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAFA6931F3897B1006645CB /* ChangeCar.sks in Resources */,
 				2FAFA67C1F35A48E006645CB /* Futura.ttc in Resources */,
 				2FD6CDDA1F3470AF00FD9B96 /* Assets.xcassets in Resources */,
 				2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */,
@@ -678,6 +689,7 @@
 			files = (
 				2FAFA6751F34C804006645CB /* GameSceneWatch.sks in Resources */,
 				2FD6CDEA1F3471FD00FD9B96 /* GameScene.sks in Resources */,
+				2FAFA6941F3897B1006645CB /* ChangeCar.sks in Resources */,
 				2F2749861F34831A006AE32D /* Assets.xcassets in Resources */,
 				2FD6CDF31F3471FD00FD9B96 /* MVAParticle.sks in Resources */,
 				2FAFA67D1F35A48E006645CB /* Futura.ttc in Resources */,
