@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>AD_UNIT_ID_FOR_REWARDED_VIDEO_TEST</key>
+	<string>ca-app-pub-3940256099942544/1712485313</string>
+	<key>CLIENT_ID</key>
+	<string>385885402473-ia8m84pfqr27d89mq5mpf2u71t7r2sur.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.385885402473-ia8m84pfqr27d89mq5mpf2u71t7r2sur</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBHul4q2tbs5sALP8OvzCf1voRSyF2qS1M</string>
+	<key>GCM_SENDER_ID</key>
+	<string>385885402473</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mva.unpredictable</string>
+	<key>PROJECT_ID</key>
+	<string>unpredictable-b9689</string>
+	<key>STORAGE_BUCKET</key>
+	<string>unpredictable-b9689.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:385885402473:ios:314729ec6e24fdcc</string>
+	<key>DATABASE_URL</key>
+	<string>https://unpredictable-b9689.firebaseio.com</string>
+</dict>
+</plist>

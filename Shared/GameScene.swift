@@ -7,7 +7,7 @@
 //
 
 import SpriteKit
-import Crashlytics
+import FirebaseAnalytics
 #if os(iOS)
 import UIKit
 #endif
@@ -106,13 +106,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
             var offP = false
+            var offAd = true
             if tutorialNode == nil {
                 if intel.distanceTraveled < 8.0 {
                     timesCrashed += 1
                 }
-                if timesCrashed >= 3 && intel.distanceTraveled > 1.0 {
-                    offP = true
+                if timesCrashed >= 3 && intel.distanceTraveled < 10.0 {
+                    offAd = true
+                    offP = false
                 } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    offAd = false
                     offP = true
                 }
             } else {
@@ -121,7 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 tutorialNode = nil
             }
             
-            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP)
+            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd)
             goNode.zPosition = 8.0
             goNode.position = .zero
             goNode.store = intel.storeHelper
@@ -149,7 +152,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             checkAchievements()
 
-            Answers.logCustomEvent(withName: "Ended_In_Level_\(intel.currentLevel.level)", customAttributes: nil)
+            Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
             //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
     }

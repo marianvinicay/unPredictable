@@ -7,7 +7,7 @@
 //
 
 import SpriteKit
-import Crashlytics
+import FirebaseAnalytics
 
 class MVATutorialNode: SKNode {
     private var dispSize: CGSize!
@@ -46,6 +46,8 @@ class MVATutorialNode: SKNode {
         gradient.position = .zero
         gradient.zPosition = -1
         newNode.addChild(gradient)
+        
+         Analytics.logEvent(AnalyticsEventTutorialBegin, parameters: nil)
         
         return newNode
     }
@@ -107,7 +109,7 @@ class MVATutorialNode: SKNode {
             self.run(SKAction.fadeOut(withDuration: 0.2), completion: { completion() })
         }
         
-        Answers.logCustomEvent(withName: "TutorialEnded", customAttributes: nil)
+        Analytics.logEvent(AnalyticsEventTutorialComplete, parameters: nil)
         
         wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
                                           SKAction.wait(forDuration: 1),

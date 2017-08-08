@@ -27,7 +27,7 @@ enum MVAConstants {
     #elseif os(macOS)
         static let baseCarSize = CGSize(width: 80.0, height: 144.0)
     #endif
-    static let priorityTime: Double = 2.5
+    static let priorityTime: Double = 1.8
     static var baseBotSpeed: Int {
         return Int(arc4random_uniform(50))+MVAConstants.minimalBotSpeed
     }

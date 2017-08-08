@@ -6,20 +6,24 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 
+import UIKit
 import SpriteKit
-import Crashlytics
+import FirebaseAnalytics
+import GoogleMobileAds
 
 class MVAGameOverNode: SKNode {
-    
     private var yesBtt: SKShapeNode?
     private var noBtt: SKShapeNode?
     private var countD: SKLabelNode?
     private var countDown = 6
+    private var showPurchase = false
+    private var showAd = false
+    fileprivate var intAd: GADInterstitial!
     
     var store: MVAStore!
     var completion: ((Bool)->())?
     
-    class func new(size: CGSize, offerPurchase: Bool) -> MVAGameOverNode {
+    class func new(size: CGSize, offerPurchase: Bool, offerAd: Bool) -> MVAGameOverNode {
         let newNode = MVAGameOverNode()
         
         let blank =  SKSpriteNode(color: .clear, size: size)
@@ -40,7 +44,9 @@ class MVAGameOverNode: SKNode {
         newNode.countD!.position = CGPoint(x: 0.0, y: -(size.height/2)+newNode.countD!.frame.height*2)
         newNode.addChild(newNode.countD!)
         
-        if offerPurchase {
+        if offerPurchase || offerAd {
+            newNode.showPurchase = offerPurchase
+            newNode.showAd = offerAd
             goLabel.position.y = goLabel.frame.height*2
             
             let firstLabel = SKLabelNode(text: "You are a bit clumsy 😛")
@@ -107,26 +113,30 @@ class MVAGameOverNode: SKNode {
         }
     }
     
-    private func startNewGame() {
+    fileprivate func startNewGame() {
         completion?(false)
         removeAllChildren()
         removeFromParent()
+        MVAGameOverNode.prepareRewardAd()
     }
     
-    private func continueInGame() {
+    fileprivate func continueInGame() {
         completion?(true)
         removeAllChildren()
         removeFromParent()
-        Answers.logPurchase(withPrice: 0.49,
+        MVAGameOverNode.prepareRewardAd()
+        //Analytics.logEvent(AnalyticsEventEcommercePurchase, parameters: <#T##[String : Any]?#>)
+        /*Answers.logPurchase(withPrice: 0.49,
                                      currency: "EUR",
                                      success: true,
                                      itemName: "Continue After Crash",
                                      itemType: "Consumable",
-                                     itemId: nil)
+                                     itemId: nil)*/
     }
     
     #if os(iOS) || os(tvOS)
-    private var activityInd: UIActivityIndicatorView!
+    fileprivate var activityInd: UIActivityIndicatorView!
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touchLocation = touches.first!.location(in: self)
         countD?.removeFromParent()
@@ -134,24 +144,28 @@ class MVAGameOverNode: SKNode {
         
         if yesBtt != nil && noBtt != nil {
             if nodes(at: touchLocation).contains(yesBtt!) {
-                
                 activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
                 activityInd.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
                 activityInd.startAnimating()
                 scene!.view!.addSubview(activityInd)
                 
-                self.activityInd.stopAnimating()
-                self.activityInd.removeFromSuperview()
-                self.continueInGame()
-                /*store.buy() { (purchased: Bool) in
+                if showPurchase {
                     self.activityInd.stopAnimating()
                     self.activityInd.removeFromSuperview()
-                    if purchased {
-                        self.continueInGame()
-                    } else {
-                        self.startNewGame()
-                    }
-                }*/
+                    self.continueInGame()
+                    /*store.buy() { (purchased: Bool) in
+                     self.activityInd.stopAnimating()
+                     self.activityInd.removeFromSuperview()
+                     if purchased {
+                     self.continueInGame()
+                     } else {
+                     self.startNewGame()
+                     }
+                     }*/
+                } else {
+                    GADRewardBasedVideoAd.sharedInstance().delegate = self
+                    showRewardAd()
+                }
             } else if nodes(at: touchLocation).contains(noBtt!) {
                 self.startNewGame()
             }
@@ -160,4 +174,61 @@ class MVAGameOverNode: SKNode {
         }
     }
     #endif
+}
+
+extension MVAGameOverNode: GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
+    class func prepareRewardAd() {
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID,"c793525e0543ad11207fc96a962b3fcf"]
+        GADRewardBasedVideoAd.sharedInstance().load(request, withAdUnitID: "ca-app-pub-3670763804809001/6616246331")
+    }
+    
+    fileprivate func showRewardAd() {
+        if GADRewardBasedVideoAd.sharedInstance().isReady {
+            self.activityInd.stopAnimating()
+            self.activityInd.removeFromSuperview()
+            GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
+        } else {
+            intAd = GADInterstitial(adUnitID: "ca-app-pub-3670763804809001/9699551155")
+            intAd.delegate = self
+            let request = GADRequest()
+            request.testDevices = [kGADSimulatorID,"c793525e0543ad11207fc96a962b3fcf"]
+            intAd.load(request)
+        }
+    }
+    
+    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
+        let alert = UIAlertController(title: "Sorry",
+                                      message: "There's problem with internet connection",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_: UIAlertAction) in
+            self.startNewGame()
+        }))
+        
+        self.activityInd.stopAnimating()
+        self.activityInd.removeFromSuperview()
+        UIApplication.shared.keyWindow!.rootViewController!.present(alert, animated: true, completion: nil)
+    }
+    
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+        self.activityInd.stopAnimating()
+        self.activityInd.removeFromSuperview()
+        intAd.present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
+    }
+    
+    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+        continueInGame()
+    }
+    
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd, didRewardUserWith reward: GADAdReward) {
+        continueInGame()
+    }
+    
+    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        startNewGame()
+    }
+    
+    func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        continueInGame()
+    }
 }

@@ -29,7 +29,7 @@ class MVASpawner: SKSpriteNode {
         }
         
         if intersectingCars.isEmpty && doubleSpawnLimit <= 0 && arc4random_uniform(2) == 1 {
-            lastLaneSpawn = arc4random_uniform(2) == 0 ? 0:2
+            lastLaneSpawn = arc4random_uniform(2) == 0 ? 0:maxLane
             var cars = [MVACar]()
             for lane in randomDoubleCombo() {
                 let car = gimmeCar()
@@ -43,7 +43,7 @@ class MVASpawner: SKSpriteNode {
                 (self.parent as! GameScene).addChild(car)
                 (self.parent as! GameScene).intel.cars.insert(car)
             }
-        } else if intersectingCars.count < 2 {//!!! even more than 2
+        } else if intersectingCars.count < maxLane {
             doubleSpawnLimit -= 1
             let carLane = randomLaneWithLanesOccupied(intersectingCars)
             lastLaneSpawn = carLane
@@ -135,10 +135,21 @@ class MVASpawner: SKSpriteNode {
     }
     
     private func randomDoubleCombo() -> [Int] {
-        switch arc4random_uniform(3) {
-        case 0: return [0,1]
-        case 1: return [1,2]
-        default: return [0,2]
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            switch arc4random_uniform(3) {
+            case 0: return [0,1]
+            case 1: return [1,2]
+            default: return [0,2]
+            }
+        } else {
+            switch arc4random_uniform(6) {
+            case 0: return [0,1]
+            case 1: return [0,2]
+            case 2: return [1,2]
+            case 3: return [1,3]
+            case 4: return [2,3]
+            default: return [0,3]
+            }
         }
     }
     

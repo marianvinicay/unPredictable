@@ -53,7 +53,7 @@ class GameViewController: UIViewController {
     }
     
     func toggleButtons() {
-        let animSpeed = 0.6
+        let animSpeed = 0.4
         if gameCenterBtt.isHidden {
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false

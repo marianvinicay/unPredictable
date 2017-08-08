@@ -5,9 +5,12 @@
 //  Created by Majo on 25/08/16.
 //  Copyright © 2016 MarVin. All rights reserved.
 //
+//AdMob adID = ca-app-pub-3670763804809001~8265381684
 
 import UIKit
 import AVFoundation
+import Firebase
+import GoogleMobileAds
 import Fabric
 import Crashlytics
 
@@ -16,10 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        Fabric.with([Crashlytics.self])
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        Fabric.with([Crashlytics.self])
+        FirebaseApp.configure()
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
+        MVAGameOverNode.prepareRewardAd()
         
         return true
     }

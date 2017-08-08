@@ -10,10 +10,7 @@ import SpriteKit
 
 extension GameScene {
     class func new(withSize deviceSize: CGSize) -> GameScene {
-        // Load 'GameScene.sks' as an SKScene.
-        
         guard let scene = GameScene(fileNamed: "GameScene") else {
-            print("Failed to load GameScene.sks")
             abort()
         }
         scene.scaleMode = .aspectFill

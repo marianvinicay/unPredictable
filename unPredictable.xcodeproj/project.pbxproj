@@ -115,17 +115,11 @@
 		2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67C1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67D1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
-		2FAFA6891F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
-		2FAFA68A1F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
-		2FAFA68B1F36EC2D006645CB /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6871F36EC2D006645CB /* Crashlytics.framework */; };
-		2FAFA68C1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
-		2FAFA68D1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
-		2FAFA68E1F36EC2D006645CB /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6881F36EC2D006645CB /* Fabric.framework */; };
-		2FAFA6901F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
-		2FAFA6911F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
-		2FAFA6921F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
-		2FAFA6931F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
-		2FAFA6941F3897B1006645CB /* ChangeCar.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCar.sks */; };
+		2FAFA6901F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
+		2FAFA6911F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
+		2FAFA6921F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
+		2FAFA6931F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
+		2FAFA6941F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
 		2FB19E391F17A65800506061 /* GameSceneKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */; };
 		2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD6CDAF1F34702200FD9B96 /* Interface.storyboard */; };
 		2FD6CDBA1F34702200FD9B96 /* AWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2FD6CDB91F34702200FD9B96 /* AWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -150,6 +144,12 @@
 		2FD6CDEF1F3471FD00FD9B96 /* GameSceneVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameSceneVolume.swift */; };
 		2FD6CDF31F3471FD00FD9B96 /* MVAParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B401F1BAB5F00162EDA /* MVAParticle.sks */; };
 		2FD6CDF41F34723B00FD9B96 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7A089F1DC65209005561B9 /* Utils.swift */; };
+		2FDFBD201F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
+		2FDFBD211F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
+		2FDFBD221F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
+		2FDFBD231F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
+		2FDFBD241F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
+		63DA5D6425DDBBBEFAE4B0B7 /* Pods_unPredictable___iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,6 +187,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1AA69DA30541300C653A89B9 /* Pods-unPredictable - iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS.release.xcconfig"; sourceTree = "<group>"; };
 		276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVAGameCenterHelper.swift; sourceTree = "<group>"; };
 		2F23E10B1D6EF21D00119E4F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		2F23E1111D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,9 +240,7 @@
 		2FAFA6741F34C804006645CB /* GameSceneWatch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneWatch.sks; sourceTree = "<group>"; };
 		2FAFA6761F35A2AA006645CB /* StartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
 		2FAFA6781F35A48E006645CB /* Futura.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Futura.ttc; sourceTree = "<group>"; };
-		2FAFA6871F36EC2D006645CB /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		2FAFA6881F36EC2D006645CB /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		2FAFA68F1F3897B1006645CB /* ChangeCar.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ChangeCar.sks; sourceTree = "<group>"; };
+		2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ChangeCarScene.sks; sourceTree = "<group>"; };
 		2FB19E381F17A65700506061 /* GameSceneKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSceneKeyboard.swift; sourceTree = "<group>"; };
 		2FD6CDAD1F34702200FD9B96 /* AWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD6CDB01F34702200FD9B96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
@@ -251,6 +250,9 @@
 		2FD6CDC41F34702300FD9B96 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		2FD6CDC81F34702300FD9B96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FD6CDD71F34704C00FD9B96 /* AWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AWatch Extension.entitlements"; sourceTree = "<group>"; };
+		2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_unPredictable___iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,10 +261,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FAFA66E1F34B102006645CB /* HealthKit.framework in Frameworks */,
-				2FAFA68C1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 				2FAFA66C1F34B0F9006645CB /* GameKit.framework in Frameworks */,
-				2FAFA6891F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
 				2F71196A1F287E0300FE58A8 /* StoreKit.framework in Frameworks */,
+				63DA5D6425DDBBBEFAE4B0B7 /* Pods_unPredictable___iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,8 +271,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FAFA68A1F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
-				2FAFA68D1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,8 +278,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FAFA68B1F36EC2D006645CB /* Crashlytics.framework in Frameworks */,
-				2FAFA68E1F36EC2D006645CB /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +287,13 @@
 			files = (
 				2FAFA6701F34B112006645CB /* HealthKit.framework in Frameworks */,
 				2FAFA6721F34B113006645CB /* GameKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		562FD7249817EA966D07D671 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +308,7 @@
 				2FAFA66D1F34B102006645CB /* HealthKit.framework */,
 				2FAFA66B1F34B0F9006645CB /* GameKit.framework */,
 				2F7119691F287E0300FE58A8 /* StoreKit.framework */,
+				78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -319,9 +324,8 @@
 				2F23E13D1D6EF21D00119E4F /* tvOS */,
 				2F23E14B1D6EF21D00119E4F /* macOS */,
 				2F23E1121D6EF21D00119E4F /* Products */,
-				2FAFA6871F36EC2D006645CB /* Crashlytics.framework */,
-				2FAFA6881F36EC2D006645CB /* Fabric.framework */,
 				276694BA1F21FF4200E70D15 /* Frameworks */,
+				D6705493572D404729883125 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -335,7 +339,7 @@
 				2F861B951F1CD49F00162EDA /* Sounds */,
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
-				2FAFA68F1F3897B1006645CB /* ChangeCar.sks */,
+				2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */,
 				2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */,
@@ -371,6 +375,7 @@
 				2F23E1181D6EF21D00119E4F /* Main.storyboard */,
 				2F23E11B1D6EF21D00119E4F /* LaunchScreen.storyboard */,
 				2F23E11E1D6EF21D00119E4F /* Info.plist */,
+				2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -446,6 +451,15 @@
 			path = "AWatch Extension";
 			sourceTree = "<group>";
 		};
+		D6705493572D404729883125 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */,
+				1AA69DA30541300C653A89B9 /* Pods-unPredictable - iOS.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -453,11 +467,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F23E16D1D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - iOS" */;
 			buildPhases = (
+				1C55E713B1847A748172EC3F /* [CP] Check Pods Manifest.lock */,
 				2F23E10D1D6EF21D00119E4F /* Sources */,
 				2F23E10E1D6EF21D00119E4F /* Frameworks */,
 				2F23E10F1D6EF21D00119E4F /* Resources */,
 				2F23E16C1D6EF21D00119E4F /* Embed Watch Content */,
-				2FAFA67E1F36EA2A006645CB /* ShellScript */,
+				711742303B246860266D0B90 /* [CP] Embed Pods Frameworks */,
+				0D160E13E3A96E471E9C8D40 /* [CP] Copy Pods Resources */,
+				2FDFBD251F39917C00E1E6A4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -508,6 +525,7 @@
 			buildPhases = (
 				2FD6CDAB1F34702200FD9B96 /* Resources */,
 				2FD6CDCF1F34702300FD9B96 /* Embed App Extensions */,
+				562FD7249817EA966D07D671 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -624,11 +642,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FAFA6901F3897B1006645CB /* ChangeCar.sks in Resources */,
+				2FAFA6901F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
 				2F23E11D1D6EF21D00119E4F /* LaunchScreen.storyboard in Resources */,
+				2FDFBD201F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
 				2FAFA6791F35A48E006645CB /* Futura.ttc in Resources */,
 				2F65AA2B1EF3D48600150F32 /* GameScene.sks in Resources */,
 				2F861B8C1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
@@ -646,10 +665,11 @@
 				2F861B661F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1441D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B7F1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
-				2FAFA6911F3897B1006645CB /* ChangeCar.sks in Resources */,
+				2FAFA6911F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2D1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8E1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2FAFA67A1F35A48E006645CB /* Futura.ttc in Resources */,
+				2FDFBD211F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
 				2F861B431F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
 				2F861B521F1BAE7C00162EDA /* Assets.xcassets in Resources */,
 			);
@@ -663,10 +683,11 @@
 				2F861B671F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B801F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
-				2FAFA6921F3897B1006645CB /* ChangeCar.sks in Resources */,
+				2FAFA6921F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2E1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8F1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */,
+				2FDFBD221F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
 				2F861B441F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
 				2F861B531F1BAE7C00162EDA /* Assets.xcassets in Resources */,
 			);
@@ -676,8 +697,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FAFA6931F3897B1006645CB /* ChangeCar.sks in Resources */,
+				2FAFA6931F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2FAFA67C1F35A48E006645CB /* Futura.ttc in Resources */,
+				2FDFBD231F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
 				2FD6CDDA1F3470AF00FD9B96 /* Assets.xcassets in Resources */,
 				2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */,
 			);
@@ -689,17 +711,51 @@
 			files = (
 				2FAFA6751F34C804006645CB /* GameSceneWatch.sks in Resources */,
 				2FD6CDEA1F3471FD00FD9B96 /* GameScene.sks in Resources */,
-				2FAFA6941F3897B1006645CB /* ChangeCar.sks in Resources */,
+				2FAFA6941F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F2749861F34831A006AE32D /* Assets.xcassets in Resources */,
 				2FD6CDF31F3471FD00FD9B96 /* MVAParticle.sks in Resources */,
 				2FAFA67D1F35A48E006645CB /* Futura.ttc in Resources */,
+				2FDFBD241F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2FAFA67E1F36EA2A006645CB /* ShellScript */ = {
+		0D160E13E3A96E471E9C8D40 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1C55E713B1847A748172EC3F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-unPredictable - iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2FDFBD251F39917C00E1E6A4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -710,7 +766,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./Fabric.framework/run 661d346440292177133f4f55e1db13108211f63d 8f683a7c6859dc7e6a47c42b94eb01a1401f94947d0948a7b5d79807bac01223";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 661d346440292177133f4f55e1db13108211f63d 8f683a7c6859dc7e6a47c42b94eb01a1401f94947d0948a7b5d79807bac01223";
+		};
+		711742303B246860266D0B90 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -975,6 +1051,7 @@
 		};
 		2F23E16E1D6EF21D00119E4F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
@@ -999,6 +1076,7 @@
 		};
 		2F23E16F1D6EF21D00119E4F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1AA69DA30541300C653A89B9 /* Pods-unPredictable - iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
