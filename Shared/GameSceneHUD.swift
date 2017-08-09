@@ -37,6 +37,10 @@ extension GameScene {
          */
     }
     
+    func changeDistanceColor(_ color: UIColor) {
+        HUDLabel.giveMeLabel1(fromNode: distanceSign)!.fontColor = color
+    }
+    
     func setLevelSpeed(_ spd: Int) {
         if canUpdateSpeed {
             HUDLabel.giveMeLabel(fromNode: speedSign).text = String(MVAWorldConverter.pointsSpeedToRealWorld(spd))

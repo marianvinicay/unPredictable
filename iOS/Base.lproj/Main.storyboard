@@ -45,16 +45,32 @@
                                     <action selector="toggleSound:" destination="BV1-FR-VrT" eventType="touchUpInside" id="pxb-aT-hqw"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfQ-E2-ai1">
+                                <rect key="frame" x="95" y="591" width="185" height="51"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
+                                <state key="normal" title=" Change Car ">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="showChangeCar:" destination="BV1-FR-VrT" eventType="touchUpInside" id="wKF-7C-KRp"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DfQ-E2-ai1" secondAttribute="bottom" constant="25" id="042-di-RdC"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="C63-kb-ATQ"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="XQD-Ul-NJ4"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="lUB-dQ-37i"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="nL6-jN-Zyr"/>
+                            <constraint firstItem="DfQ-E2-ai1" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="s2m-Zv-Tse"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
+                        <outlet property="changeCarBtt" destination="DfQ-E2-ai1" id="qql-AE-O2w"/>
                         <outlet property="gameCenterBtt" destination="V1S-qh-hdo" id="H4k-to-YiU"/>
                         <outlet property="soundBtt" destination="m2I-PE-wpB" id="GMo-vq-nPs"/>
                     </connections>

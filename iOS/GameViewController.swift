@@ -12,6 +12,7 @@ import SpriteKit
 class GameViewController: UIViewController {
 
     @IBOutlet weak var gameCenterBtt: UIButton!
+    @IBOutlet weak var changeCarBtt: UIButton!
     @IBOutlet weak var soundBtt: UIButton! {
         willSet {
             if MVAMemory.audioMuted {
@@ -22,16 +23,18 @@ class GameViewController: UIViewController {
         }
     }
     var scene: GameScene!
+    var changeCarScene: ChangeCarScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        scene = GameScene.new(withSize: self.view.frame.size)
+        let sceneSize = self.view.frame.size
+        scene = GameScene.new(withSize: sceneSize)
+        changeCarScene = ChangeCarScene.new(withSize: sceneSize)
         
         if MVAMemory.audioMuted {
             scene.audioEngine.mainMixerNode.outputVolume = 0.0
         }
         
-        // Present the scene
         let skView = self.view as! SKView
         skView.presentScene(scene)
         
@@ -41,33 +44,51 @@ class GameViewController: UIViewController {
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
         
         scene.intel.healthKHelper.initiateKit()
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer()
         }
     }
-
+    
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
     
-    func toggleButtons() {
-        let animSpeed = 0.4
+    func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if gameCenterBtt.isHidden {
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
+            if !scene.gameStarted {
+                changeCarBtt.isHidden = false
+            }
             UIView.animate(withDuration: animSpeed, animations: {
                 self.gameCenterBtt.alpha = 1.0
                 self.soundBtt.alpha = 1.0
+                if !self.scene.gameStarted {
+                    self.changeCarBtt.alpha = 1.0
+                }
+            }, completion: { (_: Bool) in
+                if !self.scene.gameStarted {
+                    self.changeCarBtt.isEnabled = true
+                }
             })
         } else {
             UIView.animate(withDuration: animSpeed, animations: {
                 self.gameCenterBtt.alpha = 0.0
                 self.soundBtt.alpha = 0.0
+                if !self.scene.gameStarted {
+                    self.changeCarBtt.alpha = 0.0
+                }
             }, completion: { (_: Bool) in
                 self.gameCenterBtt.isHidden = true
                 self.soundBtt.isHidden = true
+                if !self.scene.gameStarted {
+                    self.changeCarBtt.isHidden = true
+                    self.changeCarBtt.isEnabled = false
+                }
             })
         }
     }
@@ -99,15 +120,36 @@ class GameViewController: UIViewController {
         }
     }
     
+    @IBAction func showChangeCar(_ sender: UIButton) {
+        toggleButtons()
+        changeCarScene.refresh()
+        let transition = SKTransition.reveal(with: .up, duration: 0.8)
+        (self.view as! SKView).presentScene(changeCarScene, transition: transition)
+    }
+    
+    
+    
+    func backFromChangeCarScene() {
+        toggleButtons(withAnimSpeed: 1.0)
+        let transition = SKTransition.moveIn(with: .up, duration: 0.8)
+        (self.view as! SKView).presentScene(scene, transition: transition)
+    }
+    
+    func changePlayerCar() {
+        let pName = MVAMemory.playerCar
+        if scene.intel.player.skin.name != pName {
+            scene.intel.player.skin = MVASkin.createForCar(pName, withAtlas: scene.spawner.textures)
+            scene.intel.player.texture = scene.intel.player.skin.normal
+            MVACar.resetPhysicsBody(forCar: scene.intel.player)
+            scene.checkLives()
+        }
+        backFromChangeCarScene()
+    }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-
     override var prefersStatusBarHidden: Bool {
         return true
     }

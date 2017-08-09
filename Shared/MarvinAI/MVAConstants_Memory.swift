@@ -54,6 +54,15 @@ enum MVAMemory {
         }
     }
     
+    static var playerCar: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "pCar")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "pCar") as? String ?? "audi"
+        }
+    }
+    
     static var maxPlayerDistance: Double {
         set {
             UserDefaults.standard.set(newValue, forKey: "maxPDist")

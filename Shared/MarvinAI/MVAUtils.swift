@@ -10,6 +10,8 @@ import Foundation
 import SpriteKit
 
 struct MVASkin {
+    let name: String
+    
     let normal: SKTexture
     let left: SKTexture
     let right: SKTexture
@@ -21,7 +23,7 @@ struct MVASkin {
             name+"Right",
             name+"Brake",
             ]
-        return MVASkin(normal: atlas.textureNamed(name), left: atlas.textureNamed(textureNames[0]), right: atlas.textureNamed(textureNames[1]), brake: atlas.textureNamed(textureNames[2]))
+        return MVASkin(name: name, normal: atlas.textureNamed(name), left: atlas.textureNamed(textureNames[0]), right: atlas.textureNamed(textureNames[1]), brake: atlas.textureNamed(textureNames[2]))
     }
 }
 

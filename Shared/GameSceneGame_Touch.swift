@@ -74,6 +74,11 @@ extension GameScene {
             }
         }
     }
+    
+    func removeLife() {
+        intel.playerLives -= 1
+        lives.childNode(withName: "life\(intel.playerLives)")?.run(SKAction.fadeOut(withDuration: 0.4))
+    }
 }
 
 #if os(iOS) || os(tvOS)

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 import CoreGraphics
 
 enum MVAPhysicsCategory: UInt32 {
@@ -14,6 +15,11 @@ enum MVAPhysicsCategory: UInt32 {
     case player = 0b10
     case remover = 0b100
     case spawner = 0b1000
+}
+
+enum MVAColor {
+    static let mvRed = UIColor(red:0.85, green:0.10, blue:0.25, alpha:1.00)
+    static let jGreen = UIColor(red:0.22, green:0.50, blue:0.10, alpha:1.00)
 }
 
 extension Collection where Indices.Iterator.Element == Index {

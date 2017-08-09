@@ -30,9 +30,15 @@ extension GameScene {
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
         scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
         scene.distanceSign.position = scene.originalDistancePosition
-        //scene.camera!.childNode(withName: "down")!.position = CGPoint(x: 0.0, y: -scene.size.height/2)
-        (scene.camera!.childNode(withName: "down") as! SKSpriteNode).size.width = scene.size.width
-        (scene.camera!.childNode(withName: "over") as! SKSpriteNode).size = scene.size
+        let over = scene.camera!.childNode(withName: "over") as! SKSpriteNode
+        over.position = .zero
+        over.size = scene.size
+        let down = scene.camera!.childNode(withName: "down") as! SKSpriteNode
+        down.position = CGPoint(x: 0.0, y: -scene.size.height/2)
+        down.size.width = scene.size.width
+        
+        scene.lives = down.childNode(withName: "lives") as! SKSpriteNode
+        scene.lives.position = CGPoint(x: scene.size.width/2, y: 0.0)
         
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
         let bestDist = MVAMemory.maxPlayerDistance.roundTo(NDecimals: 1)
@@ -51,7 +57,7 @@ extension GameScene {
     }
     
     private func spawnPlayer() {
-        let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)
+        let pSkin = MVASkin.createForCar(MVAMemory.playerCar, withAtlas: spawner.textures)
         let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
@@ -61,6 +67,23 @@ extension GameScene {
         self.addChild(player)
         player.zPosition = 5.0
         intel.player = player
+        checkLives()
+    }
+    
+    func checkLives() {
+        switch intel.player.skin.name {
+        case "playerJeep":
+            intel.playerLives = 3
+            changeDistanceColor(MVAColor.jGreen)
+            lives.isHidden = false
+            for child in lives.children {
+                child.alpha = 1.0
+            }
+        default:
+            intel.playerLives = -1
+            changeDistanceColor(MVAColor.mvRed)
+            lives.isHidden = true
+        }	
     }
     
     private func spawnStartRoad() {

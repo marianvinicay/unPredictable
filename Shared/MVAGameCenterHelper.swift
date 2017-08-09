@@ -26,6 +26,7 @@ class MVAGameCenterHelper: NSObject {
     
     override init() {
         super.init()
+        //NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: Notification.Name.GKPlayerAuthenticationDidChangeNotificationName, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: NSNotification.Name(rawValue: GKPlayerAuthenticationDidChangeNotificationName), object: nil)
     }
     
@@ -44,6 +45,7 @@ class MVAGameCenterHelper: NSObject {
                     MVAMemory.enableGameCenter = true
                 } else {
                     MVAMemory.enableGameCenter = false
+               
                 }
             }
         #elseif os(watchOS)

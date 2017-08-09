@@ -38,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var distanceSign: SKSpriteNode!
     var originalDistancePosition: CGPoint!
     var recordDistance: SKLabelNode!
+    var lives: SKSpriteNode!
     var roadNodes = Set<MVARoadNode>()
     var remover: SKSpriteNode!
     var spawner: MVASpawner!
@@ -106,12 +107,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
             var offP = false
-            var offAd = true
+            var offAd = false
             if tutorialNode == nil {
                 if intel.distanceTraveled < 8.0 {
                     timesCrashed += 1
                 }
-                if timesCrashed >= 3 && intel.distanceTraveled < 10.0 {
+                if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
                     offAd = true
                     offP = false
                 } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
@@ -172,6 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setLevelSpeed(intel.currentLevel.playerSpeed)
         spawnWithDelay(intel.currentLevel.spawnRate)
         
+        checkLives()
         MVACar.resetPhysicsBody(forCar: intel.player)
         intel.player.zRotation = 0
         intel.player.position.x = CGFloat(lanePositions[intel.player.currentLane]!)
@@ -411,6 +413,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    private var playerInCollision = false
+    func cancelPlayerCollision() { playerInCollision = false }
+    
     // MARK: - SKPhysicsContactDelegate
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
@@ -442,21 +447,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.player.rawValue:
-            if intel.stop == false {
-                physicsWorld.speed = 0.0
-                intel.stop = true
-                intel.player.pointsPerSecond = 0
-                intel.player.removeAllActions()
-                intel.player.removeAllChildren()
-                intel.cars.forEach({
-                    $0.removeAllActions()
-                    $0.removeAllChildren()
-                    $0.pointsPerSecond = 0
-                })
-                sound.crash(onNode: intel.player)
-                generateSmoke(atPoint: contact.contactPoint, forTime: nil)
-                hideHUD(animated: true)
-                gameOver()
+            if !playerInCollision {
+                playerInCollision = true
+                if intel.playerLives > 0 {
+                    removeLife()
+                    sound.crash(onNode: intel.player)
+                    let ordCar = [contact.bodyA.node, contact.bodyB.node].map({ $0 as! MVACar }).filter({ $0.mindSet != .player })
+                    for car in ordCar {
+                        scrape(car: car)
+                    }
+                    MVACar.resetPhysicsBody(forCar: intel.player)
+                    intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+                } else {
+                    physicsWorld.speed = 0.0
+                    intel.stop = true
+                    intel.player.pointsPerSecond = 0
+                    intel.player.removeAllActions()
+                    intel.player.removeAllChildren()
+                    intel.cars.forEach({
+                        $0.removeAllActions()
+                        $0.removeAllChildren()
+                        $0.pointsPerSecond = 0
+                    })
+                    sound.crash(onNode: intel.player)
+                    generateSmoke(atPoint: contact.contactPoint, forTime: nil)
+                    hideHUD(animated: true)
+                    gameOver()
+                }
+                perform(#selector(cancelPlayerCollision), with: nil, afterDelay: 0.05)
             }
         default: break
         }
