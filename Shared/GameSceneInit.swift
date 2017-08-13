@@ -10,7 +10,12 @@ import SpriteKit
 
 extension GameScene {
     class func new(withSize deviceSize: CGSize) -> GameScene {
-        guard let scene = GameScene(fileNamed: "GameScene") else {
+        #if os(iOS)
+            let sceneName = "GameScene"
+        #elseif os(watchOS)
+            let sceneName = "GameSceneWatch"
+        #endif
+        guard let scene = GameScene(fileNamed: sceneName) else {
             abort()
         }
         scene.scaleMode = .aspectFill
@@ -57,7 +62,7 @@ extension GameScene {
     }
     
     private func spawnPlayer() {
-        let pSkin = MVASkin.createForCar(MVAMemory.playerCar, withAtlas: spawner.textures)
+        let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)//MVAMemory.playerCar, withAtlas: spawner.textures)
         let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue

@@ -8,9 +8,10 @@
 
 import UIKit
 import SpriteKit
-import FirebaseAnalytics
-import GoogleMobileAds
-
+#if os(iOS)
+    import FirebaseAnalytics
+#endif
+    
 class MVAGameOverNode: SKNode {
     private var yesBtt: SKShapeNode?
     private var noBtt: SKShapeNode?
@@ -18,7 +19,8 @@ class MVAGameOverNode: SKNode {
     private var countDown = 6
     private var showPurchase = false
     private var showAd = false
-    fileprivate var intAd: GADInterstitial!
+    private let adsAsPurchase = MVAAds(config: .videoAndShort)
+    private let adsForCars: MVAAds? = MVAMemory.adsEnabled ? MVAAds(config: .onlyShort):nil
     
     var store: MVAStore!
     var completion: ((Bool)->())?
@@ -36,6 +38,9 @@ class MVAGameOverNode: SKNode {
         goLabel.verticalAlignmentMode = .center
         goLabel.position = .zero
         newNode.addChild(goLabel)
+        if goLabel.frame.size.width > size.width {
+            goLabel.fontSize = 45
+        }
         
         newNode.countD = SKLabelNode(text: String(newNode.countDown))
         newNode.countD!.fontName = "Futura Medium"
@@ -97,6 +102,30 @@ class MVAGameOverNode: SKNode {
             newNode.addChild(newNode.noBtt!)
         }
     
+        #if os(iOS)
+            newNode.adsAsPurchase.successHandler = { [unowned newNode] (rewarded: Bool) in
+                if rewarded {
+                    newNode.continueInGame()
+                } else {
+                    newNode.startNewGame()
+                }
+            }
+            newNode.adsAsPurchase.completionHandler = { [unowned newNode] () in
+                newNode.activityInd?.stopAnimating()
+                newNode.activityInd?.removeFromSuperview()
+            }
+            
+            newNode.adsForCars?.successHandler = { [unowned newNode] (_: Bool) in
+                
+                newNode.startNewGame()
+            }
+            newNode.adsForCars?.completionHandler = { [unowned newNode] () in
+                newNode.activityInd?.stopAnimating()
+                newNode.activityInd?.removeFromSuperview()
+            }
+        #endif
+
+        
         newNode.isUserInteractionEnabled = true
         return newNode
     }
@@ -108,7 +137,11 @@ class MVAGameOverNode: SKNode {
                 countD?.text = String(countDown)
                 perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
             } else {
-                startNewGame()
+                if MVAMemory.adsEnabled {
+                    adsForCars?.showAd()
+                } else {
+                    self.startNewGame()
+                }
             }
         }
     }
@@ -117,14 +150,12 @@ class MVAGameOverNode: SKNode {
         completion?(false)
         removeAllChildren()
         removeFromParent()
-        MVAGameOverNode.prepareRewardAd()
     }
     
     fileprivate func continueInGame() {
         completion?(true)
         removeAllChildren()
         removeFromParent()
-        MVAGameOverNode.prepareRewardAd()
         //Analytics.logEvent(AnalyticsEventEcommercePurchase, parameters: <#T##[String : Any]?#>)
         /*Answers.logPurchase(withPrice: 0.49,
                                      currency: "EUR",
@@ -135,23 +166,23 @@ class MVAGameOverNode: SKNode {
     }
     
     #if os(iOS) || os(tvOS)
-    fileprivate var activityInd: UIActivityIndicatorView!
+    fileprivate var activityInd: UIActivityIndicatorView?
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touchLocation = touches.first!.location(in: self)
         countD?.removeFromParent()
         countD = nil
         
-        if yesBtt != nil && noBtt != nil {
-            if nodes(at: touchLocation).contains(yesBtt!) {
+        if yesBtt != nil && noBtt != nil && nodes(at: touchLocation).contains(yesBtt!) {
+            //if nodes(at: touchLocation).contains(yesBtt!) {
                 activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-                activityInd.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
-                activityInd.startAnimating()
-                scene!.view!.addSubview(activityInd)
+                activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
+                activityInd!.startAnimating()
+                scene!.view!.addSubview(activityInd!)
                 
                 if showPurchase {
-                    self.activityInd.stopAnimating()
-                    self.activityInd.removeFromSuperview()
+                    self.activityInd?.stopAnimating()
+                    self.activityInd?.removeFromSuperview()
                     self.continueInGame()
                     /*store.buy() { (purchased: Bool) in
                      self.activityInd.stopAnimating()
@@ -163,72 +194,24 @@ class MVAGameOverNode: SKNode {
                      }
                      }*/
                 } else {
-                    GADRewardBasedVideoAd.sharedInstance().delegate = self
-                    showRewardAd()
+                    adsAsPurchase.showAd()
                 }
-            } else if nodes(at: touchLocation).contains(noBtt!) {
+            //} else {//if nodes(at: touchLocation).contains(noBtt!) {
+        } else {
+            if MVAMemory.adsEnabled {
+                adsForCars?.showAd()
+            } else {
                 self.startNewGame()
             }
-        } else {
-            startNewGame()
         }
+        /*
+        } else {
+            if MVAMemory.adsEnabled {
+                adsForCars.showAd()
+            } else {
+                startNewGame()
+            }
+        }*/
     }
     #endif
-}
-
-extension MVAGameOverNode: GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
-    class func prepareRewardAd() {
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID,"c793525e0543ad11207fc96a962b3fcf"]
-        GADRewardBasedVideoAd.sharedInstance().load(request, withAdUnitID: "ca-app-pub-3670763804809001/6616246331")
-    }
-    
-    fileprivate func showRewardAd() {
-        if GADRewardBasedVideoAd.sharedInstance().isReady {
-            self.activityInd.stopAnimating()
-            self.activityInd.removeFromSuperview()
-            GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
-        } else {
-            intAd = GADInterstitial(adUnitID: "ca-app-pub-3670763804809001/9699551155")
-            intAd.delegate = self
-            let request = GADRequest()
-            request.testDevices = [kGADSimulatorID,"c793525e0543ad11207fc96a962b3fcf"]
-            intAd.load(request)
-        }
-    }
-    
-    func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
-        let alert = UIAlertController(title: "Sorry",
-                                      message: "There's problem with internet connection",
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_: UIAlertAction) in
-            self.startNewGame()
-        }))
-        
-        self.activityInd.stopAnimating()
-        self.activityInd.removeFromSuperview()
-        UIApplication.shared.keyWindow!.rootViewController!.present(alert, animated: true, completion: nil)
-    }
-    
-    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
-        self.activityInd.stopAnimating()
-        self.activityInd.removeFromSuperview()
-        intAd.present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
-    }
-    
-    func interstitialWillDismissScreen(_ ad: GADInterstitial) {
-        continueInGame()
-    }
-    
-    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd, didRewardUserWith reward: GADAdReward) {
-        continueInGame()
-    }
-    
-    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
-        startNewGame()
-    }
-    
-    func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
-        continueInGame()
-    }
 }

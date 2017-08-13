@@ -38,7 +38,7 @@ class MVASpawner: SKSpriteNode {
                 car.pointsPerSecond = MVAConstants.baseBotSpeed
                 cars.append(car)
             }
-            doubleSpawnLimit = Int(arc4random_uniform(3))+5
+            doubleSpawnLimit = Int(arc4random_uniform(3))+4
             for car in cars {
                 (self.parent as! GameScene).addChild(car)
                 (self.parent as! GameScene).intel.cars.insert(car)
@@ -135,22 +135,26 @@ class MVASpawner: SKSpriteNode {
     }
     
     private func randomDoubleCombo() -> [Int] {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            switch arc4random_uniform(3) {
-            case 0: return [0,1]
-            case 1: return [1,2]
-            default: return [0,2]
+        #if os(iOS)
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                switch arc4random_uniform(3) {
+                case 0: return [0,1]
+                case 1: return [1,2]
+                default: return [0,2]
+                }
+            } else {
+                switch arc4random_uniform(6) {
+                case 0: return [0,1]
+                case 1: return [0,2]
+                case 2: return [1,2]
+                case 3: return [1,3]
+                case 4: return [2,3]
+                default: return [0,3]
+                }
             }
-        } else {
-            switch arc4random_uniform(6) {
-            case 0: return [0,1]
-            case 1: return [0,2]
-            case 2: return [1,2]
-            case 3: return [1,3]
-            case 4: return [2,3]
-            default: return [0,3]
-            }
-        }
+        #elseif os(watchOS)
+            return [Int(arc4random_uniform(2))]
+        #endif
     }
     
     private func randomise(_ fs: [()->()]) {

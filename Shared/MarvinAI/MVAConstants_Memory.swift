@@ -63,6 +63,24 @@ enum MVAMemory {
         }
     }
     
+    static var ownedCars: [String] {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "ownCars")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "ownCars") as? [String] ?? ["audi"]
+        }
+    }
+    
+    static var adCars: [String] {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "adCars")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "adCars") as? [String] ?? []
+        }
+    }
+    
     static var maxPlayerDistance: Double {
         set {
             UserDefaults.standard.set(newValue, forKey: "maxPDist")
@@ -87,6 +105,15 @@ enum MVAMemory {
         }
         get {
             return UserDefaults.standard.value(forKey: "accDist") as? Double ?? 0.0
+        }
+    }
+    
+    static var adsEnabled: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "adsEn")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "adsEn") as? Bool ?? false
         }
     }
     

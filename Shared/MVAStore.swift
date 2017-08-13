@@ -8,6 +8,7 @@
 
 #if os(iOS) || os(tvOS) || os(macOS)
     import StoreKit
+    
     class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
         func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
             for transaction in transactions {

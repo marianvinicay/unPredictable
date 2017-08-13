@@ -15,6 +15,9 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     
     private var backBtt: SKSpriteNode!
     private var useBtt: SKSpriteNode!
+    private var newCarBtts: SKSpriteNode!
+    private var enableAdsBtt: SKSpriteNode!
+    private var buyBtt: SKSpriteNode!
     private var leftArr: SKSpriteNode!
     private var rightArr: SKSpriteNode!
     private var carImg: SKSpriteNode!
@@ -23,6 +26,8 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     private let availableCars = ["audi", "playerJeep"]
     private let mockUpNames = ["audi":"Veep", "playerJeep":"Mudi"]
     private var selectedCar = MVAMemory.playerCar
+    private let ads = MVAAds(config: .onlyVideo)
+    private let store = MVAStore()
     
     class func new(withSize deviceSize: CGSize) -> ChangeCarScene {
         guard let scene = ChangeCarScene(fileNamed: "ChangeCarScene") else {
@@ -48,13 +53,35 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         scene.carImg = scene.childNode(withName: "carImg") as! SKSpriteNode
         scene.carImg.position = .zero
         scene.carName = scene.childNode(withName: "carName") as! SKLabelNode
-        scene.carName.position = CGPoint(x: 0.0, y: (scene.carImg.size.height/2)+30)
+        scene.carName.position = CGPoint(x: 0.0, y: (scene.carImg.size.height/2)+26)
         scene.leftArr = scene.childNode(withName: "left") as! SKSpriteNode
         scene.leftArr.position = CGPoint(x: (-deviceSize.width/2)+50, y: 0.0)
         scene.rightArr = scene.childNode(withName: "right") as! SKSpriteNode
         scene.rightArr.position = CGPoint(x: (deviceSize.width/2)-50, y: 0.0)
         scene.useBtt = scene.childNode(withName: "use") as! SKSpriteNode
         scene.useBtt.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
+        
+        scene.newCarBtts = scene.childNode(withName: "newCar") as! SKSpriteNode
+        scene.newCarBtts.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
+        scene.enableAdsBtt = scene.newCarBtts.childNode(withName: "ads") as! SKSpriteNode
+        scene.buyBtt = scene.newCarBtts.childNode(withName: "buy") as! SKSpriteNode
+        
+        scene.ads.successHandler = { [unowned scene] (rewarded: Bool) in
+            if rewarded {
+                MVAMemory.adCars.append(scene.selectedCar)
+                MVAMemory.playerCar = scene.selectedCar
+                MVAMemory.adsEnabled = true
+                scene.newCarBtts.isHidden = true
+                scene.useBtt.isHidden = false
+                scene.removeSwipes()
+                NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
+            } else {
+                MVAMemory.adsEnabled = false
+                scene.newCarBtts.isHidden = false
+                scene.useBtt.isHidden = true
+            }
+        }
+        scene.ads.completionHandler = {}
         
         return scene
     }
@@ -72,6 +99,19 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     }
     
     private func checkArrows() {
+        if MVAMemory.ownedCars.contains(selectedCar) {
+            useBtt.isHidden = false
+            newCarBtts.isHidden = true
+            (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
+        } else if MVAMemory.adCars.contains(selectedCar) {
+            useBtt.isHidden = false
+            newCarBtts.isHidden = true
+            (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "0.00 €"
+        } else {
+            useBtt.isHidden = true
+            newCarBtts.isHidden = false
+        }
+        
         switch availableCars.index(of: selectedCar)! {
         case 0:
             leftArr.isHidden = true
@@ -148,15 +188,39 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         }
     }
     
+    private func purchase() {
+        MVAMemory.adsEnabled = false
+        MVAMemory.ownedCars.append(selectedCar)
+        newCarBtts.isHidden = true
+        useBtt.isHidden = false
+        //store.buy(withCompletion: <#T##(Bool) -> ()#>)
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!.location(in: self)
         if backBtt.contains(touch) {
             removeSwipes()
             NotificationCenter.default.post(name: ChangeCarScene.backFromScene, object: nil)
-        } else if useBtt.contains(touch) {
+        } else if !useBtt.isHidden && useBtt.contains(touch) {
             removeSwipes()
-            MVAMemory.playerCar = selectedCar
+            if (useBtt.childNode(withName: "txt") as! SKLabelNode).text == "USE" {
+                if MVAMemory.ownedCars.contains(selectedCar) {
+                    MVAMemory.playerCar = selectedCar
+                    MVAMemory.adCars = []
+                    MVAMemory.adsEnabled = false
+                }
+            } else {
+                purchase()
+                (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
+            }
             NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
+        } else if !newCarBtts.isHidden && newCarBtts.contains(touch) {
+            let specificTouch = touches.first!.location(in: self.newCarBtts)
+            if enableAdsBtt.contains(specificTouch) {
+                ads.showAd()
+            } else if buyBtt.contains(specificTouch) {
+                purchase()
+            }
         } else if rightArr.contains(touch) {
             changeCar(1)
         } else if leftArr.contains(touch) {

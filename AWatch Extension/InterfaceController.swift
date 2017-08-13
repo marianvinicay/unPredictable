@@ -23,6 +23,11 @@ class InterfaceController: WKInterfaceController {
         
         // Use a preferredFramesPerSecond that will maintain consistent frame rate
         self.skInterface.preferredFramesPerSecond = 30
+        
+        scene.intel.healthKHelper.initiateKit()
+        //if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
+            scene.intel.gameCHelper.authenticateLocalPlayer()
+        //}
     }
     
     @IBAction func handleGesture(gestureRecognizer : WKGestureRecognizer) {

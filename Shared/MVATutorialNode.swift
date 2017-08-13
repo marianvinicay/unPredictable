@@ -7,7 +7,9 @@
 //
 
 import SpriteKit
-import FirebaseAnalytics
+#if os(iOS)
+    import FirebaseAnalytics
+#endif
 
 class MVATutorialNode: SKNode {
     private var dispSize: CGSize!
@@ -47,8 +49,10 @@ class MVATutorialNode: SKNode {
         gradient.zPosition = -1
         newNode.addChild(gradient)
         
-         Analytics.logEvent(AnalyticsEventTutorialBegin, parameters: nil)
-        
+        #if os(iOS)
+            Analytics.logEvent(AnalyticsEventTutorialBegin, parameters: nil)
+        #endif
+            
         return newNode
     }
     
@@ -109,7 +113,9 @@ class MVATutorialNode: SKNode {
             self.run(SKAction.fadeOut(withDuration: 0.2), completion: { completion() })
         }
         
-        Analytics.logEvent(AnalyticsEventTutorialComplete, parameters: nil)
+        #if os(iOS)
+            Analytics.logEvent(AnalyticsEventTutorialComplete, parameters: nil)
+        #endif
         
         wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
                                           SKAction.wait(forDuration: 1),

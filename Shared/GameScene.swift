@@ -7,9 +7,9 @@
 //
 
 import SpriteKit
-import FirebaseAnalytics
 #if os(iOS)
-import UIKit
+    import UIKit
+    import FirebaseAnalytics
 #endif
 
 #if os(watchOS)
@@ -153,7 +153,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             checkAchievements()
 
+            #if os(iOS)
             Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
+            #endif
             //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
     }
@@ -391,7 +393,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if playerBraking {
             var minSpeed = 150
             if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
-                if carInFront.pointsPerSecond > 35 && carInFront.pointsPerSecond < 111 {
+                if carInFront.pointsPerSecond > 10 && carInFront.pointsPerSecond < 111 {
                     minSpeed = carInFront.pointsPerSecond
                 }
             }

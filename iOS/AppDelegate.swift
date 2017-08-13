@@ -24,7 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
-        MVAGameOverNode.prepareRewardAd()
+        MVAAds.prepareRewardAd()
+        //AppTracker.startSession("aVAsQLlLoTNO9cbTz8nVVx1hTd3Lq6u3", with: AppTrackerEnableAutoCache)
         
         return true
     }
@@ -50,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        MVAAds.prepareRewardAd()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
