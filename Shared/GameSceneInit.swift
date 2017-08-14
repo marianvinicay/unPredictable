@@ -62,7 +62,7 @@ extension GameScene {
     }
     
     private func spawnPlayer() {
-        let pSkin = MVASkin.createForCar("audi", withAtlas: spawner.textures)//MVAMemory.playerCar, withAtlas: spawner.textures)
+        let pSkin = MVASkin.createForCar(MVAMemory.playerCar, withAtlas: spawner.textures)
         let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue

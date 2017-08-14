@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Leaderboards.png",
+      "filename" : "leaderb~universal@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Leaderboards@2x.png",
+      "filename" : "leaderb~universal@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Leaderboards@3x.png",
+      "filename" : "leaderb~universal@3x.png",
       "scale" : "3x"
     }
   ],

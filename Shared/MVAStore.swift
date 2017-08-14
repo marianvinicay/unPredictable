@@ -10,22 +10,23 @@
     import StoreKit
     
     class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+        func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+            if queue.transactions.isEmpty {
+                completion?(false, nil)
+            }
+        }
         func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
             for transaction in transactions {
                 switch transaction.transactionState {
-                case SKPaymentTransactionState.purchased:
-                    print("Transaction completed successfully.")
+                case .purchased, .restored:
                     SKPaymentQueue.default().finishTransaction(transaction)
                     transactionInProgress = false
-                    completion?(true)
-                    
-                case SKPaymentTransactionState.failed:
+                    completion?(true,transaction.payment.productIdentifier)
+                case .failed:
                     SKPaymentQueue.default().finishTransaction(transaction)
                     transactionInProgress = false
-                    completion?(false)
-                    
-                default:
-                    print(transaction.transactionState.rawValue)
+                    completion?(false, nil)
+                default: break
                 }
             }
         }
@@ -34,40 +35,64 @@
             if response.products.count != 0 {
                 productsArray = response.products
             }
-            else {
-                print("There are no products.")
-            }
         }
         
-        var productIDs = ["unpredictable.continueAfterCrash"]
+        var productIDs = ["life":"unpredictable.continueAfterCrash", "lives_car":"unpredictable.lives_car"]
         var productsArray = [SKProduct]()
         var transactionInProgress = false
-        var completion: ((Bool)->())?
+        private var completion: ((Bool,String?)->())?
         
         override init() {
             super.init()
-            requestProductInfo()
             SKPaymentQueue.default().add(self)
+            requestProductInfo()
         }
         
-        func buy(withCompletion comp: @escaping (Bool)->()) {
+        func buyLife(withCompletion comp: @escaping (Bool,String?)->()) {
             if !transactionInProgress {
                 transactionInProgress = true
-                let payment = SKPayment(product: productsArray.first!)
-                SKPaymentQueue.default().add(payment)
-                completion = comp
+                if let cLife = productsArray.filter({ $0.productIdentifier == productIDs["life"] }).first {
+                    let payment = SKPayment(product: cLife)
+                    SKPaymentQueue.default().add(payment)
+                    completion = comp
+                }
+            }
+        }
+        
+        func buyMudiCar(withCompletion comp: @escaping (Bool, String?)->()) {
+            if !transactionInProgress {
+                transactionInProgress = true
+                if let mCar = productsArray.filter({ $0.productIdentifier == productIDs["lives_car"] }).first {
+                    let payment = SKPayment(product: mCar)
+                    SKPaymentQueue.default().add(payment)
+                    completion = comp
+                }
+            }
+        }
+        
+        func restorePurchases(withCompletion comp: @escaping (Bool, String?)->()) {
+            SKPaymentQueue.default().restoreCompletedTransactions()
+            completion = comp
+        }
+        
+        func getCarPrice() -> String {
+            if let mCar = productsArray.filter({ $0.productIdentifier == productIDs["lives_car"] }).first {
+                let numberF = NumberFormatter()
+                numberF.numberStyle = .currency
+                numberF.locale = mCar.priceLocale
+                return numberF.string(from: mCar.price) ?? "BUY"
+            } else {
+                return "BUY"
             }
         }
         
         func requestProductInfo() {
             if SKPaymentQueue.canMakePayments() {
-                let productIdentifiers = Set(productIDs)
+                let productIdentifiers = Set(productIDs.values)
                 let productRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
                 
                 productRequest.delegate = self
                 productRequest.start()
-            } else {
-                print("Cannot perform In App Purchases.")
             }
         }
     }

@@ -25,7 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
         MVAAds.prepareRewardAd()
-        //AppTracker.startSession("aVAsQLlLoTNO9cbTz8nVVx1hTd3Lq6u3", with: AppTrackerEnableAutoCache)
         
         return true
     }

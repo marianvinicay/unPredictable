@@ -52,7 +52,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let sound = MVASound()
     var newBestDisplayed = false
     var canUpdateSpeed = true
-    private var startDate: Date?
     
     // MARK: - Gameplay
     func startGame() {
@@ -96,7 +95,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if MVAMemory.tutorialDisplayed {
                 self.isUserInteractionEnabled = true
-                self.startDate = Date()
                 self.intel.updateDist = true
             }
         }
@@ -134,9 +132,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if purchased {
                     self.continueInGame()
                 } else {
-                    if let sDate = self.startDate {
-                        self.intel.healthKHelper.logTime(withStart: sDate)
-                    }
                     self.resetScene()
                 }
             }
@@ -297,7 +292,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.tutorialNode?.removeFromParent()
             self.tutorialNode = nil
             self.intel.updateDist = true
-            self.startDate = Date()
             self.showHUD()
             
             MVAMemory.tutorialDisplayed = true
@@ -399,7 +393,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
             if intel.player.pointsPerSecond > minSpeed {
-                let backForce = CGFloat((intel.currentLevel.playerSpeed/5)*13)
+                let backForce = intel.currentLevel.level > 6 ? CGFloat((intel.currentLevel.playerSpeed/5)*13)*1.8 : CGFloat((intel.currentLevel.playerSpeed/5)*13)
                 intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
                 intel.player.brakeLight(true)
                 if intel.player.pointsPerSecond > minSpeed {
@@ -474,6 +468,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     sound.crash(onNode: intel.player)
                     generateSmoke(atPoint: contact.contactPoint, forTime: nil)
                     hideHUD(animated: true)
+                    self.camera!.childNode(withName: "nBest")?.removeFromParent()
                     gameOver()
                 }
                 perform(#selector(cancelPlayerCollision), with: nil, afterDelay: 0.05)

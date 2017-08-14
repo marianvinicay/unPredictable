@@ -86,7 +86,9 @@ class MVAGameCenterHelper: NSObject {
     func report(achievement: String) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
         let ach = GKAchievement(identifier: achievement)
+        ach.percentComplete = 100.0
         ach.showsCompletionBanner = true
+        print("rep")
         GKAchievement.report([ach], withCompletionHandler: nil)
     }
 }

@@ -3,7 +3,6 @@ target 'unPredictable - iOS' do
   use_frameworks!
   pod 'Firebase/Core'
   pod 'Firebase/AdMob'
-  pod 'GoogleMobileAdsMediationAdColony'
   pod 'Fabric'
   pod 'Crashlytics'
 end

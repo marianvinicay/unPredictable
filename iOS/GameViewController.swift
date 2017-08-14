@@ -29,7 +29,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         let sceneSize = self.view.frame.size
         scene = GameScene.new(withSize: sceneSize)
-        changeCarScene = ChangeCarScene.new(withSize: sceneSize)
+        changeCarScene = ChangeCarScene.new(withSize: sceneSize, andStore: scene.intel.storeHelper)
         
         if MVAMemory.audioMuted {
             scene.audioEngine.mainMixerNode.outputVolume = 0.0
@@ -47,7 +47,6 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
         
-        scene.intel.healthKHelper.initiateKit()
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer()
         }
@@ -145,9 +144,16 @@ class GameViewController: UIViewController {
         }
         backFromChangeCarScene()
     }
+   
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .portrait
+        } else {
+            return .all
+        }
     }
     
     override var prefersStatusBarHidden: Bool {

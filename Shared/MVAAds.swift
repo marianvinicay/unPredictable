@@ -100,7 +100,7 @@ enum MVAAdsCombination: CustomStringConvertible {
         }
         
         func interstitial(_ ad: GADInterstitial, didFailToReceiveAdWithError error: GADRequestError) {
-            presentError(error.localizedDescription)
+            presentError(withName: error.localizedDescription)
             if config != .onlyShort {
                 MVAAds.prepareRewardAd()
             }

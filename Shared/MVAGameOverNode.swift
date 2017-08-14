@@ -39,7 +39,7 @@ class MVAGameOverNode: SKNode {
         goLabel.position = .zero
         newNode.addChild(goLabel)
         if goLabel.frame.size.width > size.width {
-            goLabel.fontSize = 45
+            goLabel.fontSize = 40
         }
         
         newNode.countD = SKLabelNode(text: String(newNode.countDown))
@@ -116,7 +116,6 @@ class MVAGameOverNode: SKNode {
             }
             
             newNode.adsForCars?.successHandler = { [unowned newNode] (_: Bool) in
-                
                 newNode.startNewGame()
             }
             newNode.adsForCars?.completionHandler = { [unowned newNode] () in
@@ -135,7 +134,13 @@ class MVAGameOverNode: SKNode {
             if countDown > 1 {
                 countDown -= 1
                 countD?.text = String(countDown)
-                perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
+                if countDown == 3 && MVAMemory.adsEnabled  {
+                    adsForCars?.showAd()
+                    countD?.removeFromParent()
+                    countD = nil
+                } else {
+                    perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
+                }
             } else {
                 if MVAMemory.adsEnabled {
                     adsForCars?.showAd()
@@ -181,18 +186,18 @@ class MVAGameOverNode: SKNode {
                 scene!.view!.addSubview(activityInd!)
                 
                 if showPurchase {
-                    self.activityInd?.stopAnimating()
+                    /*self.activityInd?.stopAnimating()
                     self.activityInd?.removeFromSuperview()
                     self.continueInGame()
-                    /*store.buy() { (purchased: Bool) in
-                     self.activityInd.stopAnimating()
-                     self.activityInd.removeFromSuperview()
-                     if purchased {
-                     self.continueInGame()
-                     } else {
-                     self.startNewGame()
-                     }
-                     }*/
+                     */store.buyLife() { (purchased: Bool, _) in
+                        self.activityInd?.stopAnimating()
+                        self.activityInd?.removeFromSuperview()
+                        if purchased {
+                            self.continueInGame()
+                        } else {
+                            self.startNewGame()
+                        }
+                    }
                 } else {
                     adsAsPurchase.showAd()
                 }
