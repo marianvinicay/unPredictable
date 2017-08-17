@@ -94,7 +94,7 @@ class MVASpawner: SKSpriteNode {
         var newLane: Int?
         
         if lastLaneSpawn == playerLane {
-            let oldLane = lns.first != nil ? lns.first!:(lastLaneSpawn ?? Int(arc4random_uniform(3)))
+            let oldLane = lns.first != nil ? lns.first!:(lastLaneSpawn ?? Int(arc4random_uniform(UInt32(maxLane+1))))
             
             switch oldLane {
             case maxLane:
