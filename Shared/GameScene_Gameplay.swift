@@ -50,6 +50,38 @@ extension GameScene {
         })
     }
     
+    func resetGame() {
+        self.removeChildren(in: self.children.filter({ $0.name == "smoke" }))
+        self.camera!.childNode(withName: "nBest")?.removeFromParent()
+        camera!.childNode(withName: "road")?.removeFromParent()
+        camera!.position = .zero
+        
+        self.recordDistance.setScale(1.0)
+        self.playBtt.setScale(1.0)
+        
+        lastUpdate = nil
+        gameStarted = false
+        playerDistance = "0.0"
+        playerBraking = false
+        newBestDisplayed = false
+        roadNodes.forEach({
+            $0.removeFromParent()
+            roadNodes.remove($0)
+        })
+        
+        setLevelSpeed(0)
+        setDistance(MVAWorldConverter.distanceToOdometer(0.0))
+        intel.reset()
+        
+        endOfWorld = 0.0
+        spawnStartRoad()
+        spawnPlayer()
+        
+        spawner.size.height = MVAConstants.baseCarSize.height*2.5
+        remover.position = CGPoint(x: 0.0, y: -frame.height)
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+    }
+    
     func checkAchievements() {
         if MVAMemory.enableGameCenter {
             let newDist = MVAMemory.accumulatedDistance + intel.distanceTraveled
@@ -75,80 +107,24 @@ extension GameScene {
         }
     }
     
+    func checkLives() {
+        switch intel.player.skin.name {
+        case "playerJeep":
+            intel.playerLives = 3
+            changeDistanceColor(MVAColor.jGreen)
+            lives.isHidden = false
+            for child in lives.children {
+                child.alpha = 1.0
+            }
+        default:
+            intel.playerLives = -1
+            changeDistanceColor(MVAColor.mvRed)
+            lives.isHidden = true
+        }
+    }
+    
     func removeLife() {
         intel.playerLives -= 1
         lives.childNode(withName: "life\(intel.playerLives)")?.run(SKAction.fadeOut(withDuration: 0.4))
     }
 }
-
-#if os(iOS) || os(tvOS)
-    // MARK: - Touch handling
-    import UIKit
-    
-    extension GameScene: UIGestureRecognizerDelegate {
-        
-        override func didMove(to view: SKView) {
-            setupSwipes()
-        }
-        
-        func setupSwipes() {
-            let right = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
-            right.direction = .right
-            
-            let left = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
-            left.direction = .left
-            
-            let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-            brake.minimumPressDuration = 0.08
-            
-            right.delegate = self
-            left.delegate = self
-            brake.delegate = self
-            
-            view?.addGestureRecognizer(right)
-            view?.addGestureRecognizer(left)
-            view?.addGestureRecognizer(brake)
-        }
-        
-        func handelUISwipe(swipe: UISwipeGestureRecognizer) {
-            switch swipe.direction {
-            case UISwipeGestureRecognizerDirection.right: handleSwipe(swipe: .right)
-            case UISwipeGestureRecognizerDirection.left: handleSwipe(swipe: .left)
-            default: break
-            }
-        }
-
-        func handleUIBrake(gest: UILongPressGestureRecognizer) {
-            switch gest.state {
-            case .began:
-                handleBrake(started: true)
-                lastPressedXPosition = gest.location(in: view).x
-            case .changed:
-                let change = gest.location(in: view).x - lastPressedXPosition
-                handleBrakingSwipe(fromPositionChange: change)
-                lastPressedXPosition = gest.location(in: view).x
-            case .ended:
-                if let currentPLane = intel.player.currentLane {
-                    handleBrake(started: false)
-                    let currentLanePos = CGFloat(lanePositions[currentPLane]!)
-                    if intel.player.position.x != currentLanePos {
-                        let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
-                        intel.player.run(actMove)
-                    }
-                }
-            default: break
-            }
-        }
-        
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            if !gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
-                self.isUserInteractionEnabled = false
-                self.startGame()
-            } else if gameStarted && pauseBtt.contains(touches.first!.location(in: self.camera!)) {
-                pauseGame(withAnimation: true)
-            } else if gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
-                resumeGame()
-            }
-        }
-    }
-#endif

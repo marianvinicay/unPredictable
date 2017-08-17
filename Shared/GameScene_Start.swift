@@ -61,7 +61,7 @@ extension GameScene {
         return scene
     }
     
-    private func spawnPlayer() {
+    func spawnPlayer() {
         let pSkin = MVASkin.createForCar(MVAMemory.playerCar, withAtlas: spawner.textures)
         let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
@@ -75,23 +75,7 @@ extension GameScene {
         checkLives()
     }
     
-    func checkLives() {
-        switch intel.player.skin.name {
-        case "playerJeep":
-            intel.playerLives = 3
-            changeDistanceColor(MVAColor.jGreen)
-            lives.isHidden = false
-            for child in lives.children {
-                child.alpha = 1.0
-            }
-        default:
-            intel.playerLives = -1
-            changeDistanceColor(MVAColor.mvRed)
-            lives.isHidden = true
-        }	
-    }
-    
-    private func spawnStartRoad() {
+    func spawnStartRoad() {
         if let starterNode = self.childNode(withName: "starter") as? MVARoadNode {
             starterNode.size = self.size
             starterNode.position = .zero
@@ -140,7 +124,7 @@ extension GameScene {
     }
     
     func initiateScene() {
-        spawner = MVASpawner.createCarSpawner(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height*2.5))
+        spawner = MVASpawnerNode.createCarSpawner(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height*2.5))
         spawner.position = CGPoint(x: 0.0, y: self.frame.height*1.5)
         spawner.zPosition = 4.0
         spawner.name = "spawner"
@@ -151,54 +135,16 @@ extension GameScene {
         spawnStartRoad()
         
         //remover
-        remover = SKSpriteNode(color: .clear, size: CGSize(width: size.width, height: 5.0))
+        remover = MVARemoverNode.createRemover(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height))
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         remover.zPosition = 4.0
         remover.name = "remover"
         self.addChild(remover)
-        
-        remover.physicsBody = SKPhysicsBody(rectangleOf: remover.size)
-        remover.physicsBody?.affectedByGravity = false
-        remover.physicsBody?.isDynamic = false
-        remover.physicsBody?.categoryBitMask = MVAPhysicsCategory.remover.rawValue
-        remover.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         
         self.audioEngine.prepare()
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.speed = 0.0
         
         sound.ignite(node: self)
-    }
-    
-    func resetScene() {
-        self.removeChildren(in: self.children.filter({ $0.name == "smoke" }))
-        self.camera!.childNode(withName: "nBest")?.removeFromParent()
-        camera!.childNode(withName: "road")?.removeFromParent()
-        camera!.position = .zero
-        
-        self.recordDistance.setScale(1.0)
-        self.playBtt.setScale(1.0)
-        
-        lastUpdate = nil
-        gameStarted = false
-        playerDistance = "0.0"
-        playerBraking = false
-        newBestDisplayed = false
-        roadNodes.forEach({
-            $0.removeFromParent()
-            roadNodes.remove($0)
-        })
-        
-        setLevelSpeed(0)
-        setDistance(MVAWorldConverter.distanceToOdometer(0.0))
-        intel.reset()
-        
-        endOfWorld = 0.0
-        spawnStartRoad()
-        spawnPlayer()
-        
-        spawner.size.height = MVAConstants.baseCarSize.height*2.5
-        remover.position = CGPoint(x: 0.0, y: -frame.height)
-        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
     }
 }

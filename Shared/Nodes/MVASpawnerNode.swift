@@ -8,17 +8,22 @@
 
 import SpriteKit
 
-class MVASpawner: SKSpriteNode {
+class MVASpawnerNode: SKSpriteNode {
     // MARK: - Car Section
-    class func createCarSpawner(withSize size: CGSize) -> MVASpawner {
-        let spawner = MVASpawner(color: .clear, size: CGSize(width: size.width, height: size.height))
+    class func createCarSpawner(withSize size: CGSize) -> MVASpawnerNode {
+        let spawner = MVASpawnerNode(color: .clear, size: CGSize(width: size.width, height: size.height))
         return spawner
     }
     
     private var lastLaneSpawn: Int?
-    let textures = SKTextureAtlas(named: "Cars")
     private var doubleSpawnLimit = 0
+    let textures = SKTextureAtlas(named: "Cars")
+    let roadTexture = SKTexture(imageNamed: "road")
     var usedCars = Set<MVACar>()
+    
+    private var playerLane: Int? {
+        return (self.parent as! GameScene).intel.player?.currentLane
+    }
         
     func spawnCar(withExistingCars cars: [MVACar]) {
         var intersectingCars = [Int]()
@@ -84,10 +89,6 @@ class MVASpawner: SKSpriteNode {
         case 4: return MVASkin.createForCar("mini_van", withAtlas: self.textures)
         default: return MVASkin.createForCar("prius", withAtlas: self.textures)
         }
-    }
-    
-    private var playerLane: Int? {
-        return (self.parent as! GameScene).intel.player?.currentLane
     }
     
     private func randomLaneWithLanesOccupied(_ lns: [Int]) -> Int {
@@ -170,20 +171,4 @@ class MVASpawner: SKSpriteNode {
             return CGFloat(posX-wiggleRoom)
         }
     }
-    
-    // MARK: - Road Section
-    var usedRoad = [MVARoadNode]()
-    var roadTexture = SKTexture(imageNamed: "road")
-    
-    func spawnRoad(withSize rSize: CGSize) -> MVARoadNode? {
-        var road: MVARoadNode!
-        if usedRoad.isEmpty {
-            road = MVARoadNode.createWith(texture: roadTexture, height: rSize.height, andWidth: rSize.width)
-        } else {
-            road = usedRoad.removeFirst()
-        }
-        
-        return road
-    }
-    
 }

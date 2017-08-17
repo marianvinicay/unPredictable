@@ -12,12 +12,6 @@ import SpriteKit
     import FirebaseAnalytics
 #endif
 
-#if os(watchOS)
-    import WatchKit
-    // <rdar://problem/26756207> SKColor typealias does not seem to be exposed on watchOS SpriteKit
-    typealias SKColor = UIColor
-#endif
-
 class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Variables
     // MARK: Gameplay Logic
@@ -40,8 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var recordDistance: SKLabelNode!
     var lives: SKSpriteNode!
     var roadNodes = Set<MVARoadNode>()
-    var remover: SKSpriteNode!
-    var spawner: MVASpawner!
+    var remover: MVARemoverNode!
+    var spawner: MVASpawnerNode!
     
     // MARK: Gameplay Helpers
     var tutorialNode: MVATutorialNode?
@@ -132,7 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if purchased {
                     self.continueInGame()
                 } else {
-                    self.resetScene()
+                    self.resetGame()
                 }
             }
             
@@ -387,7 +381,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if playerBraking {
             var minSpeed = 150
             if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
-                if carInFront.pointsPerSecond > 10 && carInFront.pointsPerSecond < 111 {
+                if carInFront.pointsPerSecond > 1 && carInFront.pointsPerSecond < 111 {
                     minSpeed = carInFront.pointsPerSecond
                 }
             }

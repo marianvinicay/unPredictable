@@ -97,5 +97,14 @@
         }
     }
 #elseif os(watchOS)
-    class MVAStore {}
+    class MVAStore {
+        func buyLife(withCompletion comp: @escaping (Bool,String?)->()) {
+        }
+        
+        func buyMudiCar(withCompletion comp: @escaping (Bool, String?)->()) {
+        }
+        
+        func restorePurchases(withCompletion comp: @escaping (Bool, String?)->()) {
+        }
+    }
 #endif
