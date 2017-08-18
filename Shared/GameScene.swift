@@ -7,10 +7,6 @@
 //
 
 import SpriteKit
-#if os(iOS)
-    import UIKit
-    import FirebaseAnalytics
-#endif
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Variables
@@ -33,6 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var originalDistancePosition: CGPoint!
     var recordDistance: SKLabelNode!
     var lives: SKSpriteNode!
+    var battery: SKSpriteNode!
     var roadNodes = Set<MVARoadNode>()
     var remover: MVARemoverNode!
     var spawner: MVASpawnerNode!
@@ -48,128 +45,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var canUpdateSpeed = true
     
     // MARK: - Gameplay
-    func startGame() {
-        self.physicsWorld.speed = 1.0
-        let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
-        let randLane = Int(arc4random_uniform(3))
-        let randLanePos = CGFloat(lanePositions[randLane]!)
-        let whereToGo = CGPoint(x: randLanePos, y: targetY)
-        let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
-        
-        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
-        startSound()
-        intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
-        
-        let turnIn = SKAction.sequence([SKAction.wait(forDuration: 0.6),SKAction.rotate(toAngle: angle, duration: 0.2)])
-        let moveIn = SKAction.sequence([SKAction.wait(forDuration: 0.7),SKAction.moveTo(x: randLanePos, duration: 0.7)])
-        let turnOut = SKAction.sequence([SKAction.wait(forDuration: 1.3),SKAction.rotate(toAngle: 0, duration: 0.2)])
-        
-        intel.player.currentLane = randLane
-        intel.player.run(SKAction.group([turnIn,moveIn,turnOut]))
-        setLevelSpeed(intel.currentLevel.playerSpeed)
-        
-        let curtainUp = SKAction.run {
-            if MVAMemory.tutorialDisplayed {
-                self.spawnWithDelay(self.intel.currentLevel.spawnRate)
-                self.showHUD()
-            } else {
-                self.tutorialNode = MVATutorialNode.new(size: self.size)
-                self.tutorialNode!.alpha = 0.0
-                self.tutorialNode!.zPosition = 9.0
-                self.camera!.addChild(self.tutorialNode!)
-                self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
-                                                          SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
-            }
-            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
-            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
+    func spawnWithDelay(_ delay: TimeInterval) {
+        self.removeAction(forKey: "spawn")
+        let spawn = SKAction.run {
+            self.spawner.spawnCar(withExistingCars: self.intel.cars.filter({ $0.position.y > self.camera!.position.y+self.size.height/3 }))
         }
-        
-        let start = SKAction.run {
-            self.gameStarted = true
-            
-            if MVAMemory.tutorialDisplayed {
-                self.isUserInteractionEnabled = true
-                self.intel.updateDist = true
-            }
-        }
-        
-        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
-    }
-    
-    private func gameOver() {
-        if self.camera!.childNode(withName: "gameO") == nil {
-            var offP = false
-            var offAd = false
-            if tutorialNode == nil {
-                if intel.distanceTraveled < 8.0 {
-                    timesCrashed += 1
-                }
-                if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
-                    offAd = true
-                    offP = false
-                } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
-                    offAd = false
-                    offP = true
-                }
-            } else {
-                tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
-                tutorialNode!.removeFromParent()
-                tutorialNode = nil
-            }
-            
-            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd)
-            goNode.zPosition = 8.0
-            goNode.position = .zero
-            goNode.store = intel.storeHelper
-            goNode.name = "gameO"
-            goNode.completion = { [unowned self] (purchased: Bool) in
-                if purchased {
-                    self.continueInGame()
-                } else {
-                    self.resetGame()
-                }
-            }
-            
-            let curtainDown = SKAction.run {
-                self.removeAction(forKey: "spawn")
-                self.camera!.addChild(goNode)
-                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
-                self.fadeOutVolume()
-                goNode.performCountDown()
-            }
-            
-            self.run(curtainDown)
-            
-            checkAchievements()
-
-            #if os(iOS)
-            Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
-            #endif
-            //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
-        }
-    }
-    
-    private func continueInGame() {
-        pauseGame(withAnimation: false)
-        removeChildren(in: self.children.filter({ $0.name == "smoke" }))
-        camera!.childNode(withName: "nBest")?.removeFromParent()
-        playerBraking = false
-        spawner.size.height = MVAConstants.baseCarSize.height*2.5
-        
-        intel.cars.forEach({
-            $0.removeFromParent()
-        })
-        intel.cars.removeAll()
-        
-        setLevelSpeed(intel.currentLevel.playerSpeed)
-        spawnWithDelay(intel.currentLevel.spawnRate)
-        
-        checkLives()
-        MVACar.resetPhysicsBody(forCar: intel.player)
-        intel.player.zRotation = 0
-        intel.player.position.x = CGFloat(lanePositions[intel.player.currentLane]!)
-        intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
-        startSound()
+        let wait = SKAction.wait(forDuration: delay)
+        self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
     }
     
     private func nextLevelSign(withCompletion completion: @escaping (()->())) {
@@ -210,20 +92,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.camera!.run(SKAction.sequence([addAct,SKAction.wait(forDuration: 5.0),removeAct]))
     }
     
-    private func spawnWithDelay(_ delay: TimeInterval) {
-        self.removeAction(forKey: "spawn")
-        let spawn = SKAction.run {
-            self.spawner.spawnCar(withExistingCars: self.intel.cars.filter({ $0.position.y > self.camera!.position.y+self.size.height/3 }))
+    private func updateCamera() {
+        spawner.position.y = camera!.position.y+self.size.height
+        if intel.player != nil {
+            let desiredCameraPosition = intel.player.position.y+size.height/4
+            camera!.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.02))
+            //camera!.position.y = desiredCameraPosition
         }
-        let wait = SKAction.wait(forDuration: delay)
-        self.run(SKAction.repeatForever(SKAction.sequence([spawn,wait])), withKey: "spawn")
+        remover.position.y = camera!.position.y-self.size.height
     }
     
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
         if gameStarted {
             if lastUpdate != nil {
-                intel.update(withDeltaTime: currentTime-lastUpdate)
+                let dTime = currentTime-lastUpdate
+                intel.update(withDeltaTime: dTime)
+                
+                if intel.player.pcsActive && !playerBraking {
+                    if intel.checkPCS(withDeltaTime: dTime) {
+                        removeLife()
+                    }
+                }
             }
             lastUpdate = currentTime
 
@@ -271,16 +161,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private func updateCamera() {
-        spawner.position.y = camera!.position.y+self.size.height
-        if intel.player != nil {
-            let desiredCameraPosition = intel.player.position.y+size.height/4
-            camera!.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.02))
-            //camera!.position.y = desiredCameraPosition
-        }
-        remover.position.y = camera!.position.y-self.size.height
-    }
-    
     private func endTutorial() {
         tutorialNode?.end {
             self.tutorialNode?.removeFromParent()
@@ -305,32 +185,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Controls
     func handleSwipe(swipe: MVAPosition) {
         if gameStarted && physicsWorld.speed != 0.0 {
-            guard intel.player.mindSet == .player else { return }
-            if intel.player.changeLane(inDirection: swipe, AndPlayer: intel.player) {
+            if intel.player.changeLane(inDirection: swipe) {
                 sound.indicate(onNode: intel.player)
                 
                 if tutorialNode?.stage == 0 {
                     spawnWithDelay(intel.currentLevel.spawnRate)
                     tutorialNode!.continueToBraking()
                 }
-            }
-        }
-    }
-    
-    func handleBrakingSwipe(fromPositionChange posCh: CGFloat) {
-        if gameStarted && physicsWorld.speed != 0.0 {
-            guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
-            guard intel.player.mindSet == .player else { return }
-            let newPlayerPos = intel.player.position.x + posCh
-            if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
-                newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
-                intel.player.position.x = newPlayerPos
-                let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
-                intel.player.currentLane = closestLane.element.key
-            }
-            
-            if tutorialNode?.stage == 1 {
-                endTutorial()
             }
         }
     }
@@ -343,6 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.removeAction(forKey: "spawn")
                     spawner.size.height = self.size.height
                     playerBraking = true
+                    intel.player.brakeLight(true)
                 }
                 deceleratePlayer()
             } else {
@@ -352,6 +214,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     intel.player.brakeLight(false)
                 }
                 acceleratePlayer()
+            }
+        }
+    }
+    
+    func handleBrakingSwipe(fromPositionChange posCh: CGFloat) {
+        if gameStarted && physicsWorld.speed != 0.0 {
+            guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
+            let newPlayerPos = intel.player.position.x + posCh
+            if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
+                newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
+                intel.player.position.x = newPlayerPos
+                let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
+                intel.player.currentLane = closestLane.element.key
+            }
+            
+            if tutorialNode?.stage == 1 {
+                endTutorial()
             }
         }
     }
@@ -380,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func deceleratePlayer() {
         if playerBraking {
             var minSpeed = 150
-            if let carInFront = intel.player.responseFromSensors(inPositions: [.front]).first {
+            if let carInFront = intel.player.responseFromSensors(inPositions: [.front, .stop]).first {
                 if carInFront.pointsPerSecond > 1 && carInFront.pointsPerSecond < 111 {
                     minSpeed = carInFront.pointsPerSecond
                 }
@@ -389,7 +268,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if intel.player.pointsPerSecond > minSpeed {
                 let backForce = intel.currentLevel.level > 6 ? CGFloat((intel.currentLevel.playerSpeed/5)*13)*1.8 : CGFloat((intel.currentLevel.playerSpeed/5)*13)
                 intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
-                intel.player.brakeLight(true)
+
                 if intel.player.pointsPerSecond > minSpeed {
                     setLevelSpeed(intel.player.pointsPerSecond)
                 } else {
@@ -403,22 +282,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    // MARK: - SKPhysicsContactDelegate
     private var playerInCollision = false
+    
     func cancelPlayerCollision() { playerInCollision = false }
     
-    // MARK: - SKPhysicsContactDelegate
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         switch collision {
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.remover.rawValue:
-            if let node = contact.bodyA.node as? MVACar {
+            if let node = contact.bodyA.node as? MVACarBot {
                 scrape(car: node)
-            } else if let node = contact.bodyB.node as? MVACar {
+            } else if let node = contact.bodyB.node as? MVACarBot {
                 scrape(car: node)
             }
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.car.rawValue:
-            if let node1 = contact.bodyA.node as? MVACar,
-                let node2 = contact.bodyB.node as? MVACar {
+            if let node1 = contact.bodyA.node as? MVACarBot,
+                let node2 = contact.bodyB.node as? MVACarBot {
                 let maxYFrame = self.camera!.position.y+self.size.height/2+MVAConstants.baseCarSize.height
                 let minYFrame = self.camera!.position.y-self.size.height/2-MVAConstants.baseCarSize.height
                 if maxYFrame > contact.contactPoint.y && contact.contactPoint.y > minYFrame {
@@ -439,14 +319,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case MVAPhysicsCategory.car.rawValue | MVAPhysicsCategory.player.rawValue:
             if !playerInCollision {
                 playerInCollision = true
-                if intel.playerLives > 0 {
+                if intel.player.skin.name == MVACarNames.playerLives && intel.playerLives > 0 {
                     removeLife()
                     sound.crash(onNode: intel.player)
-                    let ordCar = [contact.bodyA.node, contact.bodyB.node].map({ $0 as! MVACar }).filter({ $0.mindSet != .player })
+                    let ordCar = [contact.bodyA.node, contact.bodyB.node].map({ $0 as? MVACarBot })
                     for car in ordCar {
-                        scrape(car: car)
+                        if car != nil { scrape(car: car!) }
                     }
-                    MVACar.resetPhysicsBody(forCar: intel.player)
+                    intel.player.resetPhysicsBody()
                     intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
                 } else {
                     physicsWorld.speed = 0.0
@@ -485,7 +365,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private func scrape(car: MVACar) {
+    private func scrape(car: MVACarBot) {
         car.removeFromParent()
         car.pointsPerSecond = 0
         intel.cars.remove(car)

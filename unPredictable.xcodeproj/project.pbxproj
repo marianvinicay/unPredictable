@@ -70,8 +70,6 @@
 		2F861B971F1CD6F900162EDA /* GameScene_Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B961F1CD6F900162EDA /* GameScene_Start.swift */; };
 		2F861B981F1CD6F900162EDA /* GameScene_Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B961F1CD6F900162EDA /* GameScene_Start.swift */; };
 		2F861B991F1CD6F900162EDA /* GameScene_Start.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B961F1CD6F900162EDA /* GameScene_Start.swift */; };
-		2F9808C71F43160500412075 /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
-		2F9808C81F43160B00412075 /* MVAStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196B1F28809800FE58A8 /* MVAStore.swift */; };
 		2F9808C91F4316AC00412075 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
 		2F9808CA1F43179C00412075 /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */; };
 		2F9808CB1F43179C00412075 /* MVACar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020A1F054B84004D4EFE /* MVACar.swift */; };
@@ -88,12 +86,17 @@
 		2F9808D61F4317AD00412075 /* GameScene_Volume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */; };
 		2F9808D71F4317B700412075 /* GameScene_Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */; };
 		2F9808D81F4317BD00412075 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
-		2F9808D91F4317C300412075 /* MVAGameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */; };
 		2F9808DE1F45DE4D00412075 /* GameScene_Touch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808DD1F45DE4D00412075 /* GameScene_Touch.swift */; };
 		2F9808E01F45DFC200412075 /* MVARemoverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808DF1F45DFC200412075 /* MVARemoverNode.swift */; };
 		2F9808E11F45E00200412075 /* MVARemoverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808DF1F45DFC200412075 /* MVARemoverNode.swift */; };
 		2F9808E21F45E00300412075 /* MVARemoverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808DF1F45DFC200412075 /* MVARemoverNode.swift */; };
 		2F9808E31F45E00400412075 /* MVARemoverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808DF1F45DFC200412075 /* MVARemoverNode.swift */; };
+		2F9808E51F46EB5E00412075 /* MVACarBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E41F46EB5E00412075 /* MVACarBot.swift */; };
+		2F9808E61F46EB5E00412075 /* MVACarBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E41F46EB5E00412075 /* MVACarBot.swift */; };
+		2F9808E71F46EB5E00412075 /* MVACarBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E41F46EB5E00412075 /* MVACarBot.swift */; };
+		2F9808E91F46EB6A00412075 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */; };
+		2F9808EA1F46EB6A00412075 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */; };
+		2F9808EB1F46EB6A00412075 /* MVACarPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */; };
 		2F9E41A41F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
 		2F9E41A61F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
 		2F9E41A71F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
@@ -224,6 +227,8 @@
 		2F861B961F1CD6F900162EDA /* GameScene_Start.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Start.swift; sourceTree = "<group>"; };
 		2F9808DD1F45DE4D00412075 /* GameScene_Touch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Touch.swift; sourceTree = "<group>"; };
 		2F9808DF1F45DFC200412075 /* MVARemoverNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVARemoverNode.swift; sourceTree = "<group>"; };
+		2F9808E41F46EB5E00412075 /* MVACarBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarBot.swift; sourceTree = "<group>"; };
+		2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarPlayer.swift; sourceTree = "<group>"; };
 		2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_HUD.swift; sourceTree = "<group>"; };
 		2FAE020A1F054B84004D4EFE /* MVACar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACar.swift; sourceTree = "<group>"; };
 		2FAE020B1F054B84004D4EFE /* MVASpawnerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVASpawnerNode.swift; sourceTree = "<group>"; };
@@ -442,6 +447,8 @@
 				2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */,
 				2FAE020D1F054B84004D4EFE /* MVALevel.swift */,
 				2FAE020A1F054B84004D4EFE /* MVACar.swift */,
+				2F9808E41F46EB5E00412075 /* MVACarBot.swift */,
+				2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */,
 				2FAE02101F054B84004D4EFE /* MVAUtils.swift */,
 				2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */,
 				2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */,
@@ -823,6 +830,7 @@
 				2F7119701F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
 				2FAE02261F054B84004D4EFE /* MVARoadNode.swift in Sources */,
 				2FAE021E1F054B84004D4EFE /* MVALevel.swift in Sources */,
+				2F9808E51F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2F71196C1F28809800FE58A8 /* MVAStore.swift in Sources */,
 				2FAE02121F054B84004D4EFE /* MVACar.swift in Sources */,
 				2FAE022A1F054B84004D4EFE /* MVAUtils.swift in Sources */,
@@ -831,6 +839,7 @@
 				2F9808DE1F45DE4D00412075 /* GameScene_Touch.swift in Sources */,
 				2FAE021A1F054B84004D4EFE /* MVAConstants_Memory.swift in Sources */,
 				276694BE1F22048500E70D15 /* MVAGameCenterHelper.swift in Sources */,
+				2F9808E91F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
 				2FAE02221F054B84004D4EFE /* MVAMarvinAI.swift in Sources */,
 				2F9808E01F45DFC200412075 /* MVARemoverNode.swift in Sources */,
 				2F861B5A1F1CAD7F00162EDA /* MVASound.swift in Sources */,
@@ -857,6 +866,7 @@
 				2FAE02281F054B84004D4EFE /* MVARoadNode.swift in Sources */,
 				2FAE02201F054B84004D4EFE /* MVALevel.swift in Sources */,
 				2FAE02141F054B84004D4EFE /* MVACar.swift in Sources */,
+				2F9808E61F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2FAE022C1F054B84004D4EFE /* MVAUtils.swift in Sources */,
 				2F5B1DF11EFFD863006AEA30 /* GameScene_Gameplay.swift in Sources */,
 				2F9808E11F45E00200412075 /* MVARemoverNode.swift in Sources */,
@@ -873,6 +883,7 @@
 				2F23E13F1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F9E41A61F03B389004FB9F5 /* GameScene_HUD.swift in Sources */,
 				2F7119711F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
+				2F9808EA1F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
 				2FDFBD281F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -888,6 +899,7 @@
 				2FAE02191F054B84004D4EFE /* MVASpawnerNode.swift in Sources */,
 				2FAE02251F054B84004D4EFE /* MVAMarvinAI.swift in Sources */,
 				2F23E15E1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2F9808E71F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */,
 				2F23E14F1D6EF21D00119E4F /* GameViewController.swift in Sources */,
 				2F9808E21F45E00300412075 /* MVARemoverNode.swift in Sources */,
@@ -904,6 +916,7 @@
 				2F3EAE431F3B1DED001A1A6E /* MVAAds.swift in Sources */,
 				2FAE021D1F054B84004D4EFE /* MVAConstants_Memory.swift in Sources */,
 				2FAE02211F054B84004D4EFE /* MVALevel.swift in Sources */,
+				2F9808EB1F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
 				2F7119721F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -915,19 +928,16 @@
 				2F9808D61F4317AD00412075 /* GameScene_Volume.swift in Sources */,
 				2F9808C91F4316AC00412075 /* GameScene.swift in Sources */,
 				2F9808D21F43179C00412075 /* MVAUtils.swift in Sources */,
-				2F9808D91F4317C300412075 /* MVAGameCenterHelper.swift in Sources */,
 				2F9808CE1F43179C00412075 /* MVAConstants_Memory.swift in Sources */,
 				2F9808CF1F43179C00412075 /* MVAWorldConverter.swift in Sources */,
 				2F9808D01F43179C00412075 /* MVASpawnerNode.swift in Sources */,
 				2F9808CB1F43179C00412075 /* MVACar.swift in Sources */,
 				2F9808CA1F43179C00412075 /* MVAMarvinAI.swift in Sources */,
 				2F9808D11F43179C00412075 /* MVARoadNode.swift in Sources */,
-				2F9808C71F43160500412075 /* MVAAds.swift in Sources */,
 				2F9808D41F4317AD00412075 /* MVAGameOverNode.swift in Sources */,
 				2F9808D51F4317AD00412075 /* GameScene_Start.swift in Sources */,
 				2F9808D71F4317B700412075 /* GameScene_Gameplay.swift in Sources */,
 				2FD6CDBF1F34702200FD9B96 /* InterfaceController.swift in Sources */,
-				2F9808C81F43160B00412075 /* MVAStore.swift in Sources */,
 				2F9808E31F45E00400412075 /* MVARemoverNode.swift in Sources */,
 				2FD6CDC51F34702300FD9B96 /* ExtensionDelegate.swift in Sources */,
 				2F9808D81F4317BD00412075 /* GameScene_HUD.swift in Sources */,

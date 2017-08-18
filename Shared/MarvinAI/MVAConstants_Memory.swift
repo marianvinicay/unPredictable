@@ -59,7 +59,7 @@ enum MVAMemory {
             UserDefaults.standard.set(newValue, forKey: "pCar")
         }
         get {
-            return UserDefaults.standard.value(forKey: "pCar") as? String ?? "audi"
+            return UserDefaults.standard.value(forKey: "pCar") as? String ?? MVACarNames.playerOrdinary
         }
     }
     
@@ -68,7 +68,7 @@ enum MVAMemory {
             UserDefaults.standard.set(newValue, forKey: "ownCars")
         }
         get {
-            return UserDefaults.standard.value(forKey: "ownCars") as? [String] ?? ["audi"]
+            return UserDefaults.standard.value(forKey: "ownCars") as? [String] ?? [MVACarNames.playerOrdinary]
         }
     }
     

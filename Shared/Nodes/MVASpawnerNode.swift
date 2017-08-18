@@ -19,13 +19,13 @@ class MVASpawnerNode: SKSpriteNode {
     private var doubleSpawnLimit = 0
     let textures = SKTextureAtlas(named: "Cars")
     let roadTexture = SKTexture(imageNamed: "road")
-    var usedCars = Set<MVACar>()
+    var usedCars = Set<MVACarBot>()
     
     private var playerLane: Int? {
         return (self.parent as! GameScene).intel.player?.currentLane
     }
         
-    func spawnCar(withExistingCars cars: [MVACar]) {
+    func spawnCar(withExistingCars cars: [MVACarBot]) {
         var intersectingCars = [Int]()
         for car in cars {
             if self.intersects(car) {
@@ -35,7 +35,7 @@ class MVASpawnerNode: SKSpriteNode {
         
         if intersectingCars.isEmpty && doubleSpawnLimit <= 0 && arc4random_uniform(2) == 1 {
             lastLaneSpawn = arc4random_uniform(2) == 0 ? 0:maxLane
-            var cars = [MVACar]()
+            var cars = [MVACarBot]()
             for lane in randomDoubleCombo() {
                 let car = gimmeCar()
                 car.currentLane = lane
@@ -63,10 +63,10 @@ class MVASpawnerNode: SKSpriteNode {
         }
     }
     
-    private func gimmeCar() -> MVACar {
-        var car: MVACar!
+    private func gimmeCar() -> MVACarBot {
+        var car: MVACarBot!
         if usedCars.isEmpty {
-            car = MVACar.new(withMindSet: .bot, andSkin: randomCarSkin())
+            car = MVACarBot.new(withSkin: randomCarSkin())
             car.useCounter = 1
         } else {
             car = usedCars.removeFirst()
@@ -82,12 +82,12 @@ class MVASpawnerNode: SKSpriteNode {
     
     private func randomCarSkin() -> MVASkin {
         switch arc4random_uniform(6) {
-        case 0: return MVASkin.createForCar("car", withAtlas: self.textures)
-        case 1: return MVASkin.createForCar("taxi", withAtlas: self.textures)
-        case 2: return MVASkin.createForCar("jeep", withAtlas: self.textures)
-        case 3: return MVASkin.createForCar("tesla", withAtlas: self.textures)
-        case 4: return MVASkin.createForCar("mini_van", withAtlas: self.textures)
-        default: return MVASkin.createForCar("prius", withAtlas: self.textures)
+        case 0: return MVASkin.createForCar(MVACarNames.muscle, withAtlas: self.textures)
+        case 1: return MVASkin.createForCar(MVACarNames.taxi, withAtlas: self.textures)
+        case 2: return MVASkin.createForCar(MVACarNames.offRoad, withAtlas: self.textures)
+        case 3: return MVASkin.createForCar(MVACarNames.electric, withAtlas: self.textures)
+        case 4: return MVASkin.createForCar(MVACarNames.van, withAtlas: self.textures)
+        default: return MVASkin.createForCar(MVACarNames.hybrid, withAtlas: self.textures)
         }
     }
     

@@ -7,9 +7,7 @@
 //
 
 import GameKit
-#if os(iOS) || os(tvOS)
-    import UIKit
-#endif
+import UIKit
 
 enum MVAAchievements {
     static let firstCrash: String = "com.mva.unpredictable.first_Crash"
@@ -17,9 +15,7 @@ enum MVAAchievements {
 }
 
 class MVAGameCenterHelper: NSObject {
-    #if os(iOS) || os(tvOS) || os(macOS)
-        var authenticationViewController: GKGameCenterViewController?
-    #endif
+    var authenticationViewController: GKGameCenterViewController?
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
     static let toggleBtts = Notification.Name(rawValue: "toggleBtts")
@@ -36,27 +32,17 @@ class MVAGameCenterHelper: NSObject {
     
     func authenticateLocalPlayer() {
         let localPlayer = GKLocalPlayer.localPlayer()
-        #if os(iOS) || os(tvOS)
-            localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
-                if viewController != nil {
-                    self.authenticationViewController = viewController as? GKGameCenterViewController
-                    NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
-                } else if localPlayer.isAuthenticated {
-                    MVAMemory.enableGameCenter = true
-                } else {
-                    MVAMemory.enableGameCenter = false
-               
-                }
+        localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
+            if viewController != nil {
+                self.authenticationViewController = viewController as? GKGameCenterViewController
+                NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
+            } else if localPlayer.isAuthenticated {
+                MVAMemory.enableGameCenter = true
+            } else {
+                MVAMemory.enableGameCenter = false
+                
             }
-        #elseif os(watchOS)
-            localPlayer.authenticateHandler = { (error: Error?) in
-                if localPlayer.isAuthenticated && error == nil {
-                    MVAMemory.enableGameCenter = true
-                } else {
-                    MVAMemory.enableGameCenter = false
-                }
-            }
-        #endif
+        }
     }
     
     func report(distance dist: Double) {

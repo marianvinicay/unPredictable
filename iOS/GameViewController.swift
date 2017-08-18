@@ -139,7 +139,7 @@ class GameViewController: UIViewController {
         if scene.intel.player.skin.name != pName {
             scene.intel.player.skin = MVASkin.createForCar(pName, withAtlas: scene.spawner.textures)
             scene.intel.player.texture = scene.intel.player.skin.normal
-            MVACar.resetPhysicsBody(forCar: scene.intel.player)
+            scene.intel.player.resetPhysicsBody()
             scene.checkLives()
         }
         backFromChangeCarScene()

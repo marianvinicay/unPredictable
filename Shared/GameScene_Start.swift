@@ -44,6 +44,10 @@ extension GameScene {
         
         scene.lives = down.childNode(withName: "lives") as! SKSpriteNode
         scene.lives.position = CGPoint(x: scene.size.width/2, y: 0.0)
+        scene.lives.isHidden = true
+        scene.battery = down.childNode(withName: "battery") as! SKSpriteNode
+        scene.battery.position = CGPoint(x: (scene.size.width/2)-8, y: 8.0)
+        scene.battery.isHidden = true
         
         scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
         let bestDist = MVAMemory.maxPlayerDistance.roundTo(NDecimals: 1)
@@ -62,8 +66,8 @@ extension GameScene {
     }
     
     func spawnPlayer() {
-        let pSkin = MVASkin.createForCar(MVAMemory.playerCar, withAtlas: spawner.textures)
-        let player = MVACar.new(withMindSet: .player, andSkin: pSkin)
+        let pSkin = MVASkin.createForCar("tesla", withAtlas: spawner.textures)
+        let player = MVACarPlayer.new(withSkin: pSkin)
         player.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
         player.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue

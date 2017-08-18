@@ -55,7 +55,7 @@ extension GameScene: UIGestureRecognizerDelegate {
             if let currentPLane = intel.player.currentLane {
                 handleBrake(started: false)
                 let currentLanePos = CGFloat(lanePositions[currentPLane]!)
-                if intel.player.position.x != currentLanePos {
+                if intel.player.position.x != currentLanePos && !intel.stop {
                     let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
                     intel.player.run(actMove)
                 }

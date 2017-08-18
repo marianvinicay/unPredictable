@@ -25,8 +25,9 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     private var carName: SKLabelNode!
     private var mudiDesc: SKSpriteNode!
     
-    private let availableCars = ["audi", "playerJeep"]
-    private let mockUpNames = ["audi":"Veep", "playerJeep":"Mudi"]
+    private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives]
+    private let mockUpNames = [MVACarNames.playerOrdinary:"Veep",
+                               MVACarNames.playerLives:"Mudi"]
     private var selectedCar = MVAMemory.playerCar
     private let ads = MVAAds(config: .onlyVideo)
     private var store: MVAStore!
@@ -130,7 +131,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             rightArr.isHidden = false
         }
         
-        if selectedCar == "playerJeep" {
+        if selectedCar == MVACarNames.playerLives {
             mudiDesc.isHidden = false
         } else {
             mudiDesc.isHidden = true
@@ -238,7 +239,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             store.restorePurchases() { (purchased: Bool, car: String?) in
                 if purchased && car == "unpredictable.lives_car" {
                     MVAMemory.adsEnabled = false
-                    MVAMemory.ownedCars.append("playerJeep")
+                    MVAMemory.ownedCars.append(MVACarNames.playerLives)
                     self.checkArrows()
                 }
                 self.waitNode.remove()

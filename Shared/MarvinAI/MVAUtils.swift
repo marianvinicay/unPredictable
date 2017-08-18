@@ -57,11 +57,6 @@ enum MVAPosition/*: CustomStringConvertible*/ {
     }*/
 }
 
-enum MVAMindSet {
-    case player
-    case bot
-}
-
 enum MVAPhysicsCategory: UInt32 {
     case car = 0b1
     case player = 0b10

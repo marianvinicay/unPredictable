@@ -30,11 +30,6 @@ extension GameScene {
         HUDLabel.giveMeLabel(fromNode: distanceSign).text = normalNum
         HUDLabel.giveMeLabel1(fromNode: distanceSign)!.text = decimNum
         HUDLabel.giveMeLabel2(fromNode: distanceSign)!.text = MVAWorldConverter.lengthUnit
-        /*
-        distanceSign.label.text = normalNum
-        distanceSign.label1?.text = decimNum
-        distanceSign.label2?.text = MVAWorldConverter.lengthUnit
-         */
     }
     
     func changeDistanceColor(_ color: UIColor) {

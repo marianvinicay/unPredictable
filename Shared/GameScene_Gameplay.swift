@@ -6,8 +6,58 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 import SpriteKit
+import FirebaseAnalytics
 
 extension GameScene {
+    
+    func startGame() {
+        self.physicsWorld.speed = 1.0
+        let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
+        let randLane = Int(arc4random_uniform(3))
+        let randLanePos = CGFloat(lanePositions[randLane]!)
+        let whereToGo = CGPoint(x: randLanePos, y: targetY)
+        let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
+        
+        NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+        startSound()
+        intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+        
+        let turnIn = SKAction.sequence([SKAction.wait(forDuration: 0.6),SKAction.rotate(toAngle: angle, duration: 0.2)])
+        let moveIn = SKAction.sequence([SKAction.wait(forDuration: 0.7),SKAction.moveTo(x: randLanePos, duration: 0.7)])
+        let turnOut = SKAction.sequence([SKAction.wait(forDuration: 1.3),SKAction.rotate(toAngle: 0, duration: 0.2)])
+        
+        intel.player.currentLane = randLane
+        intel.player.run(SKAction.group([turnIn,moveIn,turnOut]))
+        setLevelSpeed(intel.currentLevel.playerSpeed)
+        
+        let curtainUp = SKAction.run {
+            if MVAMemory.tutorialDisplayed {
+                self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+                self.showHUD()
+            } else {
+                self.tutorialNode = MVATutorialNode.new(size: self.size)
+                self.tutorialNode!.alpha = 0.0
+                self.tutorialNode!.zPosition = 9.0
+                self.camera!.addChild(self.tutorialNode!)
+                self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
+                                                          SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
+            }
+            self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
+            self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
+        }
+        
+        let start = SKAction.run {
+            self.gameStarted = true
+            
+            if MVAMemory.tutorialDisplayed {
+                self.isUserInteractionEnabled = true
+                self.intel.updateDist = true
+            }
+        }
+        
+        playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
+    }
+    
     func pauseGame(withAnimation anim: Bool) {
         if !isPaused {
             self.intel.stop = true
@@ -48,6 +98,82 @@ extension GameScene {
             self.intel.stop = false
             self.fadeInVolume()
         })
+    }
+    
+    func gameOver() {
+        if self.camera!.childNode(withName: "gameO") == nil {
+            var offP = false
+            var offAd = false
+            if tutorialNode == nil {
+                if intel.distanceTraveled < 8.0 {
+                    timesCrashed += 1
+                }
+                if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
+                    offAd = true
+                    offP = false
+                } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    offAd = false
+                    offP = true
+                }
+            } else {
+                tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
+                tutorialNode!.removeFromParent()
+                tutorialNode = nil
+            }
+            
+            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd)
+            goNode.zPosition = 9.0
+            goNode.position = .zero
+            goNode.store = intel.storeHelper
+            goNode.name = "gameO"
+            goNode.completion = { [unowned self] (purchased: Bool) in
+                if purchased {
+                    self.continueInGame()
+                } else {
+                    self.resetGame()
+                }
+            }
+            
+            let curtainDown = SKAction.run {
+                self.removeAction(forKey: "spawn")
+                self.camera!.addChild(goNode)
+                self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
+                self.fadeOutVolume()
+                goNode.performCountDown()
+            }
+            
+            self.run(curtainDown)
+            
+            checkAchievements()
+            
+            #if os(iOS)
+                Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
+            #endif
+            //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
+        }
+    }
+    
+    func continueInGame() {
+        pauseGame(withAnimation: false)
+        removeChildren(in: self.children.filter({ $0.name == "smoke" }))
+        camera!.childNode(withName: "nBest")?.removeFromParent()
+        playerBraking = false
+        spawner.size.height = MVAConstants.baseCarSize.height*2.5
+        
+        intel.cars.forEach({
+            $0.removeFromParent()
+        })
+        intel.cars.removeAll()
+        
+        setLevelSpeed(intel.currentLevel.playerSpeed)
+        spawnWithDelay(intel.currentLevel.spawnRate)
+        
+        checkLives()
+        intel.player.resetPhysicsBody()
+        intel.player.zRotation = 0
+        intel.player.position.x = CGFloat(lanePositions[intel.player.currentLane]!)
+        intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+        startSound()
     }
     
     func resetGame() {
@@ -109,11 +235,21 @@ extension GameScene {
     
     func checkLives() {
         switch intel.player.skin.name {
-        case "playerJeep":
+        case MVACarNames.playerLives:
             intel.playerLives = 3
             changeDistanceColor(MVAColor.jGreen)
             lives.isHidden = false
+            battery.isHidden = true
             for child in lives.children {
+                child.alpha = 1.0
+            }
+        case MVACarNames.playerPCS:
+            intel.playerLives = 3
+            changeDistanceColor(MVAColor.mvRed)
+            lives.isHidden = true
+            battery.isHidden = false
+            for child in battery.children {
+                child.removeAllActions()
                 child.alpha = 1.0
             }
         default:
@@ -123,8 +259,37 @@ extension GameScene {
         }
     }
     
+    func addToBattery() {
+        if let battBefore = battery.childNode(withName: "batt\(intel.playerLives)") {
+            battBefore.removeAllActions()
+            battBefore.alpha = 1.0
+        }
+        intel.playerLives += 1
+        if intel.playerLives > 3 {
+            perform(#selector(self.addToBattery), with: nil, afterDelay: 5.0)
+        }
+    }
+    
     func removeLife() {
         intel.playerLives -= 1
-        lives.childNode(withName: "life\(intel.playerLives)")?.run(SKAction.fadeOut(withDuration: 0.4))
+        switch intel.player.skin.name {
+        case MVACarNames.playerLives: lives.childNode(withName: "life\(intel.playerLives)")?.run(SKAction.fadeOut(withDuration: 0.4))
+        case MVACarNames.playerPCS:
+            let battBlink = SKAction.sequence([SKAction.fadeOut(withDuration: 0.01),
+                                               SKAction.wait(forDuration: 0.3),
+                                               SKAction.fadeIn(withDuration: 0.01),
+                                               SKAction.wait(forDuration: 0.3)])
+            let battAct = SKAction.sequence([SKAction.repeat(battBlink, count: 2),
+                                             SKAction.fadeOut(withDuration: 0.01)])
+            
+            if let battBefore = battery.childNode(withName: "batt\(intel.playerLives+1)") {
+                battBefore.removeAllActions()
+                battBefore.alpha = 0.0
+            }
+            battery.childNode(withName: "batt\(intel.playerLives)")?.run(battAct) {
+                self.perform(#selector(self.addToBattery), with: nil, afterDelay: 5.0)
+            }
+        default: break
+        }
     }
 }
