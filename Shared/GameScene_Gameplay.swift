@@ -259,15 +259,13 @@ extension GameScene {
         }
     }
     
-    func addToBattery() {
+    @objc func addToBattery() {
         if let battBefore = battery.childNode(withName: "batt\(intel.playerLives)") {
             battBefore.removeAllActions()
             battBefore.alpha = 1.0
         }
         intel.playerLives += 1
-        if intel.playerLives > 3 {
-            perform(#selector(self.addToBattery), with: nil, afterDelay: 5.0)
-        }
+        batteryTime = 5.0
     }
     
     func removeLife() {
@@ -286,9 +284,8 @@ extension GameScene {
                 battBefore.removeAllActions()
                 battBefore.alpha = 0.0
             }
-            battery.childNode(withName: "batt\(intel.playerLives)")?.run(battAct) {
-                self.perform(#selector(self.addToBattery), with: nil, afterDelay: 5.0)
-            }
+            self.batteryTime = 5.0
+            battery.childNode(withName: "batt\(intel.playerLives)")?.run(battAct)
         default: break
         }
     }

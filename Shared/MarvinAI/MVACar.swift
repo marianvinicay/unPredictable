@@ -10,10 +10,11 @@
 import SpriteKit
 
 enum MVACarNames {
-    static let playerOrdinary = "audi"
+    static let playerOrdinary = "player"
     static let playerLives = "playerJeep"
-    static let playerPCS = "tesla"
+    static let playerPCS = "audi"
     static let muscle = "car"
+    static let classic = "classic"
     static let offRoad = "jeep"
     static let taxi = "taxi"
     static let electric = "tesla"

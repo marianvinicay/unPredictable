@@ -71,8 +71,10 @@ class MVAMarvinAI {
                 if player.changeLane(inDirection: randDir, pcsCalling: true) == false {
                     let nextDir: MVAPosition = randDir == .left ? .right:.left
                     if player.changeLane(inDirection: nextDir, pcsCalling: true) == false {
-                        player.pointsPerSecond = carInFront.pointsPerSecond
+                        player.brakeLight(true)
+                        player.pointsPerSecond = carInFront.pointsPerSecond/2
                         player.pcsProcessing = false
+                        player.perform(#selector(player.endPlayerBrakeLight), with: nil, afterDelay: 0.6)
                     }
                     playerPCS = 0.2
                     return true

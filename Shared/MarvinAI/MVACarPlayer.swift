@@ -93,4 +93,6 @@ class MVACarPlayer: MVACar {
         }
         return false
     }
+    
+    @objc func endPlayerBrakeLight() { brakeLight(false) }
 }

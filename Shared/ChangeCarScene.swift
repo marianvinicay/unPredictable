@@ -25,9 +25,10 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     private var carName: SKLabelNode!
     private var mudiDesc: SKSpriteNode!
     
-    private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives]
-    private let mockUpNames = [MVACarNames.playerOrdinary:"Veep",
-                               MVACarNames.playerLives:"Mudi"]
+    private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
+    private let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
+                               MVACarNames.playerLives:"Mudi",
+                               MVACarNames.playerPCS:"Veep"]
     private var selectedCar = MVAMemory.playerCar
     private let ads = MVAAds(config: .onlyVideo)
     private var store: MVAStore!

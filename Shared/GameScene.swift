@@ -36,6 +36,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Gameplay Helpers
     var tutorialNode: MVATutorialNode?
+    var batteryTime = 0.0
     var lastPressedXPosition: CGFloat!
     var endOfWorld: CGFloat? = 0.0
     var brakingTimer: Timer!
@@ -114,10 +115,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         removeLife()
                     }
                 }
+                
+                if batteryTime > 0 {
+                    batteryTime -= dTime
+                }
             }
             lastUpdate = currentTime
 
             DispatchQueue.main.async {
+                if self.batteryTime <= 0 && self.intel.playerLives < 3 {
+                    self.addToBattery()
+                }
+                
                 let newDistance = MVAWorldConverter.distanceToOdometer(self.intel.distanceTraveled)
                 if self.playerDistance != newDistance {
                     if !self.newBestDisplayed && MVAMemory.maxPlayerDistance != 0.0 && MVAMemory.maxPlayerDistance <= self.intel.distanceTraveled {
@@ -269,14 +278,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let backForce = intel.currentLevel.level > 6 ? CGFloat((intel.currentLevel.playerSpeed/5)*13)*1.8 : CGFloat((intel.currentLevel.playerSpeed/5)*13)
                 intel.player.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -intel.player.physicsBody!.mass*backForce))
 
-                if intel.player.pointsPerSecond > minSpeed {
-                    setLevelSpeed(intel.player.pointsPerSecond)
-                } else {
-                    setLevelSpeed(150)
-                }
+                setLevelSpeed(intel.player.pointsPerSecond)
+                
                 if self.audioEngine.mainMixerNode.outputVolume > 0.4 {
                     setVolume(audioEngine.mainMixerNode.outputVolume-0.1)
                 }
+            } else {
+                setLevelSpeed(150)
             }
             self.perform(#selector(deceleratePlayer), with: nil, afterDelay: 0.01)
         }
