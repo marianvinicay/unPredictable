@@ -10,12 +10,7 @@ import SpriteKit
 
 extension GameScene {
     class func new(withSize deviceSize: CGSize) -> GameScene {
-        #if os(iOS)
-            let sceneName = "GameScene"
-        #elseif os(watchOS)
-            let sceneName = "GameSceneWatch"
-        #endif
-        guard let scene = GameScene(fileNamed: sceneName) else {
+        guard let scene = GameScene(fileNamed: "GameScene") else {
             abort()
         }
         scene.scaleMode = .aspectFill

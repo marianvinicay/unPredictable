@@ -163,20 +163,16 @@ class GameViewController: UIViewController {
     }
    
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("willTrans")
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    /*override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .portrait
         } else {
             return .all
         }
-    }
+    }*/
     
     override var prefersStatusBarHidden: Bool {
         return true
