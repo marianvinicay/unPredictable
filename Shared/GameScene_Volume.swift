@@ -18,7 +18,7 @@ extension GameScene {
         
         self.audioEngine.mainMixerNode.outputVolume = 0.0
         do { try self.audioEngine.start() } catch {}
-        sound.playerSound(intel.player)
+        intel.sound.playerSound(intel.player)
         fadeInVolume()
     }
     

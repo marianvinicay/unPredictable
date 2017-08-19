@@ -149,6 +149,6 @@ extension GameScene {
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.speed = 0.0
         
-        sound.ignite(node: self)
+        intel.sound.ignite(node: self)
     }
 }

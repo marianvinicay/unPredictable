@@ -23,7 +23,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     private var rightArr: SKSpriteNode!
     private var carImg: SKSpriteNode!
     private var carName: SKLabelNode!
-    private var mudiDesc: SKSpriteNode!
+    private var descLabel: SKSpriteNode!
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
     private let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
@@ -58,8 +58,8 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         scene.carImg.position = CGPoint(x: 0.0, y: 30.0)
         scene.carName = scene.childNode(withName: "carName") as! SKLabelNode
         scene.carName.position = CGPoint(x: 0.0, y: 30.0+(scene.carImg.size.height/2)+20)
-        scene.mudiDesc = scene.childNode(withName: "mudiDesc") as! SKSpriteNode
-        scene.mudiDesc.position = CGPoint(x: 0.0, y: 30.0-(scene.carImg.size.height/2)-10)
+        scene.descLabel = scene.childNode(withName: "descLabel") as! SKSpriteNode
+        scene.descLabel.position = CGPoint(x: 0.0, y: 30.0-(scene.carImg.size.height/2)-15)
         
         scene.leftArr = scene.childNode(withName: "left") as! SKSpriteNode
         scene.leftArr.position = CGPoint(x: (-deviceSize.width/2)+50, y: 30.0)
@@ -75,7 +75,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         
         scene.ads.successHandler = { [unowned scene] (rewarded: Bool) in
             if rewarded {
-                MVAMemory.adCars.append(scene.selectedCar)
+                MVAMemory.adCar = scene.selectedCar
                 MVAMemory.playerCar = scene.selectedCar
                 MVAMemory.adsEnabled = true
                 scene.newCarBtts.isHidden = true
@@ -110,7 +110,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             useBtt.isHidden = false
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
-        } else if MVAMemory.adCars.contains(selectedCar) {
+        } else if MVAMemory.adCar == selectedCar {
             useBtt.isHidden = false
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getCarPrice()
@@ -132,10 +132,16 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             rightArr.isHidden = false
         }
         
-        if selectedCar == MVACarNames.playerLives {
-            mudiDesc.isHidden = false
-        } else {
-            mudiDesc.isHidden = true
+        switch selectedCar {
+        case MVACarNames.playerLives:
+            (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "You can crash multiple times"
+            (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = "before destroying the car"
+        case MVACarNames.playerPCS:
+            (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "Built-in"
+            (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = "pre-collision system"
+        default:
+            (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "Nothing special 😐"
+            (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = ""
         }
     }
     
@@ -206,6 +212,7 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         waitNode = MVAWaitNode.new(withSize: self.size, inScene: self)
         waitNode.zPosition = 10.0
         self.addChild(waitNode)
+        self.isUserInteractionEnabled = false
         /*
         MVAMemory.adsEnabled = false
         MVAMemory.ownedCars.append(self.selectedCar)
@@ -216,15 +223,36 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         self.waitNode.remove()
         self.waitNode = nil
         */
-        store.buyMudiCar { (purchased: Bool, _) in
-            if purchased {
+        
+        let completion = { (purchased:Bool, _:String, err:Error?) in
+            if purchased && err == nil {
                 MVAMemory.adsEnabled = false
                 MVAMemory.ownedCars.append(self.selectedCar)
+                MVAMemory.adCar = nil
                 self.newCarBtts.isHidden = true
+                (self.useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
                 self.useBtt.isHidden = false
             }
+            self.isUserInteractionEnabled = true
             self.waitNode.remove()
             self.waitNode = nil
+        }
+        
+        let error = { () in
+            self.isUserInteractionEnabled = true
+            self.waitNode.remove()
+            self.waitNode = nil
+            let alert = UIAlertController(title: "Sorry", message: "Server is unreachable", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            (UIApplication.shared.keyWindow?.rootViewController as! GameViewController).present(alert, animated: true, completion: nil)
+        }
+        
+        switch selectedCar {
+        case MVACarNames.playerLives:
+            store.buyLivesCar(withCompletion: completion, andError: error)
+        case MVACarNames.playerPCS:
+            store.buyPCSCar(withCompletion: completion, andError: error)
+        default: break
         }
     }
     
@@ -237,28 +265,38 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             waitNode = MVAWaitNode.new(withSize: self.size, inScene: self)
             waitNode.zPosition = 10.0
             self.addChild(waitNode)
-            store.restorePurchases() { (purchased: Bool, car: String?) in
-                if purchased && car == "unpredictable.lives_car" {
+            store.restorePurchases() { (purchased: Bool, car: String, error: Error?) in
+                if purchased && error == nil {
                     MVAMemory.adsEnabled = false
-                    MVAMemory.ownedCars.append(MVACarNames.playerLives)
+                    switch car {
+                    case "unpredictable.lives_car": MVAMemory.ownedCars.append(MVACarNames.playerLives)
+                    case "unpredictable.pcs_car": MVAMemory.ownedCars.append(MVACarNames.playerPCS)
+                    default: break
+                    }
                     self.checkArrows()
+                } else if error != nil {
+                    let alertTitle = error == nil ? "Server is unreachable":error!.localizedDescription
+                    let alert = UIAlertController(title: "Sorry", message: alertTitle, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    (UIApplication.shared.keyWindow?.rootViewController as! GameViewController).present(alert, animated: true, completion: nil)
                 }
-                self.waitNode.remove()
-                self.waitNode = nil
+                if self.waitNode != nil {
+                    self.waitNode.remove()
+                    self.waitNode = nil
+                }
             }
         } else if !useBtt.isHidden && useBtt.contains(touch) {
-            removeSwipes()
             if (useBtt.childNode(withName: "txt") as! SKLabelNode).text == "USE" {
                 if MVAMemory.ownedCars.contains(selectedCar) {
+                    removeSwipes()
                     MVAMemory.playerCar = selectedCar
-                    MVAMemory.adCars = []
+                    MVAMemory.adCar = nil
                     MVAMemory.adsEnabled = false
+                    NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
                 }
             } else {
                 purchase()
-                (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
             }
-            NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
         } else if !newCarBtts.isHidden && newCarBtts.contains(touch) {
             let specificTouch = touches.first!.location(in: self.newCarBtts)
             if enableAdsBtt.contains(specificTouch) {

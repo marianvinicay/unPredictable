@@ -15,10 +15,12 @@ class MVAMarvinAI {
     var distanceTraveled = 0.0 //in KM/MI accordingly
     var currentLevel = MVALevel(level: 1)
     var cars = Set<MVACarBot>()
+    
+    let sound = MVASound()
     let gameCHelper = MVAGameCenterHelper()
     let storeHelper = MVAStore()
     
-    var stop = false
+    var stop = true
     var updateDist = false
     
     private var checkTime = 0.3
@@ -63,10 +65,16 @@ class MVAMarvinAI {
     }
     
     private var playerPCS = 0.0
+    private var playerEmergencyBrake = 0.0
     
     func checkPCS(withDeltaTime dTime: TimeInterval) -> Bool {
         if playerLives > 0 && playerPCS <= 0 {
             if let carInFront = player.responseFromSensors(inPositions: [.stop]).first as? MVACarBot {
+                defer {
+                    sound.pcsSystem(onNode: player)
+                    playerPCS = 0.2
+                }
+                
                 let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
                 if player.changeLane(inDirection: randDir, pcsCalling: true) == false {
                     let nextDir: MVAPosition = randDir == .left ? .right:.left
@@ -74,29 +82,27 @@ class MVAMarvinAI {
                         player.brakeLight(true)
                         player.pointsPerSecond = carInFront.pointsPerSecond/2
                         player.pcsProcessing = false
+                        playerEmergencyBrake = 2.0
                         player.perform(#selector(player.endPlayerBrakeLight), with: nil, afterDelay: 0.6)
                     }
-                    playerPCS = 0.2
-                    return true
                 }
-                playerPCS = 0.2
                 return true
-            } else {
-                if player.pointsPerSecond < currentLevel.playerSpeed {
-                    player.changeSpeed(currentLevel.playerSpeed)
-                }
             }
             player.pcsProcessing = false
-            return false
-        } else {
-            playerPCS -= dTime
-            if player.responseFromSensors(inPositions: [.stop]).isEmpty {
-                if player.pointsPerSecond < currentLevel.playerSpeed {
-                    player.changeSpeed(currentLevel.playerSpeed)
-                }
-            }
-            return false
         }
+        if playerPCS > 0 {
+            playerPCS -= dTime
+        }
+        if playerEmergencyBrake > 0 {
+            playerEmergencyBrake -= dTime
+        }
+        
+        if player.responseFromSensors(inPositions: [.stop]).isEmpty && playerEmergencyBrake <= 0 {
+            if player.pointsPerSecond < currentLevel.playerSpeed {
+                player.changeSpeed(currentLevel.playerSpeed)
+            }
+        }
+        return false
     }
     
     func update(withDeltaTime dTime: TimeInterval) {
@@ -145,9 +151,10 @@ class MVAMarvinAI {
     }
     
     private func playerCornered() -> [MVACarBot]? {
-        let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.backRight,.right]).map({ $0 as! MVACarBot }).filter({ $0.hasPriority != true })//???
+        let badCars = player.responseFromSensors(inPositions: [.backLeft,.left,.backRight,.right]).map({ $0 as! MVACarBot }).filter({ $0.hasPriority != true })
         let frontCars = player.responseFromSensors(inPositions: [.front]).map({ $0 as! MVACarBot }).filter({ $0.hasPriority != true })
-        if !frontCars.isEmpty && badCars.count >= 1 { //???
+        if !frontCars.isEmpty && badCars.count >= 1 {
+            sound.hornSound(onNode: player)
             return badCars+frontCars
         } else {
             return nil

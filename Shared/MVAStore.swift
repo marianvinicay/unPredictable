@@ -9,22 +9,34 @@
 import StoreKit
 
 class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        if queue.transactions.isEmpty {
-            completion?(false, nil)
-        }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        transactionInProgress = false
+        completion?(false,"",error)
     }
+    
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        transactionInProgress = false
+        let alert = UIAlertController(title: nil, message: "Purchases were restored", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_: UIAlertAction) in
+            if queue.transactions.isEmpty {
+                self.completion?(false,"",nil)
+            }
+        }))
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             switch transaction.transactionState {
             case .purchased, .restored:
                 SKPaymentQueue.default().finishTransaction(transaction)
                 transactionInProgress = false
-                completion?(true,transaction.payment.productIdentifier)
+                completion?(true,transaction.payment.productIdentifier,nil)
             case .failed:
                 SKPaymentQueue.default().finishTransaction(transaction)
                 transactionInProgress = false
-                completion?(false, nil)
+                completion?(false,"",nil)
             default: break
             }
         }
@@ -36,10 +48,12 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
         }
     }
     
-    var productIDs = ["life":"unpredictable.continueAfterCrash", "lives_car":"unpredictable.lives_car"]
+    var productIDs = ["life":"unpredictable.continueAfterCrash",
+                      "lives_car":"unpredictable.lives_car",
+                      "pcs_car":"unpredictable.pcs_car"]
     var productsArray = [SKProduct]()
     var transactionInProgress = false
-    private var completion: ((Bool,String?)->())?
+    private var completion: ((Bool, String, Error?)->())?
     
     override init() {
         super.init()
@@ -47,7 +61,14 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
         requestProductInfo()
     }
     
-    func buyLife(withCompletion comp: @escaping (Bool,String?)->()) {
+    func canBuyLife() -> Bool {
+        if productsArray.map({ $0.productIdentifier == productIDs["life"] }).isEmpty == false {
+            return true
+        }
+        return false
+    }
+    
+    func buyLife(withCompletion comp: @escaping (Bool, String, Error?)->()) {
         if !transactionInProgress {
             transactionInProgress = true
             if let cLife = productsArray.filter({ $0.productIdentifier == productIDs["life"] }).first {
@@ -58,20 +79,38 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
         }
     }
     
-    func buyMudiCar(withCompletion comp: @escaping (Bool, String?)->()) {
+    func buyLivesCar(withCompletion comp: @escaping (Bool, String, Error?)->(), andError error: @escaping (()->())) {
         if !transactionInProgress {
-            transactionInProgress = true
             if let mCar = productsArray.filter({ $0.productIdentifier == productIDs["lives_car"] }).first {
+                transactionInProgress = true
                 let payment = SKPayment(product: mCar)
                 SKPaymentQueue.default().add(payment)
                 completion = comp
+                return
             }
         }
+        error()
     }
     
-    func restorePurchases(withCompletion comp: @escaping (Bool, String?)->()) {
-        SKPaymentQueue.default().restoreCompletedTransactions()
-        completion = comp
+    func buyPCSCar(withCompletion comp: @escaping (Bool, String, Error?)->(), andError error: @escaping (()->())) {
+        if !transactionInProgress {
+            if let mCar = productsArray.filter({ $0.productIdentifier == productIDs["pcs_car"] }).first {
+                transactionInProgress = true
+                let payment = SKPayment(product: mCar)
+                SKPaymentQueue.default().add(payment)
+                completion = comp
+                return
+            }
+        }
+        error()
+    }
+    
+    func restorePurchases(withCompletion comp: @escaping (Bool, String, Error?)->()) {
+        if !transactionInProgress {
+            transactionInProgress = true
+            SKPaymentQueue.default().restoreCompletedTransactions()
+            completion = comp
+        }
     }
     
     func getCarPrice() -> String {

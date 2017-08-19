@@ -12,6 +12,8 @@ import UIKit
 enum MVAAchievements {
     static let firstCrash: String = "com.mva.unpredictable.first_Crash"
     static let aroundEarth: String = "com.mva.unpredictable.around_Earth"
+    static let crashed100Cars: String = "com.mva.unpredictable.100C_cars"
+    static let marathon: String = "com.mva.unpredictable.marathon"
 }
 
 class MVAGameCenterHelper: NSObject {
@@ -30,7 +32,7 @@ class MVAGameCenterHelper: NSObject {
         MVAMemory.enableGameCenter = GKLocalPlayer.localPlayer().isAuthenticated
     }
     
-    func authenticateLocalPlayer() {
+    func authenticateLocalPlayer(_ comp: @escaping ((Bool)->())) {
         let localPlayer = GKLocalPlayer.localPlayer()
         localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
             if viewController != nil {
@@ -38,9 +40,10 @@ class MVAGameCenterHelper: NSObject {
                 NotificationCenter.default.post(name: MVAGameCenterHelper.authenticationCompleted, object: nil)
             } else if localPlayer.isAuthenticated {
                 MVAMemory.enableGameCenter = true
+                comp(true)
             } else {
                 MVAMemory.enableGameCenter = false
-                
+                comp(false)
             }
         }
     }
@@ -74,7 +77,6 @@ class MVAGameCenterHelper: NSObject {
         let ach = GKAchievement(identifier: achievement)
         ach.percentComplete = 100.0
         ach.showsCompletionBanner = true
-        print("rep")
         GKAchievement.report([ach], withCompletionHandler: nil)
     }
 }
@@ -85,14 +87,14 @@ class MVAGameCenterHelper: NSObject {
             gameCenterViewController.dismiss(animated: true, completion: nil)
         }
         
-        func showGKGameCenterViewController(viewController: UIViewController) {
+        func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
             if GKLocalPlayer.localPlayer().isAuthenticated {
                 let gameCenterViewController = GKGameCenterViewController()
                 gameCenterViewController.gameCenterDelegate = self
                 viewController.present(gameCenterViewController,
                                        animated: true, completion: nil)
             } else {
-                authenticateLocalPlayer()
+                authenticateLocalPlayer(comp)
             }
         }
     }

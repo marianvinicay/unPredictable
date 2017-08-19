@@ -71,7 +71,7 @@ class MVASpawnerNode: SKSpriteNode {
         } else {
             car = usedCars.removeFirst()
             car.useCounter += 1
-            if car.useCounter > 5 {
+            if car.useCounter > 3 {
                 car.skin = randomCarSkin()
                 car.texture = car.skin.normal
             }
@@ -81,13 +81,14 @@ class MVASpawnerNode: SKSpriteNode {
     }
     
     private func randomCarSkin() -> MVASkin {
-        switch arc4random_uniform(7) {
+        switch arc4random_uniform(8) {
         case 0: return MVASkin.createForCar(MVACarNames.muscle, withAtlas: self.textures)
         case 1: return MVASkin.createForCar(MVACarNames.taxi, withAtlas: self.textures)
         case 2: return MVASkin.createForCar(MVACarNames.offRoad, withAtlas: self.textures)
         case 3: return MVASkin.createForCar(MVACarNames.electric, withAtlas: self.textures)
         case 4: return MVASkin.createForCar(MVACarNames.van, withAtlas: self.textures)
         case 5: return MVASkin.createForCar(MVACarNames.hybrid, withAtlas: self.textures)
+        case 6: return MVASkin.createForCar(MVACarNames.sports, withAtlas: self.textures)
         default: return MVASkin.createForCar(MVACarNames.classic, withAtlas: self.textures)
         }
     }

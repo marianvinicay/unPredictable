@@ -26,8 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
         MVAAds.prepareRewardAd()
         
-        MVAMemory.playerCar = MVACarNames.playerOrdinary
-        
         return true
     }
 

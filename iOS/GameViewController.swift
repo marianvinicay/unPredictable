@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 import SpriteKit
 
 class GameViewController: UIViewController {
@@ -48,16 +49,26 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
         
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
-            scene.intel.gameCHelper.authenticateLocalPlayer()
+            scene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
+                if granted {
+                    self.gameCenterBtt.isHidden = false
+                } else {
+                    self.gameCenterBtt.isHidden = true
+                }
+            }
         }
     }
     
-    override var shouldAutorotate: Bool {
-        return false
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if #available(iOS 10.3, *) {
+            SKStoreReviewController.requestReview()
+        }
     }
     
+    
     func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
-        if gameCenterBtt.isHidden {
+        if soundBtt.isHidden {
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
             if !scene.gameStarted {
@@ -105,7 +116,13 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func showGameCenter(_ sender: UIButton) {
-        scene.intel.gameCHelper.showGKGameCenterViewController(viewController: self)
+        scene.intel.gameCHelper.showGKGameCenterViewController(viewController: self) { (granted: Bool) in
+            if granted {
+                self.gameCenterBtt.isHidden = false
+            } else {
+                self.gameCenterBtt.isHidden = true
+            }
+        }
     }
     
     func showAuthenticationViewController() {
@@ -145,7 +162,12 @@ class GameViewController: UIViewController {
         backFromChangeCarScene()
     }
    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("willTrans")
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

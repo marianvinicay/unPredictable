@@ -111,6 +111,11 @@ class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
         }
     }
     
+    func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
+        successHandler(true)
+        MVAAds.prepareRewardAd()
+    }
+    
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
         successHandler(true)
         MVAAds.prepareRewardAd()

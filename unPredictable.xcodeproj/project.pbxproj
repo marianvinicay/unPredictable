@@ -28,6 +28,12 @@
 		2F3EAE411F3B1DED001A1A6E /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
 		2F3EAE421F3B1DED001A1A6E /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
 		2F3EAE431F3B1DED001A1A6E /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
+		2F5584FF1F480C42006D229F /* Grand_Tourer_horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */; };
+		2F5585001F480C42006D229F /* Grand_Tourer_horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */; };
+		2F5585011F480C42006D229F /* Grand_Tourer_horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */; };
+		2F5585031F48105D006D229F /* pcs_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5585021F48105D006D229F /* pcs_beep.wav */; };
+		2F5585041F48105D006D229F /* pcs_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5585021F48105D006D229F /* pcs_beep.wav */; };
+		2F5585051F48105D006D229F /* pcs_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5585021F48105D006D229F /* pcs_beep.wav */; };
 		2F5B1DEF1EFFD863006AEA30 /* GameScene_Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */; };
 		2F5B1DF11EFFD863006AEA30 /* GameScene_Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */; };
 		2F65AA2B1EF3D48600150F32 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F65AA2A1EF3D48600150F32 /* GameScene.sks */; };
@@ -209,6 +215,8 @@
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F26548C1F41A6FA00A7D2CF /* MVAWaitNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWaitNode.swift; sourceTree = "<group>"; };
 		2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAAds.swift; sourceTree = "<group>"; };
+		2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Grand_Tourer_horn.wav; sourceTree = "<group>"; };
+		2F5585021F48105D006D229F /* pcs_beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pcs_beep.wav; sourceTree = "<group>"; };
 		2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Gameplay.swift; sourceTree = "<group>"; };
 		2F65AA2A1EF3D48600150F32 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = unPredictable.entitlements; sourceTree = "<group>"; };
@@ -408,6 +416,8 @@
 		2F861B951F1CD49F00162EDA /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				2F5585021F48105D006D229F /* pcs_beep.wav */,
+				2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */,
 				2F861B721F1CC50300162EDA /* SUV_ignition_02.wav */,
 				2F861B7C1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav */,
 				2F861B8B1F1CD22600162EDA /* SUV_steady_low_rpm.wav */,
@@ -681,6 +691,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FAFA6901F3897B1006645CB /* ChangeCarScene.sks in Resources */,
+				2F5584FF1F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
+				2F5585031F48105D006D229F /* pcs_beep.wav in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
@@ -706,8 +718,10 @@
 				2FAFA6911F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2D1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8E1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
+				2F5585001F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
 				2FAFA67A1F35A48E006645CB /* Futura.ttc in Resources */,
 				2FDFBD211F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
+				2F5585041F48105D006D229F /* pcs_beep.wav in Resources */,
 				2F861B431F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
 				2F861B521F1BAE7C00162EDA /* Assets.xcassets in Resources */,
 			);
@@ -724,8 +738,10 @@
 				2FAFA6921F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2E1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8F1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
+				2F5585011F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
 				2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */,
 				2FDFBD221F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */,
+				2F5585051F48105D006D229F /* pcs_beep.wav in Resources */,
 				2F861B441F1BAB5F00162EDA /* MVAParticle.sks in Resources */,
 				2F861B531F1BAE7C00162EDA /* Assets.xcassets in Resources */,
 			);

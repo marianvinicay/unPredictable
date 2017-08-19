@@ -72,12 +72,12 @@ enum MVAMemory {
         }
     }
     
-    static var adCars: [String] {
+    static var adCar: String? {
         set {
-            UserDefaults.standard.set(newValue, forKey: "adCars")
+            UserDefaults.standard.set(newValue, forKey: "adCar")
         }
         get {
-            return UserDefaults.standard.value(forKey: "adCars") as? [String] ?? []
+            return UserDefaults.standard.value(forKey: "adCar") as? String
         }
     }
     

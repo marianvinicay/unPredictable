@@ -41,7 +41,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var endOfWorld: CGFloat? = 0.0
     var brakingTimer: Timer!
     var lastUpdate: TimeInterval!
-    let sound = MVASound()
     var newBestDisplayed = false
     var canUpdateSpeed = true
     
@@ -102,6 +101,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         remover.position.y = camera!.position.y-self.size.height
     }
+
+    private func showPCSWarning() {
+        if camera?.childNode(withName: "pcs") == nil {
+            let pcs = SKSpriteNode(imageNamed: "pcs")
+            pcs.name = "pcs"
+            pcs.size = self.size
+            pcs.position = .zero
+            pcs.zPosition = 7.0
+            camera!.addChild(pcs)
+            pcs.run(SKAction.fadeOut(withDuration: 2.2)) {
+                pcs.removeFromParent()
+            }
+        }
+    }
     
     override func update(_ currentTime: TimeInterval) {
         updateCamera()
@@ -112,6 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 if intel.player.pcsActive && !playerBraking {
                     if intel.checkPCS(withDeltaTime: dTime) {
+                        showPCSWarning()
                         removeLife()
                     }
                 }
@@ -123,7 +137,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             lastUpdate = currentTime
 
             DispatchQueue.main.async {
-                if self.batteryTime <= 0 && self.intel.playerLives < 3 {
+                if self.intel.player.pcsActive && self.batteryTime <= 0 && self.intel.playerLives < 3 {
                     self.addToBattery()
                 }
                 
@@ -186,7 +200,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(road)
             
             if MVAMemory.enableGameCenter {
-                self.intel.gameCHelper.authenticateLocalPlayer()
+                self.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
+                    if let myVC = UIApplication.shared.keyWindow?.rootViewController as? GameViewController {
+                        if granted {
+                            myVC.gameCenterBtt.isHidden = false
+                        } else {
+                            myVC.gameCenterBtt.isHidden = true
+                        }
+                    }
+                }
             }
         }
     }
@@ -195,7 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func handleSwipe(swipe: MVAPosition) {
         if gameStarted && physicsWorld.speed != 0.0 {
             if intel.player.changeLane(inDirection: swipe) {
-                sound.indicate(onNode: intel.player)
+                intel.sound.indicate(onNode: intel.player)
                 
                 if tutorialNode?.stage == 0 {
                     spawnWithDelay(intel.currentLevel.spawnRate)
@@ -316,7 +338,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         car.removeAllChildren()
                         car.physicsBody!.isDynamic = false
                     }
-                    sound.crash(onNode: node1)
+                    intel.sound.crash(onNode: node1)
                     generateSmoke(atPoint: contact.contactPoint, forTime: 25.0)
                 } else {
                     for car in [node1,node2] {
@@ -329,10 +351,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 playerInCollision = true
                 if intel.player.skin.name == MVACarNames.playerLives && intel.playerLives > 0 {
                     removeLife()
-                    sound.crash(onNode: intel.player)
+                    intel.sound.crash(onNode: intel.player)
                     let ordCar = [contact.bodyA.node, contact.bodyB.node].map({ $0 as? MVACarBot })
                     for car in ordCar {
-                        if car != nil { scrape(car: car!) }
+                        if car != nil { delete(car: car!) }
                     }
                     intel.player.resetPhysicsBody()
                     intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
@@ -347,7 +369,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         $0.removeAllChildren()
                         $0.pointsPerSecond = 0
                     })
-                    sound.crash(onNode: intel.player)
+                    intel.sound.crash(onNode: intel.player)
                     generateSmoke(atPoint: contact.contactPoint, forTime: nil)
                     hideHUD(animated: true)
                     self.camera!.childNode(withName: "nBest")?.removeFromParent()
@@ -373,9 +395,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    private func delete(car: MVACarBot) {
+        car.physicsBody = nil
+        car.run(SKAction.scale(to: 0.0, duration: 0.1)) {
+            car.removeFromParent()
+        }
+        intel.cars.remove(car)
+    }
+    
     private func scrape(car: MVACarBot) {
-        car.removeFromParent()
         car.pointsPerSecond = 0
+        car.removeFromParent()
         intel.cars.remove(car)
         spawner.usedCars.insert(car)
     }

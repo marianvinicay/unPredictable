@@ -179,17 +179,18 @@ class MVAGameOverNode: SKNode {
         countD = nil
         
         if yesBtt != nil && noBtt != nil && nodes(at: touchLocation).contains(yesBtt!) {
-            //if nodes(at: touchLocation).contains(yesBtt!) {
                 activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
                 activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
                 activityInd!.startAnimating()
                 scene!.view!.addSubview(activityInd!)
                 
                 if showPurchase {
-                    /*self.activityInd?.stopAnimating()
+                    /*
+                    self.activityInd?.stopAnimating()
                     self.activityInd?.removeFromSuperview()
                     self.continueInGame()
-                     */store.buyLife() { (purchased: Bool, _) in
+                    */
+                    store.buyLife() { (purchased: Bool, _, _) in
                         self.activityInd?.stopAnimating()
                         self.activityInd?.removeFromSuperview()
                         if purchased {
@@ -201,7 +202,6 @@ class MVAGameOverNode: SKNode {
                 } else {
                     adsAsPurchase.showAd()
                 }
-            //} else {//if nodes(at: touchLocation).contains(noBtt!) {
         } else {
             if MVAMemory.adsEnabled {
                 adsForCars?.showAd()
@@ -209,14 +209,6 @@ class MVAGameOverNode: SKNode {
                 self.startNewGame()
             }
         }
-        /*
-        } else {
-            if MVAMemory.adsEnabled {
-                adsForCars.showAd()
-            } else {
-                startNewGame()
-            }
-        }*/
     }
     #endif
 }

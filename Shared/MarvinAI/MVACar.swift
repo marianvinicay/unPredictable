@@ -18,8 +18,9 @@ enum MVACarNames {
     static let offRoad = "jeep"
     static let taxi = "taxi"
     static let electric = "tesla"
-    static let hybrid = "tesla"
-    static let van = "prius"
+    static let hybrid = "prius"
+    static let van = "mini_van"
+    static let sports = "sports"
 }
 
 class MVACar: SKSpriteNode {

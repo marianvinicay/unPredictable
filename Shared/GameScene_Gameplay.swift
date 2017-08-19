@@ -27,6 +27,7 @@ extension GameScene {
         let turnOut = SKAction.sequence([SKAction.wait(forDuration: 1.3),SKAction.rotate(toAngle: 0, duration: 0.2)])
         
         intel.player.currentLane = randLane
+        intel.player.position.x = 0.0
         intel.player.run(SKAction.group([turnIn,moveIn,turnOut]))
         setLevelSpeed(intel.currentLevel.playerSpeed)
         
@@ -48,6 +49,7 @@ extension GameScene {
         
         let start = SKAction.run {
             self.gameStarted = true
+            self.intel.stop = false
             
             if MVAMemory.tutorialDisplayed {
                 self.isUserInteractionEnabled = true
@@ -113,7 +115,7 @@ extension GameScene {
                     offP = false
                 } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
                     offAd = false
-                    offP = true
+                    offP = intel.storeHelper.canBuyLife()
                 }
             } else {
                 tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
@@ -212,8 +214,14 @@ extension GameScene {
         if MVAMemory.enableGameCenter {
             let newDist = MVAMemory.accumulatedDistance + intel.distanceTraveled
             MVAMemory.accumulatedDistance = newDist
-            if newDist > 12_742 {
-                intel.gameCHelper.report(achievement: MVAAchievements.aroundEarth)
+            let distToCompare = Locale.current.usesMetricSystem ? newDist:MVAWorldConverter.milesToKilometers(newDist)
+            
+            if distToCompare > 42.2 {
+                if distToCompare > 12_742 {
+                     intel.gameCHelper.report(achievement: MVAAchievements.aroundEarth)
+                } else {
+                    intel.gameCHelper.report(achievement: MVAAchievements.marathon)
+                }
             }
             
             if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
@@ -228,6 +236,7 @@ extension GameScene {
             intel.gameCHelper.report(crashedCars: newCC)
             switch newCC {
             case 1: intel.gameCHelper.report(achievement: MVAAchievements.firstCrash)
+            case 100: intel.gameCHelper.report(achievement: MVAAchievements.crashed100Cars)
             default: break
             }
         }
@@ -254,8 +263,9 @@ extension GameScene {
             }
         default:
             intel.playerLives = -1
-            changeDistanceColor(MVAColor.mvRed)
+            changeDistanceColor(MVAColor.normBeige)
             lives.isHidden = true
+            battery.isHidden = true
         }
     }
     
@@ -265,7 +275,7 @@ extension GameScene {
             battBefore.alpha = 1.0
         }
         intel.playerLives += 1
-        batteryTime = 5.0
+        batteryTime = 6.0
     }
     
     func removeLife() {
@@ -284,7 +294,7 @@ extension GameScene {
                 battBefore.removeAllActions()
                 battBefore.alpha = 0.0
             }
-            self.batteryTime = 5.0
+            self.batteryTime = 6.0
             battery.childNode(withName: "batt\(intel.playerLives)")?.run(battAct)
         default: break
         }

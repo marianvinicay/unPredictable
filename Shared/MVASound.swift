@@ -12,6 +12,8 @@ import SpriteKit
         private let startCarSound = SKAction.playSoundFileNamed("SUV_ignition_02", waitForCompletion: true)
         private let indicatorSound = SKAction.playSoundFileNamed("Grand_Tourer_signal_lights_loop", waitForCompletion: true)
         private let crashSound = SKAction.playSoundFileNamed("crash", waitForCompletion: false)
+        private let hornSound = SKAction.playSoundFileNamed("Grand_Tourer_horn", waitForCompletion: false)
+        private let pcsSound = SKAction.playSoundFileNamed("pcs_beep", waitForCompletion: false)
         
         func playerSound(_ car: SKNode) {
             normalCarSound.isPositional = true
@@ -40,6 +42,20 @@ import SpriteKit
         func crash(onNode node: SKNode) {
             if !MVAMemory.audioMuted {
                 node.run(crashSound)
+            }
+        }
+        
+        func hornSound(onNode node: SKNode) {
+            if !MVAMemory.audioMuted {
+                node.run(hornSound)
+            }
+        }
+        
+        func pcsSystem(onNode node: SKNode) {
+            if !MVAMemory.audioMuted {
+                if node.action(forKey: "pcs") == nil {
+                    node.run(pcsSound, withKey: "pcs")
+                }
             }
         }
     }
