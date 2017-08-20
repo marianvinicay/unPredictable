@@ -259,8 +259,3 @@ class MVAMarvinAI {
         }
     }
 }
-
-public var lanePositions = [Int:Int]()
-public var maxLane: Int {
-    return lanePositions.count-1
-}

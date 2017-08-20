@@ -17,13 +17,11 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         transactionInProgress = false
-        let alert = UIAlertController(title: nil, message: "Purchases were restored", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_: UIAlertAction) in
-            if queue.transactions.isEmpty {
-                self.completion?(false,"",nil)
-            }
-        }))
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+        if queue.transactions.isEmpty {
+            self.completion?(false,"",nil)
+        }
+        let alert = MVAAlert.new(withTitle: nil, andMessage: "Purchases were restored")
+        MVAAlert.present(alert)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -113,8 +111,9 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
         }
     }
     
-    func getCarPrice() -> String {
-        if let mCar = productsArray.filter({ $0.productIdentifier == productIDs["lives_car"] }).first {
+    func getPrice(forCar carN: String) -> String {
+        let carID = carN == MVACarNames.playerLives ? "lives_car":"pcs_car"
+        if let mCar = productsArray.filter({ $0.productIdentifier == productIDs[carID] }).first {
             let numberF = NumberFormatter()
             numberF.numberStyle = .currency
             numberF.locale = mCar.priceLocale

@@ -7,19 +7,21 @@
 //
 
 import Foundation
-import GoogleMobileAds
 
 enum MVAAdsCombination {//: CustomStringConvertible {
     case onlyVideo, videoAndShort, onlyShort
     
     /*var description: String {
-        switch self {
-        case .onlyShort: return "OS"
-        case .onlyVideo: return "OV"
-        case.videoAndShort: return "VS"
-        }
-    }*/
+     switch self {
+     case .onlyShort: return "OS"
+     case .onlyVideo: return "OV"
+     case.videoAndShort: return "VS"
+     }
+     }*/
 }
+
+#if os(iOS) || os(tvOS)
+import GoogleMobileAds
 
 class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
     class func prepareRewardAd() {
@@ -66,7 +68,6 @@ class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_: UIAlertAction) in
                 self.successHandler(false)
             }))
-            self.completionHandler()
             UIApplication.shared.keyWindow!.rootViewController!.present(alert, animated: true, completion: nil)
         }
     }
@@ -112,27 +113,43 @@ class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
     }
     
     func interstitialWillLeaveApplication(_ ad: GADInterstitial) {
+        completionHandler()
         successHandler(true)
         MVAAds.prepareRewardAd()
     }
     
     func interstitialWillDismissScreen(_ ad: GADInterstitial) {
+        completionHandler()
         successHandler(true)
         MVAAds.prepareRewardAd()
     }
     
     func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd, didRewardUserWith reward: GADAdReward) {
+        completionHandler()
         successHandler(true)
         MVAAds.prepareRewardAd()
     }
     
     func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        completionHandler()
         successHandler(false)
         MVAAds.prepareRewardAd()
     }
     
     func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        completionHandler()
         successHandler(true)
         MVAAds.prepareRewardAd()
     }
 }
+#else
+    class MVAAds {
+        var successHandler: ((Bool)->())!
+        var completionHandler: (()->())!
+        
+        class func prepareRewardAd() {}
+        init(config: MVAAdsCombination) {}
+        func prepareShortAd() {}
+        func showAd() {}
+    }
+#endif

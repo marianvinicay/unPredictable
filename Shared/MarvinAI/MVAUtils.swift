@@ -65,9 +65,15 @@ enum MVAPhysicsCategory: UInt32 {
 }
 
 enum MVAColor {
-    static let normBeige = UIColor(red:0.84, green:0.71, blue:0.56, alpha:1.00)//UIColor(red:0.80, green:0.71, blue:0.62, alpha:1.00)
-    static let mvRed = UIColor(red:0.85, green:0.10, blue:0.25, alpha:1.00)
-    static let jGreen = UIColor(red:0.22, green:0.50, blue:0.10, alpha:1.00)
+    #if os(macOS)
+        static let normBeige = NSColor(red:0.84, green:0.71, blue:0.56, alpha:1.00)
+        static let mvRed = NSColor(red:0.85, green:0.10, blue:0.25, alpha:1.00)
+        static let jGreen = NSColor(red:0.22, green:0.50, blue:0.10, alpha:1.00)
+    #else
+        static let normBeige = UIColor(red:0.84, green:0.71, blue:0.56, alpha:1.00)//UIColor(red:0.80, green:0.71, blue:0.62, alpha:1.00)
+        static let mvRed = UIColor(red:0.85, green:0.10, blue:0.25, alpha:1.00)
+        static let jGreen = UIColor(red:0.22, green:0.50, blue:0.10, alpha:1.00)
+    #endif
 }
 
 extension CGSize {

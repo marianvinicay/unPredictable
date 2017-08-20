@@ -14,9 +14,10 @@
             <objects>
                 <controller id="Cbd-b9-Gye" customClass="StartController" customModule="AWatch_Extension">
                     <items>
-                        <button width="1" alignment="center" title="START" id="lvZ-d9-EjS">
+                        <button width="1" alignment="center" verticalAlignment="center" title="GO!" id="lvZ-d9-EjS">
                             <connections>
                                 <action selector="startGame" destination="Cbd-b9-Gye" id="Qry-gf-2Hv"/>
+                                <segue destination="AgC-eL-Hgc" kind="push" id="Awh-Yy-nf1"/>
                             </connections>
                         </button>
                     </items>
@@ -27,30 +28,20 @@
         <!--game-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller identifier="game" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="AWatch" customModuleProvider="target">
+                <controller identifier="game" id="AgC-eL-Hgc" customClass="GameController" customModule="AWatch" customModuleProvider="target">
                     <items>
                         <spriteKitScene alignment="left" id="ARY-87-yzO">
                             <gestureRecognizers>
                                 <swipeGestureRecognizer id="N0b-g4-xPh">
                                     <connections>
-                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="jlX-aI-r2P"/>
+                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="0kR-MP-O8p"/>
                                     </connections>
                                 </swipeGestureRecognizer>
                                 <swipeGestureRecognizer direction="2" id="Oih-uJ-rVj">
                                     <connections>
-                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="nVC-t8-XUn"/>
+                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="l9C-4k-OBh"/>
                                     </connections>
                                 </swipeGestureRecognizer>
-                                <longPressGestureRecognizer numberOfTapsRequired="1" minimumPressDuration="0.10000000000000001" id="3ao-Pn-hGW">
-                                    <connections>
-                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="ORJ-IX-AXD"/>
-                                    </connections>
-                                </longPressGestureRecognizer>
-                                <tapGestureRecognizer numberOfTapsRequired="6" id="dBr-SI-ini">
-                                    <connections>
-                                        <action selector="handleGestureWithGestureRecognizer:" destination="AgC-eL-Hgc" id="Qsu-X9-Ly1"/>
-                                    </connections>
-                                </tapGestureRecognizer>
                             </gestureRecognizers>
                         </spriteKitScene>
                     </items>
@@ -59,6 +50,7 @@
                     </connections>
                 </controller>
             </objects>
+            <point key="canvasLocation" x="-256" y="435"/>
         </scene>
     </scenes>
 </document>

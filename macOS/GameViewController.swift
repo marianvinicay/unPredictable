@@ -9,9 +9,11 @@
 import Cocoa
 import SpriteKit
 
-class GameViewController: NSViewController {
+class GameViewControllerMAC: NSViewController {
 
     private var gameScene: GameScene!
+    
+    @IBOutlet weak var gameCenterBtt: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()

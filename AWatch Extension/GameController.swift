@@ -9,28 +9,29 @@
 import WatchKit
 import SpriteKit
 
-class InterfaceController: WKInterfaceController {
+class GameController: WKInterfaceController {
 
     @IBOutlet var skInterface: WKInterfaceSKScene!
-    private var scene: GameScene!
+    private var scene: GameSceneWatch!
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
-        scene = GameScene.new(withSize: self.contentFrame.size)
+        scene = GameSceneWatch.newScene()
         // Present the scene
         self.skInterface.presentScene(scene)
         
         // Use a preferredFramesPerSecond that will maintain consistent frame rate
         self.skInterface.preferredFramesPerSecond = 30
-        
+        print("awake")
         //if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
-            scene.intel.gameCHelper.authenticateLocalPlayer()
+            //scene.intel.gameCHelper.authenticateLocalPlayer()
         //}
     }
     
-    @IBAction func handleGesture(gestureRecognizer : WKGestureRecognizer) {
-        if let swipe = gestureRecognizer as? WKSwipeGestureRecognizer {
+    @IBAction func handleGesture(withGestureRecognizer gestureRecognizer: WKGestureRecognizer) {
+        print("gest")
+        /*if let swipe = gestureRecognizer as? WKSwipeGestureRecognizer {
             if swipe.direction == .right {
                 scene.handleSwipe(swipe: .right)
             } else if swipe.direction == .left {
@@ -42,11 +43,7 @@ class InterfaceController: WKInterfaceController {
             } else if press.state == .ended {
                 scene.handleBrake(started: false)
             }
-        } else if let tap = gestureRecognizer as? WKTapGestureRecognizer {
-            if scene.playBtt.contains(tap.locationInObject())  {
-                scene.startGame()
-            }
-        }
+        }*/
     }
     
     override func willActivate() {

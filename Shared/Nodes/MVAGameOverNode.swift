@@ -6,9 +6,9 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 
-import UIKit
 import SpriteKit
 #if os(iOS)
+    import UIKit
     import FirebaseAnalytics
 #endif
     
@@ -101,29 +101,26 @@ class MVAGameOverNode: SKNode {
             newNode.noBtt!.addChild(nLabel)
             newNode.addChild(newNode.noBtt!)
         }
-    
-        #if os(iOS)
-            newNode.adsAsPurchase.successHandler = { [unowned newNode] (rewarded: Bool) in
-                if rewarded {
-                    newNode.continueInGame()
-                } else {
-                    newNode.startNewGame()
-                }
-            }
-            newNode.adsAsPurchase.completionHandler = { [unowned newNode] () in
-                newNode.activityInd?.stopAnimating()
-                newNode.activityInd?.removeFromSuperview()
-            }
-            
-            newNode.adsForCars?.successHandler = { [unowned newNode] (_: Bool) in
+
+        newNode.adsAsPurchase.successHandler = { [unowned newNode] (rewarded: Bool) in
+            if rewarded {
+                newNode.continueInGame()
+            } else {
                 newNode.startNewGame()
             }
-            newNode.adsForCars?.completionHandler = { [unowned newNode] () in
-                newNode.activityInd?.stopAnimating()
-                newNode.activityInd?.removeFromSuperview()
-            }
-        #endif
-
+        }
+        newNode.adsAsPurchase.completionHandler = { [unowned newNode] () in
+            newNode.stopIndicator()
+            newNode.activityInd?.removeFromSuperview()
+        }
+        
+        newNode.adsForCars?.successHandler = { [unowned newNode] (_: Bool) in
+            newNode.startNewGame()
+        }
+        newNode.adsForCars?.completionHandler = { [unowned newNode] () in
+            newNode.stopIndicator()
+            newNode.activityInd?.removeFromSuperview()
+        }
         
         newNode.isUserInteractionEnabled = true
         return newNode
@@ -173,6 +170,10 @@ class MVAGameOverNode: SKNode {
     #if os(iOS) || os(tvOS)
     fileprivate var activityInd: UIActivityIndicatorView?
     
+    fileprivate func stopIndicator() {
+        activityInd?.stopAnimating()
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touchLocation = touches.first!.location(in: self)
         countD?.removeFromParent()
@@ -210,5 +211,49 @@ class MVAGameOverNode: SKNode {
             }
         }
     }
+    #elseif os(macOS)
+    fileprivate var activityInd: NSProgressIndicator?
+    
+    fileprivate func stopIndicator() {
+        activityInd?.stopAnimation(nil)
+    }
+    /*
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touchLocation = touches.first!.location(in: self)
+        countD?.removeFromParent()
+        countD = nil
+        
+        if yesBtt != nil && noBtt != nil && nodes(at: touchLocation).contains(yesBtt!) {
+            activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
+            activityInd!.startAnimating()
+            scene!.view!.addSubview(activityInd!)
+            
+            if showPurchase {
+                /*
+                 self.activityInd?.stopAnimating()
+                 self.activityInd?.removeFromSuperview()
+                 self.continueInGame()
+                 */
+                store.buyLife() { (purchased: Bool, _, _) in
+                    self.activityInd?.stopAnimating()
+                    self.activityInd?.removeFromSuperview()
+                    if purchased {
+                        self.continueInGame()
+                    } else {
+                        self.startNewGame()
+                    }
+                }
+            } else {
+                adsAsPurchase.showAd()
+            }
+        } else {
+            if MVAMemory.adsEnabled {
+                adsForCars?.showAd()
+            } else {
+                self.startNewGame()
+            }
+        }
+    }*/
     #endif
 }

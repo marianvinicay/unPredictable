@@ -201,13 +201,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if MVAMemory.enableGameCenter {
                 self.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
-                    if let myVC = UIApplication.shared.keyWindow?.rootViewController as? GameViewController {
-                        if granted {
-                            myVC.gameCenterBtt.isHidden = false
-                        } else {
-                            myVC.gameCenterBtt.isHidden = true
+                    #if os(iOS) || os(tvOS)
+                        if let myVC = UIApplication.shared.keyWindow?.rootViewController as? GameViewController {
+                            if granted {
+                                myVC.gameCenterBtt.isHidden = false
+                            } else {
+                                myVC.gameCenterBtt.isHidden = true
+                            }
                         }
-                    }
+                    #elseif os(macOS)
+                        if let myVC = NSApplication.shared().mainWindow?.contentViewController as? GameViewControllerMAC {
+                            if granted {
+                                myVC.gameCenterBtt.isHidden = false
+                            } else {
+                                myVC.gameCenterBtt.isHidden = true
+                            }
+                        }
+                    #endif
                 }
             }
         }
@@ -249,13 +259,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func handleBrakingSwipe(fromPositionChange posCh: CGFloat) {
+    func handleBrakingSwipe(fromPositionChange posCh: CGFloat, animated anim: Bool = false) {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
             let newPlayerPos = intel.player.position.x + posCh
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
                 newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
-                intel.player.position.x = newPlayerPos
+                if anim {
+                    intel.player.run(SKAction.moveTo(x: newPlayerPos, duration: 0.1))
+                } else {
+                    intel.player.position.x = newPlayerPos
+                }
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
             }

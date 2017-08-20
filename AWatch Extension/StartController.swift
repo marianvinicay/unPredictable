@@ -15,7 +15,7 @@ class StartController: WKInterfaceController {
     @IBAction func startGame() {
         //let gameController = InterfaceController()
         //gameController.awake(withContext: nil)
-        self.presentController(withName: "game", context: nil)
+        //self.presentController(withName: "game", context: nil)
     }
     
     override func awake(withContext context: Any?) {

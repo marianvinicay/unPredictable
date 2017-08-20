@@ -8,9 +8,12 @@
 
 import SpriteKit
 
-#if os(iOS) || os(tvOS)
 class MVAWaitNode: SKNode {
-    private var activityInd: UIActivityIndicatorView?
+    #if os(iOS) || os(tvOS)
+        private var activityInd: UIActivityIndicatorView?
+    #elseif os(macOS)
+        private var activityInd: NSProgressIndicator?
+    #endif
     
     class func new(withSize size: CGSize, inScene scene: SKScene) -> MVAWaitNode {
         let newNode = MVAWaitNode()
@@ -20,18 +23,28 @@ class MVAWaitNode: SKNode {
         newNode.addChild(backG)
         backG.position = .zero
         
-        newNode.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        newNode.activityInd!.center = CGPoint(x: scene.view!.frame.midX, y: scene.view!.frame.midY)
-        newNode.activityInd!.startAnimating()
+        #if os(iOS) || os(tvOS)
+            newNode.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            newNode.activityInd!.center = CGPoint(x: scene.view!.frame.midX, y: scene.view!.frame.midY)
+            newNode.activityInd!.startAnimating()
+        #elseif os(macOS)
+            newNode.activityInd = NSProgressIndicator()
+            newNode.activityInd!.style = .spinningStyle
+            newNode.activityInd!.setFrameOrigin(NSPoint(x: scene.view!.frame.midX, y: scene.view!.frame.midY))
+            newNode.activityInd!.startAnimation(nil)
+        #endif
         scene.view!.addSubview(newNode.activityInd!)
         
         return newNode
     }
     
     func remove() {
-        self.activityInd?.stopAnimating()
+        #if os(iOS) || os(tvOS)
+            self.activityInd?.stopAnimating()
+        #elseif os(macOS)
+            self.activityInd?.stopAnimation(nil)
+        #endif
         self.activityInd?.removeFromSuperview()
         self.removeFromParent()
     }
 }
-#endif

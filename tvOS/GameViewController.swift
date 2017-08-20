@@ -10,9 +10,6 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-    
-    
-    
     private var gameScene: GameScene!
     
     override func viewDidLoad() {

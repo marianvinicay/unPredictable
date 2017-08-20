@@ -11,6 +11,11 @@ import SpriteKit
     import UIKit
 #endif
 
+public var lanePositions = [Int:Int]()
+public var maxLane: Int {
+    return lanePositions.count-1
+}
+
 class MVARoadNode: SKSpriteNode {
     
     class func createWith(texture: SKTexture, height: CGFloat, andWidth width: CGFloat) -> MVARoadNode {

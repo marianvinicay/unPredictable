@@ -7,7 +7,6 @@
 //
 
 import GameKit
-import UIKit
 
 enum MVAAchievements {
     static let firstCrash: String = "com.mva.unpredictable.first_Crash"
@@ -17,6 +16,10 @@ enum MVAAchievements {
 }
 
 class MVAGameCenterHelper: NSObject {
+    #if os(macOS)
+        typealias UIViewController = NSViewController
+    #endif
+    
     var authenticationViewController: GKGameCenterViewController?
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
@@ -24,8 +27,8 @@ class MVAGameCenterHelper: NSObject {
     
     override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: Notification.Name.GKPlayerAuthenticationDidChangeNotificationName, object: nil)
-        //NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: NSNotification.Name(rawValue: GKPlayerAuthenticationDidChangeNotificationName), object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: Notification.Name.GKPlayerAuthenticationDidChangeNotificationName, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: NSNotification.Name(rawValue: GKPlayerAuthenticationDidChangeNotificationName), object: nil)
     }
     
     func authDidChange() {
@@ -82,6 +85,8 @@ class MVAGameCenterHelper: NSObject {
 }
 //???
 #if os(iOS) || os(tvOS)
+    import UIKit
+    
     extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
         func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
             gameCenterViewController.dismiss(animated: true, completion: nil)

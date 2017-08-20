@@ -6,10 +6,12 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 
-import UIKit
 import SpriteKit
+#if os(iOS)
+    import UIKit
+#endif
 
-class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
+class ChangeCarScene: SKScene {
     static let backFromScene = Notification.Name("backFromCCScene")
     static let changePCar = Notification.Name("chPCar")
     
@@ -24,6 +26,9 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
     private var carImg: SKSpriteNode!
     private var carName: SKLabelNode!
     private var descLabel: SKSpriteNode!
+    #if os(iOS) || os(tvOS)
+        var myRecongizers = [UISwipeGestureRecognizer]()
+    #endif
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
     private let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
@@ -80,7 +85,9 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
                 MVAMemory.adsEnabled = true
                 scene.newCarBtts.isHidden = true
                 scene.useBtt.isHidden = false
-                scene.removeSwipes()
+                #if os(iOS) || os(tvOS)
+                    scene.removeSwipes() //!!!
+                #endif
                 NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
             } else {
                 MVAMemory.adsEnabled = false
@@ -91,10 +98,6 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         scene.ads.completionHandler = {}
         
         return scene
-    }
-    
-    override func didMove(to view: SKView) {
-        setupSwipes()
     }
     
     func refresh() {
@@ -113,11 +116,11 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         } else if MVAMemory.adCar == selectedCar {
             useBtt.isHidden = false
             newCarBtts.isHidden = true
-            (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getCarPrice()
+            (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
         } else {
             useBtt.isHidden = true
             newCarBtts.isHidden = false
-            (buyBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getCarPrice()
+            (buyBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
         }
         
         switch availableCars.index(of: selectedCar)! {
@@ -178,36 +181,6 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         checkArrows()
     }
     
-    private var myRecongizers = [UISwipeGestureRecognizer]()
-    
-    private func setupSwipes() {
-        let right = UISwipeGestureRecognizer(target: self, action: #selector(swipeGesture(swipe:)))
-        right.direction = .right
-        
-        let left = UISwipeGestureRecognizer(target: self, action: #selector(swipeGesture(swipe:)))
-        left.direction = .left
-        
-        right.delegate = self
-        left.delegate = self
-        
-        view?.addGestureRecognizer(right)
-        view?.addGestureRecognizer(left)
-        
-        myRecongizers = [right,left]
-    }
-    
-    private func removeSwipes() {
-        myRecongizers.forEach({ view?.removeGestureRecognizer($0) })
-    }
-    
-    func swipeGesture(swipe: UIGestureRecognizer) {
-        if (swipe as? UISwipeGestureRecognizer)?.direction == .left {
-            changeCar(1)
-        } else if (swipe as? UISwipeGestureRecognizer)?.direction == .right {
-            changeCar(-1)
-        }
-    }
-    
     private func purchase() {
         waitNode = MVAWaitNode.new(withSize: self.size, inScene: self)
         waitNode.zPosition = 10.0
@@ -242,9 +215,8 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             self.isUserInteractionEnabled = true
             self.waitNode.remove()
             self.waitNode = nil
-            let alert = UIAlertController(title: "Sorry", message: "Server is unreachable", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            (UIApplication.shared.keyWindow?.rootViewController as! GameViewController).present(alert, animated: true, completion: nil)
+            let alert = MVAAlert.new(withTitle: "Sorry", andMessage: "Server is unreachable")
+            MVAAlert.present(alert)
         }
         
         switch selectedCar {
@@ -256,12 +228,25 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
         }
     }
     
+    #if os(iOS) || os(tvOS)
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!.location(in: self)
-        if backBtt.contains(touch) {
+        touchedPosition(touch)
+    }
+    #elseif os(macOS)
+    override func touchesBegan(with event: NSEvent) {
+        let touch = event.locationInWindow
+        touchedPosition(touch)
+    }
+    #endif
+    
+    private func touchedPosition(_ pos: CGPoint) {
+        if backBtt.contains(pos) {
+            #if os(iOS) || os(tvOS)
             removeSwipes()
+            #endif
             NotificationCenter.default.post(name: ChangeCarScene.backFromScene, object: nil)
-        } else if restoreBtt.contains(touch) {
+        } else if restoreBtt.contains(pos) {
             waitNode = MVAWaitNode.new(withSize: self.size, inScene: self)
             waitNode.zPosition = 10.0
             self.addChild(waitNode)
@@ -275,20 +260,21 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
                     }
                     self.checkArrows()
                 } else if error != nil {
-                    let alertTitle = error == nil ? "Server is unreachable":error!.localizedDescription
-                    let alert = UIAlertController(title: "Sorry", message: alertTitle, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    (UIApplication.shared.keyWindow?.rootViewController as! GameViewController).present(alert, animated: true, completion: nil)
+                    let alertMsg = error == nil ? "Server is unreachable":error!.localizedDescription
+                    let alert = MVAAlert.new(withTitle: "Sorry", andMessage: alertMsg)
+                    MVAAlert.present(alert)
                 }
                 if self.waitNode != nil {
                     self.waitNode.remove()
                     self.waitNode = nil
                 }
             }
-        } else if !useBtt.isHidden && useBtt.contains(touch) {
+        } else if !useBtt.isHidden && useBtt.contains(pos) {
             if (useBtt.childNode(withName: "txt") as! SKLabelNode).text == "USE" {
                 if MVAMemory.ownedCars.contains(selectedCar) {
+                    #if os(iOS) || os(tvOS)
                     removeSwipes()
+                    #endif
                     MVAMemory.playerCar = selectedCar
                     MVAMemory.adCar = nil
                     MVAMemory.adsEnabled = false
@@ -297,16 +283,18 @@ class ChangeCarScene: SKScene, UIGestureRecognizerDelegate {
             } else {
                 purchase()
             }
-        } else if !newCarBtts.isHidden && newCarBtts.contains(touch) {
-            let specificTouch = touches.first!.location(in: self.newCarBtts)
+        } else if !newCarBtts.isHidden && newCarBtts.contains(pos) {
+            let specificTouch = newCarBtts.convert(pos, from: self)
+            print(specificTouch)
+            //let specificTouch = touches.first!.location(in: self.newCarBtts)
             if enableAdsBtt.contains(specificTouch) {
                 ads.showAd()
             } else if buyBtt.contains(specificTouch) {
                 purchase()
             }
-        } else if rightArr.contains(touch) {
+        } else if rightArr.contains(pos) {
             changeCar(1)
-        } else if leftArr.contains(touch) {
+        } else if leftArr.contains(pos) {
             changeCar(-1)
         }
     }
