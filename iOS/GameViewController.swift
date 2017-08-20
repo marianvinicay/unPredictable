@@ -27,7 +27,6 @@ class GameViewController: UIViewController {
     var changeCarScene: ChangeCarScene!
 
     override func viewDidLoad() {
-        @IBOutlet weak var gameCenterBtt: NSButton!
         super.viewDidLoad()
         let sceneSize = self.view.frame.size
         scene = GameScene.new(withSize: sceneSize)
