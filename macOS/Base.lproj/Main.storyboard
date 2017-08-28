@@ -135,10 +135,14 @@
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
                     <window key="window" title="unPredictable" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="609" y="417" width="270" height="480"/>
+                        <rect key="contentRect" x="633" y="145" width="512" height="683"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <value key="minSize" type="size" width="512" height="683"/>
+                        <value key="maxSize" type="size" width="512" height="683"/>
+                        <value key="minFullScreenContentSize" type="size" width="512" height="683"/>
+                        <value key="maxFullScreenContentSize" type="size" width="512" height="683"/>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -146,7 +150,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74" y="139"/>
+            <point key="canvasLocation" x="74" y="95.5"/>
         </scene>
         <!--unPredictable-->
         <scene sceneID="hIz-AP-VOD">
@@ -166,15 +170,52 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="showGameCenter:" target="XfG-lQ-9wD" id="AGd-dU-hn1"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mTp-A0-sz5">
+                                <rect key="frame" x="10" y="740" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="ej6-g5-D4Q"/>
+                                    <constraint firstAttribute="height" constant="50" id="nH7-tu-faC"/>
+                                </constraints>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="SoundON" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="pK6-bV-D6d">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="toggleSound:" target="XfG-lQ-9wD" id="3hF-8T-Kpg"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kVx-z5-Vt6">
+                                <rect key="frame" x="225" y="13" width="151" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="139" id="Slu-Av-CeF"/>
+                                    <constraint firstAttribute="height" constant="45" id="jm8-aa-Jgd"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Change Car" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="20" name="Futura-Medium"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="showChangeCar:" target="XfG-lQ-9wD" id="uSS-Nd-WDh"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="F1s-52-Jbe"/>
+                            <constraint firstItem="kVx-z5-Vt6" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="LkV-Vs-XXf"/>
+                            <constraint firstItem="mTp-A0-sz5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="Oij-T5-5vL"/>
+                            <constraint firstItem="mTp-A0-sz5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="QSf-Qf-P9g"/>
+                            <constraint firstAttribute="bottom" secondItem="kVx-z5-Vt6" secondAttribute="bottom" constant="20" id="dIU-hE-6wZ"/>
                             <constraint firstAttribute="trailing" secondItem="wdj-la-tMo" secondAttribute="trailing" constant="10" id="lL3-1b-jrS"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="changeCarBtt" destination="kVx-z5-Vt6" id="sQs-6Y-XJP"/>
                         <outlet property="gameCenterBtt" destination="wdj-la-tMo" id="r60-3x-82u"/>
+                        <outlet property="soundBtt" destination="mTp-A0-sz5" id="iJN-RE-ljK"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -184,5 +225,6 @@
     </scenes>
     <resources>
         <image name="Leaderboards" width="60" height="60"/>
+        <image name="SoundON" width="60" height="60"/>
     </resources>
 </document>

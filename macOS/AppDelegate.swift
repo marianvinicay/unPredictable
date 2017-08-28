@@ -13,7 +13,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        NSApp.mainWindow?.styleMask.remove(.resizable)
+        //NSApp.mainWindow!.styleMask.remove(.resizable)
+        MVAMemory.tutorialDisplayed = false
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

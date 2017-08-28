@@ -11,6 +11,24 @@ import SpriteKit
     import FirebaseAnalytics
 #endif
 
+enum MVATutorialText {
+    #if os(iOS) || os(tvOS)
+    static let swipeLabel = "Swiping changes"
+    static let swipe2ndLabel = "your car's lane"
+    static let swipe3rdLabel = "Try it! 😎"
+    static let brakeLabel = "Touch and hold to brake"
+    static let brake2ndLabel = "and drag"
+    static let brake3rdLabel = "to change direction"
+    #elseif os(macOS)
+    static let swipeLabel = "Change your car's"
+    static let swipe2ndLabel = "lane with ◀️/▶️"
+    static let swipe3rdLabel = "Try it! 😎"
+    static let brakeLabel = "Hold 🔽 to brake"
+    static let brake2ndLabel = "and click ◀️/▶️"
+    static let brake3rdLabel = "to change direction"
+    #endif
+}
+
 class MVATutorialNode: SKNode {
     private var dispSize: CGSize!
     
@@ -30,15 +48,15 @@ class MVATutorialNode: SKNode {
         let newNode = MVATutorialNode()
         newNode.dispSize = size
         
-        let swipeLabel = MVATutorialNode.label(withText: "Swiping changes", andName: "swipe")
+        let swipeLabel = MVATutorialNode.label(withText: MVATutorialText.swipeLabel, andName: "swipe")
         swipeLabel.position = CGPoint(x: 0.0, y: size.height/2.3)
         newNode.addChild(swipeLabel)
         
-        let swipe2ndLabel = MVATutorialNode.label(withText: "your car's lane", andName: "swipe")
+        let swipe2ndLabel = MVATutorialNode.label(withText: MVATutorialText.swipe2ndLabel, andName: "swipe")
         swipe2ndLabel.position = CGPoint(x: 0.0, y: swipeLabel.frame.minY-20)
         newNode.addChild(swipe2ndLabel)
         
-        let swipe3rdLabel = MVATutorialNode.label(withText: "Try it! 😎", andName: "swipe")
+        let swipe3rdLabel = MVATutorialNode.label(withText: MVATutorialText.swipe3rdLabel, andName: "swipe")
         swipe3rdLabel.position = CGPoint(x: 0.0, y: swipe2ndLabel.frame.minY-30)
         newNode.addChild(swipe3rdLabel)
 
@@ -73,15 +91,15 @@ class MVATutorialNode: SKNode {
                 let bNode = SKNode()
                 bNode.name = "brake"
                 
-                let brakeLabel = MVATutorialNode.label(withText: "Touch and hold to brake", andName: nil)
+                let brakeLabel = MVATutorialNode.label(withText: MVATutorialText.brakeLabel, andName: nil)
                 brakeLabel.position = CGPoint(x: 0.0, y: self.dispSize.height/2.3)
                 bNode.addChild(brakeLabel)
                 
-                let brake2ndLabel = MVATutorialNode.label(withText: "and drag", andName: nil)
+                let brake2ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake2ndLabel, andName: nil)
                 brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-27)
                 bNode.addChild(brake2ndLabel)
                 
-                let brake3ndLabel = MVATutorialNode.label(withText: "to change direction", andName: nil)
+                let brake3ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake3rdLabel, andName: nil)
                 brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-20)
                 bNode.addChild(brake3ndLabel)
                 

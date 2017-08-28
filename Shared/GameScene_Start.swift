@@ -13,6 +13,7 @@ extension GameScene {
         guard let scene = GameScene(fileNamed: "GameScene") else {
             abort()
         }
+
         scene.scaleMode = .aspectFill
         scene.size = deviceSize
         scene.camera = (scene.childNode(withName: "cam") as! SKCameraNode)

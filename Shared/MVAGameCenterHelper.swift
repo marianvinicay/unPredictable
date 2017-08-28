@@ -103,4 +103,22 @@ class MVAGameCenterHelper: NSObject {
             }
         }
     }
+#elseif os(macOS)
+    extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
+        func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+            GKDialogController.shared().dismiss(self)
+        }
+        
+        func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
+            if GKLocalPlayer.localPlayer().isAuthenticated {
+                let gameCenterViewController = GKGameCenterViewController()
+                gameCenterViewController.gameCenterDelegate = self
+                let sdc = GKDialogController.shared()
+                sdc.parentWindow = NSApp.mainWindow
+                sdc.present(gameCenterViewController)
+            } else {
+                authenticateLocalPlayer(comp)
+            }
+        }
+    }
 #endif

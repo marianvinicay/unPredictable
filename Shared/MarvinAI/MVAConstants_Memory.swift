@@ -25,7 +25,7 @@ enum MVAConstants {
     #elseif os(watchOS)
         static let baseCarSize = CGSize(width: 20.0, height: 36.0)
     #elseif os(macOS)
-        static let baseCarSize = CGSize(width: 80.0, height: 144.0)
+        static let baseCarSize = CGSize(width: 50.0, height: 90.0)
     #endif
     static let priorityTime: Double = 1.8
     static var baseBotSpeed: Int {

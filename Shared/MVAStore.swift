@@ -30,11 +30,15 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
             case .purchased, .restored:
                 SKPaymentQueue.default().finishTransaction(transaction)
                 transactionInProgress = false
-                completion?(true,transaction.payment.productIdentifier,nil)
+                DispatchQueue.main.async {
+                    self.completion?(true,transaction.payment.productIdentifier,nil)
+                }
             case .failed:
                 SKPaymentQueue.default().finishTransaction(transaction)
                 transactionInProgress = false
-                completion?(false,"",nil)
+                DispatchQueue.main.async {
+                    self.completion?(false,"",nil)
+                }
             default: break
             }
         }

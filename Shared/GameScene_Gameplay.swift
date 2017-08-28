@@ -106,6 +106,7 @@ extension GameScene {
     
     func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
+            #if os(iOS) || os(tvOS)
             var offP = false
             var offAd = false
             if tutorialNode == nil {
@@ -124,6 +125,24 @@ extension GameScene {
                 tutorialNode!.removeFromParent()
                 tutorialNode = nil
             }
+            #elseif os(macOS)
+                var offP = false
+                let offAd = false
+                if tutorialNode == nil {
+                    if intel.distanceTraveled < 8.0 {
+                        timesCrashed += 1
+                    }
+                    if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
+                        offP = intel.storeHelper.canBuyLife()
+                    } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                        offP = intel.storeHelper.canBuyLife()
+                    }
+                } else {
+                    tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
+                    tutorialNode!.removeFromParent()
+                    tutorialNode = nil
+                }
+            #endif
             
             let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd)
             goNode.zPosition = 9.0

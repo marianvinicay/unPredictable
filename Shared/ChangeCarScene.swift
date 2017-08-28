@@ -233,14 +233,9 @@ class ChangeCarScene: SKScene {
         let touch = touches.first!.location(in: self)
         touchedPosition(touch)
     }
-    #elseif os(macOS)
-    override func touchesBegan(with event: NSEvent) {
-        let touch = event.locationInWindow
-        touchedPosition(touch)
-    }
     #endif
     
-    private func touchedPosition(_ pos: CGPoint) {
+    func touchedPosition(_ pos: CGPoint) {
         if backBtt.contains(pos) {
             #if os(iOS) || os(tvOS)
             removeSwipes()
@@ -285,8 +280,6 @@ class ChangeCarScene: SKScene {
             }
         } else if !newCarBtts.isHidden && newCarBtts.contains(pos) {
             let specificTouch = newCarBtts.convert(pos, from: self)
-            print(specificTouch)
-            //let specificTouch = touches.first!.location(in: self.newCarBtts)
             if enableAdsBtt.contains(specificTouch) {
                 ads.showAd()
             } else if buyBtt.contains(specificTouch) {

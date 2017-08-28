@@ -65,13 +65,7 @@ extension GameScene: UIGestureRecognizerDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
-            self.isUserInteractionEnabled = false
-            self.startGame()
-        } else if gameStarted && pauseBtt.contains(touches.first!.location(in: self.camera!)) {
-            pauseGame(withAnimation: true)
-        } else if gameStarted && playBtt.contains(touches.first!.location(in: self.camera!)) {
-            resumeGame()
-        }
+        let point = touches.first!.location(in: self.camera!)
+        touchedPosition(point)
     }
 }

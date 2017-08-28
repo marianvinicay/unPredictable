@@ -326,6 +326,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func touchedPosition(_ pos: CGPoint) {
+        if !gameStarted && playBtt.contains(pos) {
+            self.isUserInteractionEnabled = false
+            self.startGame()
+        } else if gameStarted && pauseBtt.contains(pos) {
+            pauseGame(withAnimation: true)
+        } else if gameStarted && playBtt.contains(pos) {
+            resumeGame()
+        }
+    }
+    
     // MARK: - SKPhysicsContactDelegate
     private var playerInCollision = false
     

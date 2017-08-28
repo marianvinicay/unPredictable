@@ -30,7 +30,13 @@ class MVAWaitNode: SKNode {
         #elseif os(macOS)
             newNode.activityInd = NSProgressIndicator()
             newNode.activityInd!.style = .spinningStyle
-            newNode.activityInd!.setFrameOrigin(NSPoint(x: scene.view!.frame.midX, y: scene.view!.frame.midY))
+            let winSize = NSApp.mainWindow!.minSize
+            newNode.activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/2)-31.5, width: 150, height: 150)
+            let lighten = CIFilter(name: "CIColorControls")!
+            lighten.setDefaults()
+            lighten.setValue(1, forKey: "inputBrightness")
+            newNode.activityInd!.contentFilters = [lighten]
+            newNode.activityInd!.display()
             newNode.activityInd!.startAnimation(nil)
         #endif
         scene.view!.addSubview(newNode.activityInd!)

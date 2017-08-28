@@ -167,66 +167,12 @@ class MVAGameOverNode: SKNode {
                                      itemId: nil)*/
     }
     
-    #if os(iOS) || os(tvOS)
-    fileprivate var activityInd: UIActivityIndicatorView?
-    
-    fileprivate func stopIndicator() {
-        activityInd?.stopAnimating()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touchLocation = touches.first!.location(in: self)
+    fileprivate func touchedPosition(_ touchLocation: CGPoint) {
         countD?.removeFromParent()
         countD = nil
         
-        if yesBtt != nil && noBtt != nil && nodes(at: touchLocation).contains(yesBtt!) {
-                activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-                activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
-                activityInd!.startAnimating()
-                scene!.view!.addSubview(activityInd!)
-                
-                if showPurchase {
-                    /*
-                    self.activityInd?.stopAnimating()
-                    self.activityInd?.removeFromSuperview()
-                    self.continueInGame()
-                    */
-                    store.buyLife() { (purchased: Bool, _, _) in
-                        self.activityInd?.stopAnimating()
-                        self.activityInd?.removeFromSuperview()
-                        if purchased {
-                            self.continueInGame()
-                        } else {
-                            self.startNewGame()
-                        }
-                    }
-                } else {
-                    adsAsPurchase.showAd()
-                }
-        } else {
-            if MVAMemory.adsEnabled {
-                adsForCars?.showAd()
-            } else {
-                self.startNewGame()
-            }
-        }
-    }
-    #elseif os(macOS)
-    fileprivate var activityInd: NSProgressIndicator?
-    
-    fileprivate func stopIndicator() {
-        activityInd?.stopAnimation(nil)
-    }
-    /*
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touchLocation = touches.first!.location(in: self)
-        countD?.removeFromParent()
-        countD = nil
-        
-        if yesBtt != nil && noBtt != nil && nodes(at: touchLocation).contains(yesBtt!) {
-            activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-            activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
-            activityInd!.startAnimating()
+        if yesBtt != nil && noBtt != nil && yesBtt!.contains(touchLocation) {
+            createIndicator()
             scene!.view!.addSubview(activityInd!)
             
             if showPurchase {
@@ -236,7 +182,7 @@ class MVAGameOverNode: SKNode {
                  self.continueInGame()
                  */
                 store.buyLife() { (purchased: Bool, _, _) in
-                    self.activityInd?.stopAnimating()
+                    self.stopIndicator()
                     self.activityInd?.removeFromSuperview()
                     if purchased {
                         self.continueInGame()
@@ -254,6 +200,49 @@ class MVAGameOverNode: SKNode {
                 self.startNewGame()
             }
         }
-    }*/
+    }
+    
+    #if os(iOS) || os(tvOS)
+    fileprivate var activityInd: UIActivityIndicatorView?
+    
+    fileprivate func stopIndicator() {
+        activityInd?.stopAnimating()
+    }
+
+    fileprivate func createIndicator() {
+        activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
+        activityInd!.startAnimating()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touchLocation = touches.first!.location(in: self)
+        touchedPosition(touchLocation)
+    }
+    #elseif os(macOS)
+    fileprivate var activityInd: NSProgressIndicator?
+    
+    fileprivate func stopIndicator() {
+        activityInd?.stopAnimation(nil)
+    }
+    
+    fileprivate func createIndicator() {
+        activityInd = NSProgressIndicator()
+        activityInd!.style = .spinningStyle
+        let winSize = NSApp.mainWindow!.minSize
+        activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/4)-75, width: 150, height: 150)
+        let lighten = CIFilter(name: "CIColorControls")!
+        lighten.setDefaults()
+        lighten.setValue(1, forKey: "inputBrightness")
+        activityInd!.contentFilters = [lighten]
+        activityInd!.display()
+        activityInd!.startAnimation(nil)
+    }
+    
+    override func mouseUp(with event: NSEvent) {
+        let fPoint = self.scene!.convertPoint(fromView: event.locationInWindow)
+        let touchLocation = self.convert(fPoint, from: self.scene!)
+        touchedPosition(touchLocation)
+    }
     #endif
 }

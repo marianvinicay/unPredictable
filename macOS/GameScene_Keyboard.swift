@@ -8,25 +8,32 @@
 
 import SpriteKit
 
-struct XYZ {
-    public static let keyDown: UInt16 = 125 //!!!
+enum KeyCodes {
+    public static let keyDown: UInt16 = 125
 }
     
 extension GameScene {
     
     override func keyUp(with event: NSEvent) {
         let keyC = event.keyCode
-        if keyC == XYZ.keyDown {
+        if keyC == KeyCodes.keyDown {
             if playerBraking {
                 handleBrake(started: false)
+                if let currentPLane = intel.player.currentLane {
+                    let currentLanePos = CGFloat(lanePositions[currentPLane]!)
+                    if intel.player.position.x != currentLanePos && !intel.stop {
+                        let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
+                        intel.player.run(actMove)
+                    }
+                }
             }
         }
     }
     
     override func mouseUp(with event: NSEvent) {
-        if playBtt.contains(CGPoint(x: event.absoluteX, y: event.absoluteY)) {
-            startGame()
-        }
+        let fPoint = self.convertPoint(fromView: event.locationInWindow)
+        let point = self.convert(fPoint, to: self.camera!)
+        touchedPosition(point)
     }
     
     override func keyDown(with event: NSEvent) {
@@ -35,7 +42,7 @@ extension GameScene {
     
     override func moveLeft(_ sender: Any?) {
         if playerBraking {
-            handleBrakingSwipe(fromPositionChange: -10, animated: true)
+            handleBrakingSwipe(fromPositionChange: -6, animated: true)
         } else {
             handleSwipe(swipe: .left)
         }
@@ -43,7 +50,7 @@ extension GameScene {
     
     override func moveRight(_ sender: Any?) {
         if playerBraking {
-            handleBrakingSwipe(fromPositionChange: 10, animated: true)
+            handleBrakingSwipe(fromPositionChange: 6, animated: true)
         } else {
             handleSwipe(swipe: .right)
         }
@@ -51,9 +58,5 @@ extension GameScene {
     
     override func moveDown(_ sender: Any?) {
         handleBrake(started: true)
-    }
-    
-    override func insertNewline(_ sender: Any?) {
-        startGame()
     }
 }
