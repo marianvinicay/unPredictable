@@ -69,6 +69,9 @@ extension GameScene {
         player.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         player.physicsBody?.isDynamic = true
         player.position = CGPoint(x: 0.0, y: -self.size.height/13)
+        if lanePositions.count == 4 {
+            player.position.y = -self.size.height/23
+        }
         self.addChild(player)
         player.zPosition = 5.0
         intel.player = player
@@ -130,9 +133,9 @@ extension GameScene {
         spawner.name = "spawner"
         self.addChild(spawner)
         
-        spawnPlayer()
-        setLevelSpeed(0)
         spawnStartRoad()
+        setLevelSpeed(0)
+        spawnPlayer()
         
         //remover
         remover = MVARemoverNode.createRemover(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height))

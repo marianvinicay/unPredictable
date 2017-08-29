@@ -14,6 +14,16 @@
       "idiom" : "universal",
       "filename" : "PlayerJeep@3x.png",
       "scale" : "3x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "PlayerJeep-1.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "PlayerJeep@2x-2.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

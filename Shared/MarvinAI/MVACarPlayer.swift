@@ -40,7 +40,9 @@ class MVACarPlayer: MVACar {
     }
     
     func resetPhysicsBody() {
+        let mySpeed = CGFloat(pointsPerSecond)
         physicsBody = SKPhysicsBody(texture: skin.normal, size: size)
+        physicsBody?.velocity.dy = mySpeed
         physicsBody?.mass = 5
         physicsBody?.density = 5000.0
         physicsBody?.friction = 0.0

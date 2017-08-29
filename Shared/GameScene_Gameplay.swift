@@ -15,7 +15,8 @@ extension GameScene {
     func startGame() {
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
-        let randLane = Int(arc4random_uniform(3))
+        let laneCount = UInt32(lanePositions.count)
+        let randLane = Int(arc4random_uniform(laneCount))
         let randLanePos = CGFloat(lanePositions[randLane]!)
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
         let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)

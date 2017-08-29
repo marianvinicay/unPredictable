@@ -23,15 +23,17 @@ class MVARoadNode: SKSpriteNode {
         road.size = CGSize(width: width, height: height)
         
         if lanePositions.isEmpty {
-            var numberOfLanes = 3
-            var sidesWidthCombined = (width*(1/3))-20
             #if os(iOS) || os(tvOS)
+                var numberOfLanes = 3
+                var sidesWidthCombined = (width*(1/3))-20
+                
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     numberOfLanes = 4
                     sidesWidthCombined = width*(1/4)-20
                 }
             #elseif os(macOS)
-                numberOfLanes = 4
+                let numberOfLanes = 4
+                let sidesWidthCombined = width*(1/4)-20
             #endif
             let createLanes = numberOfLanes-1
 

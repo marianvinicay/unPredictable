@@ -9,10 +9,10 @@
 import GameKit
 
 enum MVAAchievements {
-    static let firstCrash: String = "com.mva.unpredictable.first_Crash"
-    static let aroundEarth: String = "com.mva.unpredictable.around_Earth"
-    static let crashed100Cars: String = "com.mva.unpredictable.100C_cars"
-    static let marathon: String = "com.mva.unpredictable.marathon"
+    static let firstCrash: String = "grp.com.mva.unpredictable.first_Crash"
+    static let aroundEarth: String = "grp.com.mva.unpredictable.around_Earth"
+    static let crashed100Cars: String = "grp.com.mva.unpredictable.100C_cars"
+    static let marathon: String = "grp.com.mva.unpredictable.marathon"
 }
 
 class MVAGameCenterHelper: NSObject {
@@ -53,7 +53,7 @@ class MVAGameCenterHelper: NSObject {
     
     func report(distance dist: Double) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
-        let gkScore = GKScore(leaderboardIdentifier: "com.mva.unpredictable.distance_traveled")
+        let gkScore = GKScore(leaderboardIdentifier: "grp.com.mva.unpredictable.distance_traveled")
         if Locale.current.usesMetricSystem {
             // dist in KM
             gkScore.value = Int64(dist*10)
@@ -66,7 +66,7 @@ class MVAGameCenterHelper: NSObject {
     
     func report(crashedCars numOfCars: Int64) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
-        let gkScore = GKScore(leaderboardIdentifier: "com.mva.unpredictable.crashed_cars")
+        let gkScore = GKScore(leaderboardIdentifier: "grp.com.mva.unpredictable.crashed_cars")
         gkScore.value = numOfCars
         GKScore.report([gkScore], withCompletionHandler: nil)
     }

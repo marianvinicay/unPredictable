@@ -108,6 +108,7 @@ enum MVAMemory {
         }
     }
     
+    #if os(iOS) || os(tvOS)
     static var adsEnabled: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "adsEn")
@@ -116,6 +117,12 @@ enum MVAMemory {
             return UserDefaults.standard.value(forKey: "adsEn") as? Bool ?? false
         }
     }
+    #elseif os(macOS)
+    static var adsEnabled: Bool {
+        set {}
+        get { return false }
+    }
+    #endif
     
     static var enableGameCenter: Bool {
         set {

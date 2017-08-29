@@ -13,7 +13,7 @@ import SpriteKit
 #endif
     
 class MVAGameOverNode: SKNode {
-    private var yesBtt: SKShapeNode?
+    var yesBtt: SKShapeNode?
     private var noBtt: SKShapeNode?
     private var countD: SKLabelNode?
     private var countDown = 6
@@ -167,7 +167,7 @@ class MVAGameOverNode: SKNode {
                                      itemId: nil)*/
     }
     
-    fileprivate func touchedPosition(_ touchLocation: CGPoint) {
+    func touchedPosition(_ touchLocation: CGPoint) {
         countD?.removeFromParent()
         countD = nil
         

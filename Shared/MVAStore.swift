@@ -54,9 +54,15 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
         }
     }
     
+    #if os(iOS) || os(tvOS)
     var productIDs = ["life":"unpredictable.continueAfterCrash",
                       "lives_car":"unpredictable.lives_car",
                       "pcs_car":"unpredictable.pcs_car"]
+    #elseif os(macOS)
+    var productIDs = ["life":"mac.unpredictable.continueAfterCrash",
+                      "lives_car":"mac.unpredictable.lives_car",
+                      "pcs_car":"mac.unpredictable.pcs_car"]
+    #endif
     var productsArray = [SKProduct]()
     var transactionInProgress = false
     private var completion: ((Bool, String, Error?)->())?

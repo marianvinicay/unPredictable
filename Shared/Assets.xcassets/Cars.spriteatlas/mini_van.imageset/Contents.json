@@ -14,6 +14,16 @@
       "idiom" : "universal",
       "filename" : "Van Indicating@3x.png",
       "scale" : "3x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Van Indicating-1.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Van Indicating@2x-1.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

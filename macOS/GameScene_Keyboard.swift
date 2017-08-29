@@ -15,16 +15,19 @@ enum KeyCodes {
 extension GameScene {
     
     override func keyUp(with event: NSEvent) {
-        let keyC = event.keyCode
-        if keyC == KeyCodes.keyDown {
-            if playerBraking {
-                handleBrake(started: false)
-                if let currentPLane = intel.player.currentLane {
-                    let currentLanePos = CGFloat(lanePositions[currentPLane]!)
-                    if intel.player.position.x != currentLanePos && !intel.stop {
-                        let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
-                        intel.player.run(actMove)
-                    }
+        if intel.stop {
+            if let goNode = self.camera?.childNode(withName: "gameO") as? MVAGameOverNode {
+                if goNode.yesBtt == nil {
+                    goNode.touchedPosition(.zero)
+                }
+            }
+        } else if event.keyCode == KeyCodes.keyDown && playerBraking {
+            handleBrake(started: false)
+            if let currentPLane = intel.player.currentLane {
+                let currentLanePos = CGFloat(lanePositions[currentPLane]!)
+                if intel.player.position.x != currentLanePos && !intel.stop {
+                    let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
+                    intel.player.run(actMove)
                 }
             }
         }
@@ -38,6 +41,13 @@ extension GameScene {
     
     override func keyDown(with event: NSEvent) {
         interpretKeyEvents([event])
+    }
+    
+    override func moveUp(_ sender: Any?) {
+        if !gameStarted {
+            self.isUserInteractionEnabled = false
+            self.startGame()
+        }
     }
     
     override func moveLeft(_ sender: Any?) {

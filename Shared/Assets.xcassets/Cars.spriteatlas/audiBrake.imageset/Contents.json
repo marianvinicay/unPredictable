@@ -14,6 +14,16 @@
       "idiom" : "universal",
       "filename" : "Brake@3x.png",
       "scale" : "3x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Brake-1.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "mac",
+      "filename" : "Brake@2x-1.png",
+      "scale" : "2x"
     }
   ],
   "info" : {
