@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SpriteKit
 
 extension ChangeCarScene: UIGestureRecognizerDelegate {
     override func didMove(to view: SKView) {

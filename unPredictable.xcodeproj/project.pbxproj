@@ -345,6 +345,7 @@
 		2F23E1031D6EF21D00119E4F = {
 			isa = PBXGroup;
 			children = (
+				2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */,
 				2F23E1081D6EF21D00119E4F /* Shared */,
 				2F23E1131D6EF21D00119E4F /* iOS */,
 				2FD6CDAE1F34702200FD9B96 /* AWatch */,
@@ -420,7 +421,6 @@
 		2F23E14B1D6EF21D00119E4F /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */,
 				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
 				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
 				2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */,
@@ -629,7 +629,7 @@
 								enabled = 1;
 							};
 							com.apple.GameCenter = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.HealthKit = {
 								enabled = 0;
@@ -1239,7 +1239,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macOS/unPredictable.entitlements;
+				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1263,7 +1263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macOS/unPredictable.entitlements;
+				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
