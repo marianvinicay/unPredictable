@@ -13,12 +13,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-        //NSApp.mainWindow!.styleMask.remove(.resizable)
-        MVAMemory.tutorialDisplayed = false
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+    }
+    
+    func applicationWillResignActive(_ notification: Notification) {
+        if let scene = (NSApp.mainWindow?.contentViewController as? GameViewControllerMAC)?.gameScene {
+            if scene.gameStarted && scene.intel.stop == false {
+                scene.pauseGame(withAnimation: true)
+            }
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

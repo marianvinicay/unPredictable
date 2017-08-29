@@ -39,8 +39,8 @@ class GameViewControllerMAC: NSViewController {
         
         skView.ignoresSiblingOrder = true
         
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        //skView.showsFPS = true
+        //skView.showsNodeCount = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
@@ -60,13 +60,11 @@ class GameViewControllerMAC: NSViewController {
     
     func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if soundBtt.alphaValue < 1.0 {
-            gameCenterBtt.isHidden = false
-            soundBtt.isHidden = false
-            if !gameScene.gameStarted {
-                changeCarBtt.isHidden = false
-            }
             gameCenterBtt.animator().alphaValue = 1.0
             soundBtt.animator().alphaValue = 1.0
+            
+            gameCenterBtt.isEnabled = true
+            soundBtt.isEnabled = true
             if !gameScene.gameStarted {
                 changeCarBtt.animator().alphaValue = 1.0
                 changeCarBtt.isEnabled = true
@@ -74,6 +72,9 @@ class GameViewControllerMAC: NSViewController {
         } else {
             gameCenterBtt.animator().alphaValue = 0.0
             soundBtt.animator().alphaValue = 0.0
+            
+            gameCenterBtt.isEnabled = false
+            soundBtt.isEnabled = false
             if !gameScene.gameStarted {
                 changeCarBtt.animator().alphaValue = 0.0
                 changeCarBtt.isEnabled = false
@@ -87,7 +88,7 @@ class GameViewControllerMAC: NSViewController {
             MVAMemory.audioMuted = true
             soundBtt.image = NSImage(named: "SoundOFF")
         } else {
-            gameScene.fadeInVolume()
+            gameScene.audioEngine.mainMixerNode.outputVolume = 1.0
             MVAMemory.audioMuted = false
             soundBtt.image = NSImage(named: "SoundON")
         }

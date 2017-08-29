@@ -22,7 +22,7 @@
 		2F23E1411D6EF21D00119E4F /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E1401D6EF21D00119E4F /* GameViewController.swift */; };
 		2F23E1441D6EF21D00119E4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E1421D6EF21D00119E4F /* Main.storyboard */; };
 		2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */; };
-		2F23E14F1D6EF21D00119E4F /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14E1D6EF21D00119E4F /* GameViewController.swift */; };
+		2F23E14F1D6EF21D00119E4F /* GameViewControllerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */; };
 		2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E1501D6EF21D00119E4F /* Main.storyboard */; };
 		2F23E15B1D6EF21D00119E4F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
 		2F23E15D1D6EF21D00119E4F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
@@ -146,6 +146,8 @@
 		2FB034021F3D7C81009B6A9A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB034011F3D7C81009B6A9A /* AdSupport.framework */; };
 		2FB034041F3D7C87009B6A9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB034031F3D7C87009B6A9A /* AVFoundation.framework */; };
 		2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */; };
+		2FCA6DD31F556964008BC3B9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCA6DD21F556964008BC3B9 /* GameKit.framework */; };
+		2FCA6DD51F556965008BC3B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCA6DD41F556965008BC3B9 /* StoreKit.framework */; };
 		2FD6CDB11F34702200FD9B96 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2FD6CDAF1F34702200FD9B96 /* Interface.storyboard */; };
 		2FD6CDBA1F34702200FD9B96 /* AWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2FD6CDB91F34702200FD9B96 /* AWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2FD6CDBF1F34702200FD9B96 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6CDBE1F34702200FD9B96 /* GameController.swift */; };
@@ -214,7 +216,7 @@
 		2F23E1451D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F23E14A1D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2F23E14E1D6EF21D00119E4F /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerMAC.swift; sourceTree = "<group>"; };
 		2F23E1511D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F26548C1F41A6FA00A7D2CF /* MVAWaitNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWaitNode.swift; sourceTree = "<group>"; };
@@ -261,6 +263,8 @@
 		2FB034011F3D7C81009B6A9A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
 		2FB034031F3D7C87009B6A9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Keyboard.swift; sourceTree = "<group>"; };
+		2FCA6DD21F556964008BC3B9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		2FCA6DD41F556965008BC3B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2FD6CDAD1F34702200FD9B96 /* AWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD6CDB01F34702200FD9B96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		2FD6CDB41F34702200FD9B96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -300,6 +304,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FCA6DD31F556964008BC3B9 /* GameKit.framework in Frameworks */,
+				2FCA6DD51F556965008BC3B9 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +330,8 @@
 		276694BA1F21FF4200E70D15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FCA6DD41F556965008BC3B9 /* StoreKit.framework */,
+				2FCA6DD21F556964008BC3B9 /* GameKit.framework */,
 				2FB034031F3D7C87009B6A9A /* AVFoundation.framework */,
 				2FB034011F3D7C81009B6A9A /* AdSupport.framework */,
 				2FAFA6711F34B113006645CB /* GameKit.framework */,
@@ -337,7 +345,6 @@
 		2F23E1031D6EF21D00119E4F = {
 			isa = PBXGroup;
 			children = (
-				2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */,
 				2F23E1081D6EF21D00119E4F /* Shared */,
 				2F23E1131D6EF21D00119E4F /* iOS */,
 				2FD6CDAE1F34702200FD9B96 /* AWatch */,
@@ -413,10 +420,11 @@
 		2F23E14B1D6EF21D00119E4F /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */,
+				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
+				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
 				2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */,
 				2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */,
-				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
-				2F23E14E1D6EF21D00119E4F /* GameViewController.swift */,
 				2F23E1501D6EF21D00119E4F /* Main.storyboard */,
 				2F23E1531D6EF21D00119E4F /* Info.plist */,
 			);
@@ -550,9 +558,9 @@
 			productReference = 2F23E13C1D6EF21D00119E4F /* unPredictable.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2F23E1491D6EF21D00119E4F /* macOS */ = {
+		2F23E1491D6EF21D00119E4F /* unPredictable - macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "macOS" */;
+			buildConfigurationList = 2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - macOS" */;
 			buildPhases = (
 				2F23E1461D6EF21D00119E4F /* Sources */,
 				2F23E1471D6EF21D00119E4F /* Frameworks */,
@@ -562,7 +570,7 @@
 			);
 			dependencies = (
 			);
-			name = macOS;
+			name = "unPredictable - macOS";
 			productName = macOS;
 			productReference = 2F23E14A1D6EF21D00119E4F /* unPredictable.app */;
 			productType = "com.apple.product-type.application";
@@ -646,8 +654,14 @@
 						DevelopmentTeam = 9K9H4YXRT5;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
 							com.apple.Sandbox = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -689,7 +703,7 @@
 			targets = (
 				2F23E1101D6EF21D00119E4F /* unPredictable - iOS */,
 				2F23E13B1D6EF21D00119E4F /* tvOS */,
-				2F23E1491D6EF21D00119E4F /* macOS */,
+				2F23E1491D6EF21D00119E4F /* unPredictable - macOS */,
 				2FD6CDAC1F34702200FD9B96 /* AWatch */,
 				2FD6CDB81F34702200FD9B96 /* AWatch Extension */,
 			);
@@ -940,7 +954,7 @@
 				2F9808E71F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */,
 				2F31BA441F49CEB400CF4C13 /* MVAGameCenterHelper.swift in Sources */,
-				2F23E14F1D6EF21D00119E4F /* GameViewController.swift in Sources */,
+				2F23E14F1D6EF21D00119E4F /* GameViewControllerMAC.swift in Sources */,
 				2F31BA431F49CD1900CF4C13 /* MVAAlert.swift in Sources */,
 				2F9808E21F45E00300412075 /* MVARemoverNode.swift in Sources */,
 				2FAE022D1F054B84004D4EFE /* MVAUtils.swift in Sources */,
@@ -1225,6 +1239,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = macOS/unPredictable.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1236,7 +1251,7 @@
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictableMac;
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -1248,6 +1263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = macOS/unPredictable.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -1259,7 +1275,7 @@
 				INFOPLIST_FILE = macOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictable;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mva.unpredictableMac;
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
@@ -1375,7 +1391,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "macOS" */ = {
+		2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2F23E1741D6EF21D00119E4F /* Debug */,

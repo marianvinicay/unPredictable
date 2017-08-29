@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
                BuildableName = "unPredictable.app"
-               BlueprintName = "macOS"
+               BlueprintName = "unPredictable - macOS"
                ReferencedContainer = "container:unPredictable.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,7 +34,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
             BuildableName = "unPredictable.app"
-            BlueprintName = "macOS"
+            BlueprintName = "unPredictable - macOS"
             ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -57,7 +57,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
             BuildableName = "unPredictable.app"
-            BlueprintName = "macOS"
+            BlueprintName = "unPredictable - macOS"
             ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -76,7 +76,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2F23E1491D6EF21D00119E4F"
             BuildableName = "unPredictable.app"
-            BlueprintName = "macOS"
+            BlueprintName = "unPredictable - macOS"
             ReferencedContainer = "container:unPredictable.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

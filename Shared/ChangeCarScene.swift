@@ -118,9 +118,15 @@ class ChangeCarScene: SKScene {
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
         } else {
+            #if os(macOS)
+            useBtt.isHidden = false
+            newCarBtts.isHidden = true
+            (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
+            #else
             useBtt.isHidden = true
             newCarBtts.isHidden = false
             (buyBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
+            #endif
         }
         
         switch availableCars.index(of: selectedCar)! {

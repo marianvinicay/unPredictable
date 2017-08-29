@@ -12,13 +12,17 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         transactionInProgress = false
-        completion?(false,"",error)
+        DispatchQueue.main.async {
+            self.completion?(false,"",error)
+        }
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         transactionInProgress = false
         if queue.transactions.isEmpty {
-            self.completion?(false,"",nil)
+            DispatchQueue.main.async {
+                self.completion?(false,"",nil)
+            }
         }
         let alert = MVAAlert.new(withTitle: nil, andMessage: "Purchases were restored")
         MVAAlert.present(alert)
