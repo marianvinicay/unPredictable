@@ -11,12 +11,15 @@ import SpriteKit
 extension ChangeCarScene {
     
     override func mouseUp(with event: NSEvent) {
-        let point = self.convertPoint(fromView: event.locationInWindow)
-        touchedPosition(point)
+        touchedPosition(event.location(in: self))
     }
     
     override func keyDown(with event: NSEvent) {
         interpretKeyEvents([event])
+    }
+    
+    override func swipe(with event: NSEvent) {
+        
     }
     
     override func moveLeft(_ sender: Any?) {

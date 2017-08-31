@@ -61,13 +61,14 @@
 		2F7119661F2873F000FE58A8 /* MVATutorialNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */; };
 		2F7119671F2873F000FE58A8 /* MVATutorialNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */; };
 		2F7119681F2873F000FE58A8 /* MVATutorialNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */; };
-		2F71196A1F287E0300FE58A8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7119691F287E0300FE58A8 /* StoreKit.framework */; };
 		2F71196C1F28809800FE58A8 /* MVAStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196B1F28809800FE58A8 /* MVAStore.swift */; };
 		2F71196D1F28809800FE58A8 /* MVAStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196B1F28809800FE58A8 /* MVAStore.swift */; };
 		2F71196E1F28809800FE58A8 /* MVAStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196B1F28809800FE58A8 /* MVAStore.swift */; };
 		2F7119701F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */; };
 		2F7119711F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */; };
 		2F7119721F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */; };
+		2F7B222B1F569FD400E9D88B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7B222A1F569FD400E9D88B /* StoreKit.framework */; };
+		2F7B222D1F569FDB00E9D88B /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F7B222C1F569FDB00E9D88B /* GameKit.framework */; };
 		2F861B411F1BAB5F00162EDA /* MVAParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B401F1BAB5F00162EDA /* MVAParticle.sks */; };
 		2F861B431F1BAB5F00162EDA /* MVAParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B401F1BAB5F00162EDA /* MVAParticle.sks */; };
 		2F861B441F1BAB5F00162EDA /* MVAParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B401F1BAB5F00162EDA /* MVAParticle.sks */; };
@@ -133,7 +134,6 @@
 		2FAE02301F054B84004D4EFE /* MVAWorldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */; };
 		2FAE02311F054B84004D4EFE /* MVAWorldConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */; };
 		2FAFA6651F34AACC006645CB /* GameScene_Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */; };
-		2FAFA66C1F34B0F9006645CB /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA66B1F34B0F9006645CB /* GameKit.framework */; };
 		2FAFA6721F34B113006645CB /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FAFA6711F34B113006645CB /* GameKit.framework */; };
 		2FAFA6751F34C804006645CB /* GameSceneWatch.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6741F34C804006645CB /* GameSceneWatch.sks */; };
 		2FAFA6771F35A2AA006645CB /* StartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAFA6761F35A2AA006645CB /* StartController.swift */; };
@@ -162,6 +162,7 @@
 		2FDFBD291F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */; };
 		2FFA3BA81F5181E40020F78F /* ChangeCarScene_Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */; };
 		63DA5D6425DDBBBEFAE4B0B7 /* Pods_unPredictable___iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */; };
+		F0C30295261B54CFF7C23FBF /* Pods_unPredictable___macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30199FE15D6B6D58FBD59EC /* Pods_unPredictable___macOS.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -227,11 +228,12 @@
 		2F5585021F48105D006D229F /* pcs_beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pcs_beep.wav; sourceTree = "<group>"; };
 		2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Gameplay.swift; sourceTree = "<group>"; };
 		2F65AA2A1EF3D48600150F32 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = unPredictable.entitlements; sourceTree = "<group>"; };
 		2F7119651F2873F000FE58A8 /* MVATutorialNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVATutorialNode.swift; sourceTree = "<group>"; };
-		2F7119691F287E0300FE58A8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		2F71196B1F28809800FE58A8 /* MVAStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAStore.swift; sourceTree = "<group>"; };
 		2F71196F1F28D34900FE58A8 /* MVAGameOverNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAGameOverNode.swift; sourceTree = "<group>"; };
+		2F7B222A1F569FD400E9D88B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		2F7B222C1F569FDB00E9D88B /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		2F7B222E1F56AC2D00E9D88B /* unPredictable.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = unPredictable.entitlements; sourceTree = "<group>"; };
 		2F861B401F1BAB5F00162EDA /* MVAParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MVAParticle.sks; sourceTree = "<group>"; };
 		2F861B4B1F1BAE7C00162EDA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F861B591F1CAD7F00162EDA /* MVASound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVASound.swift; sourceTree = "<group>"; };
@@ -254,7 +256,6 @@
 		2FAE020F1F054B84004D4EFE /* MVARoadNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVARoadNode.swift; sourceTree = "<group>"; };
 		2FAE02101F054B84004D4EFE /* MVAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAUtils.swift; sourceTree = "<group>"; };
 		2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWorldConverter.swift; sourceTree = "<group>"; };
-		2FAFA66B1F34B0F9006645CB /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		2FAFA6711F34B113006645CB /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS3.2.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 		2FAFA6741F34C804006645CB /* GameSceneWatch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneWatch.sks; sourceTree = "<group>"; };
 		2FAFA6761F35A2AA006645CB /* StartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
@@ -276,8 +277,11 @@
 		2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene.swift; sourceTree = "<group>"; };
 		2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene_Keyboard.swift; sourceTree = "<group>"; };
+		44169A500DA5A8F4747F34C9 /* Pods-unPredictable - macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS.release.xcconfig"; sourceTree = "<group>"; };
 		75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_unPredictable___iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30199FE15D6B6D58FBD59EC /* Pods_unPredictable___macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_unPredictable___macOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC34D7C25A2D0741A49C014A /* Pods-unPredictable - macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - macOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,11 +289,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F71196A1F287E0300FE58A8 /* StoreKit.framework in Frameworks */,
 				2FB034041F3D7C87009B6A9A /* AVFoundation.framework in Frameworks */,
 				2FB034021F3D7C81009B6A9A /* AdSupport.framework in Frameworks */,
-				2FAFA66C1F34B0F9006645CB /* GameKit.framework in Frameworks */,
+				2F7B222B1F569FD400E9D88B /* StoreKit.framework in Frameworks */,
 				63DA5D6425DDBBBEFAE4B0B7 /* Pods_unPredictable___iOS.framework in Frameworks */,
+				2F7B222D1F569FDB00E9D88B /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +310,7 @@
 			files = (
 				2FCA6DD31F556964008BC3B9 /* GameKit.framework in Frameworks */,
 				2FCA6DD51F556965008BC3B9 /* StoreKit.framework in Frameworks */,
+				F0C30295261B54CFF7C23FBF /* Pods_unPredictable___macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,14 +335,15 @@
 		276694BA1F21FF4200E70D15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F7B222C1F569FDB00E9D88B /* GameKit.framework */,
+				2F7B222A1F569FD400E9D88B /* StoreKit.framework */,
 				2FCA6DD41F556965008BC3B9 /* StoreKit.framework */,
 				2FCA6DD21F556964008BC3B9 /* GameKit.framework */,
 				2FB034031F3D7C87009B6A9A /* AVFoundation.framework */,
 				2FB034011F3D7C81009B6A9A /* AdSupport.framework */,
 				2FAFA6711F34B113006645CB /* GameKit.framework */,
-				2FAFA66B1F34B0F9006645CB /* GameKit.framework */,
-				2F7119691F287E0300FE58A8 /* StoreKit.framework */,
 				78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */,
+				A30199FE15D6B6D58FBD59EC /* Pods_unPredictable___macOS.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -345,7 +351,7 @@
 		2F23E1031D6EF21D00119E4F = {
 			isa = PBXGroup;
 			children = (
-				2F7119641F286D8B00FE58A8 /* unPredictable.entitlements */,
+				2F7B222E1F56AC2D00E9D88B /* unPredictable.entitlements */,
 				2F23E1081D6EF21D00119E4F /* Shared */,
 				2F23E1131D6EF21D00119E4F /* iOS */,
 				2FD6CDAE1F34702200FD9B96 /* AWatch */,
@@ -512,6 +518,8 @@
 			children = (
 				75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */,
 				1AA69DA30541300C653A89B9 /* Pods-unPredictable - iOS.release.xcconfig */,
+				CC34D7C25A2D0741A49C014A /* Pods-unPredictable - macOS.debug.xcconfig */,
+				44169A500DA5A8F4747F34C9 /* Pods-unPredictable - macOS.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -562,9 +570,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - macOS" */;
 			buildPhases = (
+				AEE1CEE928EA430829843D97 /* [CP] Check Pods Manifest.lock */,
 				2F23E1461D6EF21D00119E4F /* Sources */,
 				2F23E1471D6EF21D00119E4F /* Frameworks */,
 				2F23E1481D6EF21D00119E4F /* Resources */,
+				25C574AA2E19CD22CFA1DCAE /* [CP] Embed Pods Frameworks */,
+				1E9BD8F027B308C861511BF2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -626,10 +637,10 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.GameCenter = {
-								enabled = 0;
+								enabled = 1;
 							};
 							com.apple.HealthKit = {
 								enabled = 0;
@@ -830,6 +841,36 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1E9BD8F027B308C861511BF2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		25C574AA2E19CD22CFA1DCAE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2FDFBD251F39917C00E1E6A4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -861,6 +902,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AEE1CEE928EA430829843D97 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-unPredictable - macOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1137,7 +1196,6 @@
 			baseConfigurationReference = 75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9K9H4YXRT5;
@@ -1167,7 +1225,6 @@
 			baseConfigurationReference = 1AA69DA30541300C653A89B9 /* Pods-unPredictable - iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 9K9H4YXRT5;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1237,6 +1294,7 @@
 		};
 		2F23E1741D6EF21D00119E4F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC34D7C25A2D0741A49C014A /* Pods-unPredictable - macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;
@@ -1261,6 +1319,7 @@
 		};
 		2F23E1751D6EF21D00119E4F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 44169A500DA5A8F4747F34C9 /* Pods-unPredictable - macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = unPredictable.entitlements;

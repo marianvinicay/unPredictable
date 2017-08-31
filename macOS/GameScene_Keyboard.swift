@@ -34,9 +34,7 @@ extension GameScene {
     }
     
     override func mouseUp(with event: NSEvent) {
-        let fPoint = self.convertPoint(fromView: event.locationInWindow)
-        let point = self.convert(fPoint, to: self.camera!)
-        touchedPosition(point)
+        touchedPosition(event.location(in: self.camera!))
     }
     
     override func keyDown(with event: NSEvent) {

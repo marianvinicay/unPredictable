@@ -240,9 +240,7 @@ class MVAGameOverNode: SKNode {
     }
     
     override func mouseUp(with event: NSEvent) {
-        let fPoint = self.scene!.convertPoint(fromView: event.locationInWindow)
-        let touchLocation = self.convert(fPoint, from: self.scene!)
-        touchedPosition(touchLocation)
+        touchedPosition(event.location(in: self.scene!))
     }
     #endif
 }

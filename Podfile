@@ -7,3 +7,9 @@ target 'unPredictable - iOS' do
   pod 'Crashlytics'
 end
 
+target 'unPredictable - macOS' do
+    platform :macOS, ’10.11’
+    use_frameworks!
+    pod 'Fabric'
+    pod 'Crashlytics'
+end
