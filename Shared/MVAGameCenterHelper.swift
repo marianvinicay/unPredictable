@@ -27,11 +27,10 @@ class MVAGameCenterHelper: NSObject {
     
     override init() {
         super.init()
-        //NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: Notification.Name.GKPlayerAuthenticationDidChangeNotificationName, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: NSNotification.Name(rawValue: GKPlayerAuthenticationDidChangeNotificationName), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authDidChange), name: Notification.Name.GKPlayerAuthenticationDidChangeNotificationName, object: nil)
     }
     
-    func authDidChange() {
+    @objc func authDidChange() {
         MVAMemory.enableGameCenter = GKLocalPlayer.localPlayer().isAuthenticated
     }
     

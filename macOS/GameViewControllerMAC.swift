@@ -17,9 +17,9 @@ class GameViewControllerMAC: NSViewController {
     @IBOutlet weak var soundBtt: NSButton! {
         willSet {
             if MVAMemory.audioMuted {
-                newValue.image = NSImage(named: "SoundOFF")
+                newValue.image = NSImage(named: NSImage.Name(rawValue: "SoundOFF"))
             } else {
-                newValue.image = NSImage(named: "SoundON")
+                newValue.image = NSImage(named: NSImage.Name(rawValue: "SoundON"))
             }
         }
     }
@@ -58,7 +58,7 @@ class GameViewControllerMAC: NSViewController {
         }
     }
     
-    func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
+    @objc func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if soundBtt.alphaValue < 1.0 {
             gameCenterBtt.animator().alphaValue = 1.0
             soundBtt.animator().alphaValue = 1.0
@@ -86,11 +86,11 @@ class GameViewControllerMAC: NSViewController {
         if gameScene.audioEngine.mainMixerNode.outputVolume > 0.0 {
             gameScene.audioEngine.mainMixerNode.outputVolume = 0.0
             MVAMemory.audioMuted = true
-            soundBtt.image = NSImage(named: "SoundOFF")
+            soundBtt.image = NSImage(named: NSImage.Name(rawValue: "SoundOFF"))
         } else {
             gameScene.audioEngine.mainMixerNode.outputVolume = 1.0
             MVAMemory.audioMuted = false
-            soundBtt.image = NSImage(named: "SoundON")
+            soundBtt.image = NSImage(named: NSImage.Name(rawValue: "SoundON"))
         }
     }
     
@@ -104,7 +104,7 @@ class GameViewControllerMAC: NSViewController {
         }
     }
     
-    func showAuthenticationViewController() {
+    @objc func showAuthenticationViewController() {
         if gameScene.gameStarted == false {
             if let authenticationViewController =
                 gameScene.intel.gameCHelper.authenticationViewController {
@@ -124,13 +124,13 @@ class GameViewControllerMAC: NSViewController {
     
     
     
-    func backFromChangeCarScene() {
+    @objc func backFromChangeCarScene() {
         toggleButtons(withAnimSpeed: 1.0)
         let transition = SKTransition.moveIn(with: .up, duration: 0.8)
         (self.view as! SKView).presentScene(gameScene, transition: transition)
     }
     
-    func changePlayerCar() {
+    @objc func changePlayerCar() {
         let pName = MVAMemory.playerCar
         if gameScene.intel.player.skin.name != pName {
             gameScene.intel.player.skin = MVASkin.createForCar(pName, withAtlas: gameScene.spawner.textures)

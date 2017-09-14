@@ -18,10 +18,6 @@ extension ChangeCarScene {
         interpretKeyEvents([event])
     }
     
-    override func swipe(with event: NSEvent) {
-        
-    }
-    
     override func moveLeft(_ sender: Any?) {
         changeCar(-1)
     }

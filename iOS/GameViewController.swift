@@ -67,7 +67,7 @@ class GameViewController: UIViewController {
     }
     
     
-    func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
+    @objc func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if soundBtt.isHidden {
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
@@ -125,7 +125,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    func showAuthenticationViewController() {
+    @objc func showAuthenticationViewController() {
         if scene.gameStarted == false {
             if let authenticationViewController =
                 scene.intel.gameCHelper.authenticationViewController {
@@ -145,13 +145,13 @@ class GameViewController: UIViewController {
     
     
     
-    func backFromChangeCarScene() {
+    @objc func backFromChangeCarScene() {
         toggleButtons(withAnimSpeed: 1.0)
         let transition = SKTransition.moveIn(with: .up, duration: 0.8)
         (self.view as! SKView).presentScene(scene, transition: transition)
     }
     
-    func changePlayerCar() {
+    @objc func changePlayerCar() {
         let pName = MVAMemory.playerCar
         if scene.intel.player.skin.name != pName {
             scene.intel.player.skin = MVASkin.createForCar(pName, withAtlas: scene.spawner.textures)

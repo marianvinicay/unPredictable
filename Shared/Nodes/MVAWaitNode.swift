@@ -29,7 +29,7 @@ class MVAWaitNode: SKNode {
             newNode.activityInd!.startAnimating()
         #elseif os(macOS)
             newNode.activityInd = NSProgressIndicator()
-            newNode.activityInd!.style = .spinningStyle
+            newNode.activityInd!.style = .spinning
             let winSize = NSApp.mainWindow!.minSize
             newNode.activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/2)-31.5, width: 150, height: 150)
             let lighten = CIFilter(name: "CIColorControls")!

@@ -13,6 +13,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        NSApp.mainWindow?.aspectRatio = NSSize(width: 512, height: 683)
+        NSApp.mainWindow?.contentAspectRatio = NSSize(width: 512, height: 683)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

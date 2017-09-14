@@ -126,7 +126,7 @@ class MVAGameOverNode: SKNode {
         return newNode
     }
     
-    func performCountDown() {
+    @objc func performCountDown() {
         if countD != nil {
             if countDown > 1 {
                 countDown -= 1
@@ -228,7 +228,7 @@ class MVAGameOverNode: SKNode {
     
     fileprivate func createIndicator() {
         activityInd = NSProgressIndicator()
-        activityInd!.style = .spinningStyle
+        activityInd!.style = .spinning
         let winSize = NSApp.mainWindow!.minSize
         activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/4)-75, width: 150, height: 150)
         let lighten = CIFilter(name: "CIColorControls")!

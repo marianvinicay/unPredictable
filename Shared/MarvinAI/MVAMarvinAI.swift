@@ -170,7 +170,8 @@ class MVAMarvinAI {
             return
         }
         
-        if let carInWay = cars.filter({ player.position.y < $0.position.y && $0.cantMoveForTime <= 0 }).sorted(by: { $0.position.y < $1.position.y }).first {
+        let goodCars = cars.filter({ player.position.y < $0.position.y && $0.cantMoveForTime <= 0 })
+        if let carInWay = goodCars.sorted(by: { $0.position.y < $1.position.y }).first {
             if let blockingCars = carsBlockingCar(carInWay) {
                 freeTheWay(blockedByCars: blockingCars+[carInWay])
             }

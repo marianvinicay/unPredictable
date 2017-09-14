@@ -34,7 +34,7 @@ extension GameScene: UIGestureRecognizerDelegate {
         view?.addGestureRecognizer(brake)
     }
     
-    func handelUISwipe(swipe: UISwipeGestureRecognizer) {
+    @objc func handelUISwipe(swipe: UISwipeGestureRecognizer) {
         switch swipe.direction {
         case UISwipeGestureRecognizerDirection.right: handleSwipe(swipe: .right)
         case UISwipeGestureRecognizerDirection.left: handleSwipe(swipe: .left)
@@ -42,7 +42,7 @@ extension GameScene: UIGestureRecognizerDelegate {
         }
     }
     
-    func handleUIBrake(gest: UILongPressGestureRecognizer) {
+    @objc func handleUIBrake(gest: UILongPressGestureRecognizer) {
         switch gest.state {
         case .began:
             handleBrake(started: true)

@@ -85,7 +85,7 @@ class MVACar: SKSpriteNode {
         }
     }
     
-    func smoothSpeedChange() {
+    @objc func smoothSpeedChange() {
         let brakingForce = CGFloat((self.pointsPerSecond/5)*11)
         if speedChange == .front {
             self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*brakingForce))

@@ -31,7 +31,7 @@
             let alert = NSAlert()
             alert.messageText = title ?? ""
             alert.informativeText = msg ?? ""
-            alert.alertStyle = NSAlertStyle.warning
+            alert.alertStyle = NSAlert.Style.warning
             alert.addButton(withTitle: "OK")
             return alert
         }

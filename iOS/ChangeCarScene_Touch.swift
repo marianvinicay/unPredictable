@@ -34,7 +34,7 @@ extension ChangeCarScene: UIGestureRecognizerDelegate {
         myRecongizers.forEach({ view?.removeGestureRecognizer($0) })
     }
     
-    func swipeGesture(swipe: UIGestureRecognizer) {
+    @objc func swipeGesture(swipe: UIGestureRecognizer) {
         if (swipe as? UISwipeGestureRecognizer)?.direction == .left {
             changeCar(1)
         } else if (swipe as? UISwipeGestureRecognizer)?.direction == .right {

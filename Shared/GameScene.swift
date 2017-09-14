@@ -210,7 +210,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                     #elseif os(macOS)
-                        if let myVC = NSApplication.shared().mainWindow?.contentViewController as? GameViewControllerMAC {
+                        if let myVC = NSApplication.shared.mainWindow?.contentViewController as? GameViewControllerMAC {
                             if granted {
                                 myVC.gameCenterBtt.isHidden = false
                             } else {
@@ -280,7 +280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func acceleratePlayer() {
+    @objc func acceleratePlayer() {
         if playerBraking == false {
             if intel.player.pointsPerSecond < intel.currentLevel.playerSpeed {
                 let forForce = CGFloat((intel.currentLevel.playerSpeed/5)*9)
@@ -301,7 +301,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func deceleratePlayer() {
+    @objc func deceleratePlayer() {
         if playerBraking {
             var minSpeed = 150
             if let carInFront = intel.player.responseFromSensors(inPositions: [.front, .stop]).first {
@@ -340,7 +340,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - SKPhysicsContactDelegate
     private var playerInCollision = false
     
-    func cancelPlayerCollision() { playerInCollision = false }
+    @objc func cancelPlayerCollision() { playerInCollision = false }
     
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask

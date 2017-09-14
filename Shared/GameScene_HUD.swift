@@ -25,8 +25,8 @@ struct HUDLabel {
 extension GameScene {
     func setDistance(_ numStr: String) {
         let decIndex = numStr.index(numStr.startIndex, offsetBy: 4)
-        let normalNum = numStr.substring(to: decIndex)
-        let decimNum = numStr.substring(with: decIndex..<numStr.endIndex)
+        let normalNum = String(numStr[..<decIndex])
+        let decimNum = String(numStr[decIndex..<numStr.endIndex])
         HUDLabel.giveMeLabel(fromNode: distanceSign).text = normalNum
         HUDLabel.giveMeLabel1(fromNode: distanceSign)!.text = decimNum
         HUDLabel.giveMeLabel2(fromNode: distanceSign)!.text = MVAWorldConverter.lengthUnit

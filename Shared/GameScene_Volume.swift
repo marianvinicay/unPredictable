@@ -30,7 +30,7 @@ extension GameScene {
         }
     }
     
-    func fadeInVolume() {
+    @objc func fadeInVolume() {
         if !MVAMemory.audioMuted {
             if self.audioEngine.mainMixerNode.outputVolume < 1.0 {
                 self.audioEngine.mainMixerNode.outputVolume += 0.1
