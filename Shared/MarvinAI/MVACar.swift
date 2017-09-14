@@ -27,7 +27,10 @@ class MVACar: SKSpriteNode {
     
     var pointsPerSecond: Int {
         get {
-            return Int(self.physicsBody!.velocity.dy)
+            if let vel = self.physicsBody?.velocity.dy {
+                return Int(vel)
+            }
+            return 0
         }
         set {
             self.physicsBody!.velocity.dy = CGFloat(newValue)

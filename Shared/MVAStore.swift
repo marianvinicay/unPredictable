@@ -10,6 +10,26 @@ import StoreKit
 
 class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
     
+    //promoted IAPs
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        switch payment.productIdentifier {
+        case productIDs["lives_car"]!:
+            if MVAMemory.ownedCars.contains(MVACarNames.playerLives) {
+                let pop = MVAAlert.new(withTitle: "Hooray!", andMessage: "You've already purchased \(mockUpNames[MVACarNames.playerLives]!) car")
+                MVAAlert.present(pop)
+                return false
+            }
+        case productIDs["pcs_car"]!:
+            if MVAMemory.ownedCars.contains(MVACarNames.playerPCS) {
+                let pop = MVAAlert.new(withTitle: "Hooray!", andMessage: "You've already purchased \(mockUpNames[MVACarNames.playerPCS]!) car")
+                MVAAlert.present(pop)
+                return false
+            }
+        default: break
+        }
+        return true
+    }
+    
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         transactionInProgress = false
         DispatchQueue.main.async {
@@ -67,10 +87,24 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
     var transactionInProgress = false
     private var completion: ((Bool, String, Error?)->())?
     
+    let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
+                       MVACarNames.playerLives:"Mudi",
+                       MVACarNames.playerPCS:"Veep"]
+    
     override init() {
         super.init()
         SKPaymentQueue.default().add(self)
         requestProductInfo()
+        restorePurchases() { (purchased: Bool, car: String, error: Error?) in
+                if purchased && error == nil {
+                    MVAMemory.adsEnabled = false
+                    switch car {
+                    case "unpredictable.lives_car": MVAMemory.ownedCars.append(MVACarNames.playerLives)
+                    case "unpredictable.pcs_car": MVAMemory.ownedCars.append(MVACarNames.playerPCS)
+                    default: break
+                    }
+                }
+        }
     }
     
     func canBuyLife() -> Bool {

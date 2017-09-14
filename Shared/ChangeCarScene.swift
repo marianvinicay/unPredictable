@@ -31,9 +31,6 @@ class ChangeCarScene: SKScene {
     #endif
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
-    private let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
-                               MVACarNames.playerLives:"Mudi",
-                               MVACarNames.playerPCS:"Veep"]
     private var selectedCar = MVAMemory.playerCar
     private let ads = MVAAds(config: .onlyVideo)
     private var store: MVAStore!
@@ -103,7 +100,7 @@ class ChangeCarScene: SKScene {
     func refresh() {
         let pCar = MVAMemory.playerCar
         carImg.texture = SKTexture(imageNamed: pCar)
-        carName.text = mockUpNames[pCar]
+        carName.text = store.mockUpNames[pCar]
         selectedCar = pCar
         checkArrows()
     }
@@ -182,7 +179,7 @@ class ChangeCarScene: SKScene {
             selectedCar = newCarName
             let direction = ind > 0 ? MVAPosition.left:MVAPosition.right
             animateChange(inDirection: direction)
-            carName.text = mockUpNames[newCarName]
+            carName.text = store.mockUpNames[newCarName]
         }
         checkArrows()
     }
@@ -255,8 +252,8 @@ class ChangeCarScene: SKScene {
                 if purchased && error == nil {
                     MVAMemory.adsEnabled = false
                     switch car {
-                    case "unpredictable.lives_car": MVAMemory.ownedCars.append(MVACarNames.playerLives)
-                    case "unpredictable.pcs_car": MVAMemory.ownedCars.append(MVACarNames.playerPCS)
+                    case self.store.productIDs["lives_car"]!: MVAMemory.ownedCars.append(MVACarNames.playerLives)
+                    case self.store.productIDs["pcs_car"]!: MVAMemory.ownedCars.append(MVACarNames.playerPCS)
                     default: break
                     }
                     self.checkArrows()

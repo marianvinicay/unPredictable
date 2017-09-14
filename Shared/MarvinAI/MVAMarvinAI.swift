@@ -18,7 +18,9 @@ class MVAMarvinAI {
     
     let sound = MVASound()
     let gameCHelper = MVAGameCenterHelper()
-    let storeHelper = MVAStore()
+    var storeHelper: MVAStore {
+        return (UIApplication.shared.delegate as! AppDelegate).inStore
+    }
     
     var stop = true
     var updateDist = false

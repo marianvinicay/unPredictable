@@ -18,6 +18,8 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    let inStore = MVAStore()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
