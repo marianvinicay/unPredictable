@@ -13,7 +13,11 @@ import SpriteKit
 class GameViewController: UIViewController {
 
     @IBOutlet weak var gameCenterBtt: UIButton!
-    @IBOutlet weak var changeCarBtt: UIButton!
+    @IBOutlet weak var changeCarBtt: UIButton! {
+        willSet {
+            newValue.layer.cornerRadius = 9
+        }
+    }
     @IBOutlet weak var soundBtt: UIButton! {
         willSet {
             if MVAMemory.audioMuted {
@@ -44,7 +48,7 @@ class GameViewController: UIViewController {
         //skView.showsNodeCount = true
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
         
@@ -66,9 +70,14 @@ class GameViewController: UIViewController {
         }
     }
     
+    @objc func toggleButtonsSEL() {
+        toggleButtons()
+    }
     
-    @objc func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
-        if soundBtt.isHidden {
+    private var bttnsHidden = false
+    func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
+        if bttnsHidden {
+            bttnsHidden = false
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
             if !scene.gameStarted {
@@ -86,6 +95,7 @@ class GameViewController: UIViewController {
                 }
             })
         } else {
+            bttnsHidden = true
             UIView.animate(withDuration: animSpeed, animations: {
                 self.gameCenterBtt.alpha = 0.0
                 self.soundBtt.alpha = 0.0
@@ -139,7 +149,7 @@ class GameViewController: UIViewController {
     @IBAction func showChangeCar(_ sender: UIButton) {
         toggleButtons()
         changeCarScene.refresh()
-        let transition = SKTransition.reveal(with: .up, duration: 0.8)
+        let transition = SKTransition.reveal(with: .left, duration: 0.8)
         (self.view as! SKView).presentScene(changeCarScene, transition: transition)
     }
     
@@ -147,7 +157,7 @@ class GameViewController: UIViewController {
     
     @objc func backFromChangeCarScene() {
         toggleButtons(withAnimSpeed: 1.0)
-        let transition = SKTransition.moveIn(with: .up, duration: 0.8)
+        let transition = SKTransition.moveIn(with: .left, duration: 0.8)
         (self.view as! SKView).presentScene(scene, transition: transition)
     }
     

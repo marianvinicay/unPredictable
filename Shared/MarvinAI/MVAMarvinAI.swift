@@ -19,7 +19,11 @@ class MVAMarvinAI {
     let sound = MVASound()
     let gameCHelper = MVAGameCenterHelper()
     var storeHelper: MVAStore {
+        #if os(iOS) || os(tvOS)
         return (UIApplication.shared.delegate as! AppDelegate).inStore
+        #elseif os(macOS)
+        return (NSApplication.shared.delegate as! AppDelegate).inStore
+        #endif
     }
     
     var stop = true

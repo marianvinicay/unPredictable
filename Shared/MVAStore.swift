@@ -8,7 +8,7 @@
 
 import StoreKit
 
-class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+class MVAStore: NSObject, SKProductsRequestDelegate {
     
     //promoted IAPs
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
@@ -93,18 +93,8 @@ class MVAStore: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserve
     
     override init() {
         super.init()
-        SKPaymentQueue.default().add(self)
+        //SKPaymentQueue.default().add(self)
         requestProductInfo()
-        restorePurchases() { (purchased: Bool, car: String, error: Error?) in
-                if purchased && error == nil {
-                    MVAMemory.adsEnabled = false
-                    switch car {
-                    case "unpredictable.lives_car": MVAMemory.ownedCars.append(MVACarNames.playerLives)
-                    case "unpredictable.pcs_car": MVAMemory.ownedCars.append(MVACarNames.playerPCS)
-                    default: break
-                    }
-                }
-        }
     }
     
     func canBuyLife() -> Bool {

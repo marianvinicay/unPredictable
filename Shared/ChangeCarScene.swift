@@ -15,7 +15,18 @@ class ChangeCarScene: SKScene {
     static let backFromScene = Notification.Name("backFromCCScene")
     static let changePCar = Notification.Name("chPCar")
     
-    private var backBtt: SKSpriteNode!
+    private func remakeButton(_ node: SKSpriteNode) {
+        node.color = .clear
+        let nSize = CGSize(width: node.frame.size.width+6, height: node.frame.size.height+18)
+        let nRect = CGRect(origin: CGPoint(x: -nSize.width/2, y: -nSize.height/2), size: nSize)
+        let rShape = SKShapeNode(rect: nRect, cornerRadius: 9.0)
+        rShape.fillColor = .white
+        rShape.strokeColor = .clear
+        rShape.zPosition = 0
+        node.addChild(rShape)
+    }
+    
+    private var backBtt: SKSpriteNode! 
     private var restoreBtt: SKSpriteNode!
     private var useBtt: SKSpriteNode!
     private var newCarBtts: SKSpriteNode!
@@ -27,7 +38,7 @@ class ChangeCarScene: SKScene {
     private var carName: SKLabelNode!
     private var descLabel: SKSpriteNode!
     #if os(iOS) || os(tvOS)
-        var myRecongizers = [UISwipeGestureRecognizer]()
+        var myRecongizers = [UIGestureRecognizer]()
     #endif
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
@@ -55,6 +66,7 @@ class ChangeCarScene: SKScene {
         scene.restoreBtt.position = CGPoint(x: (deviceSize.width/2)-(scene.restoreBtt.size.width/2)-8,
                                          y: scene.backBtt.position.y)
         (scene.childNode(withName: "title") as! SKLabelNode).position = CGPoint(x: 0.0, y: scene.backBtt.position.y)
+        scene.remakeButton(scene.restoreBtt)
         
         scene.carImg = scene.childNode(withName: "carImg") as! SKSpriteNode
         scene.carImg.position = CGPoint(x: 0.0, y: 30.0)
@@ -69,11 +81,14 @@ class ChangeCarScene: SKScene {
         scene.rightArr.position = CGPoint(x: (deviceSize.width/2)-50, y: 30.0)
         scene.useBtt = scene.childNode(withName: "use") as! SKSpriteNode
         scene.useBtt.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
+        scene.remakeButton(scene.useBtt)
         
         scene.newCarBtts = scene.childNode(withName: "newCar") as! SKSpriteNode
         scene.newCarBtts.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
         scene.enableAdsBtt = scene.newCarBtts.childNode(withName: "ads") as! SKSpriteNode
         scene.buyBtt = scene.newCarBtts.childNode(withName: "buy") as! SKSpriteNode
+        scene.remakeButton(scene.enableAdsBtt)
+        scene.remakeButton(scene.buyBtt)
         
         scene.ads.successHandler = { [unowned scene] (rewarded: Bool) in
             if rewarded {
@@ -237,13 +252,17 @@ class ChangeCarScene: SKScene {
         touchedPosition(touch)
     }
     #endif
+
+    func backBttAction() {
+        #if os(iOS) || os(tvOS)
+            removeSwipes()
+        #endif
+        NotificationCenter.default.post(name: ChangeCarScene.backFromScene, object: nil)
+    }
     
     func touchedPosition(_ pos: CGPoint) {
         if backBtt.contains(pos) {
-            #if os(iOS) || os(tvOS)
-            removeSwipes()
-            #endif
-            NotificationCenter.default.post(name: ChangeCarScene.backFromScene, object: nil)
+            backBttAction()
         } else if restoreBtt.contains(pos) {
             waitNode = MVAWaitNode.new(withSize: self.size, inScene: self)
             waitNode.zPosition = 10.0

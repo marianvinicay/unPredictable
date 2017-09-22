@@ -13,15 +13,33 @@ import Firebase
 import GoogleMobileAds
 import Fabric
 import Crashlytics
+import StoreKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObserver {
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        inStore.paymentQueue(queue, updatedTransactions: transactions)
+    }
+    
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        inStore.paymentQueueRestoreCompletedTransactionsFinished(queue)
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        inStore.paymentQueue(queue, restoreCompletedTransactionsFailedWithError: error)
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return inStore.paymentQueue(queue, shouldAddStorePayment: payment, for: product)
+    }
 
     var window: UIWindow?
     
     let inStore = MVAStore()
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        SKPaymentQueue.default().add(self)
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
@@ -57,6 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        SKPaymentQueue.default().remove(self)
     }
 
 

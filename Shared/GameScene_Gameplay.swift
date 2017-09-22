@@ -75,15 +75,15 @@ extension GameScene {
                 self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
                 self.recordDistance.run(SKAction.scale(to: 1.0, duration: 0.6))
                 self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
-                    NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
                     self.isPaused = true
+                    NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
                 })
             } else {
                 self.playBtt.setScale(1.0)
                 self.recordDistance.setScale(1.0)
                 self.camera!.childNode(withName: "over")?.alpha = 1.0
-                self.isPaused = true
                 NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+                self.isPaused = true
             }
             if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
                 let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)

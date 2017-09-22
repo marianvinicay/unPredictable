@@ -7,18 +7,40 @@
 //
 
 import Cocoa
+import StoreKit
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver {
 
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        inStore.paymentQueue(queue, updatedTransactions: transactions)
+    }
+    
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+        inStore.paymentQueueRestoreCompletedTransactionsFinished(queue)
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+        inStore.paymentQueue(queue, restoreCompletedTransactionsFailedWithError: error)
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        return inStore.paymentQueue(queue, shouldAddStorePayment: payment, for: product)
+    }
+    
+    let inStore = MVAStore()
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        SKPaymentQueue.default().add(self)
+        
         NSApp.mainWindow?.aspectRatio = NSSize(width: 512, height: 683)
         NSApp.mainWindow?.contentAspectRatio = NSSize(width: 512, height: 683)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+        SKPaymentQueue.default().remove(self)
     }
     
     func applicationWillResignActive(_ notification: Notification) {

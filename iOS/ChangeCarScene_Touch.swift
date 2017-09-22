@@ -24,10 +24,14 @@ extension ChangeCarScene: UIGestureRecognizerDelegate {
         right.delegate = self
         left.delegate = self
         
+        let back = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goBack(eSwipe:)))
+        back.edges = .left
+        
         view?.addGestureRecognizer(right)
         view?.addGestureRecognizer(left)
+        view?.addGestureRecognizer(back)
         
-        myRecongizers = [right,left]
+        myRecongizers = [right,left,back]
     }
     
     func removeSwipes() {
@@ -39,6 +43,14 @@ extension ChangeCarScene: UIGestureRecognizerDelegate {
             changeCar(1)
         } else if (swipe as? UISwipeGestureRecognizer)?.direction == .right {
             changeCar(-1)
+        }
+    }
+    
+    @objc func goBack(eSwipe: UIGestureRecognizer) {
+        if eSwipe is UIScreenEdgePanGestureRecognizer {
+            if eSwipe.state == .began {
+                backBttAction()
+            }
         }
     }
 }
