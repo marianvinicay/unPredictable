@@ -140,10 +140,5 @@ class GameViewControllerMAC: NSViewController {
         }
         backFromChangeCarScene()
     }
-
-    override func viewDidAppear() {
-        super.viewDidAppear()
-    }
-    
 }
 

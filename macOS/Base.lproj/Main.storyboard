@@ -55,10 +55,8 @@
                     <window key="window" title="unPredictable" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="disallowed" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="633" y="145" width="512" height="683"/>
+                        <rect key="contentRect" x="609" y="205" width="512" height="683"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <value key="minSize" type="size" width="512" height="683"/>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="fgp-aB-PGv"/>
                         </connections>

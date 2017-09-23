@@ -33,9 +33,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         SKPaymentQueue.default().add(self)
-        
-        NSApp.mainWindow?.aspectRatio = NSSize(width: 512, height: 683)
-        NSApp.mainWindow?.contentAspectRatio = NSSize(width: 512, height: 683)
+        let screenH = NSScreen.main!.visibleFrame.height //??? other screens
+        let screenW = NSScreen.main!.visibleFrame.width
+        let aspectRatio = CGFloat(3/4)
+
+        NSApp.mainWindow?.aspectRatio = NSSize(width: 3, height: 4)//(width: 512, height: 683)
+        NSApp.mainWindow?.contentAspectRatio = NSSize(width: 3, height: 4)//(width: 512, height: 683)
+        NSApp.mainWindow?.minSize = NSSize(width: (screenH/3)/aspectRatio, height: screenH/3)
+        NSApp.mainWindow?.maxSize = NSSize(width: screenH/aspectRatio, height: screenH)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
