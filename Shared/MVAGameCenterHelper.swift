@@ -35,6 +35,7 @@ class MVAGameCenterHelper: NSObject {
     }
     
     func authenticateLocalPlayer(_ comp: @escaping ((Bool)->())) {
+        GKLocalPlayer.localPlayer()
         let localPlayer = GKLocalPlayer.localPlayer()
         localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
             if viewController != nil {

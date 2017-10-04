@@ -25,4 +25,8 @@ extension ChangeCarScene {
     override func moveRight(_ sender: Any?) {
         changeCar(1)
     }
+    
+    override func swipe(with event: NSEvent) {
+        print("ha")
+    }
 }
