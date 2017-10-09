@@ -18,8 +18,10 @@ class ChangeCarScene: SKScene {
     private func remakeButton(_ node: SKSpriteNode) {
         node.color = .clear
         let txtN = node.childNode(withName: "txt") as! SKLabelNode
-        let addWidth: CGFloat = txtN.text == store.getPrice(forCar: selectedCar) ? 30 : 13
-        let nSize = CGSize(width: txtN.frame.size.width+addWidth, height: 99)
+        print(txtN, txtN.frame.size.width)
+        let bWidth = txtN.frame.size.width < 80 ? 83:(txtN.frame.size.width+13)
+        print(bWidth)
+        let nSize = CGSize(width: bWidth, height: 99)
         let nRect = CGRect(origin: CGPoint(x: -nSize.width/2, y: -nSize.height/2), size: nSize)
         let rShape = SKShapeNode(rect: nRect, cornerRadius: 13.0)
         rShape.fillColor = .white

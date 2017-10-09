@@ -233,9 +233,18 @@ extension GameScene {
     }
     
     func checkAchievements() {
+        if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
+            let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
+            MVAMemory.maxPlayerDistance = maxDist
+            intel.gameCHelper.report(distance: maxDist)
+            self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
+        }
+        let newDist = MVAMemory.accumulatedDistance + intel.distanceTraveled
+        MVAMemory.accumulatedDistance = newDist
+        
+        let newCC = MVAMemory.crashedCars+Int64(1)
+        MVAMemory.crashedCars = newCC
         if MVAMemory.enableGameCenter {
-            let newDist = MVAMemory.accumulatedDistance + intel.distanceTraveled
-            MVAMemory.accumulatedDistance = newDist
             let distToCompare = Locale.current.usesMetricSystem ? newDist:MVAWorldConverter.milesToKilometers(newDist)
             
             if distToCompare > 42.2 {
@@ -246,15 +255,6 @@ extension GameScene {
                 }
             }
             
-            if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
-                let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
-                MVAMemory.maxPlayerDistance = maxDist
-                intel.gameCHelper.report(distance: maxDist)
-                self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
-            }
-            
-            let newCC = MVAMemory.crashedCars+Int64(1)
-            MVAMemory.crashedCars = newCC
             intel.gameCHelper.report(crashedCars: newCC)
             switch newCC {
             case 1: intel.gameCHelper.report(achievement: MVAAchievements.firstCrash)
