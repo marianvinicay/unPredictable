@@ -29,7 +29,7 @@ class GameViewControllerMAC: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let size = NSSize(width: 512, height: 683)
+        let size = self.view.frame.size
         gameScene = GameScene.new(withSize: size)
         changeCarScene = ChangeCarScene.new(withSize: size, andStore: gameScene.intel.storeHelper)
         

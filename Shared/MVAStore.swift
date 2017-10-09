@@ -87,7 +87,7 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
     var transactionInProgress = false
     private var completion: ((Bool, String, Error?)->())?
     
-    let mockUpNames = [MVACarNames.playerOrdinary:"Reva",
+    let mockUpNames = [MVACarNames.playerOrdinary:"Norm",
                        MVACarNames.playerLives:"Mudi",
                        MVACarNames.playerPCS:"Veep"]
     

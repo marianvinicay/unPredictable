@@ -16,10 +16,6 @@ enum MVAAchievements {
 }
 
 class MVAGameCenterHelper: NSObject {
-    #if os(macOS)
-        typealias UIViewController = NSViewController
-    #endif
-    
     var authenticationViewController: GKGameCenterViewController?
     
     static let authenticationCompleted = Notification.Name(rawValue: "AuthComp")
@@ -35,7 +31,6 @@ class MVAGameCenterHelper: NSObject {
     }
     
     func authenticateLocalPlayer(_ comp: @escaping ((Bool)->())) {
-        GKLocalPlayer.localPlayer()
         let localPlayer = GKLocalPlayer.localPlayer()
         localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
             if viewController != nil {
@@ -105,6 +100,8 @@ class MVAGameCenterHelper: NSObject {
     }
 #elseif os(macOS)
     extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
+        typealias UIViewController = NSViewController
+        
         func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
             GKDialogController.shared().dismiss(self)
         }

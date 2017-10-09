@@ -152,6 +152,7 @@
 		2FD6CDBA1F34702200FD9B96 /* AWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2FD6CDB91F34702200FD9B96 /* AWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2FD6CDBF1F34702200FD9B96 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6CDBE1F34702200FD9B96 /* GameController.swift */; };
 		2FD6CDC51F34702300FD9B96 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6CDC41F34702300FD9B96 /* ExtensionDelegate.swift */; };
+		2FDB9A6C1F8929D7007F8EB2 /* MVAWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */; };
 		2FDFBD201F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
 		2FDFBD211F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
 		2FDFBD221F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
@@ -274,6 +275,7 @@
 		2FD6CDC41F34702300FD9B96 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		2FD6CDC81F34702300FD9B96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FD6CDD71F34704C00FD9B96 /* AWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AWatch Extension.entitlements"; sourceTree = "<group>"; };
+		2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVAWindow.swift; sourceTree = "<group>"; };
 		2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene.swift; sourceTree = "<group>"; };
 		2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene_Keyboard.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
+				2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */,
 				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
 				2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */,
 				2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */,
@@ -1023,6 +1026,7 @@
 				2FAE02151F054B84004D4EFE /* MVACar.swift in Sources */,
 				2FAFA6651F34AACC006645CB /* GameScene_Gameplay.swift in Sources */,
 				2F861B5D1F1CAD7F00162EDA /* MVASound.swift in Sources */,
+				2FDB9A6C1F8929D7007F8EB2 /* MVAWindow.swift in Sources */,
 				2FAE02311F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
 				2FDFBD291F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
 				2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */,

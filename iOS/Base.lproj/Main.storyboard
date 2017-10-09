@@ -51,8 +51,11 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfQ-E2-ai1">
-                                <rect key="frame" x="95" y="591" width="185" height="51"/>
+                                <rect key="frame" x="95" y="582" width="185" height="60"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="LiY-Kg-XaD"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="30"/>
                                 <state key="normal" title=" Change Car ">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

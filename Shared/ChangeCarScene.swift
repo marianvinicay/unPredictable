@@ -17,9 +17,11 @@ class ChangeCarScene: SKScene {
     
     private func remakeButton(_ node: SKSpriteNode) {
         node.color = .clear
-        let nSize = CGSize(width: node.frame.size.width+6, height: node.frame.size.height+18)
+        let txtN = node.childNode(withName: "txt") as! SKLabelNode
+        let addWidth: CGFloat = txtN.text == store.getPrice(forCar: selectedCar) ? 30 : 13
+        let nSize = CGSize(width: txtN.frame.size.width+addWidth, height: 99)
         let nRect = CGRect(origin: CGPoint(x: -nSize.width/2, y: -nSize.height/2), size: nSize)
-        let rShape = SKShapeNode(rect: nRect, cornerRadius: 9.0)
+        let rShape = SKShapeNode(rect: nRect, cornerRadius: 13.0)
         rShape.fillColor = .white
         rShape.strokeColor = .clear
         rShape.zPosition = 0
@@ -118,6 +120,7 @@ class ChangeCarScene: SKScene {
         carName.text = store.mockUpNames[pCar]
         selectedCar = pCar
         checkArrows()
+        remakeButton(useBtt)
     }
     
     private func checkArrows() {
@@ -125,19 +128,23 @@ class ChangeCarScene: SKScene {
             useBtt.isHidden = false
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
+            remakeButton(useBtt)
         } else if MVAMemory.adCar == selectedCar {
             useBtt.isHidden = false
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
+            remakeButton(useBtt)
         } else {
             #if os(macOS)
             useBtt.isHidden = false
             newCarBtts.isHidden = true
             (useBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
+            remakeButton(useBtt)
             #else
             useBtt.isHidden = true
             newCarBtts.isHidden = false
             (buyBtt.childNode(withName: "txt") as! SKLabelNode).text = store.getPrice(forCar: selectedCar)
+            remakeButton(buyBtt)
             #endif
         }
         
@@ -223,6 +230,7 @@ class ChangeCarScene: SKScene {
                 self.newCarBtts.isHidden = true
                 (self.useBtt.childNode(withName: "txt") as! SKLabelNode).text = "USE"
                 self.useBtt.isHidden = false
+                self.remakeButton(self.useBtt)
             }
             self.isUserInteractionEnabled = true
             self.waitNode.remove()
