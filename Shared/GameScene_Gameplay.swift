@@ -61,6 +61,12 @@ extension GameScene {
         }
         
         playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
+        
+        #if os(macOS)
+            if gameControls == .precise {
+                NSCursor.hide()
+            }
+        #endif
     }
     
     func pauseGame(withAnimation anim: Bool) {
@@ -89,6 +95,12 @@ extension GameScene {
                 let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
                 self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             }
+            
+            #if os(macOS)
+                if gameControls == .precise {
+                    NSCursor.unhide()
+                }
+            #endif
         }
     }
     
@@ -103,6 +115,12 @@ extension GameScene {
             self.intel.stop = false
             self.fadeInVolume()
         })
+        
+        #if os(macOS)
+            if gameControls == .precise {
+                NSCursor.hide()
+            }
+        #endif
     }
     
     func gameOver() {
@@ -110,6 +128,7 @@ extension GameScene {
             #if os(iOS) || os(tvOS)
             var offP = false
             var offAd = false
+            var clumsy = true
             if tutorialNode == nil {
                 if intel.distanceTraveled < 8.0 {
                     timesCrashed += 1
@@ -120,6 +139,7 @@ extension GameScene {
                 } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
                     offAd = false
                     offP = intel.storeHelper.canBuyLife()
+                    clumsy = false
                 }
             } else {
                 tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
@@ -129,6 +149,7 @@ extension GameScene {
             #elseif os(macOS)
                 var offP = false
                 let offAd = false
+                var clumsy = true
                 if tutorialNode == nil {
                     if intel.distanceTraveled < 8.0 {
                         timesCrashed += 1
@@ -137,15 +158,20 @@ extension GameScene {
                         offP = intel.storeHelper.canBuyLife()
                     } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
                         offP = intel.storeHelper.canBuyLife()
+                        clumsy = false
                     }
                 } else {
                     tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
                     tutorialNode!.removeFromParent()
                     tutorialNode = nil
                 }
+
+                if gameControls == .precise {
+                    NSCursor.unhide()
+                }
             #endif
             
-            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd)
+            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd, clumsy: clumsy)
             goNode.zPosition = 9.0
             goNode.position = .zero
             goNode.store = intel.storeHelper
@@ -198,6 +224,12 @@ extension GameScene {
         intel.player.position.x = CGFloat(lanePositions[intel.player.currentLane]!)
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         startSound()
+        
+        #if os(macOS)
+            if gameControls == .precise {
+                NSCursor.hide()
+            }
+        #endif
     }
     
     func resetGame() {

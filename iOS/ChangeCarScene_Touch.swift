@@ -53,4 +53,9 @@ extension ChangeCarScene: UIGestureRecognizerDelegate {
             }
         }
     }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!.location(in: self)
+        touchedPosition(touch)
+    }
 }

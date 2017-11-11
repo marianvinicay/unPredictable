@@ -18,9 +18,7 @@ class ChangeCarScene: SKScene {
     private func remakeButton(_ node: SKSpriteNode) {
         node.color = .clear
         let txtN = node.childNode(withName: "txt") as! SKLabelNode
-        print(txtN, txtN.frame.size.width)
         let bWidth = txtN.frame.size.width < 80 ? 83:(txtN.frame.size.width+13)
-        print(bWidth)
         let nSize = CGSize(width: bWidth, height: 99)
         let nRect = CGRect(origin: CGPoint(x: -nSize.width/2, y: -nSize.height/2), size: nSize)
         let rShape = SKShapeNode(rect: nRect, cornerRadius: 13.0)
@@ -75,7 +73,7 @@ class ChangeCarScene: SKScene {
         scene.carImg = scene.childNode(withName: "carImg") as! SKSpriteNode
         scene.carImg.position = CGPoint(x: 0.0, y: 30.0)
         scene.carName = scene.childNode(withName: "carName") as! SKLabelNode
-        scene.carName.position = CGPoint(x: 0.0, y: 30.0+(scene.carImg.size.height/2)+20)
+        scene.carName.position = CGPoint(x: 0.0, y: 30.0+(scene.carImg.size.height/2)+15)
         scene.descLabel = scene.childNode(withName: "descLabel") as! SKSpriteNode
         scene.descLabel.position = CGPoint(x: 0.0, y: 30.0-(scene.carImg.size.height/2)-15)
         
@@ -167,8 +165,8 @@ class ChangeCarScene: SKScene {
             (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "You can crash multiple times"
             (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = "before destroying the car"
         case MVACarNames.playerPCS:
-            (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "Built-in"
-            (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = "pre-collision system"
+            (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "Pre-collision system"
+            (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = "helps to avoid cars"
         default:
             (descLabel.childNode(withName: "txt1") as! SKLabelNode).text = "Nothing special 😐"
             (descLabel.childNode(withName: "txt2") as! SKLabelNode).text = ""
@@ -255,19 +253,28 @@ class ChangeCarScene: SKScene {
         default: break
         }
     }
-    
-    #if os(iOS) || os(tvOS)
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!.location(in: self)
-        touchedPosition(touch)
-    }
-    #endif
 
     func backBttAction() {
         #if os(iOS) || os(tvOS)
             removeSwipes()
         #endif
         NotificationCenter.default.post(name: ChangeCarScene.backFromScene, object: nil)
+    }
+    
+    func selectCar() {
+        if (useBtt.childNode(withName: "txt") as! SKLabelNode).text == "USE" {
+            if MVAMemory.ownedCars.contains(selectedCar) {
+                #if os(iOS) || os(tvOS)
+                    removeSwipes()
+                #endif
+                MVAMemory.playerCar = selectedCar
+                MVAMemory.adCar = nil
+                MVAMemory.adsEnabled = false
+                NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
+            }
+        } else {
+            purchase()
+        }
     }
     
     func touchedPosition(_ pos: CGPoint) {
@@ -297,19 +304,7 @@ class ChangeCarScene: SKScene {
                 }
             }
         } else if !useBtt.isHidden && useBtt.contains(pos) {
-            if (useBtt.childNode(withName: "txt") as! SKLabelNode).text == "USE" {
-                if MVAMemory.ownedCars.contains(selectedCar) {
-                    #if os(iOS) || os(tvOS)
-                    removeSwipes()
-                    #endif
-                    MVAMemory.playerCar = selectedCar
-                    MVAMemory.adCar = nil
-                    MVAMemory.adsEnabled = false
-                    NotificationCenter.default.post(name: ChangeCarScene.changePCar, object: nil)
-                }
-            } else {
-                purchase()
-            }
+            selectCar()
         } else if !newCarBtts.isHidden && newCarBtts.contains(pos) {
             let specificTouch = newCarBtts.convert(pos, from: self)
             if enableAdsBtt.contains(specificTouch) {

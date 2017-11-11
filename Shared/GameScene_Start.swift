@@ -20,13 +20,12 @@ extension GameScene {
         
         scene.playBtt = scene.camera!.childNode(withName: "playBtt") as! SKSpriteNode
         scene.pauseBtt = scene.camera!.childNode(withName: "stop") as! SKSpriteNode
-        scene.originalPausePosition = CGPoint(x: scene.size.width/2, y: scene.size.height/2)
+        scene.originalPausePosition = CGPoint(x: (scene.size.width/2)-5, y: (scene.size.height/2)-5)
         scene.pauseBtt.position = scene.originalPausePosition
         
         scene.speedSign = scene.camera!.childNode(withName: "speed") as! SKSpriteNode
-        scene.originalSpeedPosition = CGPoint(x: -(scene.size.width/2)+scene.speedSign.size.width/2, y: (scene.size.height/2)-scene.speedSign.size.height/2)
+        scene.originalSpeedPosition = CGPoint(x: (-(scene.size.width/2)+scene.speedSign.size.width/2)+5, y: ((scene.size.height/2)-scene.speedSign.size.height/2)-5)
         scene.speedSign.position = scene.originalSpeedPosition
-        scene.camera!.childNode(withName: "spdB")!.position = scene.originalSpeedPosition
         
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
         scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)

@@ -25,7 +25,7 @@ class MVAGameOverNode: SKNode {
     var store: MVAStore!
     var completion: ((Bool)->())?
     
-    class func new(size: CGSize, offerPurchase: Bool, offerAd: Bool) -> MVAGameOverNode {
+    class func new(size: CGSize, offerPurchase: Bool, offerAd: Bool, clumsy: Bool) -> MVAGameOverNode {
         let newNode = MVAGameOverNode()
         
         let blank =  SKSpriteNode(color: .clear, size: size)
@@ -54,7 +54,7 @@ class MVAGameOverNode: SKNode {
             newNode.showAd = offerAd
             goLabel.position.y = goLabel.frame.height*2
             
-            let firstLabel = SKLabelNode(text: "You are a bit clumsy 😛")
+            let firstLabel = clumsy == true ? SKLabelNode(text: "You are a bit clumsy 😜") : SKLabelNode(text: "You are good 😎")
             firstLabel.fontName = "Futura Medium"
             firstLabel.fontSize = 22
             firstLabel.verticalAlignmentMode = .baseline

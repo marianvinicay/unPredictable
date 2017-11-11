@@ -14,9 +14,12 @@ import GoogleMobileAds
 import Fabric
 import Crashlytics
 import StoreKit
+import CoreMotion
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObserver {
+    
+    let motionManager = CMMotionManager()
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         inStore.paymentQueue(queue, updatedTransactions: transactions)

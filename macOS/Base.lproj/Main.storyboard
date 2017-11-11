@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -106,7 +106,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kVx-z5-Vt6">
-                                <rect key="frame" x="225" y="13" width="151" height="56"/>
+                                <rect key="frame" x="435" y="13" width="151" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Slu-Av-CeF"/>
                                     <constraint firstAttribute="height" constant="45" id="jm8-aa-Jgd"/>
@@ -119,19 +119,37 @@
                                     <action selector="showChangeCar:" target="XfG-lQ-9wD" id="uSS-Nd-WDh"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sUK-EY-Vc7">
+                                <rect key="frame" x="14" y="13" width="144" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="fMP-iu-Eob"/>
+                                    <constraint firstAttribute="height" constant="45" id="nNM-zO-onV"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Keyboard" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="23" name="Futura-Medium"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="toggleControls:" target="XfG-lQ-9wD" id="WzX-gF-8UZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="sUK-EY-Vc7" secondAttribute="bottom" constant="20" id="AWe-Ir-bir"/>
+                            <constraint firstItem="kVx-z5-Vt6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sUK-EY-Vc7" secondAttribute="trailing" constant="12" symbolic="YES" id="Exh-8Q-5lN"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="F1s-52-Jbe"/>
-                            <constraint firstItem="kVx-z5-Vt6" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="LkV-Vs-XXf"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="Oij-T5-5vL"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="QSf-Qf-P9g"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mTp-A0-sz5" secondAttribute="trailing" constant="8" symbolic="YES" id="bzZ-wY-ULF"/>
                             <constraint firstAttribute="bottom" secondItem="kVx-z5-Vt6" secondAttribute="bottom" constant="20" id="dIU-hE-6wZ"/>
                             <constraint firstAttribute="trailing" secondItem="wdj-la-tMo" secondAttribute="trailing" constant="10" id="lL3-1b-jrS"/>
+                            <constraint firstAttribute="trailing" secondItem="kVx-z5-Vt6" secondAttribute="trailing" constant="20" symbolic="YES" id="wIn-Gz-b6V"/>
+                            <constraint firstItem="sUK-EY-Vc7" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="ybi-Fd-d4z"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="changeCarBtt" destination="kVx-z5-Vt6" id="sQs-6Y-XJP"/>
+                        <outlet property="controlsBtt" destination="sUK-EY-Vc7" id="3Ft-zF-d5H"/>
                         <outlet property="gameCenterBtt" destination="wdj-la-tMo" id="r60-3x-82u"/>
                         <outlet property="soundBtt" destination="mTp-A0-sz5" id="iJN-RE-ljK"/>
                     </connections>

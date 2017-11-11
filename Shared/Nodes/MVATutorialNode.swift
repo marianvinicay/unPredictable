@@ -21,10 +21,10 @@ enum MVATutorialText {
     static let brake3rdLabel = "to change direction"
     #elseif os(macOS)
     static let swipeLabel = "Change your car's"
-    static let swipe2ndLabel = "lane with ◀️/▶️"
+    static let swipe2ndLabel = "lane with ◀️|▶️"
     static let swipe3rdLabel = "Try it! 😎"
     static let brakeLabel = "Hold 🔽 to brake"
-    static let brake2ndLabel = "and click ◀️/▶️"
+    static let brake2ndLabel = "and click ◀️|▶️"
     static let brake3rdLabel = "to change direction"
     #endif
 }

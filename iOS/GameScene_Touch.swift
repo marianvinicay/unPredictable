@@ -8,11 +8,31 @@
 
 import UIKit
 import SpriteKit
+import CoreMotion
 
 extension GameScene: UIGestureRecognizerDelegate {
     
     override func didMove(to view: SKView) {
         setupSwipes()
+        setupTilt()
+    }
+    
+    func setupTilt() {
+        let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
+        if manager.isDeviceMotionAvailable {
+            manager.deviceMotionUpdateInterval = 0.01
+            manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
+                if let attitude = data?.attitude {
+                    let angle = attitude.roll*(180/Double.pi)
+                    if self.lastRotation != nil {
+                        let deltaAngle = CGFloat(angle - self.lastRotation!)*4
+                        self.handlePreciseMove(withDeltaX: deltaAngle)
+                    }
+                    
+                    self.lastRotation = angle
+                }
+            }
+        }
     }
     
     func setupSwipes() {
@@ -49,7 +69,7 @@ extension GameScene: UIGestureRecognizerDelegate {
             lastPressedXPosition = gest.location(in: view).x
         case .changed:
             let change = gest.location(in: view).x - lastPressedXPosition
-            handleBrakingSwipe(fromPositionChange: change)
+            handlePreciseMove(withDeltaX: change)
             lastPressedXPosition = gest.location(in: view).x
         case .ended:
             if let currentPLane = intel.player.currentLane {

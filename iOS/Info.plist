@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>(un)Predictable</string>
+	<string>unPredictable</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3</string>
+	<string>1.6.1</string>
 	<key>CFBundleVersion</key>
-	<string>13</string>
+	<string>99</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

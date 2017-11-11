@@ -33,5 +33,6 @@ class MVAWindow: NSWindow {
         self.contentAspectRatio = NSSize(width: 3, height: 4)
         self.minSize = NSSize(width: minH*aspectRatio, height: minH)
         self.maxSize = NSSize(width: screenH*aspectRatio, height: screenH)
+    
     }
 }

@@ -23,9 +23,19 @@ class GameViewControllerMAC: NSViewController {
             }
         }
     }
-    
+    @IBOutlet weak var controlsBtt: NSButton! {
+        willSet {
+            if MVAMemory.gameControls == .swipe {
+                newValue.title = "Keyboard"
+            } else {
+                newValue.title = "Mouse"
+            }
+        }
+    }
+        
     var gameScene: GameScene!
     var changeCarScene: ChangeCarScene!
+    private var mouseMonitors = [Any?]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,10 +43,16 @@ class GameViewControllerMAC: NSViewController {
         gameScene = GameScene.new(withSize: size)
         changeCarScene = ChangeCarScene.new(withSize: size, andStore: gameScene.intel.storeHelper)
         
+        let trackingArea = NSTrackingArea(rect: self.view.bounds, options: [.activeInKeyWindow,.mouseMoved], owner: self, userInfo: nil)
+        self.view.addTrackingArea(trackingArea)
+        
+        if gameScene.gameControls == .precise {
+            setUpMouseControls()
+        }
+        
         // Present the scene
         let skView = self.view as! SKView
         skView.presentScene(gameScene)
-        
         skView.ignoresSiblingOrder = true
         
         //skView.showsFPS = true
@@ -62,9 +78,11 @@ class GameViewControllerMAC: NSViewController {
         if soundBtt.alphaValue < 1.0 {
             gameCenterBtt.animator().alphaValue = 1.0
             soundBtt.animator().alphaValue = 1.0
+            controlsBtt.animator().alphaValue = 1.0
             
             gameCenterBtt.isEnabled = true
             soundBtt.isEnabled = true
+            controlsBtt.isEnabled = true
             if !gameScene.gameStarted {
                 changeCarBtt.animator().alphaValue = 1.0
                 changeCarBtt.isEnabled = true
@@ -72,9 +90,11 @@ class GameViewControllerMAC: NSViewController {
         } else {
             gameCenterBtt.animator().alphaValue = 0.0
             soundBtt.animator().alphaValue = 0.0
+            controlsBtt.animator().alphaValue = 0.0
             
             gameCenterBtt.isEnabled = false
             soundBtt.isEnabled = false
+            controlsBtt.isEnabled = false
             if !gameScene.gameStarted {
                 changeCarBtt.animator().alphaValue = 0.0
                 changeCarBtt.isEnabled = false
@@ -91,6 +111,40 @@ class GameViewControllerMAC: NSViewController {
             gameScene.audioEngine.mainMixerNode.outputVolume = 1.0
             MVAMemory.audioMuted = false
             soundBtt.image = NSImage(named: NSImage.Name(rawValue: "SoundON"))
+        }
+    }
+    
+    private func setUpMouseControls() {
+        mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseMoved, handler: {
+            if self.gameScene.gameStarted {
+                self.gameScene.moveWithMouse(NSEvent.mouseLocation.x)
+            }
+            return $0
+        }))
+        mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
+            if !self.gameScene.intel.stop {
+                NSCursor.hide()
+            }
+            return $0
+        }))
+        mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseExited, handler: {
+            NSCursor.unhide()
+            return $0
+        }))
+    }
+    
+    @IBAction func toggleControls(_ sender: NSButton) {
+        if gameScene.gameControls == .swipe {
+            controlsBtt.title = "Mouse"
+            gameScene.gameControls = .precise
+            setUpMouseControls()
+        } else {
+            controlsBtt.title = "Keyboard"
+            gameScene.gameControls = .swipe
+            for monitor in mouseMonitors.filter({ $0 != nil }) {
+                NSEvent.removeMonitor(monitor!)
+            }
+            mouseMonitors.removeAll()
         }
     }
     
@@ -121,8 +175,6 @@ class GameViewControllerMAC: NSViewController {
         let transition = SKTransition.reveal(with: .up, duration: 0.8)
         (self.view as! SKView).presentScene(changeCarScene, transition: transition)
     }
-    
-    
     
     @objc func backFromChangeCarScene() {
         toggleButtons(withAnimSpeed: 1.0)

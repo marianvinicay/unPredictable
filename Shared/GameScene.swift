@@ -8,6 +8,10 @@
 
 import SpriteKit
 
+enum MVAGameControls {
+    case swipe, precise
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     // MARK: - Variables
     // MARK: Gameplay Logic
@@ -16,6 +20,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameStarted = false
     var playerBraking = false
     var timesCrashed = 0
+    var gameControls: MVAGameControls {
+        set {
+            MVAMemory.gameControls = newValue
+        }
+        get {
+            return MVAMemory.gameControls
+        }
+    }
+    #if os(iOS)
+        var lastRotation: Double?
+    #elseif os(macOS)
+        var lastMousePos: CGFloat?
+    #endif
     
     // MARK: Buttons
     var playBtt: SKSpriteNode!
@@ -259,10 +276,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func handleBrakingSwipe(fromPositionChange posCh: CGFloat, animated anim: Bool = false) {
+    func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) {
         if gameStarted && physicsWorld.speed != 0.0 {
             guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
-            let newPlayerPos = intel.player.position.x + posCh
+            
+            let newPlayerPos = self.intel.player.position.x + deltaX
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
                 newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
                 if anim {
@@ -270,6 +288,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else {
                     intel.player.position.x = newPlayerPos
                 }
+                
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
             }

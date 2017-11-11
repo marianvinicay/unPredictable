@@ -30,8 +30,7 @@ class MVAWaitNode: SKNode {
         #elseif os(macOS)
             newNode.activityInd = NSProgressIndicator()
             newNode.activityInd!.style = .spinning
-            let winSize = NSApp.mainWindow!.minSize
-            newNode.activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/2)-31.5, width: 150, height: 150)
+            newNode.activityInd!.frame = NSRect(x: (scene.size.width/2)-(150/2), y: (scene.size.height/2)-(150/2), width: 150, height: 150)
             let lighten = CIFilter(name: "CIColorControls")!
             lighten.setDefaults()
             lighten.setValue(1, forKey: "inputBrightness")
