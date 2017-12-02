@@ -51,7 +51,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfQ-E2-ai1">
-                                <rect key="frame" x="155" y="588" width="185" height="60"/>
+                                <rect key="frame" x="174" y="588" width="185" height="60"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="LiY-Kg-XaD"/>
@@ -64,13 +64,27 @@
                                     <action selector="showChangeCar:" destination="BV1-FR-VrT" eventType="touchUpInside" id="wKF-7C-KRp"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x0b-5m-X22">
+                                <rect key="frame" x="16" y="588" width="55" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="8M1-tC-hJV"/>
+                                    <constraint firstAttribute="width" constant="55" id="LYb-dV-0qo"/>
+                                </constraints>
+                                <state key="normal" image="phoneTouch"/>
+                                <connections>
+                                    <action selector="toggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hOW-38-nYK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DfQ-E2-ai1" secondAttribute="bottom" constant="19" id="042-di-RdC"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="C63-kb-ATQ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" constant="19" id="UDr-4B-7hC"/>
+                            <constraint firstItem="x0b-5m-X22" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="DRI-LA-Dxv"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="x0b-5m-X22" secondAttribute="bottom" constant="19" id="FTB-Fw-UYA"/>
+                            <constraint firstItem="DfQ-E2-ai1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="x0b-5m-X22" secondAttribute="trailing" constant="8" symbolic="YES" id="Jpt-KQ-PSr"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" id="UDr-4B-7hC"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="XQD-Ul-NJ4"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="lUB-dQ-37i"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="nL6-jN-Zyr"/>
@@ -79,6 +93,7 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="changeCarBtt" destination="DfQ-E2-ai1" id="qql-AE-O2w"/>
+                        <outlet property="controlsBtt" destination="x0b-5m-X22" id="Ufa-Hg-ukX"/>
                         <outlet property="gameCenterBtt" destination="V1S-qh-hdo" id="H4k-to-YiU"/>
                         <outlet property="soundBtt" destination="m2I-PE-wpB" id="GMo-vq-nPs"/>
                     </connections>
@@ -91,5 +106,6 @@
     <resources>
         <image name="Leaderboards" width="60" height="60"/>
         <image name="SoundON" width="60" height="60"/>
+        <image name="phoneTouch" width="54" height="56"/>
     </resources>
 </document>

@@ -12,6 +12,7 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
+    @IBOutlet weak var controlsBtt: UIButton!
     @IBOutlet weak var gameCenterBtt: UIButton!
     @IBOutlet weak var changeCarBtt: UIButton! {
         willSet {
@@ -78,12 +79,14 @@ class GameViewController: UIViewController {
     func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if bttnsHidden {
             bttnsHidden = false
+            controlsBtt.isHidden = false
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
             if !scene.gameStarted {
                 changeCarBtt.isHidden = false
             }
             UIView.animate(withDuration: animSpeed, animations: {
+                self.controlsBtt.alpha = 1.0
                 self.gameCenterBtt.alpha = 1.0
                 self.soundBtt.alpha = 1.0
                 if !self.scene.gameStarted {
@@ -97,12 +100,14 @@ class GameViewController: UIViewController {
         } else {
             bttnsHidden = true
             UIView.animate(withDuration: animSpeed, animations: {
+                self.controlsBtt.alpha = 0.0
                 self.gameCenterBtt.alpha = 0.0
                 self.soundBtt.alpha = 0.0
                 if !self.scene.gameStarted {
                     self.changeCarBtt.alpha = 0.0
                 }
             }, completion: { (_: Bool) in
+                self.controlsBtt.isHidden = true
                 self.gameCenterBtt.isHidden = true
                 self.soundBtt.isHidden = true
                 if !self.scene.gameStarted {
@@ -122,6 +127,21 @@ class GameViewController: UIViewController {
             scene.fadeInVolume()
             MVAMemory.audioMuted = false
             soundBtt.setImage(#imageLiteral(resourceName: "SoundON"), for: .normal)
+        }
+    }
+    
+    @IBAction func toggleControls(_ sender: UIButton) {
+        if scene.gameControls == .swipe {
+            controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
+            scene.gameControls = .precise
+            //setUpMouseControls()
+        } else {
+            controlsBtt.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
+            scene.gameControls = .swipe
+            /*for monitor in mouseMonitors.filter({ $0 != nil }) {
+                NSEvent.removeMonitor(monitor!)
+            }
+            mouseMonitors.removeAll()*/
         }
     }
     

@@ -68,17 +68,15 @@ extension GameScene {
                 self.distanceSign.run(SKAction.moveTo(y: self.distanceSign.position.y-self.distanceSign.size.height, duration: 0.5))
                 self.camera!.childNode(withName: "down")!.run(SKAction.moveTo(y: self.distanceSign.position.y-self.distanceSign.size.height, duration: 0.5))
                 
-                let spdAct = SKAction.moveTo(y: self.speedSign.position.y+self.speedSign.size.height, duration: 0.5)
-                self.speedSign.run(spdAct)
-                
-                self.pauseBtt.run(SKAction.moveTo(y: self.pauseBtt.position.y+self.pauseBtt.size.height, duration: 0.5))
+                self.speedSign.run(SKAction.moveTo(y: self.speedSign.position.y+(self.speedSign.size.height*2), duration: 0.5))
+                self.pauseBtt.run(SKAction.moveTo(y: self.pauseBtt.position.y+(self.pauseBtt.size.height*2), duration: 0.5))
             }
             self.run(hideAct)
         } else {
             self.distanceSign.position.y = self.distanceSign.position.y-self.distanceSign.size.height
             self.camera!.childNode(withName: "down")!.position.y = self.distanceSign.position.y
-            self.speedSign.position.y = self.speedSign.position.y+self.speedSign.size.height
-            self.pauseBtt.position.y = self.pauseBtt.position.y+self.pauseBtt.size.height
+            self.speedSign.position.y = self.speedSign.position.y+(self.speedSign.size.height*2)
+            self.pauseBtt.position.y = self.pauseBtt.position.y+(self.pauseBtt.size.height*2)
         }
     }
 }

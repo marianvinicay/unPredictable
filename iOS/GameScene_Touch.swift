@@ -22,10 +22,10 @@ extension GameScene: UIGestureRecognizerDelegate {
         if manager.isDeviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.01
             manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-                if let attitude = data?.attitude {
-                    let angle = attitude.roll*(180/Double.pi)
+                if let attitude = data?.attitude, !self.intel.stop {
+                    let angle = attitude.roll*58//(180/Double.pi)
                     if self.lastRotation != nil {
-                        let deltaAngle = CGFloat(angle - self.lastRotation!)*4
+                        let deltaAngle = CGFloat(angle - self.lastRotation!)*9
                         self.handlePreciseMove(withDeltaX: deltaAngle)
                     }
                     
