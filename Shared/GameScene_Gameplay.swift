@@ -16,8 +16,8 @@ extension GameScene {
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let laneCount = UInt32(lanePositions.count)
-        let randLane = Int(arc4random_uniform(laneCount))
-        let randLanePos = CGFloat(lanePositions[randLane]!)
+        let randLane = self.gameControls == .precise ? 1:Int(arc4random_uniform(laneCount))
+        let randLanePos = self.gameControls == .precise ? 0.0:CGFloat(lanePositions[randLane]!)
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
         let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
         
@@ -55,6 +55,11 @@ extension GameScene {
             self.intel.stop = false
             
             if MVAMemory.tutorialDisplayed {
+                #if os(iOS)
+                    if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
+                        self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
+                    }
+                #endif
                 self.isUserInteractionEnabled = true
                 self.intel.updateDist = true
             }

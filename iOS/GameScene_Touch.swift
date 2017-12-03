@@ -13,22 +13,34 @@ import CoreMotion
 extension GameScene: UIGestureRecognizerDelegate {
     
     override func didMove(to view: SKView) {
-        setupSwipes()
-        setupTilt()
+        if MVAMemory.gameControls == .precise && (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
+            setupTilt()
+        } else {
+            setupSwipes()
+        }
+        
+        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
+        brake.minimumPressDuration = 0.08
+        brake.delegate = self
+        view.addGestureRecognizer(brake)
     }
     
     func setupTilt() {
         let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
-        if manager.isDeviceMotionAvailable {
-            manager.deviceMotionUpdateInterval = 0.01
-            manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-                if let attitude = data?.attitude, !self.intel.stop {
-                    let angle = attitude.roll*58//(180/Double.pi)
-                    if self.lastRotation != nil {
-                        let deltaAngle = CGFloat(angle - self.lastRotation!)*9
-                        self.handlePreciseMove(withDeltaX: deltaAngle)
+        manager.deviceMotionUpdateInterval = 0.01
+        manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
+            if let quat = data?.attitude.quaternion, !self.intel.stop {
+                let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
+                let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
+                
+                if self.lastRotation != nil {
+                    let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastRotation!)*(-13):CGFloat(angle - self.lastRotation!)*13
+                    if fabs(deltaAngle) > 0.5 {
+                        if self.handlePreciseMove(withDeltaX: deltaAngle) {
+                            self.lastRotation = angle
+                        }
                     }
-                    
+                } else {
                     self.lastRotation = angle
                 }
             }
@@ -42,16 +54,11 @@ extension GameScene: UIGestureRecognizerDelegate {
         let left = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
         left.direction = .left
         
-        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-        brake.minimumPressDuration = 0.08
-        
         right.delegate = self
         left.delegate = self
-        brake.delegate = self
         
         view?.addGestureRecognizer(right)
         view?.addGestureRecognizer(left)
-        view?.addGestureRecognizer(brake)
     }
     
     @objc func handelUISwipe(swipe: UISwipeGestureRecognizer) {
@@ -67,11 +74,11 @@ extension GameScene: UIGestureRecognizerDelegate {
         case .began:
             handleBrake(started: true)
             lastPressedXPosition = gest.location(in: view).x
-        case .changed:
+        case .changed where self.gameControls == .swipe:
             let change = gest.location(in: view).x - lastPressedXPosition
-            handlePreciseMove(withDeltaX: change)
+            _ = handlePreciseMove(withDeltaX: change)
             lastPressedXPosition = gest.location(in: view).x
-        case .ended:
+        case .ended where self.gameControls == .swipe:
             if let currentPLane = intel.player.currentLane {
                 handleBrake(started: false)
                 let currentLanePos = CGFloat(lanePositions[currentPLane]!)
@@ -80,6 +87,8 @@ extension GameScene: UIGestureRecognizerDelegate {
                     intel.player.run(actMove)
                 }
             }
+        case .ended where self.gameControls == .precise:
+            handleBrake(started: false)
         default: break
         }
     }

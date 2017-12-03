@@ -276,10 +276,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) {
-        if gameStarted && physicsWorld.speed != 0.0 {
-            guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
-            
+    func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) -> Bool {
+        if gameStarted && physicsWorld.speed != 0.0 && (tutorialNode == nil || tutorialNode?.stage != 0) {
             let newPlayerPos = self.intel.player.position.x + deltaX
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
                 newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
@@ -291,12 +289,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
-            }
-            
-            if tutorialNode?.stage == 1 {
-                endTutorial()
+                
+                if tutorialNode?.stage == 1 {
+                    endTutorial()
+                }
+                
+                return true
             }
         }
+        return false
     }
     
     @objc func acceleratePlayer() {

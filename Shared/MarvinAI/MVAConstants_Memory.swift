@@ -117,6 +117,15 @@ enum MVAMemory {
             return UserDefaults.standard.value(forKey: "adsEn") as? Bool ?? false
         }
     }
+    
+    static var isIphoneX: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "isIpX")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "isIpX") as? Bool ?? false
+        }
+    }
     #elseif os(macOS)
     static var adsEnabled: Bool {
         set {}

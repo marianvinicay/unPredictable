@@ -12,7 +12,15 @@ import SpriteKit
 
 class GameViewController: UIViewController {
 
-    @IBOutlet weak var controlsBtt: UIButton!
+    @IBOutlet weak var controlsBtt: UIButton! {
+        willSet {
+            if MVAMemory.gameControls == .swipe {
+                newValue.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
+            } else {
+                newValue.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
+            }
+        }
+    }
     @IBOutlet weak var gameCenterBtt: UIButton!
     @IBOutlet weak var changeCarBtt: UIButton! {
         willSet {
@@ -47,7 +55,7 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
-        //skView.showsPhysics = true
+        skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
@@ -131,17 +139,19 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func toggleControls(_ sender: UIButton) {
-        if scene.gameControls == .swipe {
+        let mManager = (UIApplication.shared.delegate as! AppDelegate).motionManager
+        if scene.gameControls == .swipe && mManager.isDeviceMotionAvailable {
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
             scene.gameControls = .precise
-            //setUpMouseControls()
+            for recog in scene.view?.gestureRecognizers ?? [] {
+                scene.view?.removeGestureRecognizer(recog)
+            }
+            scene.setupTilt()
         } else {
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
             scene.gameControls = .swipe
-            /*for monitor in mouseMonitors.filter({ $0 != nil }) {
-                NSEvent.removeMonitor(monitor!)
-            }
-            mouseMonitors.removeAll()*/
+            mManager.stopDeviceMotionUpdates()
+            scene.setupSwipes()
         }
     }
     

@@ -9,6 +9,16 @@
 import SpriteKit
 
 extension GameScene {
+    private func addIphoneXInset() {
+        let node = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: 30.0))
+        node.anchorPoint.y = 0.0
+        node.position.x = 0.0
+        node.position.y = -self.size.height/2
+        node.name = "iphoneX"
+        node.zPosition = 6.0
+        self.camera!.addChild(node)
+    }
+    
     class func new(withSize deviceSize: CGSize) -> GameScene {
         guard let scene = GameScene(fileNamed: "GameScene") else {
             abort()
@@ -27,15 +37,21 @@ extension GameScene {
         scene.originalSpeedPosition = CGPoint(x: (-(scene.size.width/2)+scene.speedSign.size.width/2)+5, y: ((scene.size.height/2)-scene.speedSign.size.height/2)-5)
         scene.speedSign.position = scene.originalSpeedPosition
         
+        let downY: CGFloat = MVAMemory.isIphoneX ? 30.0:0.0
+        
         scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
-        scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: -scene.size.height/2)
+        scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: (-scene.size.height/2)+downY)
         scene.distanceSign.position = scene.originalDistancePosition
         let over = scene.camera!.childNode(withName: "over") as! SKSpriteNode
         over.position = .zero
         over.size = scene.size
         let down = scene.camera!.childNode(withName: "down") as! SKSpriteNode
-        down.position = CGPoint(x: 0.0, y: -scene.size.height/2)
+        down.position = CGPoint(x: 0.0, y: (-scene.size.height/2)+downY)
         down.size.width = scene.size.width
+        
+        if downY > 0.0 {
+            scene.addIphoneXInset()
+        }
         
         scene.lives = down.childNode(withName: "lives") as! SKSpriteNode
         scene.lives.position = CGPoint(x: scene.size.width/2, y: 0.0)
