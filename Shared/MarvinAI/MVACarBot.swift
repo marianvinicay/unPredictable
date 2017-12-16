@@ -25,7 +25,7 @@ class MVACarBot: MVACar {
         newCar.skin = textures
         newCar.zPosition = 4.0
         
-        newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: carSize)
+        newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: CGSize(width: carSize.width-6, height: carSize.height-6))
         newCar.physicsBody?.mass = 5
         newCar.physicsBody?.density = 5000.0
         newCar.physicsBody?.friction = 0.0

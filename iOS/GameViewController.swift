@@ -10,7 +10,15 @@ import UIKit
 import StoreKit
 import SpriteKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GameVCDelegate {
+    
+    func present(view: UIViewController, completion: @escaping ()->Void) {
+        self.present(view, animated: true, completion: completion)
+    }
+    
+    func changeControls(to controls: MVAGameControls) {
+        setControls(to: controls)
+    }
 
     @IBOutlet weak var controlsBtt: UIButton! {
         willSet {
@@ -43,6 +51,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         let sceneSize = self.view.frame.size
         scene = GameScene.new(withSize: sceneSize)
+        scene.cDelegate = self
         changeCarScene = ChangeCarScene.new(withSize: sceneSize, andStore: scene.intel.storeHelper)
         
         if MVAMemory.audioMuted {
@@ -55,7 +64,7 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
-        skView.showsPhysics = true
+        //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
@@ -138,20 +147,24 @@ class GameViewController: UIViewController {
         }
     }
     
-    @IBAction func toggleControls(_ sender: UIButton) {
-        let mManager = (UIApplication.shared.delegate as! AppDelegate).motionManager
-        if scene.gameControls == .swipe && mManager.isDeviceMotionAvailable {
-            controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
-            scene.gameControls = .precise
-            for recog in scene.view?.gestureRecognizers ?? [] {
-                scene.view?.removeGestureRecognizer(recog)
-            }
-            scene.setupTilt()
-        } else {
+    private func setControls(to controls: MVAGameControls) {
+        switch controls {
+        case .swipe:
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
             scene.gameControls = .swipe
-            mManager.stopDeviceMotionUpdates()
             scene.setupSwipes()
+        case .precise:
+            controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
+            scene.gameControls = .precise
+            scene.setupTilt()
+        }
+    }
+    
+    @IBAction func toggleControls(_ sender: UIButton) {
+        if scene.gameControls == .swipe && (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
+            setControls(to: .precise)
+        } else {
+            setControls(to: .swipe)
         }
     }
     

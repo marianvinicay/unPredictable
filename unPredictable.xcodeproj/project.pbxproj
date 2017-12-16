@@ -109,6 +109,9 @@
 		2F9E41A41F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
 		2F9E41A61F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
 		2F9E41A71F03B389004FB9F5 /* GameScene_HUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */; };
+		2FA27A491FDC05EA00DA5819 /* MVAPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */; };
+		2FA27A4A1FDC05EA00DA5819 /* MVAPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */; };
+		2FA27A4B1FDC05EA00DA5819 /* MVAPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */; };
 		2FAE02121F054B84004D4EFE /* MVACar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020A1F054B84004D4EFE /* MVACar.swift */; };
 		2FAE02141F054B84004D4EFE /* MVACar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020A1F054B84004D4EFE /* MVACar.swift */; };
 		2FAE02151F054B84004D4EFE /* MVACar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020A1F054B84004D4EFE /* MVACar.swift */; };
@@ -249,6 +252,7 @@
 		2F9808E41F46EB5E00412075 /* MVACarBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarBot.swift; sourceTree = "<group>"; };
 		2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACarPlayer.swift; sourceTree = "<group>"; };
 		2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_HUD.swift; sourceTree = "<group>"; };
+		2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVAPopup.swift; sourceTree = "<group>"; };
 		2FAE020A1F054B84004D4EFE /* MVACar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVACar.swift; sourceTree = "<group>"; };
 		2FAE020B1F054B84004D4EFE /* MVASpawnerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVASpawnerNode.swift; sourceTree = "<group>"; };
 		2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAConstants_Memory.swift; sourceTree = "<group>"; };
@@ -356,10 +360,10 @@
 				2F7B222E1F56AC2D00E9D88B /* unPredictable.entitlements */,
 				2F23E1081D6EF21D00119E4F /* Shared */,
 				2F23E1131D6EF21D00119E4F /* iOS */,
+				2F23E14B1D6EF21D00119E4F /* macOS */,
 				2FD6CDAE1F34702200FD9B96 /* AWatch */,
 				2FD6CDBD1F34702200FD9B96 /* AWatch Extension */,
 				2F23E13D1D6EF21D00119E4F /* tvOS */,
-				2F23E14B1D6EF21D00119E4F /* macOS */,
 				2F23E1121D6EF21D00119E4F /* Products */,
 				276694BA1F21FF4200E70D15 /* Frameworks */,
 				D6705493572D404729883125 /* Pods */,
@@ -375,6 +379,7 @@
 				2F861B591F1CAD7F00162EDA /* MVASound.swift */,
 				2F31BA401F49CD1900CF4C13 /* MVAAlert.swift */,
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
+				2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */,
 				2F861B961F1CD6F900162EDA /* GameScene_Start.swift */,
 				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
 				2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */,
@@ -867,9 +872,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/NSAlertController/NSAlertController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSAlertController.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -897,11 +905,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/PopupDialog/PopupDialog.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PopupDialog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -957,6 +967,7 @@
 				2FAE02161F054B84004D4EFE /* MVASpawnerNode.swift in Sources */,
 				2FAE022E1F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
 				2F861B971F1CD6F900162EDA /* GameScene_Start.swift in Sources */,
+				2FA27A491FDC05EA00DA5819 /* MVAPopup.swift in Sources */,
 				2F3EAE411F3B1DED001A1A6E /* MVAAds.swift in Sources */,
 				2F26548D1F41A6FA00A7D2CF /* MVAWaitNode.swift in Sources */,
 				2F23E1151D6EF21D00119E4F /* AppDelegate.swift in Sources */,
@@ -993,6 +1004,7 @@
 				2FAE02301F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
 				2F861B981F1CD6F900162EDA /* GameScene_Start.swift in Sources */,
 				2F3EAE421F3B1DED001A1A6E /* MVAAds.swift in Sources */,
+				2FA27A4A1FDC05EA00DA5819 /* MVAPopup.swift in Sources */,
 				2F26548E1F41A6FA00A7D2CF /* MVAWaitNode.swift in Sources */,
 				2F23E13F1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F9E41A61F03B389004FB9F5 /* GameScene_HUD.swift in Sources */,
@@ -1029,6 +1041,7 @@
 				2FDB9A6C1F8929D7007F8EB2 /* MVAWindow.swift in Sources */,
 				2FAE02311F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
 				2FDFBD291F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
+				2FA27A4B1FDC05EA00DA5819 /* MVAPopup.swift in Sources */,
 				2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F861B991F1CD6F900162EDA /* GameScene_Start.swift in Sources */,
 				2FFA3BA81F5181E40020F78F /* ChangeCarScene_Keyboard.swift in Sources */,

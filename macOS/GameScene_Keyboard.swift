@@ -9,10 +9,18 @@
 import SpriteKit
 
 enum KeyCodes {
-    public static let keyDown: UInt16 = 125
+    public static let keySpacebar: UInt16 = 49
 }
     
 extension GameScene {
+    
+    func setupTilt() {
+        self.cDelegate?.changeControls(to: .precise)
+    }
+    
+    func setupSwipes() {
+        self.cDelegate?.changeControls(to: .swipe)
+    }
     
     override func keyUp(with event: NSEvent) {
         if intel.stop {
@@ -21,7 +29,7 @@ extension GameScene {
                     goNode.touchedPosition(.zero)
                 }
             }
-        } else if gameControls == .swipe && event.keyCode == KeyCodes.keyDown && playerBraking {
+        } else if event.keyCode == KeyCodes.keySpacebar && playerBraking {
             handleBrake(started: false)
             if let currentPLane = intel.player.currentLane {
                 let currentLanePos = CGFloat(lanePositions[currentPLane]!)
@@ -44,7 +52,8 @@ extension GameScene {
     func moveWithMouse(_ mPosition: CGFloat) {
         if let mousePos = self.lastMousePos, !intel.stop {
             let deltaX = mPosition - mousePos
-            let newPlayerPos = self.intel.player.position.x + deltaX
+            _ = self.handlePreciseMove(withDeltaX: deltaX)
+            /*let newPlayerPos = self.intel.player.position.x + deltaX
             
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
                 newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
@@ -52,18 +61,18 @@ extension GameScene {
                     
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
-            }
+            }*/
         }
         self.lastMousePos = mPosition
     }
     
-    override func mouseDown(with event: NSEvent) {
+    /*override func mouseDown(with event: NSEvent) {
         if gameStarted && !intel.stop && gameControls == .precise {
             if !playerBraking {
                 handleBrake(started: true)
             }
         }
-    }
+    }*/
     
     override func rightMouseDragged(with event: NSEvent) {
         self.lastMousePos = NSEvent.mouseLocation.x
@@ -76,14 +85,22 @@ extension GameScene {
     override func mouseDragged(with event: NSEvent) {
         if gameStarted && !intel.stop && gameControls == .precise {
             moveWithMouse(NSEvent.mouseLocation.x)
-            if !playerBraking {
+            /*if !playerBraking {
                 handleBrake(started: true)
-            }
+            }*/
         }
     }
     
     override func keyDown(with event: NSEvent) {
-        interpretKeyEvents([event])
+        if event.keyCode == KeyCodes.keySpacebar {
+            if self.tutorialNode?.stage == 3 && self.playerBraking {
+                endTutorial()
+            }
+            
+            handleBrake(started: true)
+        } else {
+            interpretKeyEvents([event])
+        }
     }
     
     override func insertNewline(_ sender: Any?) {
@@ -112,7 +129,7 @@ extension GameScene {
     override func moveLeft(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                handlePreciseMove(withDeltaX: -9, animated: true)
+                _ = handlePreciseMove(withDeltaX: -9, animated: true)
             } else {
                 handleSwipe(swipe: .left)
             }
@@ -122,17 +139,10 @@ extension GameScene {
     override func moveRight(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                handlePreciseMove(withDeltaX: 9, animated: true)
+                _ = handlePreciseMove(withDeltaX: 9, animated: true)
             } else {
                 handleSwipe(swipe: .right)
             }
         }
-    }
-    
-    override func moveDown(_ sender: Any?) {
-        if gameControls == .swipe {
-            handleBrake(started: true)
-        }
-            
     }
 }

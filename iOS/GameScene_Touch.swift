@@ -18,18 +18,15 @@ extension GameScene: UIGestureRecognizerDelegate {
         } else {
             setupSwipes()
         }
-        
-        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
-        brake.minimumPressDuration = 0.08
-        brake.delegate = self
-        view.addGestureRecognizer(brake)
     }
     
     func setupTilt() {
+        clearControls()
+        
         let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
         manager.deviceMotionUpdateInterval = 0.01
         manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-            if let quat = data?.attitude.quaternion, !self.intel.stop {
+            if let quat = data?.attitude.quaternion, !self.intel.stop || !self.canUpdateSpeed {
                 let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
                 let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
                 
@@ -45,23 +42,42 @@ extension GameScene: UIGestureRecognizerDelegate {
                 }
             }
         }
+        
+        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
+        brake.minimumPressDuration = 0.08
+        brake.delegate = self
+        self.view?.addGestureRecognizer(brake)
     }
     
     func setupSwipes() {
-        let right = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
+        clearControls()
+        
+        let right = UISwipeGestureRecognizer(target: self, action: #selector(handleUISwipe(swipe:)))
         right.direction = .right
         
-        let left = UISwipeGestureRecognizer(target: self, action: #selector(handelUISwipe(swipe:)))
+        let left = UISwipeGestureRecognizer(target: self, action: #selector(handleUISwipe(swipe:)))
         left.direction = .left
+        
+        let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
+        brake.minimumPressDuration = 0.08
         
         right.delegate = self
         left.delegate = self
+        brake.delegate = self
         
         view?.addGestureRecognizer(right)
         view?.addGestureRecognizer(left)
+        view?.addGestureRecognizer(brake)
     }
     
-    @objc func handelUISwipe(swipe: UISwipeGestureRecognizer) {
+    private func clearControls() {
+        (UIApplication.shared.delegate as! AppDelegate).motionManager.stopDeviceMotionUpdates()
+        for recog in self.view?.gestureRecognizers ?? [] {
+            self.view?.removeGestureRecognizer(recog)
+        }
+    }
+    
+    @objc func handleUISwipe(swipe: UISwipeGestureRecognizer) {
         switch swipe.direction {
         case UISwipeGestureRecognizerDirection.right: handleSwipe(swipe: .right)
         case UISwipeGestureRecognizerDirection.left: handleSwipe(swipe: .left)

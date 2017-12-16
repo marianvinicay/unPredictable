@@ -10,9 +10,30 @@ import SpriteKit
     import FirebaseAnalytics
 #endif
 
-extension GameScene {
+extension GameScene: MVATutorialDelegate {
+    
+    func activateSwipe() {
+        self.gameControls = .swipe
+        self.setupSwipes()
+    }
+    
+    func activateTilt() {
+        self.gameControls = .precise
+        self.setupTilt()
+    }
+    
+    func prepareTilt() {
+        #if os(iOS)
+            if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
+                self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
+            }
+        #endif
+    }
     
     func startGame() {
+        if !MVAMemory.tutorialDisplayed {
+            self.gameControls = .swipe
+        }
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let laneCount = UInt32(lanePositions.count)
@@ -40,6 +61,8 @@ extension GameScene {
                 self.showHUD()
             } else {
                 self.tutorialNode = MVATutorialNode.new(size: self.size)
+                self.tutorialNode?.delegate = self
+                self.tutorialNode?.delegate?.activateSwipe()
                 self.tutorialNode!.alpha = 0.0
                 self.tutorialNode!.zPosition = 9.0
                 self.camera!.addChild(self.tutorialNode!)
@@ -48,6 +71,12 @@ extension GameScene {
             }
             self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
             self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
+            
+            #if os(iOS)
+                if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
+                    self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
+                }
+            #endif
         }
         
         let start = SKAction.run {
@@ -55,13 +84,8 @@ extension GameScene {
             self.intel.stop = false
             
             if MVAMemory.tutorialDisplayed {
-                #if os(iOS)
-                    if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
-                        self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
-                    }
-                #endif
-                self.isUserInteractionEnabled = true
                 self.intel.updateDist = true
+                self.isUserInteractionEnabled = true
             }
         }
         
@@ -83,6 +107,9 @@ extension GameScene {
             if anim {
                 self.playBtt.setScale(0.0)
                 self.recordDistance.setScale(0.0)
+                if self.tutorialNode != nil {
+                   self.tutorialNode?.run(SKAction.fadeOut(withDuration: 0.5))
+                }
                 self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
                 self.recordDistance.run(SKAction.scale(to: 1.0, duration: 0.6))
                 self.playBtt.run(SKAction.scale(to: 1.0, duration: 0.6), completion: {
@@ -113,7 +140,11 @@ extension GameScene {
         self.isPaused = false
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
         self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
-        self.showHUD()
+        if self.tutorialNode != nil {
+            self.tutorialNode?.run(SKAction.fadeIn(withDuration: 0.5))
+        } else {
+            self.showHUD()
+        }
         self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.6))
         self.playBtt.run(SKAction.group([SKAction.scale(to: 0.0, duration: 0.6)]), completion: {
             self.physicsWorld.speed = 1.0
@@ -204,6 +235,7 @@ extension GameScene {
             #if os(iOS)
                 Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
             #endif
+            
             //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
     }

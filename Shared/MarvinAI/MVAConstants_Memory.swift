@@ -127,6 +127,8 @@ enum MVAMemory {
         }
     }
     #elseif os(macOS)
+    static let isIphoneX = false
+    
     static var adsEnabled: Bool {
         set {}
         get { return false }

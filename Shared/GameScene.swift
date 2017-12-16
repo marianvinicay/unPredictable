@@ -8,6 +8,15 @@
 
 import SpriteKit
 
+protocol GameVCDelegate {
+    #if os(iOS)
+        func present(view: UIViewController, completion: @escaping ()->Void)
+    #elseif os(macOS)
+        func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse)->Void)
+    #endif
+    func changeControls(to controls: MVAGameControls)
+}
+
 enum MVAGameControls {
     case swipe, precise
 }
@@ -28,6 +37,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return MVAMemory.gameControls
         }
     }
+    
+    var cDelegate: GameVCDelegate?
     #if os(iOS)
         var lastRotation: Double?
     #elseif os(macOS)
@@ -88,12 +99,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func displayNewBest() {
         newBestDisplayed = true
+        let downY: CGFloat = MVAMemory.isIphoneX ? 33.0:0.0
         let label = SKLabelNode(fontNamed: "Futura Bold")
         label.fontSize = 20
         label.text = "New Best!"
         label.verticalAlignmentMode = .bottom
         label.horizontalAlignmentMode = .left
-        label.position = CGPoint(x: distanceSign.position.x+distanceSign.size.width+10, y: (-self.size.height/2)+label.frame.height)
+        label.position = CGPoint(x: distanceSign.position.x+distanceSign.size.width+3, y: (-self.size.height/2)+label.frame.height+downY)
         label.zPosition = 7.0
         label.name = "nBest"
         let addAct = SKAction.run {
@@ -113,7 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawner.position.y = camera!.position.y+self.size.height
         if intel.player != nil {
             let desiredCameraPosition = intel.player.position.y+size.height/4
-            camera!.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.02))
+            camera!.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.04))
             //camera!.position.y = desiredCameraPosition
         }
         remover.position.y = camera!.position.y-self.size.height
@@ -168,7 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     if newDistance == MVAWorldConverter.distanceToOdometer(Double(self.intel.currentLevel.nextMilestone)) && !self.playerBraking {
                         self.intel.currentLevel.level += 1
-                        self.nextLevelSign {
+                        self.nextLevelSign() {
                             if !self.playerBraking {
                                 self.intel.player.changeSpeed(self.intel.currentLevel.playerSpeed)
                             }
@@ -201,8 +213,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    private func endTutorial() {
-        tutorialNode?.end {
+    func endTutorial() {
+        let tutorialEnding = { () in
             self.tutorialNode?.removeFromParent()
             self.tutorialNode = nil
             self.intel.updateDist = true
@@ -238,6 +250,62 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        
+        let dialog = MVAPopup.create(withTitle: "What do you prefer?", andMessage: nil)
+        
+        #if os(iOS)
+            let mManager = (UIApplication.shared.delegate as! AppDelegate).motionManager
+            
+            MVAPopup.addAction(toPopup: dialog, withTitle: "Swipe") {
+                self.tutorialNode?.end(tutorialEnding)
+                self.cDelegate?.changeControls(to: .swipe)
+                self.physicsWorld.speed = 1.0
+                self.intel.stop = false
+                self.intel.player.run(SKAction.moveTo(x: CGFloat(lanePositions[self.intel.player.currentLane] ?? 0), duration: 0.2))
+            }
+            if mManager.isDeviceMotionAvailable {
+                MVAPopup.addAction(toPopup: dialog, withTitle: "Tilt") {
+                    self.tutorialNode?.end(tutorialEnding)
+                    self.cDelegate?.changeControls(to: .precise)
+                    self.physicsWorld.speed = 1.0
+                    self.intel.stop = false
+                }
+            }
+        #elseif os(macOS)
+            MVAPopup.addAction(toPopup: dialog, withTitle: "Arrows")
+            MVAPopup.addAction(toPopup: dialog, withTitle: "Mouse", shouldHighlight: true)
+        #endif
+        
+        self.run(SKAction.sequence([
+            SKAction.run({ self.tutorialNode?.prepareEnd() }),
+            SKAction.wait(forDuration: 0.8),
+            SKAction.run({
+                self.handleBrake(started: false)
+                self.physicsWorld.speed = 0.0
+                self.intel.stop = true
+                #if os(iOS)
+                    self.cDelegate?.present(view: dialog, completion: {})
+                #elseif os(macOS)
+                    NSCursor.unhide()
+                    self.cDelegate?.present(alert: dialog) { (resp: NSApplication.ModalResponse) in
+                        switch resp {
+                        case .alertFirstButtonReturn:
+                            self.tutorialNode?.end(tutorialEnding)
+                            self.cDelegate?.changeControls(to: .swipe)
+                            self.physicsWorld.speed = 1.0
+                            self.intel.stop = false
+                            self.intel.player.run(SKAction.moveTo(x: CGFloat(lanePositions[self.intel.player.currentLane] ?? 0), duration: 0.2))
+                        case .alertSecondButtonReturn:
+                            self.tutorialNode?.end(tutorialEnding)
+                            self.cDelegate?.changeControls(to: .precise)
+                            self.physicsWorld.speed = 1.0
+                            self.intel.stop = false
+                            NSCursor.hide()
+                        default: break
+                        }
+                    }
+                #endif
+            })]))
     }
     
     // MARK: - Controls
@@ -247,8 +315,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 intel.sound.indicate(onNode: intel.player)
                 
                 if tutorialNode?.stage == 0 {
-                    spawnWithDelay(intel.currentLevel.spawnRate)
-                    tutorialNode!.continueToBraking()
+                    tutorialNode!.continueToTilting(playerCar: self.intel.player)
                 }
             }
         }
@@ -256,8 +323,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func handleBrake(started: Bool) {
         if gameStarted {
+            guard tutorialNode == nil || (tutorialNode?.stage ?? 0) > 2 else { return }
             if started {
-                guard tutorialNode == nil || tutorialNode?.stage != 0 else { return }
                 if playerBraking == false {
                     self.removeAction(forKey: "spawn")
                     spawner.size.height = self.size.height
@@ -290,7 +357,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
                 intel.player.currentLane = closestLane.element.key
                 
-                if tutorialNode?.stage == 1 {
+                if tutorialNode?.stage == 2 {
+                    tutorialNode?.continueToBraking()
+                } else if tutorialNode?.stage == 3 && self.playerBraking {
                     endTutorial()
                 }
                 

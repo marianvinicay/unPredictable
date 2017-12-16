@@ -5,6 +5,7 @@ target 'unPredictable - iOS' do
   pod 'Firebase/AdMob'
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'PopupDialog'
 end
 
 target 'unPredictable - macOS' do

@@ -49,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         FirebaseApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
         MVAAds.prepareRewardAd()
+        MVAPopup.customiseAppeareance()
         
         if #available(iOS 11.0, *) {
             MVAMemory.isIphoneX = (window?.safeAreaInsets.bottom ?? 0) > CGFloat(0)

@@ -17,17 +17,12 @@
     },
     {
       "idiom" : "ipad",
-      "filename" : "PlainRoadIPad.png",
+      "filename" : "PlainRoadIPad-2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "filename" : "PlainRoadIPad@2x.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "watch",
-      "filename" : "Apple Watch Plain@2x.png",
+      "filename" : "PlainRoadIPad@2x-2.png",
       "scale" : "2x"
     },
     {

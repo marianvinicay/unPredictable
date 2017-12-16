@@ -68,7 +68,7 @@ extension GameScene {
             let hideAct = SKAction.run {
                 self.distanceSign.run(SKAction.moveTo(y: self.distanceSign.position.y-(self.distanceSign.size.height*2), duration: 0.5))
                 self.camera!.childNode(withName: "down")!.run(SKAction.moveTo(y: self.distanceSign.position.y-(self.distanceSign.size.height*2), duration: 0.5))
-                self.camera!.childNode(withName: "iphoneX")!.run(SKAction.moveTo(y: self.distanceSign.position.y-(self.distanceSign.size.height*2), duration: 0.5))
+                self.camera!.childNode(withName: "iphoneX")?.run(SKAction.moveTo(y: self.distanceSign.position.y-(self.distanceSign.size.height*2), duration: 0.5))
                 
                 self.speedSign.run(SKAction.moveTo(y: self.speedSign.position.y+(self.speedSign.size.height*2), duration: 0.5))
                 self.pauseBtt.run(SKAction.moveTo(y: self.pauseBtt.position.y+(self.pauseBtt.size.height*2), duration: 0.5))

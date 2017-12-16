@@ -27,6 +27,10 @@ extension GameScene {
         scene.scaleMode = .aspectFill
         scene.size = deviceSize
         scene.camera = (scene.childNode(withName: "cam") as! SKCameraNode)
+        scene.backgroundColor = MVAColor.roadGreen
+        if arc4random_uniform(4) == 3 {
+            scene.backgroundColor = MVAColor.roadBrown
+        }
         
         scene.playBtt = scene.camera!.childNode(withName: "playBtt") as! SKSpriteNode
         scene.pauseBtt = scene.camera!.childNode(withName: "stop") as! SKSpriteNode
@@ -110,18 +114,6 @@ extension GameScene {
         let start2Texture = SKTexture(imageNamed: "Start2")
         for _ in 0..<3 {
             let road = MVARoadNode.createWith(texture: start2Texture, height: self.size.height, andWidth: self.size.width)
-            if  arc4random_uniform(2) == 3 {
-                let pSpot = arc4random_uniform(2) == 0 ? SKSpriteNode(imageNamed: "ParkingSpotR"):SKSpriteNode(imageNamed: "ParkingSpotL")
-                pSpot.anchorPoint.y = 1.0
-                pSpot.size = pSpot.size.adjustSize(toNewWidth: road.size.width)
-                var posRange = CGFloat(arc4random_uniform(UInt32((road.size.height/2)-pSpot.size.height)))
-                if arc4random_uniform(2) == 1 {
-                    posRange *= -1
-                }
-                pSpot.position = CGPoint(x: 0.0, y: posRange)
-                pSpot.zPosition = 1.0
-                road.addChild(pSpot)
-            }
             road.position = CGPoint(x: 0.0, y: endOfWorld!)
             endOfWorld = road.position.y+road.size.height
             roadNodes.insert(road)

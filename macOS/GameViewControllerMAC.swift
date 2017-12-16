@@ -10,7 +10,35 @@ import Cocoa
 import SpriteKit
 import GameKit
 
-class GameViewControllerMAC: NSViewController {
+class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegate {
+    
+    func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
+        alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: completion)
+    }
+    
+    func changeControls(to controls: MVAGameControls) {
+        self.setControls(to: controls)
+    }
+    
+    @available(OSX 10.12.2, *)
+    override func makeTouchBar() -> NSTouchBar? {
+        let touchBar = NSTouchBar()
+        touchBar.delegate = self
+        // 2
+        touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier("idk")
+        // 3
+        touchBar.defaultItemIdentifiers = [NSTouchBarItem.Identifier("idk")]
+        // 4
+        touchBar.customizationAllowedItemIdentifiers = [NSTouchBarItem.Identifier("idk")]
+        return touchBar
+    }
+    
+    @available(OSX 10.12.2, *)
+    func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
+        let customViewItem = NSCustomTouchBarItem(identifier: identifier)
+        customViewItem.view = NSTextField(labelWithString: "\u{1F30E} TEST")
+        return customViewItem
+    }
     
     @IBOutlet weak var gameCenterBtt: NSButton!
     @IBOutlet weak var changeCarBtt: NSButton!
@@ -41,6 +69,8 @@ class GameViewControllerMAC: NSViewController {
         super.viewDidLoad()
         let size = self.view.frame.size
         gameScene = GameScene.new(withSize: size)
+        gameScene.cDelegate = self
+        
         changeCarScene = ChangeCarScene.new(withSize: size, andStore: gameScene.intel.storeHelper)
         
         let trackingArea = NSTrackingArea(rect: self.view.bounds, options: [.activeInKeyWindow,.mouseMoved], owner: self, userInfo: nil)
@@ -133,18 +163,26 @@ class GameViewControllerMAC: NSViewController {
         }))
     }
     
-    @IBAction func toggleControls(_ sender: NSButton) {
-        if gameScene.gameControls == .swipe {
-            controlsBtt.title = "Mouse"
-            gameScene.gameControls = .precise
-            setUpMouseControls()
-        } else {
+    private func setControls(to controls: MVAGameControls) {
+        if controls == .swipe {
             controlsBtt.title = "Keyboard"
             gameScene.gameControls = .swipe
             for monitor in mouseMonitors.filter({ $0 != nil }) {
                 NSEvent.removeMonitor(monitor!)
             }
             mouseMonitors.removeAll()
+        } else if controls == .precise {
+            controlsBtt.title = "Mouse"
+            gameScene.gameControls = .precise
+            setUpMouseControls()
+        }
+    }
+    
+    @IBAction func toggleControls(_ sender: NSButton) {
+        if gameScene.gameControls == .swipe {
+            self.setControls(to: .precise)
+        } else {
+            self.setControls(to: .swipe)
         }
     }
     
