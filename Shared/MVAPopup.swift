@@ -48,7 +48,7 @@ class MVAPopup {
     
     class MVAPopup {
         class func create(withTitle title: String, andMessage message: String?) -> NSAlert {
-            let dialog = NSAlert()//PopupDialog(title: title, message: message, image: nil, buttonAlignment: .horizontal, transitionStyle: .bounceDown, preferredWidth: 340, gestureDismissal: false, hideStatusBar: true, completion: nil)
+            let dialog = NSAlert()
             dialog.messageText = title
             dialog.informativeText = message ?? ""
             dialog.alertStyle = .informational

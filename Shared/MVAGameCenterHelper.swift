@@ -56,14 +56,14 @@ class MVAGameCenterHelper: NSObject {
             // dist in MI convert to KM bc leaderboards are in KM
             gkScore.value = Int64(MVAWorldConverter.milesToKilometers(dist)*10)
         }
-        //GKScore.report([gkScore], withCompletionHandler: nil)
+        GKScore.report([gkScore], withCompletionHandler: nil)
     }
     
     func report(crashedCars numOfCars: Int64) {
         guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
         let gkScore = GKScore(leaderboardIdentifier: "grp.com.mva.unpredictable.crashed_cars")
         gkScore.value = numOfCars
-        //GKScore.report([gkScore], withCompletionHandler: nil)
+        GKScore.report([gkScore], withCompletionHandler: nil)
     }
     
     deinit {

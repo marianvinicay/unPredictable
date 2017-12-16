@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SKPaymentQueue.default().add(self)
-        
+        MVAMemory.tutorialDisplayed = false
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
