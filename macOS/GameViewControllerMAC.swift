@@ -54,7 +54,7 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
     @IBOutlet weak var controlsBtt: NSButton! {
         willSet {
             if MVAMemory.gameControls == .swipe {
-                newValue.title = "Keyboard"
+                newValue.title = "Arrows"
             } else {
                 newValue.title = "Mouse"
             }
@@ -151,7 +151,7 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
             }
             return $0
         }))
-        mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
+       /* mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
             if !self.gameScene.intel.stop {
                 NSCursor.hide()
             }
@@ -161,11 +161,12 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
             NSCursor.unhide()
             return $0
         }))
+        */
     }
     
     private func setControls(to controls: MVAGameControls) {
         if controls == .swipe {
-            controlsBtt.title = "Keyboard"
+            controlsBtt.title = "Arrows"
             gameScene.gameControls = .swipe
             for monitor in mouseMonitors.filter({ $0 != nil }) {
                 NSEvent.removeMonitor(monitor!)

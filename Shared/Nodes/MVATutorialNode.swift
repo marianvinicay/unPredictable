@@ -24,11 +24,11 @@ enum MVATutorialText {
     static let brake3rdLabel = ""//"to change direction"
     #elseif os(macOS)
     static let swipeLabel = "Change your car's"
-    static let swipe2ndLabel = "lane with ◀️|▶️"
+    static let swipe2ndLabel = "lane with ◀️/▶️"
     static let swipe3rdLabel = "Try it! 😎"
     static let tiltLabel = "You can also change"
-    static let tilt2ndLabel = "lanes by moving the mouse"
-    static let tilt3rdLabel = "Move the mouse! 🐭"
+    static let tilt2ndLabel = "lanes by moving the cursor"
+    static let tilt3rdLabel = "Move me! ↖️"
     static let brakeLabel = "Hold spacebar"// to brake"
     static let brake2ndLabel = "to brake"//"and click ◀️|▶️"
     static let brake3rdLabel = ""//"to change direction"
@@ -115,10 +115,12 @@ class MVATutorialNode: SKNode {
             let presentTiltInstructs = SKAction.run {
                 self.delegate?.activateTilt()
                 playerCar.run(SKAction.moveTo(x: 0.0, duration: 0.2))
+                /*
                 #if os(macOS)
                     NSCursor.hide()
                 #endif
-                
+                */
+ 
                 let tNode = SKNode()
                 tNode.name = "tilt"
                 

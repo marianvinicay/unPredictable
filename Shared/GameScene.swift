@@ -286,7 +286,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 #if os(iOS)
                     self.cDelegate?.present(view: dialog, completion: {})
                 #elseif os(macOS)
-                    NSCursor.unhide()
+                    //NSCursor.unhide()
                     self.cDelegate?.present(alert: dialog) { (resp: NSApplication.ModalResponse) in
                         switch resp {
                         case .alertFirstButtonReturn:
@@ -300,7 +300,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             self.cDelegate?.changeControls(to: .precise)
                             self.physicsWorld.speed = 1.0
                             self.intel.stop = false
-                            NSCursor.hide()
+                            //NSCursor.hide()
                         default: break
                         }
                     }
