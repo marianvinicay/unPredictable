@@ -10,6 +10,7 @@ import SpriteKit
 
 enum KeyCodes {
     public static let keySpacebar: UInt16 = 49
+    public static let keyESC: UInt16 = 53
 }
     
 extension GameScene {
@@ -92,30 +93,18 @@ extension GameScene {
     }
     
     override func keyDown(with event: NSEvent) {
-        if event.keyCode == KeyCodes.keySpacebar {
+        switch event.keyCode {
+        case KeyCodes.keySpacebar:
             if self.tutorialNode?.stage == 3 && self.playerBraking {
                 endTutorial()
             }
-            
             handleBrake(started: true)
-        } else {
-            interpretKeyEvents([event])
-        }
-    }
-    
-    override func insertNewline(_ sender: Any?) {
-        if self.isUserInteractionEnabled {
-            if !gameStarted {
-                NSCursor.hide()
-                self.isUserInteractionEnabled = false
-                self.startGame()
-            } else {
-                if isPaused {
-                    self.resumeGame()
-                } else {
-                    self.pauseGame(withAnimation: true)
-                }
+        case KeyCodes.keyESC:
+            if gameStarted && !isPaused {
+                self.pauseGame(withAnimation: true)
             }
+        default:
+            interpretKeyEvents([event])
         }
     }
     

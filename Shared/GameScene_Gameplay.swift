@@ -90,12 +90,13 @@ extension GameScene: MVATutorialDelegate {
         }
         
         playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
-        
+        /*
         #if os(macOS)
             if gameControls == .precise {
                 NSCursor.hide()
             }
         #endif
+        */
     }
     
     func pauseGame(withAnimation anim: Bool) {
@@ -127,12 +128,13 @@ extension GameScene: MVATutorialDelegate {
                 let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
                 self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             }
-            
+            /*
             #if os(macOS)
                 if gameControls == .precise {
                     NSCursor.unhide()
                 }
             #endif
+            */
         }
     }
     
@@ -152,11 +154,13 @@ extension GameScene: MVATutorialDelegate {
             self.fadeInVolume()
         })
         
+        /*
         #if os(macOS)
             if gameControls == .precise {
                 NSCursor.hide()
             }
         #endif
+        */
     }
     
     func gameOver() {
@@ -202,9 +206,11 @@ extension GameScene: MVATutorialDelegate {
                     tutorialNode = nil
                 }
 
+                /*
                 if gameControls == .precise {
                     NSCursor.unhide()
                 }
+                */
             #endif
             
             let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd, clumsy: clumsy)
@@ -262,11 +268,13 @@ extension GameScene: MVATutorialDelegate {
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         startSound()
         
+        /*
         #if os(macOS)
             if gameControls == .precise {
                 NSCursor.hide()
             }
         #endif
+        */
     }
     
     func resetGame() {

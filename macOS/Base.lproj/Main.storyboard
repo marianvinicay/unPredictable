@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -106,28 +106,28 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kVx-z5-Vt6">
-                                <rect key="frame" x="435" y="13" width="151" height="56"/>
+                                <rect key="frame" x="440" y="13" width="146" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="70" id="Slu-Av-CeF"/>
-                                    <constraint firstAttribute="height" constant="45" id="jm8-aa-Jgd"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Slu-Av-CeF"/>
+                                    <constraint firstAttribute="height" constant="33" id="jm8-aa-Jgd"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Change Car" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
+                                <buttonCell key="cell" type="push" title="Change Car" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="20" name="Futura-Medium"/>
+                                    <font key="font" size="19" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="showChangeCar:" target="XfG-lQ-9wD" id="uSS-Nd-WDh"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sUK-EY-Vc7">
-                                <rect key="frame" x="14" y="13" width="144" height="56"/>
+                                <rect key="frame" x="14" y="13" width="112" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="fMP-iu-Eob"/>
-                                    <constraint firstAttribute="height" constant="45" id="nNM-zO-onV"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Jbc-eb-2k8"/>
+                                    <constraint firstAttribute="height" constant="33" id="fRG-sV-3uE"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Keyboard" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
+                                <buttonCell key="cell" type="push" title="Arrows" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="23" name="Futura-Medium"/>
+                                    <font key="font" size="19" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="toggleControls:" target="XfG-lQ-9wD" id="WzX-gF-8UZ"/>
