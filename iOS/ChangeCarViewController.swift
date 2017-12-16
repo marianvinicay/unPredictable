@@ -9,7 +9,6 @@
 import UIKit
 
 class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
-    static let backFromScene = Notification.Name("backFromCCScene")
     static let changePCar = Notification.Name("chPCar")
     
     @IBOutlet weak var backBtt: UIBarButtonItem!
@@ -35,10 +34,6 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var carImg: UIImageView!
     @IBOutlet weak var carName: UILabel!
     @IBOutlet weak var descLabel: UILabel!
-        
-    #if os(iOS) || os(tvOS)
-    var myRecongizers = [UIGestureRecognizer]()
-    #endif
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
     private var selectedCar = MVAMemory.playerCar
@@ -55,14 +50,11 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
                 MVAMemory.adsEnabled = true
                 self.enableAdsBtt.isHidden = true
                 self.orLabel.isHidden = true
-                self.buyBtt.setTitle(" USE ", for: .normal)
-                self.removeSwipes()
+                self.buyBtt.setTitle(" \(self.store.getPrice(forCar: self.selectedCar)) ", for: .normal)
                 NotificationCenter.default.post(name: ChangeCarViewController.changePCar, object: nil)
+                self.performSegue(withIdentifier: "goBack", sender: nil)
             } else {
                 MVAMemory.adsEnabled = false
-                self.enableAdsBtt.isHidden = false
-                self.orLabel.isHidden = false
-                self.buyBtt.setTitle(" BUY ", for: .normal)
             }
         }
         ads.completionHandler = {}
@@ -121,15 +113,22 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
         newCarView.alpha = 0.0
         self.view.addSubview(newCarView)
         
+        let oldCarView = UIImageView(frame: carImg.frame)
+        oldCarView.image = carImg.image
+        self.view.addSubview(oldCarView)
+        carImg.alpha = 0.0
+        
         UIView.animate(withDuration: 0.4, animations: {
-            self.carImg.frame.origin.x = dir == .right ? self.view.frame.size.width : 0.0
-            self.carImg.alpha = 0.0
+            oldCarView.frame.origin.x = dir == .right ? self.view.frame.size.width : 0.0
+            oldCarView.alpha = 0.0
             
             newCarView.frame.origin.x = (self.view.frame.size.width/2)-(newCarView.frame.width/2)
             newCarView.alpha = 1.0
         }) { (end: Bool) in
-            self.carImg.removeFromSuperview()
-            self.carImg = newCarView
+            oldCarView.removeFromSuperview()
+            self.carImg.image = newCarView.image
+            self.carImg.alpha = 1.0
+            newCarView.removeFromSuperview()
             self.leftArr.isUserInteractionEnabled = true
             self.rightArr.isUserInteractionEnabled = true
         }
@@ -154,7 +153,7 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
         waitView = MVAWaitView.new(withSize: self.view.frame.size) //.new(withSize: self.size, inScene: self)
         self.view.addSubview(waitView)
         
-        let completion = { (purchased:Bool, _:String, err:Error?) in
+        let completion = { (purchased: Bool, _: String, err: Error?) in
             if purchased && err == nil {
                 MVAMemory.adsEnabled = false
                 MVAMemory.ownedCars.append(self.selectedCar)
@@ -183,16 +182,14 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func selectCar() {
-        if buyBtt.title(for: .normal) == " USE " {
+    @IBAction func selectCar(_ sender: UIButton) {
+        if sender.title(for: .normal) == " USE " {
             if MVAMemory.ownedCars.contains(selectedCar) {
-                #if os(iOS) || os(tvOS)
-                    removeSwipes()
-                #endif
                 MVAMemory.playerCar = selectedCar
                 MVAMemory.adCar = nil
                 MVAMemory.adsEnabled = false
                 NotificationCenter.default.post(name: ChangeCarViewController.changePCar, object: nil)
+                self.performSegue(withIdentifier: "goBack", sender: nil)
             }
         } else {
             purchaseCar()
@@ -232,58 +229,22 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
         changeCar(1)
     }
     
-    @IBAction func useCar(_ sender: UIButton) {
-        if sender.title(for: .normal) == " USE " {
-            selectCar()
-        } else {
-            purchaseCar()
-        }
-    }
-    
     @IBAction func enableAds(_ sender: UIButton) {
-        ads.showAd()
+        ads.showAd(fromViewController: self)
     }
     
-    // MARK: - Swipes
-    func setupSwipes() {
-        let right = UISwipeGestureRecognizer(target: self, action: #selector(swipeGesture(swipe:)))
-        right.direction = .right
-        
-        let left = UISwipeGestureRecognizer(target: self, action: #selector(swipeGesture(swipe:)))
-        left.direction = .left
-        
-        right.delegate = self
-        left.delegate = self
-        
-        let back = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(goBack(eSwipe:)))
-        back.edges = .left
-        
-        view?.addGestureRecognizer(right)
-        view?.addGestureRecognizer(left)
-        view?.addGestureRecognizer(back)
-        
-        myRecongizers = [right,left,back]
-    }
-    
-    func removeSwipes() {
-        myRecongizers.forEach({ view?.removeGestureRecognizer($0) })
-    }
-    
-    @objc func swipeGesture(swipe: UIGestureRecognizer) {
-        if (swipe as? UISwipeGestureRecognizer)?.direction == .left {
+    @IBAction func swipeGesture(_ sender: UIGestureRecognizer) {
+        if (sender as? UISwipeGestureRecognizer)?.direction == .left {
             changeCar(1)
-        } else if (swipe as? UISwipeGestureRecognizer)?.direction == .right {
+        } else if (sender as? UISwipeGestureRecognizer)?.direction == .right {
             changeCar(-1)
         }
     }
     
-    @objc func goBack(eSwipe: UIGestureRecognizer) {
-        if eSwipe is UIScreenEdgePanGestureRecognizer {
-            if eSwipe.state == .began {
-                removeSwipes()
-                NotificationCenter.default.post(name: ChangeCarViewController.backFromScene, object: nil)
-                self.performSegue(withIdentifier: "goBack", sender: nil)
-            }
+    @IBAction func goBack(_ sender: UIGestureRecognizer) {
+        print("ccc")
+        if sender.state == .began {
+            self.performSegue(withIdentifier: "goBack", sender: nil)
         }
     }
 }

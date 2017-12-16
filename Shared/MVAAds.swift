@@ -72,26 +72,26 @@ class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
         }
     }
     
-    func showAd() {
+    func showAd(fromViewController viewController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!) {
         switch config {
         case .onlyVideo:
             if GADRewardBasedVideoAd.sharedInstance().isReady {
                 completionHandler()
-                GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
+                GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: viewController)
             } else {
                 presentError()
                 MVAAds.prepareRewardAd()
             }
         case .videoAndShort:
             if GADRewardBasedVideoAd.sharedInstance().isReady {
-                GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
+                GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: viewController)
             } else {
                 prepareShortAd()
             }
         case .onlyShort:
             if intAd.isReady == true {
                 completionHandler()
-                intAd.present(fromRootViewController: UIApplication.shared.keyWindow!.rootViewController!)
+                intAd.present(fromRootViewController: viewController)
             } else {
                 showShort = true
             }

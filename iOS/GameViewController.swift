@@ -65,7 +65,6 @@ class GameViewController: UIViewController, GameVCDelegate {
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarViewController.backFromScene, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
         
         if MVAMemory.enableGameCenter {

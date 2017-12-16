@@ -7,7 +7,7 @@
 //
 
 import SpriteKit
-
+/*
 extension ChangeCarScene {
     
     override func mouseUp(with event: NSEvent) {
@@ -29,4 +29,4 @@ extension ChangeCarScene {
     override func moveRight(_ sender: Any?) {
         changeCar(1)
     }
-}
+}*/
