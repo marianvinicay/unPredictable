@@ -26,19 +26,15 @@ extension GameScene: UIGestureRecognizerDelegate {
         let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
         manager.deviceMotionUpdateInterval = 0.01
         manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-            if let quat = data?.attitude.quaternion, !self.intel.stop || !self.canUpdateSpeed {
+            if let quat = data?.attitude.quaternion, self.gameStarted {
                 let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
                 let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
-                
                 if self.lastRotation != nil {
                     let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastRotation!)*(-13):CGFloat(angle - self.lastRotation!)*13
-                    if fabs(deltaAngle) > 0.5 {
-                        if self.handlePreciseMove(withDeltaX: deltaAngle) {
-                            self.lastRotation = angle
-                        }
+                    if fabs(deltaAngle) > 0.4 {
+                        self.handlePreciseMove(withDeltaX: deltaAngle)
                     }
-                } else {
-                    self.lastRotation = angle
+                self.lastRotation = angle
                 }
             }
         }
@@ -92,7 +88,7 @@ extension GameScene: UIGestureRecognizerDelegate {
             lastPressedXPosition = gest.location(in: view).x
         case .changed where self.gameControls == .swipe:
             let change = gest.location(in: view).x - lastPressedXPosition
-            _ = handlePreciseMove(withDeltaX: change)
+            handlePreciseMove(withDeltaX: change)
             lastPressedXPosition = gest.location(in: view).x
         case .ended where self.gameControls == .swipe:
             if let currentPLane = intel.player.currentLane {

@@ -324,12 +324,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func handleBrake(started: Bool) {
         if gameStarted {
             guard tutorialNode == nil || (tutorialNode?.stage ?? 0) > 2 else { return }
+            
             if started {
                 if playerBraking == false {
                     self.removeAction(forKey: "spawn")
                     spawner.size.height = self.size.height
                     playerBraking = true
                     intel.player.brakeLight(true)
+                    
+                    if self.tutorialNode?.stage == 3 {
+                        endTutorial()
+                    }
                 }
                 deceleratePlayer()
             } else {
@@ -343,7 +348,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) -> Bool {
+    func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) {
         if gameStarted && physicsWorld.speed != 0.0 && (tutorialNode == nil || tutorialNode?.stage != 0) {
             let newPlayerPos = self.intel.player.position.x + deltaX
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
@@ -359,14 +364,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 if tutorialNode?.stage == 2 {
                     tutorialNode?.continueToBraking()
-                } else if tutorialNode?.stage == 3 && self.playerBraking {
-                    endTutorial()
                 }
-                
-                return true
             }
         }
-        return false
     }
     
     @objc func acceleratePlayer() {

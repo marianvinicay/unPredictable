@@ -53,7 +53,7 @@ extension GameScene {
     func moveWithMouse(_ mPosition: CGFloat) {
         if let mousePos = self.lastMousePos, !intel.stop {
             let deltaX = mPosition - mousePos
-            _ = self.handlePreciseMove(withDeltaX: deltaX)
+            self.handlePreciseMove(withDeltaX: deltaX)
             /*let newPlayerPos = self.intel.player.position.x + deltaX
             
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
@@ -95,9 +95,6 @@ extension GameScene {
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
         case KeyCodes.keySpacebar:
-            if self.tutorialNode?.stage == 3 && self.playerBraking {
-                endTutorial()
-            }
             handleBrake(started: true)
         case KeyCodes.keyESC:
             if gameStarted && !isPaused {
@@ -118,7 +115,7 @@ extension GameScene {
     override func moveLeft(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                _ = handlePreciseMove(withDeltaX: -9, animated: true)
+                handlePreciseMove(withDeltaX: -9, animated: true)
             } else {
                 handleSwipe(swipe: .left)
             }
@@ -128,7 +125,7 @@ extension GameScene {
     override func moveRight(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                _ = handlePreciseMove(withDeltaX: 9, animated: true)
+                handlePreciseMove(withDeltaX: 9, animated: true)
             } else {
                 handleSwipe(swipe: .right)
             }

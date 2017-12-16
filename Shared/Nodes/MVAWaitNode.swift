@@ -6,27 +6,23 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 
-import SpriteKit
+import UIKit
 
-class MVAWaitNode: SKNode {
+class MVAWaitView: UIView {
     #if os(iOS) || os(tvOS)
         private var activityInd: UIActivityIndicatorView?
     #elseif os(macOS)
         private var activityInd: NSProgressIndicator?
     #endif
     
-    class func new(withSize size: CGSize, inScene scene: SKScene) -> MVAWaitNode {
-        let newNode = MVAWaitNode()
-        
-        let backG = SKSpriteNode(color: .black, size: size)
-        backG.alpha = 0.6
-        newNode.addChild(backG)
-        backG.position = .zero
+    class func new(withSize size: CGSize) -> MVAWaitView {
+        let newView = MVAWaitView(frame: CGRect(origin: .zero, size: size))
+        newView.backgroundColor = UIColor(white: 0.0, alpha: 0.6)
         
         #if os(iOS) || os(tvOS)
-            newNode.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-            newNode.activityInd!.center = CGPoint(x: scene.view!.frame.midX, y: scene.view!.frame.midY)
-            newNode.activityInd!.startAnimating()
+            newView.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            newView.activityInd!.center = CGPoint(x: newView.frame.midX, y: newView.frame.midY)
+            newView.activityInd!.startAnimating()
         #elseif os(macOS)
             newNode.activityInd = NSProgressIndicator()
             newNode.activityInd!.style = .spinning
@@ -38,9 +34,9 @@ class MVAWaitNode: SKNode {
             newNode.activityInd!.display()
             newNode.activityInd!.startAnimation(nil)
         #endif
-        scene.view!.addSubview(newNode.activityInd!)
+        newView.addSubview(newView.activityInd!)
         
-        return newNode
+        return newView
     }
     
     func remove() {
@@ -50,6 +46,6 @@ class MVAWaitNode: SKNode {
             self.activityInd?.stopAnimation(nil)
         #endif
         self.activityInd?.removeFromSuperview()
-        self.removeFromParent()
+        self.removeFromSuperview()
     }
 }

@@ -45,14 +45,12 @@ class GameViewController: UIViewController, GameVCDelegate {
         }
     }
     var scene: GameScene!
-    var changeCarScene: ChangeCarScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let sceneSize = self.view.frame.size
         scene = GameScene.new(withSize: sceneSize)
         scene.cDelegate = self
-        changeCarScene = ChangeCarScene.new(withSize: sceneSize, andStore: scene.intel.storeHelper)
         
         if MVAMemory.audioMuted {
             scene.audioEngine.mainMixerNode.outputVolume = 0.0
@@ -67,10 +65,10 @@ class GameViewController: UIViewController, GameVCDelegate {
         //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarViewController.backFromScene, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
         
-        if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
+        if MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
                 if granted {
                     self.gameCenterBtt.isHidden = false
@@ -188,20 +186,9 @@ class GameViewController: UIViewController, GameVCDelegate {
             }
         }
     }
-    
-    @IBAction func showChangeCar(_ sender: UIButton) {
-        toggleButtons()
-        changeCarScene.refresh()
-        let transition = SKTransition.reveal(with: .left, duration: 0.8)
-        (self.view as! SKView).presentScene(changeCarScene, transition: transition)
-    }
-    
-    
-    
+
     @objc func backFromChangeCarScene() {
-        toggleButtons(withAnimSpeed: 1.0)
-        let transition = SKTransition.moveIn(with: .left, duration: 0.8)
-        (self.view as! SKView).presentScene(scene, transition: transition)
+        
     }
     
     @objc func changePlayerCar() {
@@ -229,6 +216,14 @@ class GameViewController: UIViewController, GameVCDelegate {
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    @IBAction func unwindToTMainMenu(segue: UIStoryboardSegue) {}
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destVC = (segue.destination as? UINavigationController)?.topViewController as? ChangeCarViewController {
+            destVC.store = self.scene.intel.storeHelper
+        }
     }
     
     deinit {

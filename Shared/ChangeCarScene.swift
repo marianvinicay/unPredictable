@@ -10,7 +10,7 @@ import SpriteKit
 #if os(iOS)
     import UIKit
 #endif
-
+/*
 class ChangeCarScene: SKScene {
     static let backFromScene = Notification.Name("backFromCCScene")
     static let changePCar = Notification.Name("chPCar")
@@ -59,11 +59,13 @@ class ChangeCarScene: SKScene {
         background.position = .zero
         background.size = deviceSize
         
+        let iphoneXNotch: CGFloat = MVAMemory.isIphoneX ? 30.0:0.0
+        
         scene.store = nStore
         
         scene.backBtt = scene.childNode(withName: "back") as! SKSpriteNode
         scene.backBtt.position = CGPoint(x: (-deviceSize.width/2)+(scene.backBtt.size.width/2),
-                                         y: (deviceSize.height/2)-(scene.backBtt.size.height/2))
+                                         y: (deviceSize.height/2)-(scene.backBtt.size.height/2)-iphoneXNotch)
         scene.restoreBtt = scene.childNode(withName: "restore") as! SKSpriteNode
         scene.restoreBtt.position = CGPoint(x: (deviceSize.width/2)-(scene.restoreBtt.size.width/2)-8,
                                          y: scene.backBtt.position.y)
@@ -82,11 +84,11 @@ class ChangeCarScene: SKScene {
         scene.rightArr = scene.childNode(withName: "right") as! SKSpriteNode
         scene.rightArr.position = CGPoint(x: (deviceSize.width/2)-50, y: 30.0)
         scene.useBtt = scene.childNode(withName: "use") as! SKSpriteNode
-        scene.useBtt.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
+        scene.useBtt.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50+iphoneXNotch)
         scene.remakeButton(scene.useBtt)
         
         scene.newCarBtts = scene.childNode(withName: "newCar") as! SKSpriteNode
-        scene.newCarBtts.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50)
+        scene.newCarBtts.position = CGPoint(x: 0.0, y: (-deviceSize.height/2)+50+iphoneXNotch)
         scene.enableAdsBtt = scene.newCarBtts.childNode(withName: "ads") as! SKSpriteNode
         scene.buyBtt = scene.newCarBtts.childNode(withName: "buy") as! SKSpriteNode
         scene.remakeButton(scene.enableAdsBtt)
@@ -319,3 +321,4 @@ class ChangeCarScene: SKScene {
         }
     }
 }
+*/
