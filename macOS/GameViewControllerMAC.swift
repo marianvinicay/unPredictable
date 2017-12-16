@@ -62,7 +62,6 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
     }
         
     var gameScene: GameScene!
-    var changeCarScene: ChangeCarScene!
     private var mouseMonitors = [Any?]()
     
     override func viewDidLoad() {
@@ -70,9 +69,7 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         let size = self.view.frame.size
         gameScene = GameScene.new(withSize: size)
         gameScene.cDelegate = self
-        
-        changeCarScene = ChangeCarScene.new(withSize: size, andStore: gameScene.intel.storeHelper)
-        
+                
         let trackingArea = NSTrackingArea(rect: self.view.bounds, options: [.activeInKeyWindow,.mouseMoved], owner: self, userInfo: nil)
         self.view.addTrackingArea(trackingArea)
         
@@ -90,8 +87,8 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
         
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             gameScene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
