@@ -36,6 +36,7 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
             }
         }
     }
+    @IBOutlet weak var controlsLabel: NSTextField!
     @IBOutlet weak var controlsBtt: NSButton! {
         willSet {
             if MVAMemory.gameControls == .swipe {
@@ -94,29 +95,39 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
     
     @objc func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
         if soundBtt.alphaValue < 1.0 {
-            gameCenterBtt.animator().alphaValue = 1.0
-            soundBtt.animator().alphaValue = 1.0
-            controlsBtt.animator().alphaValue = 1.0
-            
-            gameCenterBtt.isEnabled = true
-            soundBtt.isEnabled = true
-            controlsBtt.isEnabled = true
-            if !gameScene.gameStarted {
-                changeCarBtt.animator().alphaValue = 1.0
-                changeCarBtt.isEnabled = true
-            }
+            NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
+                context.duration = animSpeed
+                
+                gameCenterBtt.animator().alphaValue = 1.0
+                soundBtt.animator().alphaValue = 1.0
+                controlsBtt.animator().alphaValue = 1.0
+                controlsLabel.animator().alphaValue = 1.0
+                
+                gameCenterBtt.isEnabled = true
+                soundBtt.isEnabled = true
+                controlsBtt.isEnabled = true
+                if !gameScene.gameStarted {
+                    changeCarBtt.animator().alphaValue = 1.0
+                    changeCarBtt.isEnabled = true
+                }
+            }, completionHandler: nil)
         } else {
-            gameCenterBtt.animator().alphaValue = 0.0
-            soundBtt.animator().alphaValue = 0.0
-            controlsBtt.animator().alphaValue = 0.0
-            
-            gameCenterBtt.isEnabled = false
-            soundBtt.isEnabled = false
-            controlsBtt.isEnabled = false
-            if !gameScene.gameStarted {
-                changeCarBtt.animator().alphaValue = 0.0
-                changeCarBtt.isEnabled = false
-            }
+            NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) in
+                context.duration = animSpeed
+                
+                gameCenterBtt.animator().alphaValue = 0.0
+                soundBtt.animator().alphaValue = 0.0
+                controlsBtt.animator().alphaValue = 0.0
+                controlsLabel.animator().alphaValue = 0.0
+                
+                gameCenterBtt.isEnabled = false
+                soundBtt.isEnabled = false
+                controlsBtt.isEnabled = false
+                if !gameScene.gameStarted {
+                    changeCarBtt.animator().alphaValue = 0.0
+                    changeCarBtt.isEnabled = false
+                }
+            }, completionHandler: nil)
         }
     }
     

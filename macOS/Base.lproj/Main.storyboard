@@ -183,6 +183,7 @@
                     <connections>
                         <outlet property="changeCarBtt" destination="kVx-z5-Vt6" id="sQs-6Y-XJP"/>
                         <outlet property="controlsBtt" destination="sUK-EY-Vc7" id="3Ft-zF-d5H"/>
+                        <outlet property="controlsLabel" destination="tfz-iN-t7e" id="qO3-LY-CPy"/>
                         <outlet property="gameCenterBtt" destination="wdj-la-tMo" id="r60-3x-82u"/>
                         <outlet property="soundBtt" destination="mTp-A0-sz5" id="iJN-RE-ljK"/>
                     </connections>
