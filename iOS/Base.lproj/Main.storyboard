@@ -7,7 +7,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Segues with Peek and Pop" minToolsVersion="7.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -52,27 +51,24 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfQ-E2-ai1">
-                                <rect key="frame" x="196" y="598" width="154" height="50"/>
+                                <rect key="frame" x="202" y="604" width="148" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="LiY-Kg-XaD"/>
+                                    <constraint firstAttribute="height" constant="44" id="LiY-Kg-XaD"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
                                 <state key="normal" title=" Change Car ">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="muZ-Bu-Ocz" kind="show" identifier="change" id="Mpf-uW-Oe4">
-                                        <segue key="commit" inheritsFrom="parent" id="32B-CH-evR"/>
-                                        <segue key="preview" inheritsFrom="commit" id="9yf-p9-72D"/>
-                                    </segue>
+                                    <segue destination="muZ-Bu-Ocz" kind="show" identifier="change" id="Mpf-uW-Oe4"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x0b-5m-X22">
-                                <rect key="frame" x="25" y="598" width="45" height="50"/>
+                                <rect key="frame" x="25" y="604" width="39" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="8M1-tC-hJV"/>
-                                    <constraint firstAttribute="width" constant="45" id="LYb-dV-0qo"/>
+                                    <constraint firstAttribute="height" constant="44" id="8M1-tC-hJV"/>
+                                    <constraint firstAttribute="width" constant="39" id="LYb-dV-0qo"/>
                                 </constraints>
                                 <state key="normal" image="phoneTouch"/>
                                 <connections>
@@ -306,7 +302,4 @@
         <image name="phoneTouch" width="54" height="56"/>
         <image name="player" width="180" height="330"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Mpf-uW-Oe4"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -38,7 +38,8 @@
         
         class func present(_ alert: NSAlert) {
             DispatchQueue.main.async {
-                alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: nil)
+                alert.runModal()
+                //alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: nil)
             }
         }
     }

@@ -108,43 +108,54 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kVx-z5-Vt6">
-                                <rect key="frame" x="440" y="13" width="146" height="44"/>
+                                <rect key="frame" x="413" y="13" width="173" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Slu-Av-CeF"/>
-                                    <constraint firstAttribute="height" constant="33" id="jm8-aa-Jgd"/>
+                                    <constraint firstAttribute="height" constant="44" id="jm8-aa-Jgd"/>
                                 </constraints>
                                 <buttonCell key="cell" type="push" title="Change Car" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="19" name="Futura-Medium"/>
+                                    <font key="font" size="24" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <segue destination="yfa-y2-kQA" kind="sheet" id="5Pa-8A-s9B"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sUK-EY-Vc7">
-                                <rect key="frame" x="14" y="13" width="112" height="44"/>
+                                <rect key="frame" x="14" y="13" width="115" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Jbc-eb-2k8"/>
-                                    <constraint firstAttribute="height" constant="33" id="fRG-sV-3uE"/>
+                                    <constraint firstAttribute="height" constant="44" id="fRG-sV-3uE"/>
                                 </constraints>
                                 <buttonCell key="cell" type="push" title="Arrows" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="19" name="Futura-Medium"/>
+                                    <font key="font" size="23" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="toggleControls:" target="XfG-lQ-9wD" id="WzX-gF-8UZ"/>
                                 </connections>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tfz-iN-t7e">
+                                <rect key="frame" x="18" y="67" width="107" height="26"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Controls:" id="FXY-R6-9jy">
+                                    <font key="font" size="16" name="Futura-Medium"/>
+                                    <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="sUK-EY-Vc7" secondAttribute="bottom" constant="20" id="AWe-Ir-bir"/>
                             <constraint firstItem="kVx-z5-Vt6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sUK-EY-Vc7" secondAttribute="trailing" constant="12" symbolic="YES" id="Exh-8Q-5lN"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="F1s-52-Jbe"/>
+                            <constraint firstItem="tfz-iN-t7e" firstAttribute="leading" secondItem="sUK-EY-Vc7" secondAttribute="leading" id="FWl-gT-q05"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="Oij-T5-5vL"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="QSf-Qf-P9g"/>
+                            <constraint firstItem="sUK-EY-Vc7" firstAttribute="top" secondItem="tfz-iN-t7e" secondAttribute="bottom" constant="3" id="RVP-Gd-94n"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mTp-A0-sz5" secondAttribute="trailing" constant="8" symbolic="YES" id="bzZ-wY-ULF"/>
                             <constraint firstAttribute="bottom" secondItem="kVx-z5-Vt6" secondAttribute="bottom" constant="20" id="dIU-hE-6wZ"/>
                             <constraint firstAttribute="trailing" secondItem="wdj-la-tMo" secondAttribute="trailing" constant="10" id="lL3-1b-jrS"/>
+                            <constraint firstItem="tfz-iN-t7e" firstAttribute="trailing" secondItem="sUK-EY-Vc7" secondAttribute="trailing" id="tXA-jT-Vgi"/>
                             <constraint firstAttribute="trailing" secondItem="kVx-z5-Vt6" secondAttribute="trailing" constant="20" symbolic="YES" id="wIn-Gz-b6V"/>
                             <constraint firstItem="sUK-EY-Vc7" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="ybi-Fd-d4z"/>
                         </constraints>
@@ -237,30 +248,30 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="AcM-8Z-Qdh">
-                                <rect key="frame" x="232" y="216" width="136" height="33"/>
+                                <rect key="frame" x="240" y="219" width="120" height="30"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Description" id="v0e-TX-ZI5">
-                                    <font key="font" size="25" name="Futura-Medium"/>
+                                    <font key="font" size="22" name="Futura-Medium"/>
                                     <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hmY-q1-fcP">
-                                <rect key="frame" x="256" y="13" width="89" height="55"/>
+                                <rect key="frame" x="257" y="13" width="87" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="WMA-wK-f2p"/>
                                 </constraints>
                                 <buttonCell key="cell" type="push" title="BUY" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t5T-ih-4Lm">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="25" name="Futura-Medium"/>
+                                    <font key="font" size="24" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="selectCar:" target="yfa-y2-kQA" id="Lvg-84-7hh"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Git-9b-hMT">
-                                <rect key="frame" x="482" y="737" width="104" height="50"/>
+                                <rect key="frame" x="482" y="735" width="104" height="55"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="39" id="Dvv-19-pmD"/>
+                                    <constraint firstAttribute="height" constant="44" id="Dvv-19-pmD"/>
                                 </constraints>
                                 <buttonCell key="cell" type="push" title="Restore" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GY7-Mn-mGM">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
