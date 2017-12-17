@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
+class ChangeCarViewController: UIViewController {
     static let changePCar = Notification.Name("chPCar")
     
     @IBOutlet weak var backBtt: UIBarButtonItem!
@@ -152,8 +152,11 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
     private func purchaseCar() {
         waitView = MVAWaitView.new(withSize: self.view.frame.size) //.new(withSize: self.size, inScene: self)
         self.view.addSubview(waitView)
+        backBtt.isEnabled = false
         
         let completion = { (purchased: Bool, _: String, err: Error?) in
+            self.backBtt.isEnabled = true
+            
             if purchased && err == nil {
                 MVAMemory.adsEnabled = false
                 MVAMemory.ownedCars.append(self.selectedCar)
@@ -167,6 +170,7 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         
         let error = { () in
+            self.backBtt.isEnabled = true
             self.waitView.remove()
             self.waitView = nil
             let alert = MVAAlert.new(withTitle: "Sorry", andMessage: "Server is unreachable")
@@ -199,8 +203,11 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func restorePurchases(_ sender: UIButton) {
         waitView = MVAWaitView.new(withSize: self.view.frame.size)
         self.view.addSubview(waitView)
+        backBtt.isEnabled = false
         
         store.restorePurchases() { (purchased: Bool, car: String, error: Error?) in
+            self.backBtt.isEnabled = true
+            
             if purchased && error == nil {
                 MVAMemory.adsEnabled = false
                 switch car {
@@ -214,10 +221,8 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
                 let alert = MVAAlert.new(withTitle: "Sorry", andMessage: alertMsg)
                 MVAAlert.present(alert)
             }
-            if self.waitView != nil {
-                self.waitView.remove()
-                self.waitView = nil
-            }
+            self.waitView.remove()
+            self.waitView = nil
         }
     }
     
@@ -242,7 +247,6 @@ class ChangeCarViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func goBack(_ sender: UIGestureRecognizer) {
-        print("ccc")
         if sender.state == .began {
             self.performSegue(withIdentifier: "goBack", sender: nil)
         }

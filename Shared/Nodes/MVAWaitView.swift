@@ -13,7 +13,7 @@ class MVAWaitView: UIView {
     
     class func new(withSize size: CGSize) -> MVAWaitView {
         let newView = MVAWaitView(frame: CGRect(origin: .zero, size: size))
-        newView.backgroundColor = UIColor(white: 0.0, alpha: 0.6)
+        newView.backgroundColor = UIColor(white: 0.0, alpha: 0.8)
         
         newView.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         newView.activityInd!.center = CGPoint(x: newView.frame.midX, y: newView.frame.midY)
@@ -38,7 +38,8 @@ class MVAWaitView: UIView {
         
         class func new(withSize size: CGSize) -> MVAWaitView {
             let newView = MVAWaitView(frame: CGRect(origin: .zero, size: size))
-            //newView. = NSColor(white: 0.0, alpha: 0.6)
+            newView.wantsLayer = true
+            newView.layer?.backgroundColor = CGColor(gray: 0.0, alpha: 0.8)
             
             newView.activityInd = NSProgressIndicator()
             newView.activityInd!.style = .spinning

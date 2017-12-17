@@ -251,9 +251,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        let dialog = MVAPopup.create(withTitle: "What do you prefer?", andMessage: nil)
-        
         #if os(iOS)
+            let dialog = MVAPopup.create(withTitle: "What do you prefer?", andMessage: nil)
             let mManager = (UIApplication.shared.delegate as! AppDelegate).motionManager
             
             MVAPopup.addAction(toPopup: dialog, withTitle: "Swipe") {
@@ -272,6 +271,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         #elseif os(macOS)
+            let dialog = MVAPopup.create(withTitle: "What controls do you prefer?", andMessage: nil)
             MVAPopup.addAction(toPopup: dialog, withTitle: "Arrows")
             MVAPopup.addAction(toPopup: dialog, withTitle: "Mouse", shouldHighlight: true)
         #endif

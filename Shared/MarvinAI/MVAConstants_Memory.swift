@@ -72,15 +72,6 @@ enum MVAMemory {
         }
     }
     
-    static var adCar: String? {
-        set {
-            UserDefaults.standard.set(newValue, forKey: "adCar")
-        }
-        get {
-            return UserDefaults.standard.value(forKey: "adCar") as? String
-        }
-    }
-    
     static var maxPlayerDistance: Double {
         set {
             UserDefaults.standard.set(newValue, forKey: "maxPDist")
@@ -118,6 +109,15 @@ enum MVAMemory {
         }
     }
     
+    static var adCar: String? {
+    set {
+    UserDefaults.standard.set(newValue, forKey: "adCar")
+    }
+    get {
+    return UserDefaults.standard.value(forKey: "adCar") as? String
+    }
+    }
+    
     static var isIphoneX: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "isIpX")
@@ -128,11 +128,7 @@ enum MVAMemory {
     }
     #elseif os(macOS)
     static let isIphoneX = false
-    
-    static var adsEnabled: Bool {
-        set {}
-        get { return false }
-    }
+    static let adsEnabled = false
     #endif
     
     static var gameControls: MVAGameControls {

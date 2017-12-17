@@ -84,12 +84,7 @@ extension GameScene {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        if gameStarted && !intel.stop && gameControls == .precise {
-            moveWithMouse(NSEvent.mouseLocation.x)
-            /*if !playerBraking {
-                handleBrake(started: true)
-            }*/
-        }
+        self.lastMousePos = NSEvent.mouseLocation.x
     }
     
     override func keyDown(with event: NSEvent) {

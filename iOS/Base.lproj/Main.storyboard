@@ -52,7 +52,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DfQ-E2-ai1">
-                                <rect key="frame" x="205" y="598" width="154" height="50"/>
+                                <rect key="frame" x="196" y="598" width="154" height="50"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="LiY-Kg-XaD"/>
@@ -69,7 +69,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x0b-5m-X22">
-                                <rect key="frame" x="16" y="598" width="45" height="50"/>
+                                <rect key="frame" x="25" y="598" width="45" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="8M1-tC-hJV"/>
                                     <constraint firstAttribute="width" constant="45" id="LYb-dV-0qo"/>
@@ -85,10 +85,10 @@
                         <constraints>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DfQ-E2-ai1" secondAttribute="bottom" constant="19" id="042-di-RdC"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="C63-kb-ATQ"/>
-                            <constraint firstItem="x0b-5m-X22" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="DRI-LA-Dxv"/>
+                            <constraint firstItem="x0b-5m-X22" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="9" id="DRI-LA-Dxv"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="x0b-5m-X22" secondAttribute="bottom" constant="19" id="FTB-Fw-UYA"/>
                             <constraint firstItem="DfQ-E2-ai1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="x0b-5m-X22" secondAttribute="trailing" constant="8" symbolic="YES" id="Jpt-KQ-PSr"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" id="UDr-4B-7hC"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" constant="9" id="UDr-4B-7hC"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="XQD-Ul-NJ4"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="lUB-dQ-37i"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="nL6-jN-Zyr"/>
@@ -113,7 +113,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="zhE-Zg-zoK">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.15686274509803921" green="0.16862745098039217" blue="0.20784313725490194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -142,7 +142,7 @@
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="player" translatesAutoresizingMaskIntoConstraints="NO" id="Z4U-PC-B4j">
                                 <rect key="frame" x="97" y="86.5" width="180" height="330"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Norm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VAP-Fl-dug">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Norm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VAP-Fl-dug">
                                 <rect key="frame" x="154.5" y="38.5" width="66" height="32.5"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -210,7 +210,8 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.15686274510000001" green="0.16862745100000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Lcw-PI-c4G" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z4U-PC-B4j" secondAttribute="trailing" constant="4" id="0f7-mo-PnK"/>
                             <constraint firstItem="hj2-QW-GxD" firstAttribute="centerX" secondItem="8Oo-9J-Xy4" secondAttribute="centerX" id="2WD-Xe-qGR"/>
@@ -233,16 +234,21 @@
                             <constraint firstItem="hj2-QW-GxD" firstAttribute="top" secondItem="Z4U-PC-B4j" secondAttribute="bottom" constant="16" id="oeW-Jd-giB"/>
                             <constraint firstItem="Z4U-PC-B4j" firstAttribute="top" secondItem="VAP-Fl-dug" secondAttribute="bottom" constant="16" id="wck-YP-a26"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="i2I-02-7C2" appends="YES" id="v8E-c3-CwL"/>
+                            <outletCollection property="gestureRecognizers" destination="vth-pL-uhN" appends="YES" id="gZr-Sn-KsV"/>
+                            <outletCollection property="gestureRecognizers" destination="dx2-rh-36X" appends="YES" id="750-5P-mD7"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Choose Car" largeTitleDisplayMode="never" id="qOp-TQ-YWM">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="arrL" id="JUR-bh-TdA">
-                            <inset key="imageInsets" minX="-30" minY="0.0" maxX="0.0" maxY="-6"/>
+                        <barButtonItem key="leftBarButtonItem" image="arrL" id="JUR-bh-TdA">
+                            <inset key="imageInsets" minX="-30" minY="-3" maxX="0.0" maxY="-9"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="5wt-yH-z6w" kind="unwind" identifier="goBack" unwindAction="unwindToTMainMenuWithSegue:" id="03G-7t-pHV"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="LYB-Ut-cnE">
+                        <barButtonItem key="rightBarButtonItem" id="LYB-Ut-cnE">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="L7l-ag-5O8">
                                 <rect key="frame" x="279" y="3" width="80" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -272,20 +278,20 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YSs-xe-j90" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="5wt-yH-z6w" userLabel="Exit" sceneMemberID="exit"/>
-                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="rci-dI-IWd">
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="i2I-02-7C2">
                     <rectEdge key="edges" left="YES"/>
                     <connections>
-                        <action selector="goBack:" destination="P5Y-F3-w0y" id="JQG-NA-WSW"/>
+                        <action selector="goBack:" destination="P5Y-F3-w0y" id="3qx-3T-NKg"/>
                     </connections>
                 </screenEdgePanGestureRecognizer>
-                <swipeGestureRecognizer direction="left" id="yVt-aW-RVz">
+                <swipeGestureRecognizer direction="right" id="vth-pL-uhN">
                     <connections>
-                        <action selector="swipeGesture:" destination="P5Y-F3-w0y" id="CzE-wd-UAK"/>
+                        <action selector="swipeGesture:" destination="P5Y-F3-w0y" id="nrd-hG-jm2"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="right" id="LfX-Rq-s79">
+                <swipeGestureRecognizer direction="left" id="dx2-rh-36X">
                     <connections>
-                        <action selector="swipeGesture:" destination="P5Y-F3-w0y" id="37U-Bx-ZHN"/>
+                        <action selector="swipeGesture:" destination="P5Y-F3-w0y" id="uCZ-TS-fSE"/>
                     </connections>
                 </swipeGestureRecognizer>
             </objects>

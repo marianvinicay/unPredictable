@@ -142,9 +142,6 @@
 		2FAFA6791F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67A1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
 		2FAFA67B1F35A48E006645CB /* Futura.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA6781F35A48E006645CB /* Futura.ttc */; };
-		2FAFA6901F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
-		2FAFA6911F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
-		2FAFA6921F3897B1006645CB /* ChangeCarScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */; };
 		2FB034021F3D7C81009B6A9A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB034011F3D7C81009B6A9A /* AdSupport.framework */; };
 		2FB034041F3D7C87009B6A9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FB034031F3D7C87009B6A9A /* AVFoundation.framework */; };
 		2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */; };
@@ -160,11 +157,8 @@
 		2FDFBD221F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
 		2FDFBD231F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
 		2FDFBD241F39881E00E1E6A4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */; };
-		2FDFBD271F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */; };
-		2FDFBD281F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */; };
-		2FDFBD291F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */; };
-		2FFA3BA81F5181E40020F78F /* ChangeCarScene_Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */; };
-		2FFE47941FE5BC1300DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47931FE5BC1300DDFA3E /* ChangeCarViewControllerMAC.swift */; };
+		2FFE47961FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */; };
+		2FFE47981FE6949000DDFA3E /* GameViewTouchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */; };
 		63DA5D6425DDBBBEFAE4B0B7 /* Pods_unPredictable___iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */; };
 		F0C30295261B54CFF7C23FBF /* Pods_unPredictable___macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A30199FE15D6B6D58FBD59EC /* Pods_unPredictable___macOS.framework */; };
 /* End PBXBuildFile section */
@@ -265,7 +259,6 @@
 		2FAFA6741F34C804006645CB /* GameSceneWatch.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameSceneWatch.sks; sourceTree = "<group>"; };
 		2FAFA6761F35A2AA006645CB /* StartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
 		2FAFA6781F35A48E006645CB /* Futura.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Futura.ttc; sourceTree = "<group>"; };
-		2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ChangeCarScene.sks; sourceTree = "<group>"; };
 		2FB034011F3D7C81009B6A9A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
 		2FB034031F3D7C87009B6A9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Keyboard.swift; sourceTree = "<group>"; };
@@ -281,9 +274,8 @@
 		2FD6CDD71F34704C00FD9B96 /* AWatch Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "AWatch Extension.entitlements"; sourceTree = "<group>"; };
 		2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVAWindow.swift; sourceTree = "<group>"; };
 		2FDFBD1F1F39881E00E1E6A4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene.swift; sourceTree = "<group>"; };
-		2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarScene_Keyboard.swift; sourceTree = "<group>"; };
-		2FFE47931FE5BC1300DDFA3E /* ChangeCarViewControllerMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeCarViewControllerMAC.swift; sourceTree = "<group>"; };
+		2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCarViewControllerMAC.swift; sourceTree = "<group>"; };
+		2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewTouchbar.swift; sourceTree = "<group>"; };
 		44169A500DA5A8F4747F34C9 /* Pods-unPredictable - macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - macOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - macOS/Pods-unPredictable - macOS.release.xcconfig"; sourceTree = "<group>"; };
 		75F0516B98A4A9EB8F255028 /* Pods-unPredictable - iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-unPredictable - iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		78A63FAECBBDB3B0C1E6D392 /* Pods_unPredictable___iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_unPredictable___iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -386,7 +378,6 @@
 				2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */,
 				2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */,
 				2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */,
-				2FDFBD261F39BD6B00E1E6A4 /* ChangeCarScene.swift */,
 				2F9808DB1F45DC5100412075 /* Nodes */,
 				2F9808DC1F45DCAB00412075 /* Resources */,
 				2F861B4B1F1BAE7C00162EDA /* Assets.xcassets */,
@@ -437,11 +428,11 @@
 			children = (
 				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
 				2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */,
-				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
 				2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */,
-				2FFE47931FE5BC1300DDFA3E /* ChangeCarViewControllerMAC.swift */,
-				2FFA3BA71F5181E40020F78F /* ChangeCarScene_Keyboard.swift */,
+				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
+				2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */,
 				2F23E1501D6EF21D00119E4F /* Main.storyboard */,
+				2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */,
 				2F23E1531D6EF21D00119E4F /* Info.plist */,
 			);
 			path = macOS;
@@ -479,7 +470,6 @@
 				2F861B951F1CD49F00162EDA /* Sounds */,
 				2FAFA6781F35A48E006645CB /* Futura.ttc */,
 				2F65AA2A1EF3D48600150F32 /* GameScene.sks */,
-				2FAFA68F1F3897B1006645CB /* ChangeCarScene.sks */,
 				2F861B401F1BAB5F00162EDA /* MVAParticle.sks */,
 			);
 			path = Resources;
@@ -738,7 +728,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FAFA6901F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F5584FF1F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
 				2F5585031F48105D006D229F /* pcs_beep.wav in Resources */,
 				2F861B641F1CB93000162EDA /* crash.caf in Resources */,
@@ -763,7 +752,6 @@
 				2F861B661F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1441D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B7F1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
-				2FAFA6911F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2D1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8E1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2F5585001F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
@@ -783,7 +771,6 @@
 				2F861B671F1CB93000162EDA /* crash.caf in Resources */,
 				2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */,
 				2F861B801F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */,
-				2FAFA6921F3897B1006645CB /* ChangeCarScene.sks in Resources */,
 				2F65AA2E1EF3D49000150F32 /* GameScene.sks in Resources */,
 				2F861B8F1F1CD22600162EDA /* SUV_steady_low_rpm.wav in Resources */,
 				2F5585011F480C42006D229F /* Grand_Tourer_horn.wav in Resources */,
@@ -975,7 +962,6 @@
 				2F23E1151D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F7119661F2873F000FE58A8 /* MVATutorialNode.swift in Sources */,
 				2F9E41A41F03B389004FB9F5 /* GameScene_HUD.swift in Sources */,
-				2FDFBD271F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1011,7 +997,6 @@
 				2F9E41A61F03B389004FB9F5 /* GameScene_HUD.swift in Sources */,
 				2F7119711F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
 				2F9808EA1F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
-				2FDFBD281F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1028,6 +1013,7 @@
 				2FAE02251F054B84004D4EFE /* MVAMarvinAI.swift in Sources */,
 				2F31BA381F49C7C500CF4C13 /* MVAAds.swift in Sources */,
 				2F23E15E1D6EF21D00119E4F /* GameScene.swift in Sources */,
+				2FFE47961FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */,
 				2F9808E71F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */,
 				2F31BA441F49CEB400CF4C13 /* MVAGameCenterHelper.swift in Sources */,
@@ -1041,16 +1027,14 @@
 				2F861B5D1F1CAD7F00162EDA /* MVASound.swift in Sources */,
 				2FDB9A6C1F8929D7007F8EB2 /* MVAWindow.swift in Sources */,
 				2FAE02311F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
-				2FDFBD291F39BD6B00E1E6A4 /* ChangeCarScene.swift in Sources */,
 				2FA27A4B1FDC05EA00DA5819 /* MVAPopup.swift in Sources */,
 				2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F861B991F1CD6F900162EDA /* GameScene_Start.swift in Sources */,
-				2FFA3BA81F5181E40020F78F /* ChangeCarScene_Keyboard.swift in Sources */,
 				2FAE021D1F054B84004D4EFE /* MVAConstants_Memory.swift in Sources */,
 				2FAE02211F054B84004D4EFE /* MVALevel.swift in Sources */,
-				2FFE47941FE5BC1300DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */,
 				2F9808EB1F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
 				2F7119721F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
+				2FFE47981FE6949000DDFA3E /* GameViewTouchbar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,7 @@ import Cocoa
 import SpriteKit
 import GameKit
 
-class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegate {
+class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate {
     
     func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
         alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: completion)
@@ -20,24 +20,9 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         self.setControls(to: controls)
     }
     
-    @available(OSX 10.12.2, *)
-    override func makeTouchBar() -> NSTouchBar? {
-        let touchBar = NSTouchBar()
-        touchBar.delegate = self
-        // 2
-        touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier("idk")
-        // 3
-        touchBar.defaultItemIdentifiers = [NSTouchBarItem.Identifier("idk")]
-        // 4
-        touchBar.customizationAllowedItemIdentifiers = [NSTouchBarItem.Identifier("idk")]
-        return touchBar
-    }
-    
-    @available(OSX 10.12.2, *)
-    func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
-        let customViewItem = NSCustomTouchBarItem(identifier: identifier)
-        customViewItem.view = NSTextField(labelWithString: "\u{1F30E} TEST")
-        return customViewItem
+    func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
+        changeCarVC?.view.window?.setContentSize(frameSize)
+        return frameSize
     }
     
     @IBOutlet weak var gameCenterBtt: NSButton!
@@ -62,6 +47,7 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
     }
         
     var gameScene: GameScene!
+    private var changeCarVC: ChangeCarViewControllerMAC?
     private var mouseMonitors = [Any?]()
     
     override func viewDidLoad() {
@@ -69,7 +55,7 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         let size = self.view.frame.size
         gameScene = GameScene.new(withSize: size)
         gameScene.cDelegate = self
-                
+        
         let trackingArea = NSTrackingArea(rect: self.view.bounds, options: [.activeInKeyWindow,.mouseMoved], owner: self, userInfo: nil)
         self.view.addTrackingArea(trackingArea)
         
@@ -87,8 +73,8 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
-        //NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarScene.backFromScene, object: nil)
-        //NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarScene.changePCar, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarViewControllerMAC.backFromScene, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewControllerMAC.changePCar, object: nil)
         
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             gameScene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
@@ -99,6 +85,11 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
                 }
             }
         }
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        self.view.window?.delegate = self
     }
     
     @objc func toggleButtons(withAnimSpeed animSpeed: Double = 0.4) {
@@ -205,17 +196,8 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
         }
     }
     
-    @IBAction func showChangeCar(_ sender: NSButton) {
-        toggleButtons()
-        changeCarScene.refresh()
-        let transition = SKTransition.reveal(with: .up, duration: 0.8)
-        (self.view as! SKView).presentScene(changeCarScene, transition: transition)
-    }
-    
     @objc func backFromChangeCarScene() {
-        toggleButtons(withAnimSpeed: 1.0)
-        let transition = SKTransition.moveIn(with: .up, duration: 0.8)
-        (self.view as! SKView).presentScene(gameScene, transition: transition)
+        changeCarVC = nil
     }
     
     @objc func changePlayerCar() {
@@ -227,6 +209,14 @@ class GameViewControllerMAC: NSViewController, NSTouchBarDelegate, GameVCDelegat
             gameScene.checkLives()
         }
         backFromChangeCarScene()
+    }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let destVC = (segue.destinationController as? ChangeCarViewControllerMAC) {
+            changeCarVC = destVC
+            destVC.store = self.gameScene.intel.storeHelper
+            destVC.view.setFrameSize(self.view.frame.size)
+        }
     }
 }
 

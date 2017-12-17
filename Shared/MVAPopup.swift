@@ -19,7 +19,7 @@ class MVAPopup {
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.backgroundColor = UIColor(red:0.16, green:0.17, blue:0.21, alpha:1.00)
+        pcv.backgroundColor = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)//UIColor(red:0.16, green:0.17, blue:0.21, alpha:1.00)
         pcv.cornerRadius    = 13
         pcv.shadowEnabled   = false
         
@@ -27,7 +27,7 @@ class MVAPopup {
         let cb = PopupDialogButton.appearance()//CancelButton.appearance()
         cb.titleFont = UIFont.systemFont(ofSize: 24.0)
         cb.titleColor     = .white
-        cb.buttonColor    = UIColor(red:0.16, green:0.17, blue:0.21, alpha:1.00)
+        cb.buttonColor    = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)
         cb.buttonHeight   = 300
         cb.separatorColor = .lightText
     }

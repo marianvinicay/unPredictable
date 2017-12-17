@@ -29,7 +29,7 @@ enum MVATutorialText {
     static let tiltLabel = "You can also change"
     static let tilt2ndLabel = "lanes by moving the cursor"
     static let tilt3rdLabel = "Move me! ↖️"
-    static let brakeLabel = "Hold spacebar"// to brake"
+    static let brakeLabel = "Hold the spacebar"// to brake"
     static let brake2ndLabel = "to brake"//"and click ◀️|▶️"
     static let brake3rdLabel = ""//"to change direction"
     #endif
