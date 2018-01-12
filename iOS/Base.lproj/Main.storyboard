@@ -270,6 +270,8 @@
                         <outlet property="orLabel" destination="Cvx-hd-ebd" id="EQg-3a-1ez"/>
                         <outlet property="restoreBtt" destination="L7l-ag-5O8" id="K1a-CM-oow"/>
                         <outlet property="rightArr" destination="Lcw-PI-c4G" id="4fe-0G-OSM"/>
+                        <outletCollection property="swipeGestures" destination="dx2-rh-36X" collectionClass="NSMutableArray" id="HMf-7W-Puy"/>
+                        <outletCollection property="swipeGestures" destination="vth-pL-uhN" collectionClass="NSMutableArray" id="g2j-4o-E3D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YSs-xe-j90" userLabel="First Responder" sceneMemberID="firstResponder"/>

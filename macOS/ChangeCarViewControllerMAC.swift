@@ -116,7 +116,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
         })
     }
     
-    func changeCar(_ ind: Int) {
+    private func changeCar(_ ind: Int) {
         if canAnimateChange {
             let currentCarIndex = availableCars.index(of: selectedCar)!
             let newIndex = currentCarIndex+ind

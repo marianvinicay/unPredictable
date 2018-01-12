@@ -31,6 +31,7 @@ class ChangeCarViewController: UIViewController {
 
     @IBOutlet weak var leftArr: UIButton!
     @IBOutlet weak var rightArr: UIButton!
+    @IBOutlet var swipeGestures: [UISwipeGestureRecognizer]!
     @IBOutlet weak var carImg: UIImageView!
     @IBOutlet weak var carName: UILabel!
     @IBOutlet weak var descLabel: UILabel!
@@ -131,10 +132,13 @@ class ChangeCarViewController: UIViewController {
             newCarView.removeFromSuperview()
             self.leftArr.isUserInteractionEnabled = true
             self.rightArr.isUserInteractionEnabled = true
+            for gest in self.swipeGestures {
+                gest.isEnabled = true
+            }
         }
     }
     
-    func changeCar(_ ind: Int) {
+    private func changeCar(_ ind: Int) {
         let currentCarIndex = availableCars.index(of: selectedCar)!
         let newIndex = currentCarIndex+ind
         if newIndex >= 0 && newIndex <= (availableCars.count-1) {
@@ -143,6 +147,9 @@ class ChangeCarViewController: UIViewController {
             carName.text = store.mockUpNames[newCarName]
             self.leftArr.isUserInteractionEnabled = false
             self.rightArr.isUserInteractionEnabled = false
+            for gest in self.swipeGestures {
+                gest.isEnabled = false
+            }
             let direction = ind > 0 ? MVAPosition.left:MVAPosition.right
             animateChange(inDirection: direction)
         }
