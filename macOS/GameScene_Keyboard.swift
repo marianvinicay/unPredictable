@@ -32,8 +32,8 @@ extension GameScene {
             }
         } else if event.keyCode == KeyCodes.keySpacebar && playerBraking {
             handleBrake(started: false)
-            if let currentPLane = intel.player.currentLane {
-                let currentLanePos = CGFloat(lanePositions[currentPLane]!)
+            if self.gameControls == .swipe, let currentLane = intel.player.currentLane {
+                let currentLanePos = CGFloat(lanePositions[currentLane]!)
                 if intel.player.position.x != currentLanePos && !intel.stop {
                     let actMove = SKAction.moveTo(x: currentLanePos, duration: 0.2)
                     intel.player.run(actMove)
@@ -44,36 +44,15 @@ extension GameScene {
     
     override func mouseUp(with event: NSEvent) {
         touchedPosition(event.location(in: self.camera!))
-        
-        if gameStarted && gameControls == .precise {
-            handleBrake(started: false)
-        }
     }
     
     func moveWithMouse(_ mPosition: CGFloat) {
         if let mousePos = self.lastMousePos, !intel.stop {
             let deltaX = mPosition - mousePos
             self.handlePreciseMove(withDeltaX: deltaX)
-            /*let newPlayerPos = self.intel.player.position.x + deltaX
-            
-            if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
-                newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
-                self.intel.player.position.x = newPlayerPos
-                    
-                let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
-                intel.player.currentLane = closestLane.element.key
-            }*/
         }
         self.lastMousePos = mPosition
     }
-    
-    /*override func mouseDown(with event: NSEvent) {
-        if gameStarted && !intel.stop && gameControls == .precise {
-            if !playerBraking {
-                handleBrake(started: true)
-            }
-        }
-    }*/
     
     override func rightMouseDragged(with event: NSEvent) {
         self.lastMousePos = NSEvent.mouseLocation.x

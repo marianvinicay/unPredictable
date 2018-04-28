@@ -5,7 +5,7 @@
 //  Created by Majo on 17/12/2017.
 //  Copyright © 2017 MarVin. All rights reserved.
 //
-/*
+
 import Cocoa
 
 @available(OSX 10.12.2, *)
@@ -25,7 +25,7 @@ extension GameViewControllerMAC: NSTouchBarDelegate {
     
     func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         let viewItem = NSCustomTouchBarItem(identifier: identifier)
-        viewItem.view = NSTextField(labelWithString: "🧐  Drive Carefully!  🚘💥")
+        viewItem.view = NSTextField(labelWithString: "💥🚔  Drive Carefully!  🚘💥")
         return viewItem
     }
-}*/
+}

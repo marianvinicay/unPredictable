@@ -134,16 +134,10 @@ enum MVAMemory {
     static var gameControls: MVAGameControls {
         set {
             let mKey = "gCtrl"
-            switch newValue {
-            case .swipe: UserDefaults.standard.set(false, forKey: mKey)
-            case .precise: UserDefaults.standard.set(true, forKey: mKey)
-            }
+            UserDefaults.standard.set(newValue.rawValue, forKey: mKey)
         }
         get {
-            switch (UserDefaults.standard.value(forKey: "gCtrl") as? Bool ?? false) {
-            case false: return .swipe
-            case true: return .precise
-            }
+            return MVAGameControls(rawValue: (UserDefaults.standard.value(forKey: "gCtrl") as? String) ?? "sw")!
         }
     }
     

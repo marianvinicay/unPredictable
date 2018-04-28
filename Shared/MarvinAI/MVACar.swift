@@ -43,6 +43,24 @@ class MVACar: SKSpriteNode {
     var newSpeed: Int!
     var speedChange: MVAPosition?
     
+    func createPhysicsBody(withCategoryBitmask catBit: UInt32, collisionBitmask colBit: UInt32, contactTestBitmask conBit: UInt32) -> SKPhysicsBody {
+        let physicsBody = SKPhysicsBody(texture: self.skin.normal, size: MVAConstants.baseCarSize) //???
+        
+        physicsBody.mass = 0.05
+        physicsBody.friction = 0.0
+        physicsBody.categoryBitMask = catBit
+        physicsBody.collisionBitMask = colBit
+        physicsBody.contactTestBitMask = conBit
+        physicsBody.isDynamic = true
+        physicsBody.linearDamping = 0.0
+        //physicsBody.angularDamping = 0.0
+        physicsBody.affectedByGravity = false
+        physicsBody.allowsRotation = false
+        physicsBody.restitution = 0.0
+        
+        return physicsBody
+    }
+
     func responseFromSensors(inPositions positions: [MVAPosition], withPlayer wPlayer: Bool = false) -> Set<MVACar> {
         var foundCars = Set<MVACar>()
         for position in positions {
@@ -91,14 +109,14 @@ class MVACar: SKSpriteNode {
     @objc func smoothSpeedChange() {
         let brakingForce = CGFloat((self.pointsPerSecond/5)*11)
         if speedChange == .front {
-            self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*brakingForce))
+            self.physicsBody?.applyForce(CGVector(dx: 0.0, dy: self.physicsBody!.mass*brakingForce))
             if pointsPerSecond < newSpeed {
                 self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)
             } else {
                 speedChange = nil
                 newSpeed = nil
             }
-        } else if speedChange == .back {
+        } else if speedChange == .back && self.physicsBody != nil {
             self.physicsBody!.applyForce(CGVector(dx: 0.0, dy: -self.physicsBody!.mass*brakingForce))
             if pointsPerSecond > newSpeed {
                 self.perform(#selector(smoothSpeedChange), with: nil, afterDelay: 0.01)

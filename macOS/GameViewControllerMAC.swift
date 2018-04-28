@@ -150,17 +150,18 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
             }
             return $0
         }))
-       /* mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
+        
+        mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
             if !self.gameScene.intel.stop {
                 NSCursor.hide()
             }
             return $0
         }))
+        
         mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseExited, handler: {
             NSCursor.unhide()
             return $0
         }))
-        */
     }
     
     private func setControls(to controls: MVAGameControls) {

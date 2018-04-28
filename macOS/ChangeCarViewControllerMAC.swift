@@ -90,7 +90,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     private func animateChange(inDirection dir: MVAPosition) {
         let newCarView = NSImageView(frame: carImg.frame)
         newCarView.image = NSImage(named: NSImage.Name(rawValue: selectedCar))
-        newCarView.frame.origin.x = dir == .right ? 0.0 : self.view.frame.size.width//-newCarView.frame.width/2)
+        newCarView.frame.origin.x = dir == .right ? 0.0 : self.view.frame.size.width
         newCarView.alphaValue = 0.0
         self.view.addSubview(newCarView)
         
@@ -133,7 +133,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     }
     
     private func purchaseCar() {
-        waitView = MVAWaitView.new(withSize: self.view.frame.size) //.new(withSize: self.size, inScene: self)
+        waitView = MVAWaitView.new(withSize: self.view.frame.size)
         self.view.addSubview(waitView)
         
         let completion = { (purchased: Bool, _: String, err: Error?) in

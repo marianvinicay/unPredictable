@@ -25,18 +25,19 @@ class MVACarBot: MVACar {
         newCar.skin = textures
         newCar.zPosition = 4.0
         
-        newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: CGSize(width: carSize.width-6, height: carSize.height-6))
-        newCar.physicsBody?.mass = 5
-        newCar.physicsBody?.density = 5000.0
+        newCar.physicsBody = newCar.createPhysicsBody(withCategoryBitmask: MVAPhysicsCategory.car.rawValue, collisionBitmask: MVAPhysicsCategory.car.rawValue, contactTestBitmask: MVAPhysicsCategory.car.rawValue)
+        
+        /*newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: CGSize(width: carSize.width-6, height: carSize.height-6))
+        newCar.physicsBody?.mass = 0.05
         newCar.physicsBody?.friction = 0.0
         newCar.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
         newCar.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
         newCar.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
         newCar.physicsBody?.isDynamic = true
         newCar.physicsBody?.linearDamping = 0.0
-        newCar.physicsBody?.angularDamping = 0.2
+        newCar.physicsBody?.angularDamping = 0.1
         newCar.physicsBody?.affectedByGravity = false
-        newCar.physicsBody?.allowsRotation = true
+        newCar.physicsBody?.allowsRotation = true*/
         
         return newCar
     }

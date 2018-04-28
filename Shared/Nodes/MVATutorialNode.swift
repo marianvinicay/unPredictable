@@ -36,9 +36,8 @@ enum MVATutorialText {
 }
 
 protocol MVATutorialDelegate {
-    func activateSwipe()
-    func activateTilt()
-    func prepareTilt()
+    func tutorialActivateSwipe()
+    func tutorialActivateTilt()
 }
 
 class MVATutorialNode: SKNode {
@@ -113,7 +112,8 @@ class MVATutorialNode: SKNode {
             addChild(wellDLabel)
             
             let presentTiltInstructs = SKAction.run {
-                self.delegate?.activateTilt()
+                self.delegate?.tutorialActivateTilt()
+                
                 playerCar.run(SKAction.moveTo(x: 0.0, duration: 0.2))
                 /*
                 #if os(macOS)
@@ -138,8 +138,6 @@ class MVATutorialNode: SKNode {
                 
                 tNode.alpha = 0.0
                 self.addChild(tNode)
-                
-                self.delegate?.prepareTilt()
                 
                 tNode.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
                                              SKAction.wait(forDuration: 1.5),

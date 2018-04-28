@@ -12,21 +12,31 @@ import SpriteKit
 
 extension GameScene: MVATutorialDelegate {
     
-    func activateSwipe() {
-        self.gameControls = .swipe
-        self.setupSwipes()
-    }
-    
-    func activateTilt() {
-        self.gameControls = .precise
-        self.setupTilt()
-    }
-    
-    func prepareTilt() {
+    private func startControls() {
         #if os(iOS)
-            if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
-                self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
-            }
+        switch self.gameControls {
+        case .precise: self.startTilt()
+        case .sphero: self.startSphero()
+        default: break
+        }
+        
+        #elseif os(macOS)
+        pauseBtt.isHidden = gameControls == .precise
+        if gameControls == .precise {
+            NSCursor.hide()
+        }
+        #endif
+    }
+    
+    private func stopControls() {
+        #if os(iOS)
+        self.stopTilt()
+        self.stopSphero()
+        self.lastAngle = nil
+        #elseif os(macOS)
+        if gameControls == .precise {
+            NSCursor.unhide()
+        }
         #endif
     }
     
@@ -34,11 +44,12 @@ extension GameScene: MVATutorialDelegate {
         if !MVAMemory.tutorialDisplayed {
             self.gameControls = .swipe
         }
+        
         self.physicsWorld.speed = 1.0
         let targetY = (self.size.height/2)-MVAConstants.baseCarSize.height
         let laneCount = UInt32(lanePositions.count)
-        let randLane = self.gameControls == .precise ? 1:Int(arc4random_uniform(laneCount))
-        let randLanePos = self.gameControls == .precise ? 0.0:CGFloat(lanePositions[randLane]!)
+        let randLane = self.gameControls == .swipe ? Int(arc4random_uniform(laneCount)):1
+        let randLanePos = self.gameControls == .swipe ? CGFloat(lanePositions[randLane]!):0.0
         let whereToGo = CGPoint(x: randLanePos, y: targetY)
         let angle = atan2(intel.player.position.y - whereToGo.y, intel.player.position.x - whereToGo.x)+CGFloat(Double.pi*0.5)
         
@@ -62,7 +73,7 @@ extension GameScene: MVATutorialDelegate {
             } else {
                 self.tutorialNode = MVATutorialNode.new(size: self.size)
                 self.tutorialNode?.delegate = self
-                self.tutorialNode?.delegate?.activateSwipe()
+                self.tutorialNode?.delegate?.tutorialActivateSwipe()
                 self.tutorialNode!.alpha = 0.0
                 self.tutorialNode!.zPosition = 9.0
                 self.camera!.addChild(self.tutorialNode!)
@@ -71,12 +82,7 @@ extension GameScene: MVATutorialDelegate {
             }
             self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
             self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
-            
-            #if os(iOS)
-                if let quat = (UIApplication.shared.delegate as! AppDelegate).motionManager.deviceMotion?.attitude.quaternion {
-                    self.lastRotation = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
-                }
-            #endif
+            self.startControls()
         }
         
         let start = SKAction.run {
@@ -90,17 +96,12 @@ extension GameScene: MVATutorialDelegate {
         }
         
         playBtt.run(SKAction.sequence([SKAction.group([SKAction.scale(to: 0.0, duration: 1.0),curtainUp]),SKAction.wait(forDuration: 0.6),start]))
-        /*
-        #if os(macOS)
-            if gameControls == .precise {
-                NSCursor.hide()
-            }
-        #endif
-        */
     }
     
     func pauseGame(withAnimation anim: Bool) {
         if !isPaused {
+            self.stopControls()
+            
             self.intel.stop = true
             physicsWorld.speed = 0.0
             self.hideHUD(animated: anim)
@@ -124,21 +125,17 @@ extension GameScene: MVATutorialDelegate {
                 NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
                 self.isPaused = true
             }
+            
             if MVAMemory.maxPlayerDistance < intel.distanceTraveled {
                 let maxDist = intel.distanceTraveled.roundTo(NDecimals: 1)
                 self.recordDistance.text = "BEST: \(maxDist) \(MVAWorldConverter.lengthUnit)"
             }
-            /*
-            #if os(macOS)
-                if gameControls == .precise {
-                    NSCursor.unhide()
-                }
-            #endif
-            */
         }
     }
     
     func resumeGame() {
+        self.startControls()
+        
         self.isPaused = false
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
         self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.5))
@@ -153,14 +150,6 @@ extension GameScene: MVATutorialDelegate {
             self.intel.stop = false
             self.fadeInVolume()
         })
-        
-        /*
-        #if os(macOS)
-            if gameControls == .precise {
-                NSCursor.hide()
-            }
-        #endif
-        */
     }
     
     func gameOver() {
@@ -205,12 +194,6 @@ extension GameScene: MVATutorialDelegate {
                     tutorialNode!.removeFromParent()
                     tutorialNode = nil
                 }
-
-                /*
-                if gameControls == .precise {
-                    NSCursor.unhide()
-                }
-                */
             #endif
             
             let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd, clumsy: clumsy)
@@ -227,6 +210,7 @@ extension GameScene: MVATutorialDelegate {
             }
             
             let curtainDown = SKAction.run {
+                self.stopControls()
                 self.removeAction(forKey: "spawn")
                 self.camera!.addChild(goNode)
                 self.camera!.childNode(withName: "over")?.run(SKAction.fadeIn(withDuration: 0.5))
@@ -241,8 +225,6 @@ extension GameScene: MVATutorialDelegate {
             #if os(iOS)
                 Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
             #endif
-            
-            //self.run(SKAction.sequence([SKAction.group([SKAction.wait(forDuration: 1.5),curtainDown]),resetAction]))
         }
     }
     
@@ -268,13 +250,7 @@ extension GameScene: MVATutorialDelegate {
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         startSound()
         
-        /*
-        #if os(macOS)
-            if gameControls == .precise {
-                NSCursor.hide()
-            }
-        #endif
-        */
+        sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
     }
     
     func resetGame() {
@@ -307,6 +283,8 @@ extension GameScene: MVATutorialDelegate {
         spawner.size.height = MVAConstants.baseCarSize.height*2.5
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
+        
+        sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
     }
     
     func checkAchievements() {
@@ -397,5 +375,18 @@ extension GameScene: MVATutorialDelegate {
             battery.childNode(withName: "batt\(intel.playerLives)")?.run(battAct)
         default: break
         }
+    }
+    
+    func tutorialActivateSwipe() {
+        self.gameControls = .swipe
+        self.setupSwipes()
+    }
+    
+    func tutorialActivateTilt() {
+        self.gameControls = .precise
+        self.setupTilt()
+        #if os(iOS)
+        self.startTilt()
+        #endif
     }
 }

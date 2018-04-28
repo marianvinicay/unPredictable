@@ -50,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         MVAAds.prepareRewardAd()
         MVAPopup.customiseAppeareance()
         
+        MVAMemory.ownedCars = [MVACarNames.playerLives, MVACarNames.playerOrdinary]
+        
         if #available(iOS 11.0, *) {
             MVAMemory.isIphoneX = (window?.safeAreaInsets.bottom ?? 0) > CGFloat(0)
         }
@@ -71,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
 
     func applicationWillTerminate(_ application: UIApplication) {
         SKPaymentQueue.default().remove(self)
+        RKRobotDiscoveryAgent.disconnectAll()
     }
 
 

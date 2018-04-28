@@ -135,21 +135,24 @@ extension GameScene {
     
     func initiateScene() {
         spawner = MVASpawnerNode.createCarSpawner(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height*2.5))
-        spawner.position = CGPoint(x: 0.0, y: self.frame.height*1.5)
+        spawner.position = CGPoint(x: 0.0, y: frame.height*1.5)
         spawner.zPosition = 4.0
-        spawner.name = "spawner"
         self.addChild(spawner)
         
         spawnStartRoad()
         setLevelSpeed(0)
         spawnPlayer()
         
-        //remover
         remover = MVARemoverNode.createRemover(withSize: CGSize(width: size.width, height: MVAConstants.baseCarSize.height))
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         remover.zPosition = 4.0
-        remover.name = "remover"
         self.addChild(remover)
+        
+        let width = (CGFloat(lanePositions[lanePositions.keys.max()!]!)/*+intel.player.size.width/1.2*/) - (CGFloat(lanePositions[0]!)/*-intel.player.size.width/1.2*/)
+        stopper = MVAStopperNode.createStopper(withRect: CGRect(x: 0.0, y: intel.player.position.y, width: width, height: frame.height*3))
+        stopper.zPosition = 4.0
+        self.addChild(stopper)
+        
         
         self.audioEngine.prepare()
         self.physicsWorld.contactDelegate = self

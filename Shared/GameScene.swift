@@ -17,8 +17,8 @@ protocol GameVCDelegate {
     func changeControls(to controls: MVAGameControls)
 }
 
-enum MVAGameControls {
-    case swipe, precise
+enum MVAGameControls: String {
+    case swipe = "sw", precise = "p", sphero = "sp"
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -40,7 +40,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var cDelegate: GameVCDelegate?
     #if os(iOS)
-        var lastRotation: Double?
+        var lastAngle: Double?
+        var sphero: RKConvenienceRobot?
     #elseif os(macOS)
         var lastMousePos: CGFloat?
     #endif
@@ -61,6 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var roadNodes = Set<MVARoadNode>()
     var remover: MVARemoverNode!
     var spawner: MVASpawnerNode!
+    var stopper: MVAStopperNode!
     
     // MARK: Gameplay Helpers
     var tutorialNode: MVATutorialNode?
@@ -91,6 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let signIN = SKAction.group([SKAction.scale(to: 0.3, duration: 0.4),SKAction.move(to: CGPoint.zero, duration: 0.4)])
         let signOUT = SKAction.group([SKAction.scale(to: rightScale, duration: 0.3),SKAction.move(to: originalSpeedPosition, duration: 0.3)])
         speedSign.run(SKAction.sequence([signIN,SKAction.wait(forDuration: 0.8),signOUT]), completion: {
+            //self.lastAngle = nil //????
             self.physicsWorld.speed = 1.0
             self.canUpdateSpeed = true
             completion()
@@ -122,13 +125,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func updateCamera() {
-        spawner.position.y = camera!.position.y+self.size.height
+        let desiredCameraPosition = intel.player.position.y+size.height/4
+        spawner.position.y = desiredCameraPosition+self.size.height
+        stopper.position.y = desiredCameraPosition
         if intel.player != nil {
-            let desiredCameraPosition = intel.player.position.y+size.height/4
             camera!.run(SKAction.moveTo(y: desiredCameraPosition, duration: 0.04))
             //camera!.position.y = desiredCameraPosition
         }
-        remover.position.y = camera!.position.y-self.size.height
+        remover.position.y = desiredCameraPosition-self.size.height
     }
 
     private func showPCSWarning() {
@@ -286,7 +290,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 #if os(iOS)
                     self.cDelegate?.present(view: dialog, completion: {})
                 #elseif os(macOS)
-                    //NSCursor.unhide()
                     self.cDelegate?.present(alert: dialog) { (resp: NSApplication.ModalResponse) in
                         switch resp {
                         case .alertFirstButtonReturn:
@@ -300,7 +303,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             self.cDelegate?.changeControls(to: .precise)
                             self.physicsWorld.speed = 1.0
                             self.intel.stop = false
-                            //NSCursor.hide()
                         default: break
                         }
                     }
@@ -351,10 +353,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func handlePreciseMove(withDeltaX deltaX: CGFloat, animated anim: Bool = false) {
         if gameStarted && physicsWorld.speed != 0.0 && (tutorialNode == nil || tutorialNode?.stage != 0) {
             let newPlayerPos = self.intel.player.position.x + deltaX
+            //if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
+            //    newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
+                if anim {
+                    intel.player.physicsBody!.applyForce(CGVector(dx: 40 * deltaX, dy: 0))
+                    //intel.player.run(SKAction.moveTo(x: newPlayerPos, duration: 0.09))
+                } else {
+                    intel.player.position.x = newPlayerPos
+                }
+                
+                let closestLane = lanePositions.enumerated().min(by: { abs(CGFloat($0.element.value) - newPlayerPos) < abs(CGFloat($1.element.value) - newPlayerPos) })!
+                intel.player.currentLane = closestLane.element.key
+                
+                if tutorialNode?.stage == 2 {
+                    tutorialNode?.continueToBraking()
+                }
+            //}
+        }
+    }
+    
+    func handlePreciseMove(toX newX: CGFloat, animated anim: Bool = false) {
+        if gameStarted && physicsWorld.speed != 0.0 && (tutorialNode == nil || tutorialNode?.stage != 0) {
+            let newPlayerPos = newX
             if newPlayerPos >= CGFloat(lanePositions[0]!)-intel.player.size.width/1.2 &&
                 newPlayerPos <= CGFloat(lanePositions[lanePositions.keys.max()!]!)+intel.player.size.width/1.2 {
                 if anim {
-                    intel.player.run(SKAction.moveTo(x: newPlayerPos, duration: 0.1))
+                    intel.player.removeAllActions()
+                    intel.player.run(SKAction.moveTo(x: newPlayerPos, duration: 0.09))
                 } else {
                     intel.player.position.x = newPlayerPos
                 }
@@ -431,6 +456,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func cancelPlayerCollision() { playerInCollision = false }
     
+    #if os(iOS)
+    //Sphero function
+    func blinkSphero(withTime time: TimeInterval?) {
+        self.sphero?.setLEDWithRed(1.0, green: 0.0, blue: 0.0)
+        
+        if time != nil {
+            Timer.scheduledTimer(withTimeInterval: time!, repeats: false) { (tmr: Timer) in
+                tmr.invalidate()
+                self.sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+            }
+        }
+    }
+    #endif
+    
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         switch collision {
@@ -472,6 +511,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     intel.player.resetPhysicsBody()
                     intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
+                    blinkSphero(withTime: 1.0)
                 } else {
                     physicsWorld.speed = 0.0
                     intel.stop = true
@@ -485,6 +525,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     })
                     intel.sound.crash(onNode: intel.player)
                     generateSmoke(atPoint: contact.contactPoint, forTime: nil)
+                    blinkSphero(withTime: nil)
                     hideHUD(animated: true)
                     self.camera!.childNode(withName: "nBest")?.removeFromParent()
                     gameOver()

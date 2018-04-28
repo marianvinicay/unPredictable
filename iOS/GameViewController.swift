@@ -20,21 +20,7 @@ class GameViewController: UIViewController, GameVCDelegate {
         setControls(to: controls)
     }
 
-    @IBOutlet weak var controlsBtt: UIButton! {
-        willSet {
-            if MVAMemory.gameControls == .swipe {
-                newValue.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
-            } else {
-                newValue.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
-            }
-        }
-    }
     @IBOutlet weak var gameCenterBtt: UIButton!
-    @IBOutlet weak var changeCarBtt: UIButton! {
-        willSet {
-            newValue.layer.cornerRadius = 9
-        }
-    }
     @IBOutlet weak var soundBtt: UIButton! {
         willSet {
             if MVAMemory.audioMuted {
@@ -44,6 +30,26 @@ class GameViewController: UIViewController, GameVCDelegate {
             }
         }
     }
+    @IBOutlet weak var controlsBtt: UIButton! {
+        willSet {
+            switch MVAMemory.gameControls {
+            case .swipe: newValue.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
+            case .precise: newValue.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
+            case .sphero: newValue.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
+            }
+        }
+    }
+    @IBOutlet weak var changeCarBtt: UIButton! {
+        willSet {
+            newValue.layer.cornerRadius = 9
+        }
+    }
+    @IBOutlet weak var spheroLabel: UILabel! {
+        willSet {
+            newValue.text = nil
+        }
+    }
+    
     var scene: GameScene!
 
     override func viewDidLoad() {
@@ -62,10 +68,15 @@ class GameViewController: UIViewController, GameVCDelegate {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
-        //skView.showsPhysics = true
+        skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
+        
+        // for sphero
+        NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: .UIApplicationWillResignActive, object: nil)
+        RKRobotDiscoveryAgent.shared().addNotificationObserver(self, selector: #selector(handleRobotStateChangeNotification(notification:)))
         
         if MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
@@ -78,10 +89,43 @@ class GameViewController: UIViewController, GameVCDelegate {
         }
     }
     
+    @objc func handleRobotStateChangeNotification(notification: RKRobotChangedStateNotification) {
+        switch (notification.type) {
+        case .online:
+            scene.sphero = RKConvenienceRobot(robot: notification.robot)
+            scene.sphero!.enableLocator(false)
+            scene.sphero!.enableCollisions(false)
+            scene.sphero!.enableStabilization(false)
+            scene.sphero!.add(scene)
+            scene.sphero!.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+            scene.sphero!.setBackLEDBrightness(0.3)
+            //scene.sphero!.setZeroHeading() ???
+            RKRobotDiscoveryAgent.stopDiscovery()
+            spheroLabel.text = "Sphero Online"
+        case .failedConnect:
+            RKRobotDiscoveryAgent.stopDiscovery()
+            RKRobotDiscoveryAgent.startDiscovery()
+        case .disconnected: break
+            //RKRobotDiscoveryAgent.startDiscovery()
+        default: break
+        }
+    }
+    
+    @objc func appBecomesActive() {
+        if MVAMemory.gameControls == .sphero {
+            RKRobotDiscoveryAgent.startDiscovery()
+        }
+    }
+    
+    @objc func appResigns() {
+        scene.sphero?.disconnect()
+        RKRobotDiscoveryAgent.stopDiscovery()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if #available(iOS 10.3, *) {
-            SKStoreReviewController.requestReview()
+            //SKStoreReviewController.requestReview()
         }
     }
     
@@ -96,6 +140,7 @@ class GameViewController: UIViewController, GameVCDelegate {
             controlsBtt.isHidden = false
             gameCenterBtt.isHidden = false
             soundBtt.isHidden = false
+            spheroLabel.isHidden = false
             if !scene.gameStarted {
                 changeCarBtt.isHidden = false
             }
@@ -103,6 +148,7 @@ class GameViewController: UIViewController, GameVCDelegate {
                 self.controlsBtt.alpha = 1.0
                 self.gameCenterBtt.alpha = 1.0
                 self.soundBtt.alpha = 1.0
+                self.spheroLabel.alpha = 1.0
                 if !self.scene.gameStarted {
                     self.changeCarBtt.alpha = 1.0
                 }
@@ -117,6 +163,7 @@ class GameViewController: UIViewController, GameVCDelegate {
                 self.controlsBtt.alpha = 0.0
                 self.gameCenterBtt.alpha = 0.0
                 self.soundBtt.alpha = 0.0
+                self.spheroLabel.alpha = 0.0
                 if !self.scene.gameStarted {
                     self.changeCarBtt.alpha = 0.0
                 }
@@ -124,6 +171,7 @@ class GameViewController: UIViewController, GameVCDelegate {
                 self.controlsBtt.isHidden = true
                 self.gameCenterBtt.isHidden = true
                 self.soundBtt.isHidden = true
+                self.spheroLabel.isHidden = true
                 if !self.scene.gameStarted {
                     self.changeCarBtt.isHidden = true
                     self.changeCarBtt.isEnabled = false
@@ -147,20 +195,37 @@ class GameViewController: UIViewController, GameVCDelegate {
     private func setControls(to controls: MVAGameControls) {
         switch controls {
         case .swipe:
+            spheroLabel.text = nil
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
             scene.gameControls = .swipe
             scene.setupSwipes()
         case .precise:
+            spheroLabel.text = nil
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
             scene.gameControls = .precise
             scene.setupTilt()
+        case .sphero:
+            spheroLabel.text = "Connecting to Sphero..."
+            controlsBtt.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
+            scene.gameControls = .sphero
+            scene.setupSphero()
+            RKRobotDiscoveryAgent.startDiscovery()
         }
     }
     
     @IBAction func toggleControls(_ sender: UIButton) {
-        if scene.gameControls == .swipe && (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
-            setControls(to: .precise)
-        } else {
+        switch scene.gameControls {
+        case .swipe:
+            if (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
+                appResigns() //disconnect sphero
+                setControls(to: .precise)
+            } else {
+                setControls(to: .sphero)
+            }
+        case .precise:
+            setControls(to: .sphero)
+        case .sphero:
+            appResigns() //disconnect sphero
             setControls(to: .swipe)
         }
     }
@@ -185,10 +250,6 @@ class GameViewController: UIViewController, GameVCDelegate {
             }
         }
     }
-
-    @objc func backFromChangeCarScene() {
-        
-    }
     
     @objc func changePlayerCar() {
         let pName = MVAMemory.playerCar
@@ -198,26 +259,17 @@ class GameViewController: UIViewController, GameVCDelegate {
             scene.intel.player.resetPhysicsBody()
             scene.checkLives()
         }
-        backFromChangeCarScene()
     }
    
     override var shouldAutorotate: Bool {
         return false
     }
     
-    /*override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .portrait
-        } else {
-            return .all
-        }
-    }*/
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    @IBAction func unwindToTMainMenu(segue: UIStoryboardSegue) {}
+    //@IBAction func unwindToTMainMenu(segue: UIStoryboardSegue) {}
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = (segue.destination as? UINavigationController)?.topViewController as? ChangeCarViewController {

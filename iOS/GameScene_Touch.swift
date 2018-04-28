@@ -10,39 +10,61 @@ import UIKit
 import SpriteKit
 import CoreMotion
 
-extension GameScene: UIGestureRecognizerDelegate {
+extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     
     override func didMove(to view: SKView) {
-        if MVAMemory.gameControls == .precise && (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
-            setupTilt()
-        } else {
-            setupSwipes()
+        switch gameControls {
+        case .swipe: setupSwipes()
+        case .precise:
+            if (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
+                setupTilt()
+            } else {
+                gameControls = .swipe
+                setupSwipes()
+            }
+        case .sphero: setupSphero()
         }
     }
     
     func setupTilt() {
         clearControls()
         
-        let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
-        manager.deviceMotionUpdateInterval = 0.01
-        manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-            if let quat = data?.attitude.quaternion, self.gameStarted {
-                let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
-                let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
-                if self.lastRotation != nil {
-                    let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastRotation!)*(-13):CGFloat(angle - self.lastRotation!)*13
-                    if fabs(deltaAngle) > 0.4 {
-                        self.handlePreciseMove(withDeltaX: deltaAngle)
-                    }
-                self.lastRotation = angle
-                }
-            }
-        }
-        
         let brake = UILongPressGestureRecognizer(target: self, action: #selector(handleUIBrake(gest:)))
         brake.minimumPressDuration = 0.08
         brake.delegate = self
         self.view?.addGestureRecognizer(brake)
+    }
+    
+    func startTilt() {
+        let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
+        manager.deviceMotionUpdateInterval = 0.06 // ???
+        manager.startAccelerometerUpdates(to: .main) { (data: CMAccelerometerData?, err: Error?) in
+            if self.gameStarted, let accelX = data?.acceleration.x {
+                if fabs(accelX) > 0.2 {
+                    self.handlePreciseMove(withDeltaX: CGFloat(accelX), animated: true)
+                }
+            }
+        }
+        /*
+        manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
+            if self.gameStarted, let quat = data?.attitude.quaternion {
+                let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
+                let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
+                
+                if self.lastAngle != nil {
+                    let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastAngle!)*(-13):CGFloat(angle - self.lastAngle!)*13
+                    if fabs(deltaAngle) > 0.3 {
+                        self.handlePreciseMove(withDeltaX: deltaAngle, animated: true)
+                    }
+                }
+                self.lastAngle = angle
+            }
+        }
+        */
+    }
+    
+    func stopTilt() {
+        (UIApplication.shared.delegate as! AppDelegate).motionManager.stopDeviceMotionUpdates()
     }
     
     func setupSwipes() {
@@ -66,8 +88,24 @@ extension GameScene: UIGestureRecognizerDelegate {
         view?.addGestureRecognizer(brake)
     }
     
+    func setupSphero() {
+        clearControls()
+    }
+    
+    func startSphero() {
+        UIApplication.shared.isIdleTimerDisabled = true
+        let mask = RKDataStreamingMask.quaternionAll.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
+        sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
+    }
+    
+    func stopSphero() {
+        sphero?.disableSensors()
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+    
     private func clearControls() {
         (UIApplication.shared.delegate as! AppDelegate).motionManager.stopDeviceMotionUpdates()
+        self.sphero?.disableSensors()
         for recog in self.view?.gestureRecognizers ?? [] {
             self.view?.removeGestureRecognizer(recog)
         }
@@ -108,5 +146,51 @@ extension GameScene: UIGestureRecognizerDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point = touches.first!.location(in: self.camera!)
         touchedPosition(point)
+    }
+    
+    func handle(_ message: RKAsyncMessage!, forRobot robot: RKRobotBase!) {
+        if self.gameStarted, let sensorMessage = message as? RKDeviceSensorsAsyncData {
+            let sensorData = sensorMessage.dataFrames.last as? RKDeviceSensorsData
+            let attitude = sensorData?.attitudeData
+            //let roll = Double(attitude?.roll ?? 0)
+            let pitch = Double(attitude?.pitch ?? 0)
+ 
+            let quaternions = sensorData?.quaternionData.quaternions
+            //steer
+            //print(roll)
+            let quat = CMQuaternion(x: Double(quaternions!.q1), y: Double(quaternions!.q2), z: Double(quaternions!.q3), w: Double(quaternions!.q0))
+            
+            let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
+            //let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
+            
+            if self.lastAngle != nil {
+                let deltaAngle = CGFloat(angle - self.lastAngle!)*13
+                /*if fabs(deltaAngle) > 1.0 {
+                    self.handlePreciseMove(withDeltaX: deltaAngle, animated: true)
+                }*/
+                self.handlePreciseMove(toX: deltaAngle, animated: true)
+            } else {
+            self.lastAngle = angle
+            }
+            /*
+            if self.lastAngle != nil {
+                var deltaAngle = CGFloat(roll - self.lastAngle!)
+                if fabs(deltaAngle) > 81.0 {
+                    deltaAngle *= -1
+                    pitch *= -1
+                }
+                
+                self.handlePreciseMove(withDeltaX: deltaAngle*10, animated: true)
+            }
+            self.lastAngle = roll
+            */
+            //brakes
+            //print(pitch)
+            if !self.playerBraking && pitch > 20.0 {
+                self.handleBrake(started: true)
+            } else if self.playerBraking && pitch < 20.0 {
+                self.handleBrake(started: false)
+            }
+        }
     }
 }

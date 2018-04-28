@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Futura.ttc">
-            <string>Futura-Medium</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -75,6 +70,12 @@
                                     <action selector="toggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hOW-38-nYK"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sphero" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZa-0Y-1Mv">
+                                <rect key="frame" x="16" y="76" width="343" height="29"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="22"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -83,11 +84,15 @@
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="C63-kb-ATQ"/>
                             <constraint firstItem="x0b-5m-X22" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="9" id="DRI-LA-Dxv"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="x0b-5m-X22" secondAttribute="bottom" constant="19" id="FTB-Fw-UYA"/>
+                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="top" secondItem="V1S-qh-hdo" secondAttribute="bottom" constant="8" symbolic="YES" id="Gff-g7-aef"/>
                             <constraint firstItem="DfQ-E2-ai1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="x0b-5m-X22" secondAttribute="trailing" constant="8" symbolic="YES" id="Jpt-KQ-PSr"/>
                             <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" constant="9" id="UDr-4B-7hC"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="XQD-Ul-NJ4"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="lUB-dQ-37i"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="nL6-jN-Zyr"/>
+                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="nMb-lj-mGj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nZa-0Y-1Mv" secondAttribute="trailing" id="oCx-4G-RbQ"/>
+                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="vIT-10-3oD"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
@@ -96,6 +101,7 @@
                         <outlet property="controlsBtt" destination="x0b-5m-X22" id="Ufa-Hg-ukX"/>
                         <outlet property="gameCenterBtt" destination="V1S-qh-hdo" id="H4k-to-YiU"/>
                         <outlet property="soundBtt" destination="m2I-PE-wpB" id="GMo-vq-nPs"/>
+                        <outlet property="spheroLabel" destination="nZa-0Y-1Mv" id="XK7-pc-ark"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
