@@ -155,7 +155,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
                 }*/
                 
                 if fabsDAngle > 0.009 {
-                    self.handlePreciseMove(toX: CGFloat(angle*174))
+                    self.handlePreciseMove(toX: CGFloat(angle*176))
                 }
             }
             self.lastAngle = angle
