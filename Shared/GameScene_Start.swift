@@ -120,7 +120,8 @@ extension GameScene {
             self.addChild(road)
         }
         
-        if MVAMemory.tutorialDisplayed {
+        let tutDisp = gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
+        if tutDisp {
             for i in 0..<2 {
                 let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
                 road.position = CGPoint(x: 0.0, y: endOfWorld!)
@@ -147,12 +148,6 @@ extension GameScene {
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         remover.zPosition = 4.0
         self.addChild(remover)
-        
-        let width = (CGFloat(lanePositions[lanePositions.keys.max()!]!)/*+intel.player.size.width/1.2*/) - (CGFloat(lanePositions[0]!)/*-intel.player.size.width/1.2*/)
-        stopper = MVAStopperNode.createStopper(withRect: CGRect(x: 0.0, y: intel.player.position.y, width: width, height: frame.height*3))
-        stopper.zPosition = 4.0
-        self.addChild(stopper)
-        
         
         self.audioEngine.prepare()
         self.physicsWorld.contactDelegate = self

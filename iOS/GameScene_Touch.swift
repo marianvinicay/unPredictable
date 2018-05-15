@@ -37,30 +37,21 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     
     func startTilt() {
         let manager = (UIApplication.shared.delegate as! AppDelegate).motionManager
-        manager.deviceMotionUpdateInterval = 0.06 // ???
-        manager.startAccelerometerUpdates(to: .main) { (data: CMAccelerometerData?, err: Error?) in
-            if self.gameStarted, let accelX = data?.acceleration.x {
-                if fabs(accelX) > 0.2 {
-                    self.handlePreciseMove(withDeltaX: CGFloat(accelX), animated: true)
-                }
-            }
-        }
-        /*
+        manager.deviceMotionUpdateInterval = 0.06
         manager.startDeviceMotionUpdates(to: .main) { [unowned self] (data: CMDeviceMotion?, error: Error?) in
-            if self.gameStarted, let quat = data?.attitude.quaternion {
+            if self.gameStarted && !self.intel.player.pcsProcessing, let quat = data?.attitude.quaternion {
                 let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
                 let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
                 
                 if self.lastAngle != nil {
                     let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastAngle!)*(-13):CGFloat(angle - self.lastAngle!)*13
                     if fabs(deltaAngle) > 0.3 {
-                        self.handlePreciseMove(withDeltaX: deltaAngle, animated: true)
+                        self.handlePreciseMove(withDeltaX: deltaAngle)
                     }
                 }
                 self.lastAngle = angle
             }
         }
-        */
     }
     
     func stopTilt() {
@@ -94,7 +85,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     
     func startSphero() {
         UIApplication.shared.isIdleTimerDisabled = true
-        let mask = RKDataStreamingMask.quaternionAll.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
+        let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuAnglesFilteredAll.rawValue
         sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
     }
     
@@ -126,7 +117,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
             lastPressedXPosition = gest.location(in: view).x
         case .changed where self.gameControls == .swipe:
             let change = gest.location(in: view).x - lastPressedXPosition
-            handlePreciseMove(withDeltaX: change)
+            handlePreciseMove(withDeltaX: change*9)
             lastPressedXPosition = gest.location(in: view).x
         case .ended where self.gameControls == .swipe:
             if let currentPLane = intel.player.currentLane {
@@ -149,46 +140,30 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     }
     
     func handle(_ message: RKAsyncMessage!, forRobot robot: RKRobotBase!) {
-        if self.gameStarted, let sensorMessage = message as? RKDeviceSensorsAsyncData {
+        if self.gameStarted && !self.intel.player.pcsProcessing, let sensorMessage = message as? RKDeviceSensorsAsyncData {
             let sensorData = sensorMessage.dataFrames.last as? RKDeviceSensorsData
-            let attitude = sensorData?.attitudeData
-            //let roll = Double(attitude?.roll ?? 0)
-            let pitch = Double(attitude?.pitch ?? 0)
- 
-            let quaternions = sensorData?.quaternionData.quaternions
-            //steer
-            //print(roll)
-            let quat = CMQuaternion(x: Double(quaternions!.q1), y: Double(quaternions!.q2), z: Double(quaternions!.q3), w: Double(quaternions!.q0))
-            
-            let angle = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)*(180/Double.pi)
-            //let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)*(180/Double.pi)
+
+            let pitch = Double(sensorData?.attitudeData?.pitch ?? 0)
+            let angle = Double(sensorData?.accelerometerData.acceleration.x ?? 0)
             
             if self.lastAngle != nil {
-                let deltaAngle = CGFloat(angle - self.lastAngle!)*13
-                /*if fabs(deltaAngle) > 1.0 {
-                    self.handlePreciseMove(withDeltaX: deltaAngle, animated: true)
-                }*/
-                self.handlePreciseMove(toX: deltaAngle, animated: true)
-            } else {
-            self.lastAngle = angle
-            }
-            /*
-            if self.lastAngle != nil {
-                var deltaAngle = CGFloat(roll - self.lastAngle!)
-                if fabs(deltaAngle) > 81.0 {
+                let deltaAngle = CGFloat(angle - self.lastAngle!)
+                let fabsDAngle = fabs(deltaAngle)
+                /*if fabs(deltaAngle) > 81.0 {
                     deltaAngle *= -1
                     pitch *= -1
-                }
+                }*/
                 
-                self.handlePreciseMove(withDeltaX: deltaAngle*10, animated: true)
+                if fabsDAngle > 0.009 {
+                    self.handlePreciseMove(toX: CGFloat(angle*169))
+                }
             }
-            self.lastAngle = roll
-            */
+            self.lastAngle = angle
+
             //brakes
-            //print(pitch)
-            if !self.playerBraking && pitch > 20.0 {
+            if !self.intel.playerBraking && pitch > 20.0 {
                 self.handleBrake(started: true)
-            } else if self.playerBraking && pitch < 20.0 {
+            } else if self.intel.playerBraking && pitch < 20.0 {
                 self.handleBrake(started: false)
             }
         }

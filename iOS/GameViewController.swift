@@ -68,7 +68,7 @@ class GameViewController: UIViewController, GameVCDelegate {
         skView.ignoresSiblingOrder = true
         //skView.showsFPS = true
         //skView.showsNodeCount = true
-        skView.showsPhysics = true
+        //skView.showsPhysics = true
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
@@ -89,6 +89,24 @@ class GameViewController: UIViewController, GameVCDelegate {
         }
     }
     
+    private func lookingForSphero() {
+        spheroLabel.text = "Connecting to Sphero"
+        Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { (tmr: Timer) in
+            if self.spheroLabel.text != nil && self.scene.sphero == nil {
+                if self.spheroLabel.text!.hasSuffix("...") == true {
+                    self.spheroLabel.text = "Connecting to Sphero"
+                } else {
+                    self.spheroLabel.text = self.spheroLabel.text!+"."
+                }
+            } else {
+                tmr.invalidate()
+                if self.scene.sphero != nil {
+                    self.spheroLabel.text = "Sphero Online"
+                }
+            }
+        }
+    }
+    
     @objc func handleRobotStateChangeNotification(notification: RKRobotChangedStateNotification) {
         switch (notification.type) {
         case .online:
@@ -99,14 +117,15 @@ class GameViewController: UIViewController, GameVCDelegate {
             scene.sphero!.add(scene)
             scene.sphero!.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
             scene.sphero!.setBackLEDBrightness(0.3)
-            //scene.sphero!.setZeroHeading() ???
+            scene.sphero!.setZeroHeading()
             RKRobotDiscoveryAgent.stopDiscovery()
             spheroLabel.text = "Sphero Online"
         case .failedConnect:
             RKRobotDiscoveryAgent.stopDiscovery()
             RKRobotDiscoveryAgent.startDiscovery()
-        case .disconnected: break
-            //RKRobotDiscoveryAgent.startDiscovery()
+            lookingForSphero()
+        case .disconnected:
+            scene.sphero = nil
         default: break
         }
     }
@@ -114,11 +133,13 @@ class GameViewController: UIViewController, GameVCDelegate {
     @objc func appBecomesActive() {
         if MVAMemory.gameControls == .sphero {
             RKRobotDiscoveryAgent.startDiscovery()
+            lookingForSphero()
         }
     }
     
     @objc func appResigns() {
         scene.sphero?.disconnect()
+        scene.sphero = nil
         RKRobotDiscoveryAgent.stopDiscovery()
     }
     
@@ -204,12 +225,19 @@ class GameViewController: UIViewController, GameVCDelegate {
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
             scene.gameControls = .precise
             scene.setupTilt()
+            if scene.gameStarted {
+                scene.startTilt()
+            }
         case .sphero:
-            spheroLabel.text = "Connecting to Sphero..."
             controlsBtt.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
+            RKRobotDiscoveryAgent.startDiscovery()
+            lookingForSphero()
+            
             scene.gameControls = .sphero
             scene.setupSphero()
-            RKRobotDiscoveryAgent.startDiscovery()
+            if scene.gameStarted {
+                scene.startSphero()
+            }
         }
     }
     
@@ -269,7 +297,7 @@ class GameViewController: UIViewController, GameVCDelegate {
         return true
     }
     
-    //@IBAction func unwindToTMainMenu(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToTMainMenu(segue: UIStoryboardSegue) {}
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVC = (segue.destination as? UINavigationController)?.topViewController as? ChangeCarViewController {

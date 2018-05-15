@@ -59,16 +59,22 @@ class MVACarPlayer: MVACar {
         physicsBody?.allowsRotation = true*/
     }
     
-    func changeLane(inDirection dir: MVAPosition, pcsCalling pcsCall: Bool = false) -> Bool {
+    func changeLane(inDirection dir: MVAPosition, pcsCalling pcsCall: Bool = false) -> Bool? {
         if !pcsProcessing {
             let newLane = dir == .left ? currentLane-1:currentLane+1
             var carsBlockingDirection = Set<MVACar>()
             if pcsCall {
                 pcsProcessing = true
-                carsBlockingDirection = self.responseFromSensors(inPositions: [dir])
+                let closeDir = dir == .left ? MVAPosition.closeLeft : MVAPosition.closeRight
+                carsBlockingDirection = self.responseFromSensors(inPositions: [closeDir])
             }
-            
-            if lanePositions[newLane] != nil && carsBlockingDirection.isEmpty {
+
+            if !carsBlockingDirection.isEmpty {
+                self.pcsProcessing = false
+                return false
+            } else if lanePositions[newLane] != nil {
+                self.pcsProcessing = false
+                
                 let newLaneCoor = CGFloat(lanePositions[newLane]!)
                 currentLane = newLane
                 let angle: CGFloat = dir == .left ? 0.5:-0.5
@@ -90,14 +96,12 @@ class MVACarPlayer: MVACar {
                 }
                 self.run(SKAction.sequence([SKAction.group([turnIn,move]),turnOut]), completion: {
                     self.cancelIndicator()
-                    self.pcsProcessing = false
                 })
-                
                 return true
+            } else {
+                self.pcsProcessing = false
             }
         }
-        return false
+        return nil
     }
-    
-    @objc func endPlayerBrakeLight() { brakeLight(false) }
 }

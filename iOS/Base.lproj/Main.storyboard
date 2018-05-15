@@ -71,7 +71,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sphero" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZa-0Y-1Mv">
-                                <rect key="frame" x="16" y="76" width="343" height="29"/>
+                                <rect key="frame" x="16" y="87" width="343" height="29"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -84,7 +84,7 @@
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="C63-kb-ATQ"/>
                             <constraint firstItem="x0b-5m-X22" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="9" id="DRI-LA-Dxv"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="x0b-5m-X22" secondAttribute="bottom" constant="19" id="FTB-Fw-UYA"/>
-                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="top" secondItem="V1S-qh-hdo" secondAttribute="bottom" constant="8" symbolic="YES" id="Gff-g7-aef"/>
+                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="top" secondItem="V1S-qh-hdo" secondAttribute="bottom" constant="19" id="Gff-g7-aef"/>
                             <constraint firstItem="DfQ-E2-ai1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="x0b-5m-X22" secondAttribute="trailing" constant="8" symbolic="YES" id="Jpt-KQ-PSr"/>
                             <constraint firstAttribute="trailingMargin" secondItem="DfQ-E2-ai1" secondAttribute="trailing" constant="9" id="UDr-4B-7hC"/>
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="XQD-Ul-NJ4"/>

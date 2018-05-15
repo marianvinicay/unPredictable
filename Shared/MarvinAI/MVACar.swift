@@ -44,18 +44,22 @@ class MVACar: SKSpriteNode {
     var speedChange: MVAPosition?
     
     func createPhysicsBody(withCategoryBitmask catBit: UInt32, collisionBitmask colBit: UInt32, contactTestBitmask conBit: UInt32) -> SKPhysicsBody {
-        let physicsBody = SKPhysicsBody(texture: self.skin.normal, size: MVAConstants.baseCarSize) //???
         
-        physicsBody.mass = 0.05
+        let baseCSize = MVAConstants.baseCarSize
+        
+        let physicsBody = SKPhysicsBody(texture: self.skin.normal, size: CGSize(width: baseCSize.width-3,
+                                                                                height: MVAConstants.baseCarSize.height-4))
+        
+        physicsBody.mass = 0.03
         physicsBody.friction = 0.0
         physicsBody.categoryBitMask = catBit
         physicsBody.collisionBitMask = colBit
         physicsBody.contactTestBitMask = conBit
         physicsBody.isDynamic = true
         physicsBody.linearDamping = 0.0
-        //physicsBody.angularDamping = 0.0
+        physicsBody.angularDamping = 0.1
         physicsBody.affectedByGravity = false
-        physicsBody.allowsRotation = false
+        physicsBody.allowsRotation = true
         physicsBody.restitution = 0.0
         
         return physicsBody
@@ -69,7 +73,11 @@ class MVACar: SKSpriteNode {
             case .front: foundCars = foundCars.union(carsIntersecting(sensors: frontSensor))
             case .frontRight: foundCars = foundCars.union(carsIntersecting(sensors: frontRightSensors))
             case .left: foundCars = foundCars.union(carsIntersecting(sensors: leftSensors))
+            case .closeLeft: foundCars = foundCars.union(carsIntersecting(sensors: closeLeftSensors))
+            case .closerLeft: foundCars = foundCars.union(carsIntersecting(sensors: closerLeftSensors))
             case .right: foundCars = foundCars.union(carsIntersecting(sensors: rightSensors))
+            case .closeRight: foundCars = foundCars.union(carsIntersecting(sensors: closeRightSensors))
+            case .closerRight: foundCars = foundCars.union(carsIntersecting(sensors: closerRightSensors))
             case .back: foundCars = foundCars.union(carsIntersecting(sensors: [backSensor]))
             case .backRight: foundCars = foundCars.union(carsIntersecting(sensors: backRightSensors))
             case .backLeft: foundCars = foundCars.union(carsIntersecting(sensors: backLeftSensors))
@@ -218,14 +226,42 @@ extension MVACar {
     fileprivate var rightSensors: [CGPoint] {
         let topRight = CGPoint(x: position.x+size.width*1.5, y: position.y+size.height*0.6)
         let centerRight = CGPoint(x: position.x+size.width*1.5, y: position.y)
-        let bottomRight = CGPoint(x: position.x+size.width*1.5, y: position.y-size.height/2)
+        let bottomRight = CGPoint(x: position.x+size.width*1.5, y: position.y-size.height*0.5)
         return [topRight,centerRight,bottomRight]
     }
     
     fileprivate var leftSensors: [CGPoint] {
         let topLeft = CGPoint(x: position.x-size.width*1.5, y: position.y+size.height*0.6)
         let centerLeft = CGPoint(x: position.x-size.width*1.5, y: position.y)
-        let bottomLeft = CGPoint(x: position.x-size.width*1.5, y: position.y-size.height/2)
+        let bottomLeft = CGPoint(x: position.x-size.width*1.5, y: position.y-size.height*0.5)
+        return [topLeft,centerLeft,bottomLeft]
+    }
+    
+    fileprivate var closerRightSensors: [CGPoint] {
+        let topRight = CGPoint(x: position.x+size.width*0.88, y: position.y+size.height*0.3)
+        let centerRight = CGPoint(x: position.x+size.width*0.88, y: position.y)
+        let bottomRight = CGPoint(x: position.x+size.width*0.88, y: position.y-size.height*0.18)
+        return [topRight,centerRight,bottomRight]
+    }
+    
+    fileprivate var closeRightSensors: [CGPoint] {
+        let topRight = CGPoint(x: position.x+size.width*1.5, y: position.y+size.height*0.3)
+        let centerRight = CGPoint(x: position.x+size.width*1.5, y: position.y)
+        let bottomRight = CGPoint(x: position.x+size.width*1.5, y: position.y-size.height*0.18)
+        return [topRight,centerRight,bottomRight]
+    }
+    
+    fileprivate var closerLeftSensors: [CGPoint] {
+        let topLeft = CGPoint(x: position.x-size.width*0.88, y: position.y+size.height*0.3)
+        let centerLeft = CGPoint(x: position.x-size.width*0.88, y: position.y)
+        let bottomLeft = CGPoint(x: position.x-size.width*0.88, y: position.y-size.height*0.18)
+        return [topLeft,centerLeft,bottomLeft]
+    }
+    
+    fileprivate var closeLeftSensors: [CGPoint] {
+        let topLeft = CGPoint(x: position.x-size.width*1.5, y: position.y+size.height*0.3)
+        let centerLeft = CGPoint(x: position.x-size.width*1.5, y: position.y)
+        let bottomLeft = CGPoint(x: position.x-size.width*1.5, y: position.y-size.height*0.18)
         return [topLeft,centerLeft,bottomLeft]
     }
     

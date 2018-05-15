@@ -40,8 +40,45 @@ extension GameScene: MVATutorialDelegate {
         #endif
     }
     
+    private func handleTutorial() {
+        #if os(iOS)
+        let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
+        if tutDisplayed {
+            self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+            self.showHUD()
+        } else {
+            self.tutorialNode = self.gameControls != .sphero ? MVATutorialNode.new(size: self.size) : MVATutorialSpheroNode.new(size: self.size)
+            self.tutorialNode!.delegate = self
+            if self.gameControls != .sphero {
+                self.tutorialNode!.delegate?.tutorialActivateSwipe()
+            } else {
+                self.tutorialNode!.delegate?.tutorialActivateSphero()
+            }
+            self.tutorialNode!.alpha = 0.0
+            self.tutorialNode!.zPosition = 9.0
+            self.camera!.addChild(self.tutorialNode!)
+            self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
+                                                      SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
+        }
+        #else
+        if MVAMemory.tutorialDisplayed {
+            self.spawnWithDelay(self.intel.currentLevel.spawnRate)
+            self.showHUD()
+        } else {
+            self.tutorialNode = MVATutorialNode.new(size: self.size)
+            self.tutorialNode!.delegate = self
+            self.tutorialNode!.delegate?.tutorialActivateSwipe()
+            self.tutorialNode!.alpha = 0.0
+            self.tutorialNode!.zPosition = 9.0
+            self.camera!.addChild(self.tutorialNode!)
+            self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
+                                                      SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
+        }
+        #endif
+    }
+    
     func startGame() {
-        if !MVAMemory.tutorialDisplayed {
+        if self.gameControls != .sphero && !MVAMemory.tutorialDisplayed {
             self.gameControls = .swipe
         }
         
@@ -67,29 +104,19 @@ extension GameScene: MVATutorialDelegate {
         setLevelSpeed(intel.currentLevel.playerSpeed)
         
         let curtainUp = SKAction.run {
-            if MVAMemory.tutorialDisplayed {
-                self.spawnWithDelay(self.intel.currentLevel.spawnRate)
-                self.showHUD()
-            } else {
-                self.tutorialNode = MVATutorialNode.new(size: self.size)
-                self.tutorialNode?.delegate = self
-                self.tutorialNode?.delegate?.tutorialActivateSwipe()
-                self.tutorialNode!.alpha = 0.0
-                self.tutorialNode!.zPosition = 9.0
-                self.camera!.addChild(self.tutorialNode!)
-                self.tutorialNode!.run(SKAction.sequence([SKAction.wait(forDuration: 0.7),
-                                                          SKAction.fadeIn(withDuration: 0.2)]), completion: { self.isUserInteractionEnabled = true })
-            }
+            self.handleTutorial()
+            
             self.recordDistance.run(SKAction.scale(to: 0.0, duration: 0.8))
             self.camera!.childNode(withName: "over")?.run(SKAction.fadeOut(withDuration: 0.9))
             self.startControls()
         }
         
+        let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
         let start = SKAction.run {
             self.gameStarted = true
             self.intel.stop = false
             
-            if MVAMemory.tutorialDisplayed {
+            if tutDisplayed {
                 self.intel.updateDist = true
                 self.isUserInteractionEnabled = true
             }
@@ -250,7 +277,9 @@ extension GameScene: MVATutorialDelegate {
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         startSound()
         
+        #if os(iOS)
         sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        #endif
     }
     
     func resetGame() {
@@ -284,7 +313,9 @@ extension GameScene: MVATutorialDelegate {
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
         
+        #if os(iOS)
         sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        #endif
     }
     
     func checkAchievements() {
@@ -389,4 +420,12 @@ extension GameScene: MVATutorialDelegate {
         self.startTilt()
         #endif
     }
+    
+    #if os(iOS)
+    func tutorialActivateSphero() {
+        self.gameControls = .sphero
+        self.setupSphero()
+        self.startSphero()
+    }
+    #endif
 }

@@ -39,6 +39,7 @@ enum MVAPosition/*: CustomStringConvertible*/ {
      */
     case frontLeft, front, frontRight
     case right, left
+    case closeRight, closeLeft, closerRight, closerLeft
     case back, backLeft, backRight
     case stop
     

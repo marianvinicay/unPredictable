@@ -45,6 +45,15 @@ enum MVAMemory {
         }
     }
     
+    static var spheroTutorialDisplayed: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "tutSpDisp")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "tutSpDisp") as? Bool ?? false
+        }
+    }
+    
     static var audioMuted: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "audioM")

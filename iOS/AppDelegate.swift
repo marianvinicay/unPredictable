@@ -50,8 +50,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         MVAAds.prepareRewardAd()
         MVAPopup.customiseAppeareance()
         
-        MVAMemory.ownedCars = [MVACarNames.playerLives, MVACarNames.playerOrdinary]
-        
         if #available(iOS 11.0, *) {
             MVAMemory.isIphoneX = (window?.safeAreaInsets.bottom ?? 0) > CGFloat(0)
         }

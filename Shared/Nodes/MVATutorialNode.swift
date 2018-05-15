@@ -12,7 +12,7 @@ import SpriteKit
 #endif
 
 enum MVATutorialText {
-    #if os(iOS) || os(tvOS)
+    #if os(iOS)
     static let swipeLabel = "Swiping changes"
     static let swipe2ndLabel = "your car's lane"
     static let swipe3rdLabel = "Try it! 😎"
@@ -38,16 +38,19 @@ enum MVATutorialText {
 protocol MVATutorialDelegate {
     func tutorialActivateSwipe()
     func tutorialActivateTilt()
+    #if os(iOS)
+    func tutorialActivateSphero()
+    #endif
 }
 
 class MVATutorialNode: SKNode {
-    private var dispSize: CGSize!
+    var dispSize: CGSize!
     
     /// stage = 0 -> swipe & stage = 1 -> tilt & stage = 2 -> brake
     var stage = 0
     var delegate: MVATutorialDelegate?
     
-    private class func label(withText txt: String, andName name: String?) -> SKLabelNode {
+    class func label(withText txt: String, andName name: String?) -> SKLabelNode {
         let lbl = SKLabelNode(text: txt)
         lbl.fontName = "Futura Medium"
         lbl.fontSize = 25
@@ -115,12 +118,7 @@ class MVATutorialNode: SKNode {
                 self.delegate?.tutorialActivateTilt()
                 
                 playerCar.run(SKAction.moveTo(x: 0.0, duration: 0.2))
-                /*
-                #if os(macOS)
-                    NSCursor.hide()
-                #endif
-                */
- 
+                
                 let tNode = SKNode()
                 tNode.name = "tilt"
                 

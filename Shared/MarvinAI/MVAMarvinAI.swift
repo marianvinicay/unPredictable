@@ -9,9 +9,10 @@
 import Foundation
 import SpriteKit
 
-class MVAMarvinAI {
+class MVAMarvinAI: NSObject {
     var player: MVACarPlayer!
     var playerLives = -1
+    var playerBraking = false
     var distanceTraveled = 0.0 //in KM/MI accordingly
     var currentLevel = MVALevel(level: 1)
     var cars = Set<MVACarBot>()
@@ -74,28 +75,6 @@ class MVAMarvinAI {
     private var playerEmergencyBrake = 0.0
     
     func checkPCS(withDeltaTime dTime: TimeInterval) -> Bool {
-        if playerLives > 0 && playerPCS <= 0 {
-            if let carInFront = player.responseFromSensors(inPositions: [.stop]).first as? MVACarBot {
-                defer {
-                    sound.pcsSystem(onNode: player)
-                    playerPCS = 0.2
-                }
-                
-                let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
-                if player.changeLane(inDirection: randDir, pcsCalling: true) == false {
-                    let nextDir: MVAPosition = randDir == .left ? .right:.left
-                    if player.changeLane(inDirection: nextDir, pcsCalling: true) == false {
-                        player.brakeLight(true)
-                        player.pointsPerSecond = carInFront.pointsPerSecond/2
-                        player.pcsProcessing = false
-                        playerEmergencyBrake = 2.0
-                        player.perform(#selector(player.endPlayerBrakeLight), with: nil, afterDelay: 0.6)
-                    }
-                }
-                return true
-            }
-            player.pcsProcessing = false
-        }
         if playerPCS > 0 {
             playerPCS -= dTime
         }
@@ -103,12 +82,47 @@ class MVAMarvinAI {
             playerEmergencyBrake -= dTime
         }
         
-        if player.responseFromSensors(inPositions: [.stop]).isEmpty && playerEmergencyBrake <= 0 {
-            if player.pointsPerSecond < currentLevel.playerSpeed {
-                player.changeSpeed(currentLevel.playerSpeed)
+        if playerLives > 0 && playerPCS <= 0 {
+            if let carInFront = player.responseFromSensors(inPositions: [.stop]).first as? MVACarBot {
+                defer {
+                    sound.pcsSystem(onNode: player)
+                    playerPCS = 0.13
+                }
+                
+                let slowDownPlayer = {
+                    self.player.brakeLight(true)
+                    self.player.pointsPerSecond = carInFront.pointsPerSecond/2
+                    self.playerEmergencyBrake = 2.0
+                    self.perform(#selector(self.endPlayerBrakeLight), with: nil, afterDelay: 2.0)
+                }
+                
+                if MVAMemory.gameControls == .swipe {
+                    let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left : .right
+                    if player.changeLane(inDirection: randDir, pcsCalling: true) == false {
+                        let nextDir: MVAPosition = randDir == .left ? .right : .left
+                        if player.changeLane(inDirection: nextDir, pcsCalling: true) == false {
+                            slowDownPlayer()
+                        }
+                    }
+                } else {
+                    slowDownPlayer()
+                }
+                return true
             }
         }
+
+        if player.pointsPerSecond < currentLevel.playerSpeed && playerEmergencyBrake <= 0 {//player.responseFromSensors(inPositions: [.stop]).isEmpty && playerEmergencyBrake <= 0 {
+            //if player.pointsPerSecond < currentLevel.playerSpeed {
+                player.changeSpeed(currentLevel.playerSpeed)
+            //}
+        }
         return false
+    }
+    
+    @objc func endPlayerBrakeLight() {
+        if !playerBraking {
+            player.brakeLight(false)
+        }
     }
     
     func update(withDeltaTime dTime: TimeInterval) {
