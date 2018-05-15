@@ -146,7 +146,7 @@ class GameViewController: UIViewController, GameVCDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if #available(iOS 10.3, *) {
-            //SKStoreReviewController.requestReview()
+            SKStoreReviewController.requestReview()
         }
     }
     

@@ -70,8 +70,8 @@
                                     <action selector="toggleControls:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hOW-38-nYK"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sphero" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZa-0Y-1Mv">
-                                <rect key="frame" x="16" y="87" width="343" height="29"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sphero" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nZa-0Y-1Mv">
+                                <rect key="frame" x="151.5" y="87" width="72" height="29"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -91,8 +91,8 @@
                             <constraint firstItem="m2I-PE-wpB" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="lUB-dQ-37i"/>
                             <constraint firstItem="V1S-qh-hdo" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="nL6-jN-Zyr"/>
                             <constraint firstItem="nZa-0Y-1Mv" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="nMb-lj-mGj"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="nZa-0Y-1Mv" secondAttribute="trailing" id="oCx-4G-RbQ"/>
-                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="vIT-10-3oD"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="nZa-0Y-1Mv" secondAttribute="trailing" id="oCx-4G-RbQ"/>
+                            <constraint firstItem="nZa-0Y-1Mv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" id="vIT-10-3oD"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
