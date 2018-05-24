@@ -119,6 +119,10 @@ extension GameScene: MVATutorialDelegate {
             if tutDisplayed {
                 self.intel.updateDist = true
                 self.isUserInteractionEnabled = true
+                
+                #if os(macOS)
+                self.cDelegate?.showInInfoLabel("Go Go Go!", forDuration: 3.0)
+                #endif
             }
         }
         
@@ -181,19 +185,21 @@ extension GameScene: MVATutorialDelegate {
     
     func gameOver() {
         if self.camera!.childNode(withName: "gameO") == nil {
-            #if os(iOS) || os(tvOS)
-            var offP = false
-            var offAd = false
             var clumsy = true
+            var offP = false
+            #if os(iOS)
             if tutorialNode == nil {
-                if intel.distanceTraveled < 8.0 {
+                if intel.distanceTraveled < 10.0 {
                     timesCrashed += 1
                 }
+                
+                if intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    clumsy = false
+                }
+                
                 if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
-                    offAd = true
-                    offP = false
-                } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
-                    offAd = false
+                    offP = intel.storeHelper.canBuyLife()
+                } else if MVAMemory.maxPlayerDistance > 10.0 {
                     offP = intel.storeHelper.canBuyLife()
                     clumsy = false
                 }
@@ -203,16 +209,18 @@ extension GameScene: MVATutorialDelegate {
                 tutorialNode = nil
             }
             #elseif os(macOS)
-                var offP = false
-                let offAd = false
-                var clumsy = true
                 if tutorialNode == nil {
-                    if intel.distanceTraveled < 8.0 {
+                    if intel.distanceTraveled < 10.0 {
                         timesCrashed += 1
                     }
+                    
+                    if intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                        clumsy = false
+                    }
+                    
                     if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
                         offP = intel.storeHelper.canBuyLife()
-                    } else if MVAMemory.maxPlayerDistance > 10.0 && intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    } else if MVAMemory.maxPlayerDistance > 10.0 {
                         offP = intel.storeHelper.canBuyLife()
                         clumsy = false
                     }
@@ -223,7 +231,7 @@ extension GameScene: MVATutorialDelegate {
                 }
             #endif
             
-            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, offerAd: offAd, clumsy: clumsy)
+            let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, clumsy: clumsy)
             goNode.zPosition = 9.0
             goNode.position = .zero
             goNode.store = intel.storeHelper
@@ -234,6 +242,9 @@ extension GameScene: MVATutorialDelegate {
                 } else {
                     self.resetGame()
                 }
+                #if os(macOS)
+                self.cDelegate?.showInInfoLabel("", forDuration: 0.0)
+                #endif
             }
             
             let curtainDown = SKAction.run {
@@ -315,6 +326,8 @@ extension GameScene: MVATutorialDelegate {
         
         #if os(iOS)
         sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        #elseif os(macOS)
+        self.cDelegate?.distanceChanged(toNumberString: nil)
         #endif
     }
     

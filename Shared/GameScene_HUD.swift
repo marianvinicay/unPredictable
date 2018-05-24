@@ -30,6 +30,10 @@ extension GameScene {
         HUDLabel.giveMeLabel(fromNode: distanceSign).text = normalNum
         HUDLabel.giveMeLabel1(fromNode: distanceSign)!.text = decimNum
         HUDLabel.giveMeLabel2(fromNode: distanceSign)!.text = MVAWorldConverter.lengthUnit
+        
+        #if os(macOS)
+        self.cDelegate?.distanceChanged(toNumberString: "\(numStr) \(MVAWorldConverter.lengthUnit)")
+        #endif
     }
     
     #if os(macOS)

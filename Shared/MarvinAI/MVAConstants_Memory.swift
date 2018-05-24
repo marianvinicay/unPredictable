@@ -109,7 +109,7 @@ enum MVAMemory {
     }
     
     #if os(iOS) || os(tvOS)
-    static var adsEnabled: Bool {
+    /*static var adsEnabled: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "adsEn")
         }
@@ -119,13 +119,13 @@ enum MVAMemory {
     }
     
     static var adCar: String? {
-    set {
-    UserDefaults.standard.set(newValue, forKey: "adCar")
-    }
-    get {
-    return UserDefaults.standard.value(forKey: "adCar") as? String
-    }
-    }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "adCar")
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "adCar") as? String
+        }
+    }*/
     
     static var isIphoneX: Bool {
         set {

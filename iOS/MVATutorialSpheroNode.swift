@@ -9,9 +9,10 @@
 import SpriteKit
 
 enum MVASpheroTutorialText {
-    static let spheroLabel = "Tilting Sphero moves"
-    static let sphero2ndLabel = "your car"
-    static let sphero3rdLabel = "Try it! 😎"
+    static let spheroLabel = "Point Sphero's aim"//"Tilt Sphero to move"
+    static let sphero2ndLabel = "light towards you."
+    static let sphero3rdLabel = "Tilt Sphero to move"
+    static let sphero4rdLabel = "your car"
     static let spheroBrakeLabel = "Roll Sphero"
     static let spheroBrake2ndLabel = "towards you"
     static let spheroBrake3rdLabel = "to brake"
@@ -28,12 +29,16 @@ class MVATutorialSpheroNode: MVATutorialNode {
         newNode.addChild(swipeLabel)
         
         let swipe2ndLabel = MVATutorialNode.label(withText: MVASpheroTutorialText.sphero2ndLabel, andName: "swipe")
-        swipe2ndLabel.position = CGPoint(x: 0.0, y: swipeLabel.frame.minY-20)
+        swipe2ndLabel.position = CGPoint(x: 0.0, y: swipeLabel.frame.minY-23)
         newNode.addChild(swipe2ndLabel)
         
         let swipe3rdLabel = MVATutorialNode.label(withText: MVASpheroTutorialText.sphero3rdLabel, andName: "swipe")
-        swipe3rdLabel.position = CGPoint(x: 0.0, y: swipe2ndLabel.frame.minY-30)
+        swipe3rdLabel.position = CGPoint(x: 0.0, y: swipe2ndLabel.frame.minY-23)
         newNode.addChild(swipe3rdLabel)
+        
+        let swipe4thLabel = MVATutorialNode.label(withText: MVASpheroTutorialText.sphero4rdLabel, andName: "swipe")
+        swipe4thLabel.position = CGPoint(x: 0.0, y: swipe3rdLabel.frame.minY-23)
+        newNode.addChild(swipe4thLabel)
 
         let gradient = SKSpriteNode(imageNamed: "grad")
         gradient.size = CGSize(width: size.width, height: size.height/2)
@@ -79,11 +84,11 @@ class MVATutorialSpheroNode: MVATutorialNode {
                 bNode.addChild(brakeLabel)
                 
                 let brake2ndLabel = MVATutorialNode.label(withText: MVASpheroTutorialText.spheroBrake2ndLabel, andName: nil)
-                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-26)
+                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-23)
                 bNode.addChild(brake2ndLabel)
                 
                 let brake3ndLabel = MVATutorialNode.label(withText: MVASpheroTutorialText.spheroBrake3rdLabel, andName: nil)
-                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-19)
+                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-23)
                 bNode.addChild(brake3ndLabel)
                 
                 bNode.alpha = 0.0

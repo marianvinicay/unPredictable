@@ -20,6 +20,25 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
         self.setControls(to: controls)
     }
     
+    func distanceChanged(toNumberString numStr: String?) {
+        if #available(OSX 10.12.2, *), let tBar = touchBar {
+            if numStr != nil {
+                (tBar.item(forIdentifier: .distanceLabel)?.view as? NSTextField)?.stringValue = "Distance: "+numStr!
+            } else {
+                (tBar.item(forIdentifier: .distanceLabel)?.view as? NSTextField)?.stringValue = ""
+            }
+        }
+    }
+    
+    func showInInfoLabel(_ txt: String, forDuration time: TimeInterval) {
+        if #available(OSX 10.12.2, *), let tBar = touchBar {
+            (tBar.item(forIdentifier: .infoLabel)?.view as? NSTextField)?.stringValue = txt
+            Timer.scheduledTimer(withTimeInterval: time, repeats: false) { (_: Timer) in
+                (tBar.item(forIdentifier: .infoLabel)?.view as? NSTextField)?.stringValue = ""
+            }
+        }
+    }
+    
     func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
         changeCarVC?.view.window?.setContentSize(frameSize)
         return frameSize
@@ -152,7 +171,7 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
         }))
         
         mouseMonitors.append(NSEvent.addLocalMonitorForEvents(matching: .mouseEntered, handler: {
-            if !self.gameScene.intel.stop {
+            if !self.gameScene.intel.stop && self.gameScene.gameStarted {
                 NSCursor.hide()
             }
             return $0

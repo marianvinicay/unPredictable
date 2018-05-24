@@ -49,7 +49,7 @@ extension GameScene {
     func moveWithMouse(_ mPosition: CGFloat) {
         if let mousePos = self.lastMousePos, !intel.stop {
             let deltaX = mPosition - mousePos
-            self.handlePreciseMove(withDeltaX: deltaX)
+            self.handlePreciseMove(withDeltaX: deltaX*8.8)
         }
         self.lastMousePos = mPosition
     }
@@ -89,7 +89,7 @@ extension GameScene {
     override func moveLeft(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                handlePreciseMove(withDeltaX: -9, animated: true)
+                handlePreciseMove(withDeltaX: -9)
             } else {
                 handleSwipe(swipe: .left)
             }
@@ -99,7 +99,7 @@ extension GameScene {
     override func moveRight(_ sender: Any?) {
         if gameControls == .swipe {
             if playerBraking {
-                handlePreciseMove(withDeltaX: 9, animated: true)
+                handlePreciseMove(withDeltaX: 9)
             } else {
                 handleSwipe(swipe: .right)
             }

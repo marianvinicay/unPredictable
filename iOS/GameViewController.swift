@@ -91,8 +91,10 @@ class GameViewController: UIViewController, GameVCDelegate {
     
     private func lookingForSphero() {
         spheroLabel.text = "Connecting to Sphero"
+        scene.playBtt.alpha = 0.2
         Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { (tmr: Timer) in
-            if self.spheroLabel.text != nil && self.scene.sphero == nil {
+            let connectedSphero = RKRobotDiscoveryAgent.shared().connectedRobots().count > 0
+            if self.spheroLabel.text != nil && !connectedSphero {
                 if self.spheroLabel.text!.hasSuffix("...") == true {
                     self.spheroLabel.text = "Connecting to Sphero"
                 } else {
@@ -100,7 +102,8 @@ class GameViewController: UIViewController, GameVCDelegate {
                 }
             } else {
                 tmr.invalidate()
-                if self.scene.sphero != nil {
+                if connectedSphero {
+                    self.scene.playBtt.alpha = 1.0
                     self.spheroLabel.text = "Sphero Online"
                 }
             }
@@ -120,6 +123,7 @@ class GameViewController: UIViewController, GameVCDelegate {
             scene.sphero!.setZeroHeading()
             RKRobotDiscoveryAgent.stopDiscovery()
             spheroLabel.text = "Sphero Online"
+            scene.playBtt.alpha = 1.0
         case .failedConnect:
             RKRobotDiscoveryAgent.stopDiscovery()
             RKRobotDiscoveryAgent.startDiscovery()
@@ -138,7 +142,7 @@ class GameViewController: UIViewController, GameVCDelegate {
     }
     
     @objc func appResigns() {
-        scene.sphero?.disconnect()
+        RKRobotDiscoveryAgent.shared().disconnectAll()
         scene.sphero = nil
         RKRobotDiscoveryAgent.stopDiscovery()
     }
@@ -218,11 +222,13 @@ class GameViewController: UIViewController, GameVCDelegate {
         case .swipe:
             spheroLabel.text = nil
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
+            scene.playBtt.alpha = 1.0
             scene.gameControls = .swipe
             scene.setupSwipes()
         case .precise:
             spheroLabel.text = nil
             controlsBtt.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
+            scene.playBtt.alpha = 1.0
             scene.gameControls = .precise
             scene.setupTilt()
             if scene.gameStarted {
@@ -245,7 +251,6 @@ class GameViewController: UIViewController, GameVCDelegate {
         switch scene.gameControls {
         case .swipe:
             if (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
-                appResigns() //disconnect sphero
                 setControls(to: .precise)
             } else {
                 setControls(to: .sphero)

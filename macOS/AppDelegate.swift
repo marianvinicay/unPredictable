@@ -33,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         SKPaymentQueue.default().add(self)
-                
+                        
         if #available(OSX 10.12.2, *) {
             NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         }

@@ -17,12 +17,12 @@ class ChangeCarViewController: UIViewController {
             newValue.layer.cornerRadius = 9
         }
     }
-    @IBOutlet weak var enableAdsBtt: UIButton! {
+    /*@IBOutlet weak var enableAdsBtt: UIButton! {
         willSet {
             newValue.layer.cornerRadius = 9
         }
     }
-    @IBOutlet weak var orLabel: UILabel!
+    @IBOutlet weak var orLabel: UILabel!*/
     @IBOutlet weak var buyBtt: UIButton! {
         willSet {
             newValue.layer.cornerRadius = 9
@@ -38,13 +38,13 @@ class ChangeCarViewController: UIViewController {
     
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
     private var selectedCar = MVAMemory.playerCar
-    private let ads = MVAAds(config: .onlyVideo)
+    //private let ads = MVAAds(config: .onlyVideo)
     var store: MVAStore!
     private var waitView: MVAWaitView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ads.successHandler = { [unowned self] (rewarded: Bool) in
+        /*ads.successHandler = { [unowned self] (rewarded: Bool) in
             if rewarded {
                 MVAMemory.adCar = self.selectedCar
                 MVAMemory.playerCar = self.selectedCar
@@ -58,7 +58,7 @@ class ChangeCarViewController: UIViewController {
                 MVAMemory.adsEnabled = false
             }
         }
-        ads.completionHandler = {}
+        ads.completionHandler = {}*/
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,16 +72,16 @@ class ChangeCarViewController: UIViewController {
     
     private func checkArrows() {
         if MVAMemory.ownedCars.contains(selectedCar) {
-            self.enableAdsBtt.isHidden = true
-            self.orLabel.isHidden = true
+            //self.enableAdsBtt.isHidden = true
+            //self.orLabel.isHidden = true
             self.buyBtt.setTitle(" USE ", for: .normal)
-        } else if MVAMemory.adCar == selectedCar {
+        } /*else if MVAMemory.adCar == selectedCar {
             self.enableAdsBtt.isHidden = true
             self.orLabel.isHidden = true
             self.buyBtt.setTitle(" \(store.getPrice(forCar: selectedCar)) ", for: .normal)
-        } else {
-            self.enableAdsBtt.isHidden = false
-            self.orLabel.isHidden = false
+        }*/ else {
+            //self.enableAdsBtt.isHidden = false
+            //self.orLabel.isHidden = false
             self.buyBtt.setTitle(" \(store.getPrice(forCar: selectedCar)) ", for: .normal)
         }
         
@@ -165,11 +165,11 @@ class ChangeCarViewController: UIViewController {
             self.backBtt.isEnabled = true
             
             if purchased && err == nil {
-                MVAMemory.adsEnabled = false
+                //MVAMemory.adsEnabled = false
                 MVAMemory.ownedCars.append(self.selectedCar)
-                MVAMemory.adCar = nil
-                self.enableAdsBtt.isHidden = true
-                self.orLabel.isHidden = true
+                //MVAMemory.adCar = nil
+                //self.enableAdsBtt.isHidden = true
+                //self.orLabel.isHidden = true
                 self.buyBtt.setTitle(" USE ", for: .normal)
             }
             self.waitView.remove()
@@ -197,8 +197,8 @@ class ChangeCarViewController: UIViewController {
         if sender.title(for: .normal) == " USE " {
             if MVAMemory.ownedCars.contains(selectedCar) {
                 MVAMemory.playerCar = selectedCar
-                MVAMemory.adCar = nil
-                MVAMemory.adsEnabled = false
+                //MVAMemory.adCar = nil
+                //MVAMemory.adsEnabled = false
                 NotificationCenter.default.post(name: ChangeCarViewController.changePCar, object: nil)
                 self.performSegue(withIdentifier: "goBack", sender: nil)
             }
@@ -216,7 +216,7 @@ class ChangeCarViewController: UIViewController {
             self.backBtt.isEnabled = true
             
             if purchased && error == nil {
-                MVAMemory.adsEnabled = false
+                //MVAMemory.adsEnabled = false
                 switch car {
                 case self.store.productIDs["lives_car"]!: MVAMemory.ownedCars.append(MVACarNames.playerLives)
                 case self.store.productIDs["pcs_car"]!: MVAMemory.ownedCars.append(MVACarNames.playerPCS)
@@ -242,7 +242,7 @@ class ChangeCarViewController: UIViewController {
     }
     
     @IBAction func enableAds(_ sender: UIButton) {
-        ads.showAd(fromViewController: self)
+        //ads.showAd(fromViewController: self)
     }
     
     @IBAction func swipeGesture(_ sender: UIGestureRecognizer) {

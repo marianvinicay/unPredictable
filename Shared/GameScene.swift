@@ -11,8 +11,10 @@ import SpriteKit
 protocol GameVCDelegate {
     #if os(iOS)
         func present(view: UIViewController, completion: @escaping ()->Void)
-    #elseif os(macOS)
+    #else
         func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse)->Void)
+        func distanceChanged(toNumberString numStr: String?)
+        func showInInfoLabel(_ txt: String, forDuration time: TimeInterval)
     #endif
     func changeControls(to controls: MVAGameControls)
 }
@@ -121,7 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         shape.name = "nBest"
         shape.addChild(label)
         label.position = CGPoint(x: -shape.frame.size.width/2.6, y: -shape.frame.size.height/4)
-        shape.position = CGPoint(x: shape.frame.size.width/2+distanceSign.position.x-1, y: shape.frame.size.height/2+distanceSign.frame.maxY-1)
+        shape.position = CGPoint(x: shape.frame.size.width/2+distanceSign.position.x-2, y: shape.frame.size.height/2+distanceSign.frame.maxY-2)
         label.zPosition = 1.0
         let addAct = SKAction.run {
             shape.xScale = 0.0
@@ -134,6 +136,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         self.camera!.run(SKAction.sequence([addAct,SKAction.wait(forDuration: 5.0),removeAct]))
+        #if os(macOS)
+        self.cDelegate?.showInInfoLabel("New Best!", forDuration: 5.0)
+        #endif
     }
     
     private func updateCamera() {
@@ -159,10 +164,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let vibrator = UIImpactFeedbackGenerator(style: .medium)
                 vibrator.impactOccurred()
             } else {
-                blinkSphero(withTime: 1.0, andColor: (r: 0.98, g: 0.53, b: 0.20))
+                blinkSphero(withTime: 1.8, andColor: (r: 0.98, g: 0.53, b: 0.20))
             }
+            #else
+            self.cDelegate?.showInInfoLabel("⚠️ ⚠️ ⚠️", forDuration: 1.8)
             #endif
-            pcs.run(SKAction.fadeOut(withDuration: 2.2)) {
+            pcs.run(SKAction.fadeOut(withDuration: 1.9)) {
                 pcs.removeFromParent()
             }
         }
@@ -528,8 +535,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func touchedPosition(_ pos: CGPoint) {
         if !gameStarted && playBtt.contains(pos) {
-            self.isUserInteractionEnabled = false
-            self.startGame()
+            let begin = {
+                self.isUserInteractionEnabled = false
+                self.startGame()
+            }
+            #if os(iOS)
+            if self.gameControls != .sphero {
+                begin()
+            } else if self.gameControls == .sphero && RKRobotDiscoveryAgent.shared().connectedRobots().count > 0 {
+                begin()
+            }
+            #else
+                begin()
+            #endif
+            
         } else if gameStarted && pauseBtt.contains(pos) {
             pauseGame(withAnimation: true)
         } else if gameStarted && playBtt.contains(pos) {
@@ -604,6 +623,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     } else {
                         blinkSphero(withTime: 1.0)
                     }
+                    #else
+                    self.cDelegate?.showInInfoLabel("🚙💥🚗", forDuration: 1.0)
                     #endif
                 } else {
                     physicsWorld.speed = 0.0
@@ -625,6 +646,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     } else {
                         blinkSphero(withTime: nil)
                     }
+                    #else
+                    self.cDelegate?.showInInfoLabel("🚙💥🚗", forDuration: 5.0)
                     #endif
                     hideHUD(animated: true)
                     self.camera!.childNode(withName: "nBest")?.removeFromParent()

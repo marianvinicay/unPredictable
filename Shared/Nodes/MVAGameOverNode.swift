@@ -13,19 +13,23 @@ import SpriteKit
 #endif
     
 class MVAGameOverNode: SKNode {
+    #if os(iOS)
+    private var yesBtt: SKShapeNode?
+    #else
     var yesBtt: SKShapeNode?
+    #endif
     private var noBtt: SKShapeNode?
     private var countD: SKLabelNode?
     private var countDown = 6
     private var showPurchase = false
-    private var showAd = false
-    private let adsAsPurchase = MVAAds(config: .videoAndShort)
-    private let adsForCars: MVAAds? = MVAMemory.adsEnabled ? MVAAds(config: .onlyShort):nil
+    //private var showAd = false
+    //private let adsAsPurchase = MVAAds(config: .videoAndShort)
+    //private let adsForCars: MVAAds? = MVAMemory.adsEnabled ? MVAAds(config: .onlyShort):nil
     
     var store: MVAStore!
     var completion: ((Bool)->())?
     
-    class func new(size: CGSize, offerPurchase: Bool, offerAd: Bool, clumsy: Bool) -> MVAGameOverNode {
+    class func new(size: CGSize, offerPurchase: Bool, clumsy: Bool) -> MVAGameOverNode {
         let newNode = MVAGameOverNode()
         
         let blank =  SKSpriteNode(color: .clear, size: size)
@@ -48,10 +52,10 @@ class MVAGameOverNode: SKNode {
         newNode.countD!.verticalAlignmentMode = .center
         newNode.countD!.position = CGPoint(x: 0.0, y: -(size.height/2)+newNode.countD!.frame.height*2)
         newNode.addChild(newNode.countD!)
-        
-        if offerPurchase || offerAd {
+
+        if offerPurchase {//|| offerAd {
             newNode.showPurchase = offerPurchase
-            newNode.showAd = offerAd
+            //newNode.showAd = offerAd
             goLabel.position.y = goLabel.frame.height*2
             
             let firstLabel = clumsy == true ? SKLabelNode(text: "You are a bit clumsy 😜") : SKLabelNode(text: "You are good 😎")
@@ -101,7 +105,7 @@ class MVAGameOverNode: SKNode {
             newNode.noBtt!.addChild(nLabel)
             newNode.addChild(newNode.noBtt!)
         }
-
+        /*
         newNode.adsAsPurchase.successHandler = { [unowned newNode] (rewarded: Bool) in
             if rewarded {
                 newNode.continueInGame()
@@ -120,8 +124,7 @@ class MVAGameOverNode: SKNode {
         newNode.adsForCars?.completionHandler = { [unowned newNode] () in
             newNode.stopIndicator()
             newNode.activityInd?.removeFromSuperview()
-        }
-        
+        }*/
         newNode.isUserInteractionEnabled = true
         return newNode
     }
@@ -131,19 +134,19 @@ class MVAGameOverNode: SKNode {
             if countDown > 1 {
                 countDown -= 1
                 countD?.text = String(countDown)
-                if countDown == 3 && MVAMemory.adsEnabled  {
-                    adsForCars?.showAd()
+                /*if countDown == 3 && MVAMemory.adsEnabled  {
+                    //adsForCars?.showAd()
                     countD?.removeFromParent()
                     countD = nil
-                } else {
-                    perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
-                }
+                } else {*/
+                perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
+                //}
             } else {
-                if MVAMemory.adsEnabled {
+                /*if MVAMemory.adsEnabled {
                     adsForCars?.showAd()
-                } else {
-                    self.startNewGame()
-                }
+                } else {*/
+                self.startNewGame()
+                //}
             }
         }
     }
@@ -170,44 +173,48 @@ class MVAGameOverNode: SKNode {
     func touchedPosition(_ touchLocation: CGPoint) {
         countD?.removeFromParent()
         countD = nil
-        
+
         if yesBtt != nil && noBtt != nil && yesBtt!.contains(touchLocation) {
             createIndicator()
             scene!.view!.addSubview(activityInd!)
+            yesBtt?.removeFromParent()
+            noBtt?.removeFromParent()
+            yesBtt = nil
+            noBtt = nil
             
-            if showPurchase {
-                /*
+            /*if showPurchase {
                  self.activityInd?.stopAnimating()
                  self.activityInd?.removeFromSuperview()
                  self.continueInGame()
                  */
                 store.buyLife() { (purchased: Bool, _, _) in
-                    self.stopIndicator()
+                    #if os(iOS)
+                    self.activityInd?.stopAnimating()
+                    #else
+                    self.activityInd?.stopAnimation(nil)
+                    #endif
                     self.activityInd?.removeFromSuperview()
+                    
                     if purchased {
                         self.continueInGame()
                     } else {
                         self.startNewGame()
                     }
                 }
-            } else {
+            /*} else {
                 adsAsPurchase.showAd()
-            }
+            }*/
         } else {
-            if MVAMemory.adsEnabled {
+            /*if MVAMemory.adsEnabled {
                 adsForCars?.showAd()
-            } else {
+            } else {*/
                 self.startNewGame()
-            }
+            //}
         }
     }
     
-    #if os(iOS) || os(tvOS)
+    #if os(iOS)
     fileprivate var activityInd: UIActivityIndicatorView?
-    
-    fileprivate func stopIndicator() {
-        activityInd?.stopAnimating()
-    }
 
     fileprivate func createIndicator() {
         activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
@@ -222,15 +229,11 @@ class MVAGameOverNode: SKNode {
     #elseif os(macOS)
     fileprivate var activityInd: NSProgressIndicator?
     
-    fileprivate func stopIndicator() {
-        activityInd?.stopAnimation(nil)
-    }
-    
     fileprivate func createIndicator() {
         activityInd = NSProgressIndicator()
         activityInd!.style = .spinning
         let winSize = NSApp.mainWindow!.minSize
-        activityInd!.frame = NSRect(x: (winSize.width/2)-31.5, y: (winSize.height/4)-75, width: 150, height: 150)
+        activityInd!.frame = NSRect(x: (winSize.width/2)+75-21, y: (winSize.height/4)-75, width: 150, height: 150)
         let lighten = CIFilter(name: "CIColorControls")!
         lighten.setDefaults()
         lighten.setValue(1, forKey: "inputBrightness")
@@ -240,7 +243,7 @@ class MVAGameOverNode: SKNode {
     }
     
     override func mouseUp(with event: NSEvent) {
-        touchedPosition(event.location(in: self.scene!))
+        touchedPosition(event.location(in: self))
     }
     #endif
 }

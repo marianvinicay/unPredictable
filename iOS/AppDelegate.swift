@@ -10,7 +10,7 @@
 import UIKit
 import AVFoundation
 import Firebase
-import GoogleMobileAds
+//import GoogleMobileAds
 import Fabric
 import Crashlytics
 import StoreKit
@@ -46,10 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
-        MVAAds.prepareRewardAd()
+        //GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
+        //MVAAds.prepareRewardAd()
         MVAPopup.customiseAppeareance()
-        
+        //MVAMemory.ownedCars = [MVACarNames.playerOrdinary]
+        //MVAMemory.maxPlayerDistance = 0.4
+                
         if #available(iOS 11.0, *) {
             MVAMemory.isIphoneX = (window?.safeAreaInsets.bottom ?? 0) > CGFloat(0)
         }
@@ -66,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        MVAAds.prepareRewardAd()
+        //MVAAds.prepareRewardAd()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

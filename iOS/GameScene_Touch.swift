@@ -46,7 +46,11 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
                 if self.lastAngle != nil {
                     let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastAngle!)*(-13):CGFloat(angle - self.lastAngle!)*13
                     if fabs(deltaAngle) > 0.3 {
-                        self.handlePreciseMove(withDeltaX: deltaAngle)
+                        if UIDevice.current.userInterfaceIdiom == .pad {
+                            self.handlePreciseMove(withDeltaX: deltaAngle*3.4)
+                        } else { //phone
+                            self.handlePreciseMove(withDeltaX: deltaAngle)
+                        }
                     }
                 }
                 self.lastAngle = angle
@@ -85,7 +89,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     
     func startSphero() {
         UIApplication.shared.isIdleTimerDisabled = true
-        let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuAnglesFilteredAll.rawValue
+        let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
         sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
     }
     
@@ -155,7 +159,11 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
                 }*/
                 
                 if fabsDAngle > 0.009 {
-                    self.handlePreciseMove(toX: CGFloat(angle*176))
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        self.handlePreciseMove(toX: CGFloat(angle*469))
+                    } else { //phone
+                        self.handlePreciseMove(toX: CGFloat(angle*176))
+                    }
                 }
             }
             self.lastAngle = angle

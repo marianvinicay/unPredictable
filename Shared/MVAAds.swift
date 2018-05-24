@@ -5,7 +5,7 @@
 //  Created by Majo on 09/08/2017.
 //  Copyright © 2017 MarVin. All rights reserved.
 //
-
+/*
 import Foundation
 
 enum MVAAdsCombination {//: CustomStringConvertible {
@@ -153,3 +153,4 @@ class MVAAds: NSObject, GADRewardBasedVideoAdDelegate, GADInterstitialDelegate {
         func showAd() {}
     }
 #endif
+*/

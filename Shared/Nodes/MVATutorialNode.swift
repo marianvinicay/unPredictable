@@ -70,7 +70,7 @@ class MVATutorialNode: SKNode {
         newNode.addChild(swipeLabel)
         
         let swipe2ndLabel = MVATutorialNode.label(withText: MVATutorialText.swipe2ndLabel, andName: "swipe")
-        swipe2ndLabel.position = CGPoint(x: 0.0, y: swipeLabel.frame.minY-20)
+        swipe2ndLabel.position = CGPoint(x: 0.0, y: swipeLabel.frame.minY-23)
         newNode.addChild(swipe2ndLabel)
         
         let swipe3rdLabel = MVATutorialNode.label(withText: MVATutorialText.swipe3rdLabel, andName: "swipe")
@@ -127,7 +127,7 @@ class MVATutorialNode: SKNode {
                 tNode.addChild(tiltLabel)
                 
                 let tilt2ndLabel = MVATutorialNode.label(withText: MVATutorialText.tilt2ndLabel, andName: "tilt")
-                tilt2ndLabel.position = CGPoint(x: 0.0, y: tiltLabel.frame.minY-20)
+                tilt2ndLabel.position = CGPoint(x: 0.0, y: tiltLabel.frame.minY-23)
                 tNode.addChild(tilt2ndLabel)
                 
                 let tilt3ndLabel = MVATutorialNode.label(withText: MVATutorialText.tilt3rdLabel, andName: "tilt")
@@ -171,11 +171,11 @@ class MVATutorialNode: SKNode {
                 bNode.addChild(brakeLabel)
                 
                 let brake2ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake2ndLabel, andName: nil)
-                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-26)
+                brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-23)
                 bNode.addChild(brake2ndLabel)
                 
                 let brake3ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake3rdLabel, andName: nil)
-                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-19)
+                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-23)
                 bNode.addChild(brake3ndLabel)
                 
                 bNode.alpha = 0.0

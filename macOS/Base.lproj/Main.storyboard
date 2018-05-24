@@ -2,10 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaDFRPlugin" version="14019"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
-        <capability name="the Touch Bar" minToolsVersion="8.1" minSystemVersion="10.12.2" requiredIntegratedClassName="NSTouchBar"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -160,15 +158,6 @@
                             <constraint firstItem="sUK-EY-Vc7" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="ybi-Fd-d4z"/>
                         </constraints>
                     </view>
-                    <touchBar key="touchBar" id="fLI-DR-HoW">
-                        <touchBarItems>
-                            <touchBarSpacerItem identifier="NSTouchBarItemIdentifierFlexibleSpace" id="joT-ZB-bgj"/>
-                            <touchBarSpacerItem identifier="NSTouchBarItemIdentifierFlexibleSpace" id="W91-qb-nSK"/>
-                        </touchBarItems>
-                        <connections>
-                            <outlet property="delegate" destination="XfG-lQ-9wD" id="t41-W7-Db9"/>
-                        </connections>
-                    </touchBar>
                     <connections>
                         <outlet property="changeCarBtt" destination="kVx-z5-Vt6" id="sQs-6Y-XJP"/>
                         <outlet property="controlsBtt" destination="sUK-EY-Vc7" id="3Ft-zF-d5H"/>
