@@ -140,6 +140,9 @@ class MVATutorialNode: SKNode {
                 tNode.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),
                                              SKAction.wait(forDuration: 1.5),
                                              SKAction.run({ self.stage = 2 })]))
+                #if os(macOS)
+                NSCursor.hide()
+                #endif
             }
             
             wellDLabel.run(SKAction.sequence([SKAction.fadeIn(withDuration: 0.1),

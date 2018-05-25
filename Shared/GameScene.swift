@@ -340,12 +340,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             self.cDelegate?.changeControls(to: .swipe)
                             self.physicsWorld.speed = 1.0
                             self.intel.stop = false
-                            self.intel.player.run(SKAction.moveTo(x: CGFloat(lanePositions[self.intel.player.currentLane] ?? 0), duration: 0.2))
+                            self.intel.player.run(SKAction.moveTo(x: CGFloat(lanePositions[self.intel.player.currentLane] ?? 0), duration: 0.8))
                         case .alertSecondButtonReturn:
                             self.tutorialNode?.end(tutorialEnding)
-                            self.cDelegate?.changeControls(to: .precise)
+                            //self.cDelegate?.changeControls(to: .precise)
                             self.physicsWorld.speed = 1.0
                             self.intel.stop = false
+                            NSCursor.hide()
                         default: break
                         }
                     }

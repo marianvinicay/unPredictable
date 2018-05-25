@@ -13,6 +13,7 @@ import GameKit
 class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate {
     
     func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
+        NSCursor.unhide()
         alert.beginSheetModal(for: NSApplication.shared.mainWindow!, completionHandler: completion)
     }
     

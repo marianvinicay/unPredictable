@@ -49,7 +49,7 @@ extension GameScene {
     func moveWithMouse(_ mPosition: CGFloat) {
         if let mousePos = self.lastMousePos, !intel.stop {
             let deltaX = mPosition - mousePos
-            self.handlePreciseMove(withDeltaX: deltaX*8.8)
+            self.handlePreciseMove(withDeltaX: deltaX*9)
         }
         self.lastMousePos = mPosition
     }
