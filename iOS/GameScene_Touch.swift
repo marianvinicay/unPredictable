@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import CoreMotion
 
-extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
+extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
     
     override func didMove(to view: SKView) {
         switch gameControls {
@@ -88,19 +88,19 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
     }
     
     func startSphero() {
-        UIApplication.shared.isIdleTimerDisabled = true
-        let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
-        sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
+        //UIApplication.shared.isIdleTimerDisabled = true
+        //let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
+        //sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
     }
     
     func stopSphero() {
-        sphero?.disableSensors()
-        UIApplication.shared.isIdleTimerDisabled = false
+        //sphero?.disableSensors()
+        //UIApplication.shared.isIdleTimerDisabled = false
     }
     
     private func clearControls() {
         (UIApplication.shared.delegate as! AppDelegate).motionManager.stopDeviceMotionUpdates()
-        self.sphero?.disableSensors()
+        //self.sphero?.disableSensors()
         for recog in self.view?.gestureRecognizers ?? [] {
             self.view?.removeGestureRecognizer(recog)
         }
@@ -119,7 +119,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
         case .began:
             handleBrake(started: true)
             lastPressedXPosition = gest.location(in: view).x
-        case .changed where self.gameControls == .swipe:
+        case .changed where self.gameControls == .swipe && self.playerBraking:
             let change = gest.location(in: view).x - lastPressedXPosition
             handlePreciseMove(withDeltaX: change*9)
             lastPressedXPosition = gest.location(in: view).x
@@ -142,7 +142,7 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
         let point = touches.first!.location(in: self.camera!)
         touchedPosition(point)
     }
-    
+    /*
     func handle(_ message: RKAsyncMessage!, forRobot robot: RKRobotBase!) {
         if self.gameStarted && !self.intel.player.pcsProcessing, let sensorMessage = message as? RKDeviceSensorsAsyncData {
             let sensorData = sensorMessage.dataFrames.last as? RKDeviceSensorsData
@@ -176,4 +176,5 @@ extension GameScene: UIGestureRecognizerDelegate, RKResponseObserver {
             }
         }
     }
+    */
 }

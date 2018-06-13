@@ -7,10 +7,11 @@
 //
 
 #if os(iOS)
-import PopupDialog
+//import PopupDialog
+import UIKit
 
 class MVAPopup {
-    class func customiseAppeareance() {
+    /*class func customiseAppeareance() {
         // Customize dialog appearance
         let pv = PopupDialogDefaultView.appearance()
         pv.titleFont    = UIFont.boldSystemFont(ofSize: 25.0)
@@ -30,17 +31,30 @@ class MVAPopup {
         cb.buttonColor    = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)
         cb.buttonHeight   = 300
         cb.separatorColor = .lightText
-    }
+    }*/
     
-    class func create(withTitle title: String, andMessage message: String?) -> PopupDialog {
-        let dialog = PopupDialog(title: title, message: message, image: nil, buttonAlignment: .horizontal, transitionStyle: .bounceDown, preferredWidth: 340, gestureDismissal: false, hideStatusBar: true, completion: nil)
+    class func create(withTitle title: String, andMessage message: String?) -> UIAlertController {
+        let dialog = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        dialog.view.tintColor = .white
+        let attributedString = NSAttributedString(string: title, attributes: [
+            .font: UIFont.preferredFont(forTextStyle: .body),
+            .foregroundColor : UIColor.white
+            ])
+        dialog.setValue(attributedString, forKey: "attributedTitle")
+        
+        let subview = (dialog.view.subviews.first?.subviews.first?.subviews.first!)! as UIView
+        subview.layer.cornerRadius = 13
+        subview.backgroundColor = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)
+        //PopupDialog(title: title, message: message, image: nil, buttonAlignment: .horizontal, transitionStyle: .bounceDown, preferredWidth: 340, gestureDismissal: false, hideStatusBar: true, completion: nil)
         
         return dialog
     }
     
-    class func addAction(toPopup dialog: PopupDialog, withTitle title: String, _ action: @escaping ()->Void) {
-        let btt = PopupDialogButton(title: title, action: action)
-        dialog.addButton(btt)
+    class func addAction(toPopup dialog: inout UIAlertController, withTitle title: String, type: UIAlertActionStyle, _ action: @escaping ()->Void) {
+        let btt = UIAlertAction(title: title, style: type, handler: { (_: UIAlertAction) in
+            action()
+        })//PopupDialogButton(title: title, action: action)
+        dialog.addAction(btt)
     }
 }
 #elseif os(macOS)

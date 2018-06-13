@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -222,25 +222,17 @@
                     </view>
                     <navigationItem key="navigationItem" title="Choose Car" largeTitleDisplayMode="never" id="qOp-TQ-YWM">
                         <barButtonItem key="leftBarButtonItem" image="arrL" id="JUR-bh-TdA">
-                            <inset key="imageInsets" minX="-30" minY="-2" maxX="0.0" maxY="-8"/>
+                            <inset key="imageInsets" minX="-30" minY="-3" maxX="0.0" maxY="-6"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <segue destination="5wt-yH-z6w" kind="unwind" identifier="goBack" unwindAction="unwindToTMainMenuWithSegue:" id="03G-7t-pHV"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" id="LYB-Ut-cnE">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="L7l-ag-5O8">
-                                <rect key="frame" x="279" y="3" width="80" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="19"/>
-                                <state key="normal" title=" Restore ">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="restorePurchases:" destination="P5Y-F3-w0y" eventType="touchUpInside" id="6n4-Wc-gkw"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" title="Restore" id="fKP-UL-WhQ">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="restorePurchases:" destination="P5Y-F3-w0y" id="Tf8-nX-bfv"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -250,7 +242,6 @@
                         <outlet property="carName" destination="VAP-Fl-dug" id="5MV-Lq-YdR"/>
                         <outlet property="descLabel" destination="hj2-QW-GxD" id="ngz-Lh-jxY"/>
                         <outlet property="leftArr" destination="mH1-J6-hC6" id="WWQ-K8-a3s"/>
-                        <outlet property="restoreBtt" destination="L7l-ag-5O8" id="K1a-CM-oow"/>
                         <outlet property="rightArr" destination="Lcw-PI-c4G" id="4fe-0G-OSM"/>
                         <outletCollection property="swipeGestures" destination="dx2-rh-36X" collectionClass="NSMutableArray" id="HMf-7W-Puy"/>
                         <outletCollection property="swipeGestures" destination="vth-pL-uhN" collectionClass="NSMutableArray" id="g2j-4o-E3D"/>

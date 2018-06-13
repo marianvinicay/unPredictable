@@ -12,12 +12,12 @@ class ChangeCarViewController: UIViewController {
     static let changePCar = Notification.Name("chPCar")
     
     @IBOutlet weak var backBtt: UIBarButtonItem!
-    @IBOutlet weak var restoreBtt: UIButton! {
+    /*@IBOutlet weak var restoreBtt: UIButton! {
         willSet {
             newValue.layer.cornerRadius = 9
         }
     }
-    /*@IBOutlet weak var enableAdsBtt: UIButton! {
+    @IBOutlet weak var enableAdsBtt: UIButton! {
         willSet {
             newValue.layer.cornerRadius = 9
         }
@@ -207,13 +207,15 @@ class ChangeCarViewController: UIViewController {
         }
     }
     
-    @IBAction func restorePurchases(_ sender: UIButton) {
+    @IBAction func restorePurchases(_ sender: UIBarButtonItem) {
         waitView = MVAWaitView.new(withSize: self.view.frame.size)
         self.view.addSubview(waitView)
         backBtt.isEnabled = false
+        sender.isEnabled = false
         
         store.restorePurchases() { (purchased: Bool, car: String, error: Error?) in
             self.backBtt.isEnabled = true
+            sender.isEnabled = true
             
             if purchased && error == nil {
                 //MVAMemory.adsEnabled = false
@@ -241,9 +243,9 @@ class ChangeCarViewController: UIViewController {
         changeCar(1)
     }
     
-    @IBAction func enableAds(_ sender: UIButton) {
-        //ads.showAd(fromViewController: self)
-    }
+    /*@IBAction func enableAds(_ sender: UIButton) {
+        ads.showAd(fromViewController: self)
+    }*/
     
     @IBAction func swipeGesture(_ sender: UIGestureRecognizer) {
         if (sender as? UISwipeGestureRecognizer)?.direction == .left {

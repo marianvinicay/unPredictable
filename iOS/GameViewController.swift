@@ -76,7 +76,7 @@ class GameViewController: UIViewController, GameVCDelegate {
         // for sphero
         NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: .UIApplicationWillResignActive, object: nil)
-        RKRobotDiscoveryAgent.shared().addNotificationObserver(self, selector: #selector(handleRobotStateChangeNotification(notification:)))
+        //RKRobotDiscoveryAgent.shared().addNotificationObserver(self, selector: #selector(handleRobotStateChangeNotification(notification:)))
         
         if MVAMemory.enableGameCenter {
             scene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
@@ -89,6 +89,7 @@ class GameViewController: UIViewController, GameVCDelegate {
         }
     }
     
+    /*
     private func lookingForSphero() {
         spheroLabel.text = "Connecting to Sphero"
         scene.playBtt.alpha = 0.2
@@ -133,18 +134,18 @@ class GameViewController: UIViewController, GameVCDelegate {
         default: break
         }
     }
-    
+    */
     @objc func appBecomesActive() {
         if MVAMemory.gameControls == .sphero {
-            RKRobotDiscoveryAgent.startDiscovery()
-            lookingForSphero()
+            //RKRobotDiscoveryAgent.startDiscovery()
+            //lookingForSphero()
         }
     }
     
     @objc func appResigns() {
-        RKRobotDiscoveryAgent.shared().disconnectAll()
-        scene.sphero = nil
-        RKRobotDiscoveryAgent.stopDiscovery()
+        //RKRobotDiscoveryAgent.shared().disconnectAll()
+        //scene.sphero = nil
+        //RKRobotDiscoveryAgent.stopDiscovery()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -236,8 +237,8 @@ class GameViewController: UIViewController, GameVCDelegate {
             }
         case .sphero:
             controlsBtt.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
-            RKRobotDiscoveryAgent.startDiscovery()
-            lookingForSphero()
+            //RKRobotDiscoveryAgent.startDiscovery()
+            //lookingForSphero()
             
             scene.gameControls = .sphero
             scene.setupSphero()
@@ -253,10 +254,10 @@ class GameViewController: UIViewController, GameVCDelegate {
             if (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
                 setControls(to: .precise)
             } else {
-                setControls(to: .sphero)
+                //setControls(to: .sphero)
             }
         case .precise:
-            setControls(to: .sphero)
+            setControls(to: .swipe)//setControls(to: .sphero)
         case .sphero:
             appResigns() //disconnect sphero
             setControls(to: .swipe)

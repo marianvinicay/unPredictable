@@ -289,7 +289,7 @@ extension GameScene: MVATutorialDelegate {
         startSound()
         
         #if os(iOS)
-        sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        //sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
         #endif
     }
     
@@ -325,7 +325,7 @@ extension GameScene: MVATutorialDelegate {
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
         
         #if os(iOS)
-        sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        //sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
         #elseif os(macOS)
         self.cDelegate?.distanceChanged(toNumberString: nil)
         #endif

@@ -50,7 +50,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var cDelegate: GameVCDelegate?
     #if os(iOS)
         var lastAngle: Double?
-        var sphero: RKConvenienceRobot?
+        //var sphero: RKConvenienceRobot?
     #elseif os(macOS)
         var lastMousePos: CGFloat?
     #endif
@@ -298,7 +298,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if self.gameControls != .sphero {
             #if os(iOS)
-            let dialog = MVAPopup.create(withTitle: "What do you prefer?", andMessage: nil)
+            var dialog = MVAPopup.create(withTitle: "What do you prefer?", andMessage: nil)
             let mManager = (UIApplication.shared.delegate as! AppDelegate).motionManager
             
             let continueWithSwipe = {
@@ -306,7 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.intel.player.run(SKAction.moveTo(x: CGFloat(lanePositions[self.intel.player.currentLane] ?? 0), duration: 0.2))
             }
             
-            MVAPopup.addAction(toPopup: dialog, withTitle: "Swipe") {
+            MVAPopup.addAction(toPopup: &dialog, withTitle: "Swipe", type: .default) {
                 continueWithSwipe()
             }
             
@@ -325,7 +325,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.intel.stop = true
                     #if os(iOS)
                     if mManager.isDeviceMotionAvailable {
-                        MVAPopup.addAction(toPopup: dialog, withTitle: "Tilt") {
+                        MVAPopup.addAction(toPopup: &dialog, withTitle: "Tilt", type: .default) {
                             continueWithControls(.precise)
                         }
                         self.cDelegate?.present(view: dialog, completion: {})
@@ -543,9 +543,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             #if os(iOS)
             if self.gameControls != .sphero {
                 begin()
-            } else if self.gameControls == .sphero && RKRobotDiscoveryAgent.shared().connectedRobots().count > 0 {
+            } /*else if self.gameControls == .sphero && RKRobotDiscoveryAgent.shared().connectedRobots().count > 0 {
                 begin()
-            }
+            }*/
             #else
                 begin()
             #endif
@@ -565,14 +565,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     #if os(iOS)
     //Sphero function
     func blinkSphero(withTime time: TimeInterval?, andColor color: (r: Float,g: Float,b: Float) = (1.0,0.0,0.0)) {
-        self.sphero?.setLEDWithRed(color.r, green: color.g, blue: color.b)
+        /*self.sphero?.setLEDWithRed(color.r, green: color.g, blue: color.b)
         
         if time != nil {
             Timer.scheduledTimer(withTimeInterval: time!, repeats: false) { (tmr: Timer) in
                 tmr.invalidate()
                 self.sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
             }
-        }
+        }*/
     }
     #endif
     
