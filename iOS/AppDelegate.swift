@@ -9,10 +9,6 @@
 
 import UIKit
 import AVFoundation
-import Firebase
-//import GoogleMobileAds
-import Fabric
-import Crashlytics
 import StoreKit
 import CoreMotion
 
@@ -44,9 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         SKPaymentQueue.default().add(self)
         
         try! AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: .mixWithOthers)
-        Fabric.with([Crashlytics.self])
-        FirebaseApp.configure()
-        //GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
+
         //MVAAds.prepareRewardAd()
         //MVAPopup.customiseAppeareance()
                 

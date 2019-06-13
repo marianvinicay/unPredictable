@@ -7,9 +7,6 @@
 //
 
 import SpriteKit
-#if os(iOS)
-    import FirebaseAnalytics
-#endif
 
 enum MVATutorialText {
     #if os(iOS)
@@ -91,11 +88,7 @@ class MVATutorialNode: SKNode {
             node.zPosition = 1
             newNode.addChild(node)
         }
-        
-        #if os(iOS)
-            Analytics.logEvent(AnalyticsEventTutorialBegin, parameters: nil)
-        #endif
-            
+
         return newNode
     }
     
@@ -208,11 +201,7 @@ class MVATutorialNode: SKNode {
         wellDLabel.run(SKAction.fadeIn(withDuration: 0.1))
     }
     
-    func end(_ completion: @escaping ()->Void) {
-        #if os(iOS)
-            Analytics.logEvent(AnalyticsEventTutorialComplete, parameters: nil)
-        #endif
-        
+    func end(_ completion: @escaping ()->Void) {        
         self.run(SKAction.fadeOut(withDuration: 0.2), completion: completion)
     }
 }

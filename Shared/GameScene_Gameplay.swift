@@ -6,9 +6,6 @@
 //  Copyright © 2017 MarVin. All rights reserved.
 //
 import SpriteKit
-#if os(iOS)
-    import FirebaseAnalytics
-#endif
 
 extension GameScene: MVATutorialDelegate {
     
@@ -259,10 +256,6 @@ extension GameScene: MVATutorialDelegate {
             self.run(curtainDown)
             
             checkAchievements()
-            
-            #if os(iOS)
-                Analytics.logEvent("game_over", parameters: ["level":intel.currentLevel.level])
-            #endif
         }
     }
     

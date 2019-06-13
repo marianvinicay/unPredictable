@@ -85,7 +85,7 @@ class ChangeCarViewController: UIViewController {
             self.buyBtt.setTitle(" \(store.getPrice(forCar: selectedCar)) ", for: .normal)
         }
         
-        switch availableCars.index(of: selectedCar)! {
+        switch availableCars.firstIndex(of: selectedCar)! {
         case 0:
             leftArr.isHidden = true
             rightArr.isHidden = false
@@ -139,7 +139,7 @@ class ChangeCarViewController: UIViewController {
     }
     
     private func changeCar(_ ind: Int) {
-        let currentCarIndex = availableCars.index(of: selectedCar)!
+        let currentCarIndex = availableCars.firstIndex(of: selectedCar)!
         let newIndex = currentCarIndex+ind
         if newIndex >= 0 && newIndex <= (availableCars.count-1) {
             let newCarName = availableCars[newIndex]

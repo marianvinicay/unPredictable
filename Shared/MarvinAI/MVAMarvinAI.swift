@@ -244,7 +244,7 @@ class MVAMarvinAI: NSObject {
     
     private func freeTheWay(blockedByCars cars: [MVACarBot]) {
         let carsFreeToMove = cars.filter({ $0.cantMoveForTime <= 0.0 }) //change
-        let carIndex = carsFreeToMove.map({ $0.hasPriority }).index(of: true) ?? Int(arc4random_uniform(UInt32(carsFreeToMove.count)))
+        let carIndex = carsFreeToMove.map({ $0.hasPriority }).firstIndex(of: true) ?? Int(arc4random_uniform(UInt32(carsFreeToMove.count)))
         if let badCar = carsFreeToMove[safe: carIndex] {
             let randDir: MVAPosition = arc4random_uniform(2) == 0 ? .left:.right
             let oppositeDir: MVAPosition = randDir == .left ? .right:.left

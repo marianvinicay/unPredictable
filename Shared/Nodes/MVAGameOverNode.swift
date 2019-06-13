@@ -9,7 +9,6 @@
 import SpriteKit
 #if os(iOS)
     import UIKit
-    import FirebaseAnalytics
 #endif
     
 class MVAGameOverNode: SKNode {
