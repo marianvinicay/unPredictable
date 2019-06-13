@@ -50,9 +50,9 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
     @IBOutlet weak var soundBtt: NSButton! {
         willSet {
             if MVAMemory.audioMuted {
-                newValue.image = NSImage(named: NSImage.Name(rawValue: "SoundOFF"))
+                newValue.image = NSImage(named: "SoundOFF")
             } else {
-                newValue.image = NSImage(named: NSImage.Name(rawValue: "SoundON"))
+                newValue.image = NSImage(named: "SoundON")
             }
         }
     }
@@ -155,11 +155,11 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
         if gameScene.audioEngine.mainMixerNode.outputVolume > 0.0 {
             gameScene.audioEngine.mainMixerNode.outputVolume = 0.0
             MVAMemory.audioMuted = true
-            soundBtt.image = NSImage(named: NSImage.Name(rawValue: "SoundOFF"))
+            soundBtt.image = NSImage(named: "SoundOFF")
         } else {
             gameScene.audioEngine.mainMixerNode.outputVolume = 1.0
             MVAMemory.audioMuted = false
-            soundBtt.image = NSImage(named: NSImage.Name(rawValue: "SoundON"))
+            soundBtt.image = NSImage(named: "SoundON")
         }
     }
     

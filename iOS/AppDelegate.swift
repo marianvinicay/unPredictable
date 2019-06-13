@@ -40,10 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
     var window: UIWindow?
     let inStore = MVAStore()
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         SKPaymentQueue.default().add(self)
-                
-        try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+        
+        try! AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: .mixWithOthers)
         Fabric.with([Crashlytics.self])
         FirebaseApp.configure()
         //GADMobileAds.configure(withApplicationID: "ca-app-pub-3670763804809001~8265381684")
@@ -76,4 +76,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
 
 
 }
-

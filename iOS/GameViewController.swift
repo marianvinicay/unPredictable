@@ -74,8 +74,8 @@ class GameViewController: UIViewController, GameVCDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
         
         // for sphero
-        NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: UIApplication.willResignActiveNotification, object: nil)
         //RKRobotDiscoveryAgent.shared().addNotificationObserver(self, selector: #selector(handleRobotStateChangeNotification(notification:)))
         
         if MVAMemory.enableGameCenter {
@@ -309,6 +309,10 @@ class GameViewController: UIViewController, GameVCDelegate {
         if let destVC = (segue.destination as? UINavigationController)?.topViewController as? ChangeCarViewController {
             destVC.store = self.scene.intel.storeHelper
         }
+    }
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
     }
     
     deinit {

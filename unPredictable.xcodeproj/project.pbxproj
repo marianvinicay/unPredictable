@@ -473,7 +473,6 @@
 				2F23E10E1D6EF21D00119E4F /* Frameworks */,
 				2F23E10F1D6EF21D00119E4F /* Resources */,
 				2F23E16C1D6EF21D00119E4F /* Embed Watch Content */,
-				711742303B246860266D0B90 /* [CP] Embed Pods Frameworks */,
 				2FDFBD251F39917C00E1E6A4 /* ShellScript */,
 			);
 			buildRules = (
@@ -551,7 +550,7 @@
 					2F23E1101D6EF21D00119E4F = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 9K9H4YXRT5;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -577,7 +576,7 @@
 					2F23E1491D6EF21D00119E4F = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 9K9H4YXRT5;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
@@ -727,26 +726,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 661d346440292177133f4f55e1db13108211f63d 8f683a7c6859dc7e6a47c42b94eb01a1401f94947d0948a7b5d79807bac01223";
-		};
-		711742303B246860266D0B90 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-unPredictable - iOS/Pods-unPredictable - iOS-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		AEE1CEE928EA430829843D97 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1038,8 +1017,7 @@
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "iOS/unPredictable - iOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1070,8 +1048,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "iOS/unPredictable - iOS-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1098,8 +1075,7 @@
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1124,8 +1100,7 @@
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

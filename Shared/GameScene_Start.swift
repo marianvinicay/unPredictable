@@ -32,18 +32,18 @@ extension GameScene {
             scene.backgroundColor = MVAColor.roadBrown
         }
         
-        scene.playBtt = scene.camera!.childNode(withName: "playBtt") as! SKSpriteNode
-        scene.pauseBtt = scene.camera!.childNode(withName: "stop") as! SKSpriteNode
+        scene.playBtt = scene.camera!.childNode(withName: "playBtt") as? SKSpriteNode
+        scene.pauseBtt = scene.camera!.childNode(withName: "stop") as? SKSpriteNode
         scene.originalPausePosition = CGPoint(x: (scene.size.width/2)-10, y: (scene.size.height/2)-10)
         scene.pauseBtt.position = scene.originalPausePosition
         
-        scene.speedSign = scene.camera!.childNode(withName: "speed") as! SKSpriteNode
+        scene.speedSign = scene.camera!.childNode(withName: "speed") as? SKSpriteNode
         scene.originalSpeedPosition = CGPoint(x: (-(scene.size.width/2)+scene.speedSign.size.width/2)+5, y: ((scene.size.height/2)-scene.speedSign.size.height/2)-5)
         scene.speedSign.position = scene.originalSpeedPosition
         
         let downY: CGFloat = MVAMemory.isIphoneX ? 30.0:0.0
         
-        scene.distanceSign = scene.camera!.childNode(withName: "distance") as! SKSpriteNode
+        scene.distanceSign = scene.camera!.childNode(withName: "distance") as? SKSpriteNode
         scene.originalDistancePosition = CGPoint(x: -scene.size.width/2, y: (-scene.size.height/2)+downY)
         scene.distanceSign.position = scene.originalDistancePosition
         let over = scene.camera!.childNode(withName: "over") as! SKSpriteNode
@@ -57,14 +57,14 @@ extension GameScene {
             scene.addIphoneXInset()
         }
         
-        scene.lives = down.childNode(withName: "lives") as! SKSpriteNode
+        scene.lives = down.childNode(withName: "lives") as? SKSpriteNode
         scene.lives.position = CGPoint(x: scene.size.width/2, y: 0.0)
         scene.lives.isHidden = true
-        scene.battery = down.childNode(withName: "battery") as! SKSpriteNode
+        scene.battery = down.childNode(withName: "battery") as? SKSpriteNode
         scene.battery.position = CGPoint(x: (scene.size.width/2)-8, y: 8.0)
         scene.battery.isHidden = true
         
-        scene.recordDistance = scene.camera!.childNode(withName: "best") as! SKLabelNode
+        scene.recordDistance = scene.camera!.childNode(withName: "best") as? SKLabelNode
         let bestDist = MVAMemory.maxPlayerDistance.roundTo(NDecimals: 1)
         if bestDist != 0.0 {
             scene.recordDistance.text = "BEST: \(bestDist) \(MVAWorldConverter.lengthUnit)"

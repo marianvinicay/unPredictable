@@ -217,7 +217,7 @@ class MVAGameOverNode: SKNode {
     fileprivate var activityInd: UIActivityIndicatorView?
 
     fileprivate func createIndicator() {
-        activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        activityInd = UIActivityIndicatorView(style: .whiteLarge)
         activityInd!.center = CGPoint(x: scene!.view!.frame.midX, y: -2.5*yesBtt!.position.y)
         activityInd!.startAnimating()
     }

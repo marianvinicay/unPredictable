@@ -15,7 +15,7 @@ class MVAWaitView: UIView {
         let newView = MVAWaitView(frame: CGRect(origin: .zero, size: size))
         newView.backgroundColor = UIColor(white: 0.0, alpha: 0.8)
         
-        newView.activityInd = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        newView.activityInd = UIActivityIndicatorView(style: .whiteLarge)
         newView.activityInd!.center = CGPoint(x: newView.frame.midX, y: newView.frame.midY)
         newView.activityInd!.startAnimating()
 

@@ -27,11 +27,11 @@ class MVAGameCenterHelper: NSObject {
     }
     
     @objc func authDidChange() {
-        MVAMemory.enableGameCenter = GKLocalPlayer.localPlayer().isAuthenticated
+        MVAMemory.enableGameCenter = GKLocalPlayer.local.isAuthenticated
     }
     
     func authenticateLocalPlayer(_ comp: @escaping ((Bool)->())) {
-        let localPlayer = GKLocalPlayer.localPlayer()
+        let localPlayer = GKLocalPlayer.local
         localPlayer.authenticateHandler = { (viewController: UIViewController?, error: Error?) in
             if viewController != nil {
                 self.authenticationViewController = viewController as? GKGameCenterViewController
@@ -47,7 +47,7 @@ class MVAGameCenterHelper: NSObject {
     }
     
     func report(distance dist: Double) {
-        guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
+        guard GKLocalPlayer.local.isAuthenticated else { return }
         let gkScore = GKScore(leaderboardIdentifier: "grp.com.mva.unpredictable.distance_traveled")
         if Locale.current.usesMetricSystem {
             // dist in KM
@@ -60,7 +60,7 @@ class MVAGameCenterHelper: NSObject {
     }
     
     func report(crashedCars numOfCars: Int64) {
-        guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
+        guard GKLocalPlayer.local.isAuthenticated else { return }
         let gkScore = GKScore(leaderboardIdentifier: "grp.com.mva.unpredictable.crashed_cars")
         gkScore.value = numOfCars
         GKScore.report([gkScore], withCompletionHandler: nil)
@@ -71,7 +71,7 @@ class MVAGameCenterHelper: NSObject {
     }
     
     func report(achievement: String) {
-        guard GKLocalPlayer.localPlayer().isAuthenticated else { return }
+        guard GKLocalPlayer.local.isAuthenticated else { return }
         let achieved = UserDefaults.standard.value(forKey: achievement) as? Bool ?? false
         
         if !achieved {
@@ -93,7 +93,7 @@ class MVAGameCenterHelper: NSObject {
         }
         
         func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
-            if GKLocalPlayer.localPlayer().isAuthenticated {
+            if GKLocalPlayer.local.isAuthenticated {
                 let gameCenterViewController = GKGameCenterViewController()
                 gameCenterViewController.gameCenterDelegate = self
                 viewController.present(gameCenterViewController,
@@ -112,7 +112,7 @@ class MVAGameCenterHelper: NSObject {
         }
         
         func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
-            if GKLocalPlayer.localPlayer().isAuthenticated {
+            if GKLocalPlayer.local.isAuthenticated {
                 let gameCenterViewController = GKGameCenterViewController()
                 gameCenterViewController.gameCenterDelegate = self
                 let sdc = GKDialogController.shared()

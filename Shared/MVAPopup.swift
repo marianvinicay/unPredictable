@@ -50,7 +50,7 @@ class MVAPopup {
         return dialog
     }
     
-    class func addAction(toPopup dialog: inout UIAlertController, withTitle title: String, type: UIAlertActionStyle, _ action: @escaping ()->Void) {
+    class func addAction(toPopup dialog: inout UIAlertController, withTitle title: String, type: UIAlertAction.Style, _ action: @escaping ()->Void) {
         let btt = UIAlertAction(title: title, style: type, handler: { (_: UIAlertAction) in
             action()
         })//PopupDialogButton(title: title, action: action)

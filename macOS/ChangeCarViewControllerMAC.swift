@@ -51,7 +51,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
         view.window!.styleMask.remove(NSWindow.StyleMask.resizable)
         
         let pCar = MVAMemory.playerCar
-        carImg.image = NSImage(named: NSImage.Name(rawValue: pCar))
+        carImg.image = NSImage(named: pCar)
         carName.stringValue = store.mockUpNames[pCar] ?? ""
         selectedCar = pCar
         checkArrows()
@@ -89,7 +89,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     private var canAnimateChange = true
     private func animateChange(inDirection dir: MVAPosition) {
         let newCarView = NSImageView(frame: carImg.frame)
-        newCarView.image = NSImage(named: NSImage.Name(rawValue: selectedCar))
+        newCarView.image = NSImage(named: selectedCar)
         newCarView.frame.origin.x = dir == .right ? 0.0 : self.view.frame.size.width
         newCarView.alphaValue = 0.0
         self.view.addSubview(newCarView)
@@ -167,7 +167,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
             if MVAMemory.ownedCars.contains(selectedCar) {
                 MVAMemory.playerCar = selectedCar
                 NotificationCenter.default.post(name: ChangeCarViewControllerMAC.changePCar, object: nil)
-                self.dismissViewController(self)
+                self.dismiss(self)
             }
         } else {
             purchaseCar()
@@ -208,7 +208,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     
     @IBAction func goBack(_ : Any) {
         NotificationCenter.default.post(name: ChangeCarViewControllerMAC.backFromScene, object: nil)
-        self.dismissViewController(self)
+        self.dismiss(self)
     }
     
     
@@ -216,7 +216,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     override func keyDown(with event: NSEvent) {
         if event.keyCode == KeyCodes.keyESC {
             NotificationCenter.default.post(name: ChangeCarViewControllerMAC.backFromScene, object: nil)
-            self.dismissViewController(self)
+            self.dismiss(self)
         } else {
             interpretKeyEvents([event])
         }

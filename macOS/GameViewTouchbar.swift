@@ -21,7 +21,7 @@ extension GameViewControllerMAC: NSTouchBarDelegate {
         let touchBar = NSTouchBar()
         touchBar.delegate = self
         
-        touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier(rawValue: "gameBar")
+        touchBar.customizationIdentifier = "gameBar"
         touchBar.defaultItemIdentifiers = [.distanceLabel, .flexibleSpace, .infoLabel, .flexibleSpace]
         touchBar.customizationAllowedItemIdentifiers = [.distanceLabel, .infoLabel]
         return touchBar

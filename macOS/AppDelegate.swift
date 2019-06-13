@@ -24,10 +24,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
         inStore.paymentQueue(queue, restoreCompletedTransactionsFailedWithError: error)
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
-        return inStore.paymentQueue(queue, shouldAddStorePayment: payment, for: product)
-    }
-    
     let inStore = MVAStore()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {

@@ -45,7 +45,7 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
                 
                 if self.lastAngle != nil {
                     let deltaAngle = pitch > 96 ? CGFloat(angle - self.lastAngle!)*(-13):CGFloat(angle - self.lastAngle!)*13
-                    if fabs(deltaAngle) > 0.3 {
+                    if abs(deltaAngle) > 0.3 {
                         if UIDevice.current.userInterfaceIdiom == .pad {
                             self.handlePreciseMove(withDeltaX: deltaAngle*3.4)
                         } else { //phone
@@ -108,8 +108,8 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
     
     @objc func handleUISwipe(swipe: UISwipeGestureRecognizer) {
         switch swipe.direction {
-        case UISwipeGestureRecognizerDirection.right: handleSwipe(swipe: .right)
-        case UISwipeGestureRecognizerDirection.left: handleSwipe(swipe: .left)
+        case UISwipeGestureRecognizer.Direction.right: handleSwipe(swipe: .right)
+        case UISwipeGestureRecognizer.Direction.left: handleSwipe(swipe: .left)
         default: break
         }
     }
