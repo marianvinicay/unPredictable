@@ -1,14 +1,15 @@
 //
-//  ChangeCarViewControllerMACN.swift
-//  unPredictable - macOS
+//  ChangeCarViewController_Mac.swift
+//  unPredictable
 //
-//  Created by Majo on 17/12/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 17/12/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import Cocoa
 
-class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
+class ChangeCarViewController_Mac: NSViewController, NSWindowDelegate {
+    
     static let changePCar = Notification.Name("chPCar")
     static let backFromScene = Notification.Name("baFrSc")
     
@@ -32,9 +33,9 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     @IBOutlet weak var carName: NSTextField!
     @IBOutlet weak var descLabel: NSTextField!
     
+    var store: MVAStore!
     private let availableCars = [MVACarNames.playerOrdinary, MVACarNames.playerLives, MVACarNames.playerPCS]
     private var selectedCar = MVAMemory.playerCar
-    var store: MVAStore!
     private var waitView: MVAWaitView!
     
     override func viewDidLoad() {
@@ -59,12 +60,12 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     
     private func checkArrows() {
         if MVAMemory.ownedCars.contains(selectedCar) {
-            self.buyBtt.title = " USE "
+            self.buyBtt.title = "USE"
         } else {
-            self.buyBtt.title = " \(store.getPrice(forCar: selectedCar)) "
+            self.buyBtt.title = "\(store.getPrice(forCar: selectedCar))"
         }
         
-        switch availableCars.index(of: selectedCar)! {
+        switch availableCars.firstIndex(of: selectedCar)! {
         case 0:
             leftArr.isHidden = true
             rightArr.isHidden = false
@@ -118,7 +119,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     
     private func changeCar(_ ind: Int) {
         if canAnimateChange {
-            let currentCarIndex = availableCars.index(of: selectedCar)!
+            let currentCarIndex = availableCars.firstIndex(of: selectedCar)!
             let newIndex = currentCarIndex+ind
             if newIndex >= 0 && newIndex <= (availableCars.count-1) {
                 canAnimateChange = false
@@ -139,7 +140,7 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
         let completion = { (purchased: Bool, _: String, err: Error?) in
             if purchased && err == nil {
                 MVAMemory.ownedCars.append(self.selectedCar)
-                self.buyBtt.title = " USE "
+                self.buyBtt.title = "USE"
                 self.selectCar(self.buyBtt)
             }
             self.waitView.remove()
@@ -163,10 +164,10 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     }
     
     @IBAction func selectCar(_ sender: NSButton) {
-        if sender.title == " USE " {
+        if sender.title == "USE" {
             if MVAMemory.ownedCars.contains(selectedCar) {
                 MVAMemory.playerCar = selectedCar
-                NotificationCenter.default.post(name: ChangeCarViewControllerMAC.changePCar, object: nil)
+                NotificationCenter.default.post(name: ChangeCarViewController_Mac.changePCar, object: nil)
                 self.dismiss(self)
             }
         } else {
@@ -207,15 +208,14 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     }
     
     @IBAction func goBack(_ : Any) {
-        NotificationCenter.default.post(name: ChangeCarViewControllerMAC.backFromScene, object: nil)
+        NotificationCenter.default.post(name: ChangeCarViewController_Mac.backFromScene, object: nil)
         self.dismiss(self)
     }
-    
     
     // MARK: - Keyboard
     override func keyDown(with event: NSEvent) {
         if event.keyCode == KeyCodes.keyESC {
-            NotificationCenter.default.post(name: ChangeCarViewControllerMAC.backFromScene, object: nil)
+            NotificationCenter.default.post(name: ChangeCarViewController_Mac.backFromScene, object: nil)
             self.dismiss(self)
         } else {
             interpretKeyEvents([event])
@@ -233,4 +233,5 @@ class ChangeCarViewControllerMAC: NSViewController, NSWindowDelegate {
     override func moveRight(_ sender: Any?) {
         changeCar(1)
     }
+    
 }

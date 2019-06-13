@@ -1,12 +1,11 @@
 //
-//  MVAMindSet.swift
-//  (un)Predictable
+//  MVAUtils.swift
+//  unPredictable
 //
-//  Created by Majo on 19/11/2016.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 19/11/2016.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
 struct MVASkin {
@@ -65,15 +64,15 @@ enum MVAPhysicsCategory: UInt32 {
     case spawner = 0b1000
 }
 
-enum MVAColor {
+struct MVAColor {
     #if os(macOS)
-        typealias UIColor = NSColor
+    typealias UIColor = NSColor
     #endif
-    static let normBeige = UIColor(red:0.84, green:0.71, blue:0.56, alpha:1.00)//UIColor(red:0.80, green:0.71, blue:0.62, alpha:1.00)
+    static let normBeige = UIColor(red:0.84, green:0.71, blue:0.56, alpha:1.00)
     static let mvRed = UIColor(red:0.85, green:0.10, blue:0.25, alpha:1.00)
     static let jGreen = UIColor(red:0.22, green:0.50, blue:0.10, alpha:1.00)
     static let roadGreen = UIColor(red:0.48, green:0.75, blue:0.42, alpha:1.00)
-    static let roadBrown = UIColor(red:0.86, green:0.64, blue:0.43, alpha:1.00)//UIColor(red:1.00, green:0.84, blue:0.70, alpha:1.00)
+    static let roadBrown = UIColor(red:0.86, green:0.64, blue:0.43, alpha:1.00)
 }
 
 extension CGSize {

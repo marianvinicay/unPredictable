@@ -2,13 +2,13 @@
 //  MVAGameCenterHelper.swift
 //  unPredictable
 //
-//  Created by Mike on 21/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 21/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import GameKit
 
-enum MVAAchievements {
+struct MVAAchievements {
     static let firstCrash: String = "grp.com.mva.unpredictable.first_Crash"
     static let aroundEarth: String = "grp.com.mva.unpredictable.around_Earth"
     static let crashed100Cars: String = "grp.com.mva.unpredictable.100C_cars"
@@ -84,43 +84,43 @@ class MVAGameCenterHelper: NSObject {
     }
 }
 
-#if os(iOS) || os(tvOS)
-    import UIKit
+#if os(iOS)
+import UIKit
+
+extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        gameCenterViewController.dismiss(animated: true, completion: nil)
+    }
     
-    extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
-        func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-            gameCenterViewController.dismiss(animated: true, completion: nil)
-        }
-        
-        func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
-            if GKLocalPlayer.local.isAuthenticated {
-                let gameCenterViewController = GKGameCenterViewController()
-                gameCenterViewController.gameCenterDelegate = self
-                viewController.present(gameCenterViewController,
-                                       animated: true, completion: nil)
-            } else {
-                authenticateLocalPlayer(comp)
-            }
+    func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
+        if GKLocalPlayer.local.isAuthenticated {
+            let gameCenterViewController = GKGameCenterViewController()
+            gameCenterViewController.gameCenterDelegate = self
+            viewController.present(gameCenterViewController,
+                                   animated: true, completion: nil)
+        } else {
+            authenticateLocalPlayer(comp)
         }
     }
+}
 #elseif os(macOS)
-    extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
-        typealias UIViewController = NSViewController
-        
-        func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-            GKDialogController.shared().dismiss(self)
-        }
-        
-        func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
-            if GKLocalPlayer.local.isAuthenticated {
-                let gameCenterViewController = GKGameCenterViewController()
-                gameCenterViewController.gameCenterDelegate = self
-                let sdc = GKDialogController.shared()
-                sdc.parentWindow = NSApp.mainWindow
-                sdc.present(gameCenterViewController)
-            } else {
-                authenticateLocalPlayer(comp)
-            }
+extension MVAGameCenterHelper: GKGameCenterControllerDelegate {
+    typealias UIViewController = NSViewController
+    
+    func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
+        GKDialogController.shared().dismiss(self)
+    }
+    
+    func showGKGameCenterViewController(viewController: UIViewController, withCompletion comp: @escaping ((Bool)->())) {
+        if GKLocalPlayer.local.isAuthenticated {
+            let gameCenterViewController = GKGameCenterViewController()
+            gameCenterViewController.gameCenterDelegate = self
+            let sdc = GKDialogController.shared()
+            sdc.parentWindow = NSApp.mainWindow
+            sdc.present(gameCenterViewController)
+        } else {
+            authenticateLocalPlayer(comp)
         }
     }
+}
 #endif

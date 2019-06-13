@@ -2,80 +2,86 @@
 //  MVAPopup.swift
 //  unPredictable
 //
-//  Created by Majo on 09/12/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 09/12/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 #if os(iOS)
-//import PopupDialog
 import UIKit
 
-class MVAPopup {
-    /*class func customiseAppeareance() {
-        // Customize dialog appearance
-        let pv = PopupDialogDefaultView.appearance()
-        pv.titleFont    = UIFont.boldSystemFont(ofSize: 25.0)
-        pv.titleColor   = .white
-        pv.messageFont  = UIFont.systemFont(ofSize: 0.0)
-        
-        // Customize the container view appearance
-        let pcv = PopupDialogContainerView.appearance()
-        pcv.backgroundColor = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)//UIColor(red:0.16, green:0.17, blue:0.21, alpha:1.00)
-        pcv.cornerRadius    = 13
-        pcv.shadowEnabled   = true
-        
-        // Customize cancel button appearance
-        let cb = PopupDialogButton.appearance()//CancelButton.appearance()
-        cb.titleFont = UIFont.systemFont(ofSize: 24.0)
-        cb.titleColor     = .white
-        cb.buttonColor    = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)
-        cb.buttonHeight   = 300
-        cb.separatorColor = .lightText
-    }*/
+class MVAPopup: UIAlertController {
     
-    class func create(withTitle title: String, andMessage message: String?) -> UIAlertController {
-        let dialog = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    class func create(withMessage message: String) -> MVAPopup {
+        let dialog = MVAPopup(title: message, message: nil, preferredStyle: .alert)
         dialog.view.tintColor = .white
-        let attributedString = NSAttributedString(string: title, attributes: [
+        let attributedString = NSAttributedString(string: message, attributes: [
             .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor : UIColor.white
+            .foregroundColor: UIColor.white
             ])
         dialog.setValue(attributedString, forKey: "attributedTitle")
         
         let subview = (dialog.view.subviews.first?.subviews.first?.subviews.first!)! as UIView
         subview.layer.cornerRadius = 13
         subview.backgroundColor = UIColor(red:0.29, green:0.29, blue:0.29, alpha:1.00)
-        //PopupDialog(title: title, message: message, image: nil, buttonAlignment: .horizontal, transitionStyle: .bounceDown, preferredWidth: 340, gestureDismissal: false, hideStatusBar: true, completion: nil)
         
         return dialog
     }
     
-    class func addAction(toPopup dialog: inout UIAlertController, withTitle title: String, type: UIAlertAction.Style, _ action: @escaping ()->Void) {
-        let btt = UIAlertAction(title: title, style: type, handler: { (_: UIAlertAction) in
-            action()
-        })//PopupDialogButton(title: title, action: action)
-        dialog.addAction(btt)
+    func addAction(withTitle title: String, type: UIAlertAction.Style, action: ((UIAlertAction)->Void)?) {
+        self.addAction(UIAlertAction(title: title, style: type, handler: action))
+    }
+    
+    class func createOKPopup(withMessage msg: String) -> MVAPopup {
+        let popup = MVAPopup.create(withMessage: msg)
+        popup.addAction(withTitle: "OK", type: .default, action: nil)
+        
+        return popup
+    }
+    
+    func present() {
+        DispatchQueue.main.async {
+            let win = UIWindow(frame: UIScreen.main.bounds)
+            let vc = UIViewController()
+            vc.view.backgroundColor = .clear
+            win.rootViewController = vc
+            win.windowLevel = UIWindow.Level.alert + 1
+            win.makeKeyAndVisible()
+            vc.present(self, animated: true, completion: nil)
+        }
     }
 }
 #elseif os(macOS)
-    import AppKit
-    
-    class MVAPopup {
-        class func create(withTitle title: String, andMessage message: String?) -> NSAlert {
-            let dialog = NSAlert()
-            dialog.messageText = title
-            dialog.informativeText = message ?? ""
-            dialog.alertStyle = .informational
-            
-            return dialog
-        }
+import AppKit
+
+class MVAPopup: NSAlert {
+    class func create(withMessage msg: String) -> MVAPopup {
+        let dialog = MVAPopup()
+        dialog.messageText = msg
+        dialog.informativeText = ""
+        dialog.alertStyle = .informational
         
-        class func addAction(toPopup dialog: NSAlert, withTitle title: String, shouldHighlight highlight: Bool = false) {
-            let btt = dialog.addButton(withTitle: title)
-            btt.keyEquivalent = ""
-            if highlight {
-                btt.keyEquivalent = "\r"
-            }
+        return dialog
+    }
+    
+    func addAction(withTitle title: String, shouldHighlight highlight: Bool = false) {
+        let btt = self.addButton(withTitle: title)
+        btt.keyEquivalent = ""
+        if highlight {
+            btt.keyEquivalent = "\r"
         }
     }
+    
+    class func createOKPopup(withMessage msg: String) -> MVAPopup {
+        let alert = MVAPopup()
+        alert.messageText = msg
+        alert.informativeText = ""
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        return alert
+    }
+    
+    func present() {
+        DispatchQueue.main.async { self.runModal() }
+    }
+}
 #endif

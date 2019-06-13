@@ -2,8 +2,8 @@
 //  MVAStore.swift
 //  unPredictable
 //
-//  Created by Majo on 26/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 26/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import StoreKit
@@ -15,14 +15,12 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
         switch payment.productIdentifier {
         case productIDs["lives_car"]!:
             if MVAMemory.ownedCars.contains(MVACarNames.playerLives) {
-                let pop = MVAAlert.new(withTitle: "Hooray!", andMessage: "You've already purchased \(mockUpNames[MVACarNames.playerLives]!) car")
-                MVAAlert.present(pop)
+                MVAPopup.createOKPopup(withMessage: "Hooray!\n\nYou've already purchased \(mockUpNames[MVACarNames.playerLives]!) car").present()
                 return false
             }
         case productIDs["pcs_car"]!:
             if MVAMemory.ownedCars.contains(MVACarNames.playerPCS) {
-                let pop = MVAAlert.new(withTitle: "Hooray!", andMessage: "You've already purchased \(mockUpNames[MVACarNames.playerPCS]!) car")
-                MVAAlert.present(pop)
+                MVAPopup.createOKPopup(withMessage: "Hooray!\n\nYou've already purchased \(mockUpNames[MVACarNames.playerPCS]!) car").present()
                 return false
             }
         default: break
@@ -33,7 +31,7 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         transactionInProgress = false
         DispatchQueue.main.async {
-            self.completion?(false,"",error)
+            self.completion?(false, "", error)
         }
     }
     
@@ -41,11 +39,10 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
         transactionInProgress = false
         if queue.transactions.isEmpty {
             DispatchQueue.main.async {
-                self.completion?(false,"",nil)
+                self.completion?(false, "", nil)
             }
         }
-        let alert = MVAAlert.new(withTitle: nil, andMessage: "Purchases were restored")
-        MVAAlert.present(alert)
+        MVAPopup.createOKPopup(withMessage: "Purchases were restored").present()
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -74,7 +71,7 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
         }
     }
     
-    #if os(iOS) || os(tvOS)
+    #if os(iOS)
     var productIDs = ["life":"unpredictable.continueAfterCrash",
                       "lives_car":"unpredictable.lives_car",
                       "pcs_car":"unpredictable.pcs_car"]
@@ -83,6 +80,7 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
                       "lives_car":"mac.unpredictable.lives_car",
                       "pcs_car":"mac.unpredictable.pcs_car"]
     #endif
+    
     var productsArray = [SKProduct]()
     var transactionInProgress = false
     private var completion: ((Bool, String, Error?)->())?
@@ -93,7 +91,6 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
     
     override init() {
         super.init()
-        //SKPaymentQueue.default().add(self)
         requestProductInfo()
     }
     
@@ -152,10 +149,14 @@ class MVAStore: NSObject, SKProductsRequestDelegate {
     func getPrice(forCar carN: String) -> String {
         let carID = carN == MVACarNames.playerLives ? "lives_car":"pcs_car"
         if let mCar = productsArray.filter({ $0.productIdentifier == productIDs[carID] }).first {
-            let numberF = NumberFormatter()
-            numberF.numberStyle = .currency
-            numberF.locale = mCar.priceLocale
-            return numberF.string(from: mCar.price) ?? "BUY"
+            if mCar.price == 0.0 {
+                return "FREE"
+            } else {
+                let numberF = NumberFormatter()
+                numberF.numberStyle = .currency
+                numberF.locale = mCar.priceLocale
+                return numberF.string(from: mCar.price) ?? "BUY"
+            }
         } else {
             return "BUY"
         }

@@ -2,23 +2,22 @@
 //  MVATutorialNode.swift
 //  unPredictable
 //
-//  Created by Majo on 26/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 26/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
 
-enum MVATutorialText {
+struct MVATutorialText {
     #if os(iOS)
     static let swipeLabel = "Swiping changes"
     static let swipe2ndLabel = "your car's lane"
     static let swipe3rdLabel = "Try it! 😎"
     static let tiltLabel = "You can also change"
     static let tilt2ndLabel = "lanes by tilting the phone"
-    static let tilt3rdLabel = "Tilt me! 🙃"
+    static let tilt3rdLabel = "Tilt me! 🤪"
     static let brakeLabel = "Touch and hold"
-    static let brake2ndLabel = "to brake" //"and drag"
-    static let brake3rdLabel = ""//"to change direction"
+    static let brake2ndLabel = "to brake" //"and drag to change direction"
     #elseif os(macOS)
     static let swipeLabel = "Change your car's"
     static let swipe2ndLabel = "lane with ◀️/▶️"
@@ -26,18 +25,17 @@ enum MVATutorialText {
     static let tiltLabel = "You can also change"
     static let tilt2ndLabel = "lanes by moving the cursor"
     static let tilt3rdLabel = "Move me! ↖️"
-    static let brakeLabel = "Hold the spacebar"// to brake"
-    static let brake2ndLabel = "to brake"//"and click ◀️|▶️"
-    static let brake3rdLabel = ""//"to change direction"
+    static let brakeLabel = "Hold the spacebar"
+    static let brake2ndLabel = "to brake" //"and click ◀️|▶️ to change direction"
     #endif
 }
 
 protocol MVATutorialDelegate {
     func tutorialActivateSwipe()
     func tutorialActivateTilt()
-    #if os(iOS)
+    /*#if os(iOS)
     func tutorialActivateSphero()
-    #endif
+    #endif*/
 }
 
 class MVATutorialNode: SKNode {
@@ -169,10 +167,6 @@ class MVATutorialNode: SKNode {
                 let brake2ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake2ndLabel, andName: nil)
                 brake2ndLabel.position = CGPoint(x: 0.0, y: brakeLabel.frame.minY-23)
                 bNode.addChild(brake2ndLabel)
-                
-                let brake3ndLabel = MVATutorialNode.label(withText: MVATutorialText.brake3rdLabel, andName: nil)
-                brake3ndLabel.position = CGPoint(x: 0.0, y: brake2ndLabel.frame.minY-23)
-                bNode.addChild(brake3ndLabel)
                 
                 bNode.alpha = 0.0
                 self.addChild(bNode)

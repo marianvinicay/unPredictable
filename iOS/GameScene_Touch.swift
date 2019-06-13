@@ -2,8 +2,8 @@
 //  GameScene_Touch.swift
 //  unPredictable
 //
-//  Created by Majo on 17/08/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 17/08/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import UIKit
@@ -22,7 +22,7 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
                 gameControls = .swipe
                 setupSwipes()
             }
-        case .sphero: setupSphero()
+        //case .sphero: setupSphero()
         }
     }
     
@@ -49,7 +49,7 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
                         if UIDevice.current.userInterfaceIdiom == .pad {
                             self.handlePreciseMove(withDeltaX: deltaAngle*3.4)
                         } else { //phone
-                            self.handlePreciseMove(withDeltaX: deltaAngle)
+                            self.handlePreciseMove(withDeltaX: deltaAngle*0.9)
                         }
                     }
                 }
@@ -87,16 +87,16 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
         clearControls()
     }
     
-    func startSphero() {
-        //UIApplication.shared.isIdleTimerDisabled = true
-        //let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
-        //sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
+    /*func startSphero() {
+        UIApplication.shared.isIdleTimerDisabled = true
+        let mask = RKDataStreamingMask.accelerometerXFiltered.rawValue | RKDataStreamingMask.imuPitchAngleFiltered.rawValue
+        sphero?.enableSensors(RKDataStreamingMask(rawValue: mask), at: RKStreamingRate.dataStreamingRate20)
     }
     
     func stopSphero() {
-        //sphero?.disableSensors()
-        //UIApplication.shared.isIdleTimerDisabled = false
-    }
+        sphero?.disableSensors()
+        UIApplication.shared.isIdleTimerDisabled = false
+    }*/
     
     private func clearControls() {
         (UIApplication.shared.delegate as! AppDelegate).motionManager.stopDeviceMotionUpdates()
@@ -142,8 +142,8 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
         let point = touches.first!.location(in: self.camera!)
         touchedPosition(point)
     }
-    /*
-    func handle(_ message: RKAsyncMessage!, forRobot robot: RKRobotBase!) {
+    
+    /*func handle(_ message: RKAsyncMessage!, forRobot robot: RKRobotBase!) {
         if self.gameStarted && !self.intel.player.pcsProcessing, let sensorMessage = message as? RKDeviceSensorsAsyncData {
             let sensorData = sensorMessage.dataFrames.last as? RKDeviceSensorsData
 
@@ -175,6 +175,5 @@ extension GameScene: UIGestureRecognizerDelegate/*, RKResponseObserver*/ {
                 self.handleBrake(started: false)
             }
         }
-    }
-    */
+    }*/
 }

@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 25/08/16.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 25/08/16.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import Cocoa
@@ -29,10 +29,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         SKPaymentQueue.default().add(self)
-
-        if #available(OSX 10.12.2, *) {
-            NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true
-        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -41,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
     }
     
     func applicationWillResignActive(_ notification: Notification) {
-        if let scene = (NSApp.mainWindow?.contentViewController as? GameViewControllerMAC)?.gameScene {
+        if let scene = (NSApp.mainWindow?.contentViewController as? GameViewController_Mac)?.gameScene {
             if scene.gameStarted && scene.intel.stop == false {
                 scene.pauseGame(withAnimation: true)
             }
@@ -53,4 +49,3 @@ class AppDelegate: NSObject, NSApplicationDelegate, SKPaymentTransactionObserver
     }
 
 }
-

@@ -1,10 +1,11 @@
 //
-//  GameSceneTouch.swift
-//  (un)Predictable
+//  GameScene_Gameplay.swift
+//  unPredictable
 //
-//  Created by Majo on 25/06/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 25/06/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
+
 import SpriteKit
 
 extension GameScene: MVATutorialDelegate {
@@ -13,7 +14,7 @@ extension GameScene: MVATutorialDelegate {
         #if os(iOS)
         switch self.gameControls {
         case .precise: self.startTilt()
-        case .sphero: self.startSphero()
+        //case .sphero: self.startSphero()
         default: break
         }
         
@@ -28,7 +29,7 @@ extension GameScene: MVATutorialDelegate {
     private func stopControls() {
         #if os(iOS)
         self.stopTilt()
-        self.stopSphero()
+        //self.stopSphero()
         self.lastAngle = nil
         #elseif os(macOS)
         if gameControls == .precise {
@@ -39,18 +40,20 @@ extension GameScene: MVATutorialDelegate {
     
     private func handleTutorial() {
         #if os(iOS)
-        let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
-        if tutDisplayed {
+        //let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
+        if MVAMemory.tutorialDisplayed {
             self.spawnWithDelay(self.intel.currentLevel.spawnRate)
             self.showHUD()
         } else {
-            self.tutorialNode = self.gameControls != .sphero ? MVATutorialNode.new(size: self.size) : MVATutorialSpheroNode.new(size: self.size)
+            //self.tutorialNode = self.gameControls != .sphero ? MVATutorialNode.new(size: self.size) : MVATutorialSpheroNode.new(size: self.size)
+            self.tutorialNode = MVATutorialNode.new(size: self.size)
             self.tutorialNode!.delegate = self
-            if self.gameControls != .sphero {
-                self.tutorialNode!.delegate?.tutorialActivateSwipe()
-            } else {
+            /*if self.gameControls == .sphero {
                 self.tutorialNode!.delegate?.tutorialActivateSphero()
-            }
+            } else {
+                self.tutorialNode!.delegate?.tutorialActivateSwipe()
+            }*/
+            self.tutorialNode!.delegate?.tutorialActivateSwipe()
             self.tutorialNode!.alpha = 0.0
             self.tutorialNode!.zPosition = 9.0
             self.camera!.addChild(self.tutorialNode!)
@@ -75,7 +78,7 @@ extension GameScene: MVATutorialDelegate {
     }
     
     func startGame() {
-        if self.gameControls != .sphero && !MVAMemory.tutorialDisplayed {
+        if /*self.gameControls != .sphero &&*/ !MVAMemory.tutorialDisplayed {
             self.gameControls = .swipe
         }
         
@@ -108,18 +111,14 @@ extension GameScene: MVATutorialDelegate {
             self.startControls()
         }
         
-        let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
+        //let tutDisplayed = self.gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
         let start = SKAction.run {
             self.gameStarted = true
             self.intel.stop = false
             
-            if tutDisplayed {
+            if MVAMemory.tutorialDisplayed {
                 self.intel.updateDist = true
                 self.isUserInteractionEnabled = true
-                
-                #if os(macOS)
-                self.cDelegate?.showInInfoLabel("Go Go Go!", forDuration: 3.0)
-                #endif
             }
         }
         
@@ -206,26 +205,26 @@ extension GameScene: MVATutorialDelegate {
                 tutorialNode = nil
             }
             #elseif os(macOS)
-                if tutorialNode == nil {
-                    if intel.distanceTraveled < 10.0 {
-                        timesCrashed += 1
-                    }
-                    
-                    if intel.distanceTraveled > MVAMemory.maxPlayerDistance {
-                        clumsy = false
-                    }
-                    
-                    if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
-                        offP = intel.storeHelper.canBuyLife()
-                    } else if MVAMemory.maxPlayerDistance > 10.0 {
-                        offP = intel.storeHelper.canBuyLife()
-                        clumsy = false
-                    }
-                } else {
-                    tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
-                    tutorialNode!.removeFromParent()
-                    tutorialNode = nil
+            if tutorialNode == nil {
+                if intel.distanceTraveled < 10.0 {
+                    timesCrashed += 1
                 }
+                
+                if intel.distanceTraveled > MVAMemory.maxPlayerDistance {
+                    clumsy = false
+                }
+                
+                if timesCrashed > 2 && intel.distanceTraveled < 10.0 {
+                    offP = intel.storeHelper.canBuyLife()
+                } else if MVAMemory.maxPlayerDistance > 10.0 {
+                    offP = intel.storeHelper.canBuyLife()
+                    clumsy = false
+                }
+            } else {
+                tutorialNode!.run(SKAction.fadeIn(withDuration: 0.1))
+                tutorialNode!.removeFromParent()
+                tutorialNode = nil
+            }
             #endif
             
             let goNode = MVAGameOverNode.new(size: self.size, offerPurchase: offP, clumsy: clumsy)
@@ -239,9 +238,6 @@ extension GameScene: MVATutorialDelegate {
                 } else {
                     self.resetGame()
                 }
-                #if os(macOS)
-                self.cDelegate?.showInInfoLabel("", forDuration: 0.0)
-                #endif
             }
             
             let curtainDown = SKAction.run {
@@ -281,9 +277,9 @@ extension GameScene: MVATutorialDelegate {
         intel.player.pointsPerSecond = intel.currentLevel.playerSpeed
         startSound()
         
-        #if os(iOS)
-        //sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
-        #endif
+        /*#if os(iOS)
+        sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
+        #endif*/
     }
     
     func resetGame() {
@@ -316,12 +312,6 @@ extension GameScene: MVATutorialDelegate {
         spawner.size.height = MVAConstants.baseCarSize.height*2.5
         remover.position = CGPoint(x: 0.0, y: -frame.height)
         NotificationCenter.default.post(name: MVAGameCenterHelper.toggleBtts, object: nil)
-        
-        #if os(iOS)
-        //sphero?.setLEDWithRed(0.0, green: 1.0, blue: 0.0)
-        #elseif os(macOS)
-        self.cDelegate?.distanceChanged(toNumberString: nil)
-        #endif
     }
     
     func checkAchievements() {
@@ -427,11 +417,11 @@ extension GameScene: MVATutorialDelegate {
         #endif
     }
     
-    #if os(iOS)
+    /*#if os(iOS)
     func tutorialActivateSphero() {
         self.gameControls = .sphero
         self.setupSphero()
         self.startSphero()
     }
-    #endif
+    #endif*/
 }

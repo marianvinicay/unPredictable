@@ -2,13 +2,14 @@
 //  MVARemoverNode.swift
 //  unPredictable
 //
-//  Created by Majo on 17/08/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 17/08/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
 
 class MVARemoverNode: SKSpriteNode {
+    
     class func createRemover(withSize size: CGSize) -> MVARemoverNode {
         let remover = MVARemoverNode(color: .clear, size: CGSize(width: size.width, height: size.height))
         
@@ -20,4 +21,5 @@ class MVARemoverNode: SKSpriteNode {
         
         return remover
     }
+    
 }

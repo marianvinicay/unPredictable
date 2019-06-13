@@ -1,14 +1,14 @@
 //
 //  RoadGenerator.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 21/10/2016.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 21/10/2016.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import SpriteKit
 #if os(iOS)
-    import UIKit
+import UIKit
 #endif
 
 public var lanePositions = [Int:Int]()
@@ -23,17 +23,17 @@ class MVARoadNode: SKSpriteNode {
         road.size = CGSize(width: width, height: height)
         
         if lanePositions.isEmpty {
-            #if os(iOS) || os(tvOS)
-                var numberOfLanes = 3
-                var sidesWidthCombined = (width*(1/3))-40
-                
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    numberOfLanes = 4
-                    sidesWidthCombined = width*(1/4)-40
-                }
+            #if os(iOS)
+            var numberOfLanes = 3
+            var sidesWidthCombined = (width*(1/3))-40
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                numberOfLanes = 4
+                sidesWidthCombined = width*(1/4)-40
+            }
             #elseif os(macOS)
-                let numberOfLanes = 4
-                let sidesWidthCombined = width*(1/4)-40
+            let numberOfLanes = 4
+            let sidesWidthCombined = width*(1/4)-40
             #endif
             let createLanes = numberOfLanes-1
 

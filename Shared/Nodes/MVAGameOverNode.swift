@@ -2,28 +2,21 @@
 //  MVAGameOverNode.swift
 //  unPredictable
 //
-//  Created by Majo on 26/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 26/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
 #if os(iOS)
-    import UIKit
+import UIKit
 #endif
     
 class MVAGameOverNode: SKNode {
-    #if os(iOS)
-    private var yesBtt: SKShapeNode?
-    #else
-    var yesBtt: SKShapeNode?
-    #endif
+    private(set) var yesBtt: SKShapeNode?
     private var noBtt: SKShapeNode?
     private var countD: SKLabelNode?
     private var countDown = 6
     private var showPurchase = false
-    //private var showAd = false
-    //private let adsAsPurchase = MVAAds(config: .videoAndShort)
-    //private let adsForCars: MVAAds? = MVAMemory.adsEnabled ? MVAAds(config: .onlyShort):nil
     
     var store: MVAStore!
     var completion: ((Bool)->())?
@@ -52,9 +45,8 @@ class MVAGameOverNode: SKNode {
         newNode.countD!.position = CGPoint(x: 0.0, y: -(size.height/2)+newNode.countD!.frame.height*2)
         newNode.addChild(newNode.countD!)
 
-        if offerPurchase {//|| offerAd {
+        if offerPurchase {
             newNode.showPurchase = offerPurchase
-            //newNode.showAd = offerAd
             goLabel.position.y = goLabel.frame.height*2
             
             let firstLabel = clumsy == true ? SKLabelNode(text: "You are a bit clumsy 😜") : SKLabelNode(text: "You are good 😎")
@@ -104,26 +96,6 @@ class MVAGameOverNode: SKNode {
             newNode.noBtt!.addChild(nLabel)
             newNode.addChild(newNode.noBtt!)
         }
-        /*
-        newNode.adsAsPurchase.successHandler = { [unowned newNode] (rewarded: Bool) in
-            if rewarded {
-                newNode.continueInGame()
-            } else {
-                newNode.startNewGame()
-            }
-        }
-        newNode.adsAsPurchase.completionHandler = { [unowned newNode] () in
-            newNode.stopIndicator()
-            newNode.activityInd?.removeFromSuperview()
-        }
-        
-        newNode.adsForCars?.successHandler = { [unowned newNode] (_: Bool) in
-            newNode.startNewGame()
-        }
-        newNode.adsForCars?.completionHandler = { [unowned newNode] () in
-            newNode.stopIndicator()
-            newNode.activityInd?.removeFromSuperview()
-        }*/
         newNode.isUserInteractionEnabled = true
         return newNode
     }
@@ -133,19 +105,9 @@ class MVAGameOverNode: SKNode {
             if countDown > 1 {
                 countDown -= 1
                 countD?.text = String(countDown)
-                /*if countDown == 3 && MVAMemory.adsEnabled  {
-                    //adsForCars?.showAd()
-                    countD?.removeFromParent()
-                    countD = nil
-                } else {*/
                 perform(#selector(performCountDown), with: nil, afterDelay: 1.0)
-                //}
             } else {
-                /*if MVAMemory.adsEnabled {
-                    adsForCars?.showAd()
-                } else {*/
                 self.startNewGame()
-                //}
             }
         }
     }
@@ -160,13 +122,6 @@ class MVAGameOverNode: SKNode {
         completion?(true)
         removeAllChildren()
         removeFromParent()
-        //Analytics.logEvent(AnalyticsEventEcommercePurchase, parameters: <#T##[String : Any]?#>)
-        /*Answers.logPurchase(withPrice: 0.49,
-                                     currency: "EUR",
-                                     success: true,
-                                     itemName: "Continue After Crash",
-                                     itemType: "Consumable",
-                                     itemId: nil)*/
     }
     
     func touchedPosition(_ touchLocation: CGPoint) {
@@ -181,34 +136,22 @@ class MVAGameOverNode: SKNode {
             yesBtt = nil
             noBtt = nil
             
-            /*if showPurchase {
-                 self.activityInd?.stopAnimating()
-                 self.activityInd?.removeFromSuperview()
-                 self.continueInGame()
-                 */
-                store.buyLife() { (purchased: Bool, _, _) in
-                    #if os(iOS)
-                    self.activityInd?.stopAnimating()
-                    #else
-                    self.activityInd?.stopAnimation(nil)
-                    #endif
-                    self.activityInd?.removeFromSuperview()
-                    
-                    if purchased {
-                        self.continueInGame()
-                    } else {
-                        self.startNewGame()
-                    }
+            store.buyLife() { (purchased: Bool, _, _) in
+                #if os(iOS)
+                self.activityInd?.stopAnimating()
+                #else
+                self.activityInd?.stopAnimation(nil)
+                #endif
+                self.activityInd?.removeFromSuperview()
+                
+                if purchased {
+                    self.continueInGame()
+                } else {
+                    self.startNewGame()
                 }
-            /*} else {
-                adsAsPurchase.showAd()
-            }*/
+            }
         } else {
-            /*if MVAMemory.adsEnabled {
-                adsForCars?.showAd()
-            } else {*/
-                self.startNewGame()
-            //}
+            self.startNewGame()
         }
     }
     
@@ -225,6 +168,7 @@ class MVAGameOverNode: SKNode {
         let touchLocation = touches.first!.location(in: self)
         touchedPosition(touchLocation)
     }
+    
     #elseif os(macOS)
     fileprivate var activityInd: NSProgressIndicator?
     

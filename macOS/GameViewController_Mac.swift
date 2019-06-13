@@ -1,16 +1,16 @@
 //
-//  GameViewController.swift
-//  macOS
+//  GameViewController_Mac.swift
+//  unPredictable
 //
-//  Created by Majo on 25/08/16.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 25/08/16.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import Cocoa
 import SpriteKit
 import GameKit
 
-class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate {
+class GameViewController_Mac: NSViewController, NSWindowDelegate, GameVCDelegate {
     
     func present(alert: NSAlert, completion: @escaping (NSApplication.ModalResponse) -> Void) {
         NSCursor.unhide()
@@ -19,25 +19,6 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
     
     func changeControls(to controls: MVAGameControls) {
         self.setControls(to: controls)
-    }
-    
-    func distanceChanged(toNumberString numStr: String?) {
-        if #available(OSX 10.12.2, *), let tBar = touchBar {
-            if numStr != nil {
-                (tBar.item(forIdentifier: .distanceLabel)?.view as? NSTextField)?.stringValue = "Distance: "+numStr!
-            } else {
-                (tBar.item(forIdentifier: .distanceLabel)?.view as? NSTextField)?.stringValue = ""
-            }
-        }
-    }
-    
-    func showInInfoLabel(_ txt: String, forDuration time: TimeInterval) {
-        if #available(OSX 10.12.2, *), let tBar = touchBar {
-            (tBar.item(forIdentifier: .infoLabel)?.view as? NSTextField)?.stringValue = txt
-            Timer.scheduledTimer(withTimeInterval: time, repeats: false) { (_: Timer) in
-                (tBar.item(forIdentifier: .infoLabel)?.view as? NSTextField)?.stringValue = ""
-            }
-        }
     }
     
     func windowWillResize(_ sender: NSWindow, to frameSize: NSSize) -> NSSize {
@@ -68,7 +49,7 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
     }
         
     var gameScene: GameScene!
-    private var changeCarVC: ChangeCarViewControllerMAC?
+    private var changeCarVC: ChangeCarViewController_Mac?
     private var mouseMonitors = [Any?]()
     
     override func viewDidLoad() {
@@ -94,8 +75,8 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
         
         NotificationCenter.default.addObserver(self, selector: #selector(showAuthenticationViewController), name: MVAGameCenterHelper.authenticationCompleted, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtons), name: MVAGameCenterHelper.toggleBtts, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarViewControllerMAC.backFromScene, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewControllerMAC.changePCar, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backFromChangeCarScene), name: ChangeCarViewController_Mac.backFromScene, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController_Mac.changePCar, object: nil)
         
         if MVAMemory.tutorialDisplayed && MVAMemory.enableGameCenter {
             gameScene.intel.gameCHelper.authenticateLocalPlayer() { (granted: Bool) in
@@ -244,7 +225,7 @@ class GameViewControllerMAC: NSViewController, NSWindowDelegate, GameVCDelegate 
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if let destVC = (segue.destinationController as? ChangeCarViewControllerMAC) {
+        if let destVC = (segue.destinationController as? ChangeCarViewController_Mac) {
             changeCarVC = destVC
             destVC.store = self.gameScene.intel.storeHelper
             destVC.view.setFrameSize(self.view.frame.size)

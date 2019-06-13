@@ -1,15 +1,16 @@
 //
-//  GameSceneVolume.swift
-//  (un)Predictable
+//  GameScene_Sound.swift
+//  unPredictable
 //
-//  Created by Majo on 17/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 17/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
 import AVFoundation
 
 extension GameScene {
+    
     func startSound() {
         let listerine = SKNode()
         listener?.position = CGPoint(x: 0.0, y: -self.size.height)

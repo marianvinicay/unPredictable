@@ -1,15 +1,14 @@
 //
 //  MarvinAI.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 19/11/2016.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 19/11/2016.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
-import Foundation
 import SpriteKit
 
-class MVAMarvinAI: NSObject {
+class MarvinAI: NSObject {
     var player: MVACarPlayer!
     var playerLives = -1
     var playerBraking = false
@@ -20,7 +19,7 @@ class MVAMarvinAI: NSObject {
     let sound = MVASound()
     let gameCHelper = MVAGameCenterHelper()
     var storeHelper: MVAStore {
-        #if os(iOS) || os(tvOS)
+        #if os(iOS)
         return (UIApplication.shared.delegate as! AppDelegate).inStore
         #elseif os(macOS)
         return (NSApplication.shared.delegate as! AppDelegate).inStore
@@ -111,10 +110,8 @@ class MVAMarvinAI: NSObject {
             }
         }
 
-        if player.pointsPerSecond < currentLevel.playerSpeed && playerEmergencyBrake <= 0 {//player.responseFromSensors(inPositions: [.stop]).isEmpty && playerEmergencyBrake <= 0 {
-            //if player.pointsPerSecond < currentLevel.playerSpeed {
+        if player.pointsPerSecond < currentLevel.playerSpeed && playerEmergencyBrake <= 0 {
                 player.changeSpeed(currentLevel.playerSpeed)
-            //}
         }
         return false
     }

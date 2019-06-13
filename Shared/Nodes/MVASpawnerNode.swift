@@ -1,9 +1,9 @@
 //
 //  MVACarSpawner.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 27/12/2016.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 27/12/2016.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import SpriteKit
@@ -138,26 +138,14 @@ class MVASpawnerNode: SKSpriteNode {
     }
     
     private func randomDoubleCombo() -> [Int] {
-        #if os(iOS) || os(tvOS)
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                switch arc4random_uniform(3) {
-                case 0: return [0,1]
-                case 1: return [1,2]
-                default: return [0,2]
-                }
-            } else {
-                switch arc4random_uniform(6) {
-                case 0: return [0,1]
-                case 1: return [0,2]
-                case 2: return [1,2]
-                case 3: return [1,3]
-                case 4: return [2,3]
-                default: return [0,3]
-                }
+        #if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            switch arc4random_uniform(3) {
+            case 0: return [0,1]
+            case 1: return [1,2]
+            default: return [0,2]
             }
-        #elseif os(watchOS)
-            return [Int(arc4random_uniform(2))]
-        #elseif os(macOS)
+        } else {
             switch arc4random_uniform(6) {
             case 0: return [0,1]
             case 1: return [0,2]
@@ -166,6 +154,16 @@ class MVASpawnerNode: SKSpriteNode {
             case 4: return [2,3]
             default: return [0,3]
             }
+        }
+        #elseif os(macOS)
+        switch arc4random_uniform(6) {
+        case 0: return [0,1]
+        case 1: return [0,2]
+        case 2: return [1,2]
+        case 3: return [1,3]
+        case 4: return [2,3]
+        default: return [0,3]
+        }
         #endif
     }
     

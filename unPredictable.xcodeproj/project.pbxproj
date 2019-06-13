@@ -14,17 +14,15 @@
 		2F23E11A1D6EF21D00119E4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E1181D6EF21D00119E4F /* Main.storyboard */; };
 		2F23E11D1D6EF21D00119E4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E11B1D6EF21D00119E4F /* LaunchScreen.storyboard */; };
 		2F23E14D1D6EF21D00119E4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */; };
-		2F23E14F1D6EF21D00119E4F /* GameViewControllerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */; };
+		2F23E14F1D6EF21D00119E4F /* GameViewController_Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E14E1D6EF21D00119E4F /* GameViewController_Mac.swift */; };
 		2F23E1521D6EF21D00119E4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F23E1501D6EF21D00119E4F /* Main.storyboard */; };
 		2F23E15B1D6EF21D00119E4F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
 		2F23E15E1D6EF21D00119E4F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F23E10B1D6EF21D00119E4F /* GameScene.swift */; };
 		2F26548D1F41A6FA00A7D2CF /* MVAWaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F26548C1F41A6FA00A7D2CF /* MVAWaitView.swift */; };
 		2F31BA361F49C63400CF4C13 /* MVAWaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F26548C1F41A6FA00A7D2CF /* MVAWaitView.swift */; };
-		2F31BA381F49C7C500CF4C13 /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
 		2F31BA411F49CD1900CF4C13 /* MVAAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31BA401F49CD1900CF4C13 /* MVAAlert.swift */; };
 		2F31BA431F49CD1900CF4C13 /* MVAAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F31BA401F49CD1900CF4C13 /* MVAAlert.swift */; };
 		2F31BA441F49CEB400CF4C13 /* MVAGameCenterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */; };
-		2F3EAE411F3B1DED001A1A6E /* MVAAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */; };
 		2F5584FF1F480C42006D229F /* Grand_Tourer_horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */; };
 		2F5585011F480C42006D229F /* Grand_Tourer_horn.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */; };
 		2F5585031F48105D006D229F /* pcs_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F5585021F48105D006D229F /* pcs_beep.wav */; };
@@ -46,8 +44,8 @@
 		2F861B5D1F1CAD7F00162EDA /* MVASound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B591F1CAD7F00162EDA /* MVASound.swift */; };
 		2F861B641F1CB93000162EDA /* crash.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B631F1CB93000162EDA /* crash.caf */; };
 		2F861B671F1CB93000162EDA /* crash.caf in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B631F1CB93000162EDA /* crash.caf */; };
-		2F861B691F1CC22B00162EDA /* GameScene_Volume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */; };
-		2F861B6C1F1CC22B00162EDA /* GameScene_Volume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */; };
+		2F861B691F1CC22B00162EDA /* GameScene_Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameScene_Sound.swift */; };
+		2F861B6C1F1CC22B00162EDA /* GameScene_Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F861B681F1CC22B00162EDA /* GameScene_Sound.swift */; };
 		2F861B731F1CC50300162EDA /* SUV_ignition_02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B721F1CC50300162EDA /* SUV_ignition_02.wav */; };
 		2F861B761F1CC50300162EDA /* SUV_ignition_02.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B721F1CC50300162EDA /* SUV_ignition_02.wav */; };
 		2F861B7D1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F861B7C1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav */; };
@@ -75,8 +73,8 @@
 		2FAE021D1F054B84004D4EFE /* MVAConstants_Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */; };
 		2FAE021E1F054B84004D4EFE /* MVALevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020D1F054B84004D4EFE /* MVALevel.swift */; };
 		2FAE02211F054B84004D4EFE /* MVALevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020D1F054B84004D4EFE /* MVALevel.swift */; };
-		2FAE02221F054B84004D4EFE /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */; };
-		2FAE02251F054B84004D4EFE /* MVAMarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */; };
+		2FAE02221F054B84004D4EFE /* MarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020E1F054B84004D4EFE /* MarvinAI.swift */; };
+		2FAE02251F054B84004D4EFE /* MarvinAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020E1F054B84004D4EFE /* MarvinAI.swift */; };
 		2FAE02261F054B84004D4EFE /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020F1F054B84004D4EFE /* MVARoadNode.swift */; };
 		2FAE02291F054B84004D4EFE /* MVARoadNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE020F1F054B84004D4EFE /* MVARoadNode.swift */; };
 		2FAE022A1F054B84004D4EFE /* MVAUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAE02101F054B84004D4EFE /* MVAUtils.swift */; };
@@ -91,8 +89,8 @@
 		2FCA6DD31F556964008BC3B9 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCA6DD21F556964008BC3B9 /* GameKit.framework */; };
 		2FCA6DD51F556965008BC3B9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCA6DD41F556965008BC3B9 /* StoreKit.framework */; };
 		2FDB9A6C1F8929D7007F8EB2 /* MVAWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */; };
-		2FFE47961FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */; };
-		2FFE47981FE6949000DDFA3E /* GameViewTouchbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */; };
+		2FFE47961FE6608800DDFA3E /* ChangeCarViewController_Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFE47951FE6608800DDFA3E /* ChangeCarViewController_Mac.swift */; };
+		58D257A422B290C000DB0E92 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D257A322B290C000DB0E92 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -120,12 +118,11 @@
 		2F23E11E1D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F23E14A1D6EF21D00119E4F /* unPredictable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unPredictable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerMAC.swift; sourceTree = "<group>"; };
+		2F23E14E1D6EF21D00119E4F /* GameViewController_Mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController_Mac.swift; sourceTree = "<group>"; };
 		2F23E1511D6EF21D00119E4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F23E1531D6EF21D00119E4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F26548C1F41A6FA00A7D2CF /* MVAWaitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWaitView.swift; sourceTree = "<group>"; };
 		2F31BA401F49CD1900CF4C13 /* MVAAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAAlert.swift; sourceTree = "<group>"; };
-		2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAAds.swift; sourceTree = "<group>"; };
 		2F4ECAB22085D3C2001FB747 /* unPredictable - iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "unPredictable - iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F5584FE1F480C42006D229F /* Grand_Tourer_horn.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Grand_Tourer_horn.wav; sourceTree = "<group>"; };
 		2F5585021F48105D006D229F /* pcs_beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pcs_beep.wav; sourceTree = "<group>"; };
@@ -139,7 +136,7 @@
 		2F861B4B1F1BAE7C00162EDA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F861B591F1CAD7F00162EDA /* MVASound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVASound.swift; sourceTree = "<group>"; };
 		2F861B631F1CB93000162EDA /* crash.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = crash.caf; sourceTree = "<group>"; };
-		2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Volume.swift; sourceTree = "<group>"; };
+		2F861B681F1CC22B00162EDA /* GameScene_Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene_Sound.swift; sourceTree = "<group>"; };
 		2F861B721F1CC50300162EDA /* SUV_ignition_02.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = SUV_ignition_02.wav; sourceTree = "<group>"; };
 		2F861B7C1F1CC79300162EDA /* Grand_Tourer_signal_lights_loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Grand_Tourer_signal_lights_loop.wav; sourceTree = "<group>"; };
 		2F861B8B1F1CD22600162EDA /* SUV_steady_low_rpm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = SUV_steady_low_rpm.wav; sourceTree = "<group>"; };
@@ -154,7 +151,7 @@
 		2FAE020B1F054B84004D4EFE /* MVASpawnerNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVASpawnerNode.swift; sourceTree = "<group>"; };
 		2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAConstants_Memory.swift; sourceTree = "<group>"; };
 		2FAE020D1F054B84004D4EFE /* MVALevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVALevel.swift; sourceTree = "<group>"; };
-		2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAMarvinAI.swift; sourceTree = "<group>"; };
+		2FAE020E1F054B84004D4EFE /* MarvinAI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarvinAI.swift; sourceTree = "<group>"; };
 		2FAE020F1F054B84004D4EFE /* MVARoadNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVARoadNode.swift; sourceTree = "<group>"; };
 		2FAE02101F054B84004D4EFE /* MVAUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAUtils.swift; sourceTree = "<group>"; };
 		2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MVAWorldConverter.swift; sourceTree = "<group>"; };
@@ -164,8 +161,8 @@
 		2FCA6DD21F556964008BC3B9 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		2FCA6DD41F556965008BC3B9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVAWindow.swift; sourceTree = "<group>"; };
-		2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCarViewControllerMAC.swift; sourceTree = "<group>"; };
-		2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewTouchbar.swift; sourceTree = "<group>"; };
+		2FFE47951FE6608800DDFA3E /* ChangeCarViewController_Mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeCarViewController_Mac.swift; sourceTree = "<group>"; };
+		58D257A322B290C000DB0E92 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +170,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58D257A422B290C000DB0E92 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +189,7 @@
 		276694BA1F21FF4200E70D15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				58D257A322B290C000DB0E92 /* GameKit.framework */,
 				2FCA6DD41F556965008BC3B9 /* StoreKit.framework */,
 				2FCA6DD21F556964008BC3B9 /* GameKit.framework */,
 			);
@@ -213,17 +212,13 @@
 			isa = PBXGroup;
 			children = (
 				2F71196B1F28809800FE58A8 /* MVAStore.swift */,
-				2F3EAE401F3B1DED001A1A6E /* MVAAds.swift */,
 				276694BD1F22048500E70D15 /* MVAGameCenterHelper.swift */,
-				2F861B591F1CAD7F00162EDA /* MVASound.swift */,
 				2F31BA401F49CD1900CF4C13 /* MVAAlert.swift */,
+				58D257A522B29A3100DB0E92 /* Utils */,
 				2FAE02091F054B84004D4EFE /* MarvinAI */,
+				58D257A622B29ACA00DB0E92 /* GameScene */,
+				2F861B591F1CAD7F00162EDA /* MVASound.swift */,
 				2FA27A481FDC05EA00DA5819 /* MVAPopup.swift */,
-				2F861B961F1CD6F900162EDA /* GameScene_Start.swift */,
-				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
-				2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */,
-				2F861B681F1CC22B00162EDA /* GameScene_Volume.swift */,
-				2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */,
 				2F9808DB1F45DC5100412075 /* Nodes */,
 				2F9808DC1F45DCAB00412075 /* Resources */,
 				2F861B4B1F1BAE7C00162EDA /* Assets.xcassets */,
@@ -247,10 +242,10 @@
 				2F23E1161D6EF21D00119E4F /* GameViewController.swift */,
 				2F9808DD1F45DE4D00412075 /* GameScene_Touch.swift */,
 				2F0F88961FE5737D00E187A2 /* ChangeCarViewController.swift */,
-				2FC53E3F20A34071007C4655 /* MVATutorialSpheroNode.swift */,
 				2F23E1181D6EF21D00119E4F /* Main.storyboard */,
 				2F23E11B1D6EF21D00119E4F /* LaunchScreen.storyboard */,
 				2F23E11E1D6EF21D00119E4F /* Info.plist */,
+				2FC53E3F20A34071007C4655 /* MVATutorialSpheroNode.swift */,
 				2F4ECAB22085D3C2001FB747 /* unPredictable - iOS-Bridging-Header.h */,
 			);
 			path = iOS;
@@ -262,10 +257,9 @@
 				2F23E14C1D6EF21D00119E4F /* AppDelegate.swift */,
 				2FDB9A6B1F8929D7007F8EB2 /* MVAWindow.swift */,
 				2FB19E381F17A65700506061 /* GameScene_Keyboard.swift */,
-				2F23E14E1D6EF21D00119E4F /* GameViewControllerMAC.swift */,
-				2FFE47951FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift */,
+				2F23E14E1D6EF21D00119E4F /* GameViewController_Mac.swift */,
+				2FFE47951FE6608800DDFA3E /* ChangeCarViewController_Mac.swift */,
 				2F23E1501D6EF21D00119E4F /* Main.storyboard */,
-				2FFE47971FE6949000DDFA3E /* GameViewTouchbar.swift */,
 				2F23E1531D6EF21D00119E4F /* Info.plist */,
 			);
 			path = macOS;
@@ -311,16 +305,35 @@
 		2FAE02091F054B84004D4EFE /* MarvinAI */ = {
 			isa = PBXGroup;
 			children = (
-				2FAE020E1F054B84004D4EFE /* MVAMarvinAI.swift */,
+				2FAE020E1F054B84004D4EFE /* MarvinAI.swift */,
 				2FAE020D1F054B84004D4EFE /* MVALevel.swift */,
 				2FAE020A1F054B84004D4EFE /* MVACar.swift */,
 				2F9808E41F46EB5E00412075 /* MVACarBot.swift */,
 				2F9808E81F46EB6A00412075 /* MVACarPlayer.swift */,
-				2FAE02101F054B84004D4EFE /* MVAUtils.swift */,
-				2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */,
-				2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */,
 			);
 			path = MarvinAI;
+			sourceTree = "<group>";
+		};
+		58D257A522B29A3100DB0E92 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2FAE020C1F054B84004D4EFE /* MVAConstants_Memory.swift */,
+				2FAE02101F054B84004D4EFE /* MVAUtils.swift */,
+				2FAE02111F054B84004D4EFE /* MVAWorldConverter.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		58D257A622B29ACA00DB0E92 /* GameScene */ = {
+			isa = PBXGroup;
+			children = (
+				2F23E10B1D6EF21D00119E4F /* GameScene.swift */,
+				2F5B1DEE1EFFD863006AEA30 /* GameScene_Gameplay.swift */,
+				2F861B961F1CD6F900162EDA /* GameScene_Start.swift */,
+				2F9E41A31F03B389004FB9F5 /* GameScene_HUD.swift */,
+				2F861B681F1CC22B00162EDA /* GameScene_Sound.swift */,
+			);
+			path = GameScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,7 +361,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F23E1731D6EF21D00119E4F /* Build configuration list for PBXNativeTarget "unPredictable - macOS" */;
 			buildPhases = (
-				AEE1CEE928EA430829843D97 /* [CP] Check Pods Manifest.lock */,
 				2F23E1461D6EF21D00119E4F /* Sources */,
 				2F23E1471D6EF21D00119E4F /* Frameworks */,
 				2F23E1481D6EF21D00119E4F /* Resources */,
@@ -401,7 +413,7 @@
 					2F23E1491D6EF21D00119E4F = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 9K9H4YXRT5;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
@@ -476,33 +488,12 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		AEE1CEE928EA430829843D97 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-unPredictable - macOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		2F23E10D1D6EF21D00119E4F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F861B691F1CC22B00162EDA /* GameScene_Volume.swift in Sources */,
+				2F861B691F1CC22B00162EDA /* GameScene_Sound.swift in Sources */,
 				2F23E15B1D6EF21D00119E4F /* GameScene.swift in Sources */,
 				2F7119701F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
 				2FC53E4020A34071007C4655 /* MVATutorialSpheroNode.swift in Sources */,
@@ -520,14 +511,13 @@
 				2FAE021A1F054B84004D4EFE /* MVAConstants_Memory.swift in Sources */,
 				276694BE1F22048500E70D15 /* MVAGameCenterHelper.swift in Sources */,
 				2F9808E91F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
-				2FAE02221F054B84004D4EFE /* MVAMarvinAI.swift in Sources */,
+				2FAE02221F054B84004D4EFE /* MarvinAI.swift in Sources */,
 				2F9808E01F45DFC200412075 /* MVARemoverNode.swift in Sources */,
 				2F861B5A1F1CAD7F00162EDA /* MVASound.swift in Sources */,
 				2FAE02161F054B84004D4EFE /* MVASpawnerNode.swift in Sources */,
 				2FAE022E1F054B84004D4EFE /* MVAWorldConverter.swift in Sources */,
 				2F861B971F1CD6F900162EDA /* GameScene_Start.swift in Sources */,
 				2FA27A491FDC05EA00DA5819 /* MVAPopup.swift in Sources */,
-				2F3EAE411F3B1DED001A1A6E /* MVAAds.swift in Sources */,
 				2F26548D1F41A6FA00A7D2CF /* MVAWaitView.swift in Sources */,
 				2F23E1151D6EF21D00119E4F /* AppDelegate.swift in Sources */,
 				2F7119661F2873F000FE58A8 /* MVATutorialNode.swift in Sources */,
@@ -539,20 +529,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F861B6C1F1CC22B00162EDA /* GameScene_Volume.swift in Sources */,
+				2F861B6C1F1CC22B00162EDA /* GameScene_Sound.swift in Sources */,
 				2F7119681F2873F000FE58A8 /* MVATutorialNode.swift in Sources */,
 				2F71196E1F28809800FE58A8 /* MVAStore.swift in Sources */,
 				2F31BA361F49C63400CF4C13 /* MVAWaitView.swift in Sources */,
 				2FAE02291F054B84004D4EFE /* MVARoadNode.swift in Sources */,
 				2FAE02191F054B84004D4EFE /* MVASpawnerNode.swift in Sources */,
-				2FAE02251F054B84004D4EFE /* MVAMarvinAI.swift in Sources */,
-				2F31BA381F49C7C500CF4C13 /* MVAAds.swift in Sources */,
+				2FAE02251F054B84004D4EFE /* MarvinAI.swift in Sources */,
 				2F23E15E1D6EF21D00119E4F /* GameScene.swift in Sources */,
-				2FFE47961FE6608800DDFA3E /* ChangeCarViewControllerMAC.swift in Sources */,
+				2FFE47961FE6608800DDFA3E /* ChangeCarViewController_Mac.swift in Sources */,
 				2F9808E71F46EB5E00412075 /* MVACarBot.swift in Sources */,
 				2FB19E391F17A65800506061 /* GameScene_Keyboard.swift in Sources */,
 				2F31BA441F49CEB400CF4C13 /* MVAGameCenterHelper.swift in Sources */,
-				2F23E14F1D6EF21D00119E4F /* GameViewControllerMAC.swift in Sources */,
+				2F23E14F1D6EF21D00119E4F /* GameViewController_Mac.swift in Sources */,
 				2F31BA431F49CD1900CF4C13 /* MVAAlert.swift in Sources */,
 				2F9808E21F45E00300412075 /* MVARemoverNode.swift in Sources */,
 				2FAE022D1F054B84004D4EFE /* MVAUtils.swift in Sources */,
@@ -569,7 +558,6 @@
 				2FAE02211F054B84004D4EFE /* MVALevel.swift in Sources */,
 				2F9808EB1F46EB6A00412075 /* MVACarPlayer.swift in Sources */,
 				2F7119721F28D34900FE58A8 /* MVAGameOverNode.swift in Sources */,
-				2FFE47981FE6949000DDFA3E /* GameViewTouchbar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -787,7 +775,7 @@
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -810,7 +798,7 @@
 				PRODUCT_NAME = unPredictable;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

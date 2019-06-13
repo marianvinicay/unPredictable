@@ -1,9 +1,9 @@
 //
-//  GameSceneInit.swift
-//  (un)Predictable
+//  GameScene_Start.swift
+//  unPredictable
 //
-//  Created by Majo on 17/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 17/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
@@ -120,8 +120,8 @@ extension GameScene {
             self.addChild(road)
         }
         
-        let tutDisp = gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
-        if tutDisp {
+        //let tutDisp = gameControls != .sphero ? MVAMemory.tutorialDisplayed : MVAMemory.spheroTutorialDisplayed
+        if MVAMemory.tutorialDisplayed {
             for i in 0..<2 {
                 let road = MVARoadNode.createWith(texture: spawner.roadTexture, height: self.size.height*1.5, andWidth: self.size.width)
                 road.position = CGPoint(x: 0.0, y: endOfWorld!)

@@ -1,9 +1,9 @@
 //
-//  HUD.swift
-//  (un)Predictable
+//  GameScene_HUD.swift
+//  unPredictable
 //
-//  Created by Majo on 28/06/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 28/06/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
@@ -30,20 +30,16 @@ extension GameScene {
         HUDLabel.giveMeLabel(fromNode: distanceSign).text = normalNum
         HUDLabel.giveMeLabel1(fromNode: distanceSign)!.text = decimNum
         HUDLabel.giveMeLabel2(fromNode: distanceSign)!.text = MVAWorldConverter.lengthUnit
-        
-        #if os(macOS)
-        self.cDelegate?.distanceChanged(toNumberString: "\(numStr) \(MVAWorldConverter.lengthUnit)")
-        #endif
     }
     
-    #if os(macOS)
-        func changeDistanceColor(_ color: NSColor) {
-            HUDLabel.giveMeLabel1(fromNode: distanceSign)!.fontColor = color
-        }
+    #if os(iOS)
+    func changeDistanceColor(_ color: UIColor) {
+        HUDLabel.giveMeLabel1(fromNode: distanceSign)!.fontColor = color
+    }
     #else
-        func changeDistanceColor(_ color: UIColor) {
-            HUDLabel.giveMeLabel1(fromNode: distanceSign)!.fontColor = color
-        }
+    func changeDistanceColor(_ color: NSColor) {
+        HUDLabel.giveMeLabel1(fromNode: distanceSign)!.fontColor = color
+    }
     #endif
     
     

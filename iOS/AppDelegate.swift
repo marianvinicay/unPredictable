@@ -1,11 +1,10 @@
 //
 //  AppDelegate.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 25/08/16.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 25/08/16.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
-//AdMob adID = ca-app-pub-3670763804809001~8265381684
 
 import UIKit
 import AVFoundation
@@ -15,6 +14,9 @@ import CoreMotion
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObserver {
     
+    var window: UIWindow?
+    
+    let inStore = MVAStore()
     let motionManager = CMMotionManager()
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -32,17 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         return inStore.paymentQueue(queue, shouldAddStorePayment: payment, for: product)
     }
-
-    var window: UIWindow?
-    let inStore = MVAStore()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         SKPaymentQueue.default().add(self)
         
         try! AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default, options: .mixWithOthers)
-
-        //MVAAds.prepareRewardAd()
-        //MVAPopup.customiseAppeareance()
                 
         if #available(iOS 11.0, *) {
             MVAMemory.isIphoneX = (window?.safeAreaInsets.bottom ?? 0) > CGFloat(0)
@@ -59,14 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, SKPaymentTransactionObser
         }
     }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        //MVAAds.prepareRewardAd()
-    }
-
     func applicationWillTerminate(_ application: UIApplication) {
         SKPaymentQueue.default().remove(self)
-        //RKRobotDiscoveryAgent.disconnectAll()
     }
-
 
 }

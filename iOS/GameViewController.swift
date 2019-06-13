@@ -1,9 +1,9 @@
 //
 //  GameViewController.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 25/08/16.
-//  Copyright © 2016 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 25/08/16.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import UIKit
@@ -35,7 +35,7 @@ class GameViewController: UIViewController, GameVCDelegate {
             switch MVAMemory.gameControls {
             case .swipe: newValue.setImage(#imageLiteral(resourceName: "phoneTouch"), for: .normal)
             case .precise: newValue.setImage(#imageLiteral(resourceName: "phoneTilt"), for: .normal)
-            case .sphero: newValue.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
+            //case .sphero: newValue.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
             }
         }
     }
@@ -73,9 +73,9 @@ class GameViewController: UIViewController, GameVCDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(toggleButtonsSEL), name: MVAGameCenterHelper.toggleBtts, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changePlayerCar), name: ChangeCarViewController.changePCar, object: nil)
         
-        // for sphero
-        NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: UIApplication.willResignActiveNotification, object: nil)
+        // for Sphero
+        //NotificationCenter.default.addObserver(self, selector: #selector(appBecomesActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(appResigns), name: UIApplication.willResignActiveNotification, object: nil)
         //RKRobotDiscoveryAgent.shared().addNotificationObserver(self, selector: #selector(handleRobotStateChangeNotification(notification:)))
         
         if MVAMemory.enableGameCenter {
@@ -134,26 +134,19 @@ class GameViewController: UIViewController, GameVCDelegate {
         default: break
         }
     }
-    */
+    
     @objc func appBecomesActive() {
         if MVAMemory.gameControls == .sphero {
-            //RKRobotDiscoveryAgent.startDiscovery()
-            //lookingForSphero()
+            RKRobotDiscoveryAgent.startDiscovery()
+            lookingForSphero()
         }
     }
     
     @objc func appResigns() {
-        //RKRobotDiscoveryAgent.shared().disconnectAll()
-        //scene.sphero = nil
-        //RKRobotDiscoveryAgent.stopDiscovery()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if #available(iOS 10.3, *) {
-            SKStoreReviewController.requestReview()
-        }
-    }
+        RKRobotDiscoveryAgent.shared().disconnectAll()
+        scene.sphero = nil
+        RKRobotDiscoveryAgent.stopDiscovery()
+    }*/
     
     @objc func toggleButtonsSEL() {
         toggleButtons()
@@ -235,7 +228,7 @@ class GameViewController: UIViewController, GameVCDelegate {
             if scene.gameStarted {
                 scene.startTilt()
             }
-        case .sphero:
+        /*case .sphero:
             controlsBtt.setImage(#imageLiteral(resourceName: "sphero"), for: .normal)
             //RKRobotDiscoveryAgent.startDiscovery()
             //lookingForSphero()
@@ -244,24 +237,28 @@ class GameViewController: UIViewController, GameVCDelegate {
             scene.setupSphero()
             if scene.gameStarted {
                 scene.startSphero()
-            }
+            }*/
         }
     }
     
     @IBAction func toggleControls(_ sender: UIButton) {
         switch scene.gameControls {
+        case .swipe where (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable: setControls(to: .precise)
+        default: setControls(to: .swipe)
+        }
+        /*switch scene.gameControls {
         case .swipe:
             if (UIApplication.shared.delegate as! AppDelegate).motionManager.isDeviceMotionAvailable {
                 setControls(to: .precise)
             } else {
-                //setControls(to: .sphero)
+                setControls(to: .sphero)
             }
         case .precise:
-            setControls(to: .swipe)//setControls(to: .sphero)
+            setControls(to: .swipe)
         case .sphero:
             appResigns() //disconnect sphero
             setControls(to: .swipe)
-        }
+        }*/
     }
     
     @IBAction func showGameCenter(_ sender: UIButton) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -16,20 +16,20 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="unPredictable" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About (un)Predictable" id="5kV-Vb-QxS">
+                                        <menuItem title="About unPredictable" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                                        <menuItem title="Hide (un)Predictable" keyEquivalent="h" id="Olw-nP-bQN">
+                                        <menuItem title="Hide unPredictable" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit (un)Predictable" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="Quit unPredictable" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
                                             </connections>
@@ -72,7 +72,7 @@
         <!--unPredictable-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="unPredictable" id="XfG-lQ-9wD" customClass="GameViewControllerMAC" customModule="unPredictable" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="unPredictable" id="XfG-lQ-9wD" customClass="GameViewController_Mac" customModule="unPredictable" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,12 +106,12 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kVx-z5-Vt6">
-                                <rect key="frame" x="413" y="13" width="173" height="55"/>
+                                <rect key="frame" x="435" y="19" width="145" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Slu-Av-CeF"/>
                                     <constraint firstAttribute="height" constant="44" id="jm8-aa-Jgd"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Change Car" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
+                                <buttonCell key="cell" type="inline" title="Change Car" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsQ-fa-s09">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" size="24" name="Futura-Medium"/>
                                 </buttonCell>
@@ -120,21 +120,21 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sUK-EY-Vc7">
-                                <rect key="frame" x="14" y="13" width="115" height="55"/>
+                                <rect key="frame" x="20" y="19" width="100" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Jbc-eb-2k8"/>
                                     <constraint firstAttribute="height" constant="44" id="fRG-sV-3uE"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Arrows" bezelStyle="rounded" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
+                                <buttonCell key="cell" type="inline" title="Arrows" bezelStyle="inline" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eOr-XT-dMx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="23" name="Futura-Medium"/>
+                                    <font key="font" size="24" name="Futura-Medium"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="toggleControls:" target="XfG-lQ-9wD" id="WzX-gF-8UZ"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tfz-iN-t7e">
-                                <rect key="frame" x="18" y="67" width="107" height="26"/>
+                                <rect key="frame" x="18" y="72" width="104" height="26"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Controls:" id="FXY-R6-9jy">
                                     <font key="font" size="16" name="Futura-Medium"/>
                                     <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -144,12 +144,12 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="sUK-EY-Vc7" secondAttribute="bottom" constant="20" id="AWe-Ir-bir"/>
-                            <constraint firstItem="kVx-z5-Vt6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sUK-EY-Vc7" secondAttribute="trailing" constant="12" symbolic="YES" id="Exh-8Q-5lN"/>
+                            <constraint firstItem="kVx-z5-Vt6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sUK-EY-Vc7" secondAttribute="trailing" constant="8" symbolic="YES" id="Exh-8Q-5lN"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="F1s-52-Jbe"/>
                             <constraint firstItem="tfz-iN-t7e" firstAttribute="leading" secondItem="sUK-EY-Vc7" secondAttribute="leading" id="FWl-gT-q05"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="10" id="Oij-T5-5vL"/>
                             <constraint firstItem="mTp-A0-sz5" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="QSf-Qf-P9g"/>
-                            <constraint firstItem="sUK-EY-Vc7" firstAttribute="top" secondItem="tfz-iN-t7e" secondAttribute="bottom" constant="3" id="RVP-Gd-94n"/>
+                            <constraint firstItem="sUK-EY-Vc7" firstAttribute="top" secondItem="tfz-iN-t7e" secondAttribute="bottom" constant="8" symbolic="YES" id="RVP-Gd-94n"/>
                             <constraint firstItem="wdj-la-tMo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mTp-A0-sz5" secondAttribute="trailing" constant="8" symbolic="YES" id="bzZ-wY-ULF"/>
                             <constraint firstAttribute="bottom" secondItem="kVx-z5-Vt6" secondAttribute="bottom" constant="20" id="dIU-hE-6wZ"/>
                             <constraint firstAttribute="trailing" secondItem="wdj-la-tMo" secondAttribute="trailing" constant="10" id="lL3-1b-jrS"/>
@@ -170,10 +170,10 @@
             </objects>
             <point key="canvasLocation" x="74" y="951"/>
         </scene>
-        <!--Change Car View ControllerMAC-->
+        <!--Change Car View Controller Mac-->
         <scene sceneID="t3R-DT-wie">
             <objects>
-                <viewController id="yfa-y2-kQA" customClass="ChangeCarViewControllerMAC" customModule="unPredictable" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="yfa-y2-kQA" customClass="ChangeCarViewController_Mac" customModule="unPredictable" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Mzf-ch-mC3">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -235,11 +235,11 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hmY-q1-fcP">
-                                <rect key="frame" x="257" y="13" width="87" height="55"/>
+                                <rect key="frame" x="271" y="19" width="59" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="WMA-wK-f2p"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="BUY" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t5T-ih-4Lm">
+                                <buttonCell key="cell" type="inline" title="BUY" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="t5T-ih-4Lm">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" size="24" name="Futura-Medium"/>
                                 </buttonCell>
@@ -248,13 +248,13 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Git-9b-hMT">
-                                <rect key="frame" x="482" y="735" width="104" height="55"/>
+                                <rect key="frame" x="521" y="741" width="59" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Dvv-19-pmD"/>
                                 </constraints>
-                                <buttonCell key="cell" type="push" title="Restore" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GY7-Mn-mGM">
+                                <buttonCell key="cell" type="inline" title="Restore" bezelStyle="inline" alignment="center" refusesFirstResponder="YES" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GY7-Mn-mGM">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="19" name="Futura-Medium"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="restorePurchases:" target="yfa-y2-kQA" id="nmw-kO-ZOO"/>

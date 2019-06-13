@@ -1,18 +1,18 @@
 //
 //  GameSceneKeyboard.swift
-//  (un)Predictable
+//  unPredictable
 //
-//  Created by Majo on 13/07/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 13/07/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
 
-enum KeyCodes {
+struct KeyCodes {
     public static let keySpacebar: UInt16 = 49
     public static let keyESC: UInt16 = 53
 }
-    
+
 extension GameScene {
     
     func setupTilt() {
@@ -105,4 +105,5 @@ extension GameScene {
             }
         }
     }
+    
 }

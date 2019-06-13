@@ -2,8 +2,8 @@
 //  MVACarPlayer.swift
 //  unPredictable
 //
-//  Created by Majo on 18/08/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 18/08/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
@@ -25,18 +25,6 @@ class MVACarPlayer: MVACar {
         
         newCar.physicsBody = newCar.createPhysicsBody(withCategoryBitmask: MVAPhysicsCategory.player.rawValue, collisionBitmask: MVAPhysicsCategory.car.rawValue, contactTestBitmask: MVAPhysicsCategory.car.rawValue)
         
-        /*newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: carSize)
-        newCar.physicsBody?.mass = 0.05
-        newCar.physicsBody?.friction = 0.0
-        newCar.physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-        newCar.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        newCar.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-        newCar.physicsBody?.isDynamic = true
-        newCar.physicsBody?.linearDamping = 0.0
-        newCar.physicsBody?.angularDamping = 0.1
-        newCar.physicsBody?.affectedByGravity = false
-        newCar.physicsBody?.allowsRotation = true*/
-        
         return newCar
     }
     
@@ -44,19 +32,6 @@ class MVACarPlayer: MVACar {
         //let mySpeed = CGFloat(pointsPerSecond)
         physicsBody = createPhysicsBody(withCategoryBitmask: MVAPhysicsCategory.player.rawValue, collisionBitmask: MVAPhysicsCategory.car.rawValue, contactTestBitmask: MVAPhysicsCategory.car.rawValue)
         physicsBody?.velocity.dy = CGFloat(pointsPerSecond)
-        /*physicsBody = SKPhysicsBody(texture: skin.normal, size: size)
-        physicsBody?.velocity.dy = mySpeed
-        physicsBody?.mass = 5
-        physicsBody?.density = 5000.0
-        physicsBody?.friction = 0.0
-        physicsBody?.categoryBitMask = MVAPhysicsCategory.player.rawValue
-        physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-        physicsBody?.isDynamic = true
-        physicsBody?.linearDamping = 0.0
-        physicsBody?.angularDamping = 0.2
-        physicsBody?.affectedByGravity = false
-        physicsBody?.allowsRotation = true*/
     }
     
     func changeLane(inDirection dir: MVAPosition, pcsCalling pcsCall: Bool = false) -> Bool? {

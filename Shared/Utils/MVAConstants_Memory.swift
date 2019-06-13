@@ -1,18 +1,18 @@
 //
-//  MVAConstants.swift
-//  (un)Predictable
+//  MVAConstants_Memory.swift
+//  unPredictable
 //
-//  Created by Majo on 29/06/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 29/06/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import Foundation
 import CoreGraphics
 #if os(iOS)
-    import UIKit
+import UIKit
 #endif
 
-enum MVAConstants {
+struct MVAConstants {
     static let basePlayerSpeed: Int = 200
     static let baseSpawnTime: TimeInterval = 2.2
     #if os(iOS)
@@ -22,10 +22,8 @@ enum MVAConstants {
         default: return CGSize(width: 50.0, height: 90.0)
         }
     }
-    #elseif os(watchOS)
-        static let baseCarSize = CGSize(width: 20.0, height: 36.0)
     #elseif os(macOS)
-        static let baseCarSize = CGSize(width: 50.0, height: 90.0)
+    static let baseCarSize = CGSize(width: 50.0, height: 90.0)
     #endif
     static let priorityTime: Double = 1.8
     static var baseBotSpeed: Int {
@@ -35,7 +33,7 @@ enum MVAConstants {
     static let maxBotSpeed: Int = 110
 }
 
-enum MVAMemory {
+struct MVAMemory {
     static var tutorialDisplayed: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "tutDisp")
@@ -45,14 +43,14 @@ enum MVAMemory {
         }
     }
     
-    static var spheroTutorialDisplayed: Bool {
+    /*static var spheroTutorialDisplayed: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "tutSpDisp")
         }
         get {
             return UserDefaults.standard.value(forKey: "tutSpDisp") as? Bool ?? false
         }
-    }
+    }*/
     
     static var audioMuted: Bool {
         set {
@@ -108,25 +106,7 @@ enum MVAMemory {
         }
     }
     
-    #if os(iOS) || os(tvOS)
-    /*static var adsEnabled: Bool {
-        set {
-            UserDefaults.standard.set(newValue, forKey: "adsEn")
-        }
-        get {
-            return UserDefaults.standard.value(forKey: "adsEn") as? Bool ?? false
-        }
-    }
-    
-    static var adCar: String? {
-        set {
-            UserDefaults.standard.set(newValue, forKey: "adCar")
-        }
-        get {
-            return UserDefaults.standard.value(forKey: "adCar") as? String
-        }
-    }*/
-    
+    #if os(iOS)
     static var isIphoneX: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "isIpX")

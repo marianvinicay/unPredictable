@@ -1,15 +1,14 @@
 //
-//  PlayerCar.swift
-//  (un)Predictable
+//  MVACar.swift
+//  unPredictable
 //
-//  Created by Majo on 30/10/2016.
-//  Copyright © 2016 MarVin. All rights reserved.
-//
+//  Created by Marian Vinicay on 30/10/2016.
+//  Copyright © 2016 Marvin. All rights reserved.
 //
 
 import SpriteKit
 
-enum MVACarNames {
+struct MVACarNames {
     static let playerOrdinary = "player"
     static let playerLives = "playerJeep"
     static let playerPCS = "audi"
@@ -266,8 +265,8 @@ extension MVACar {
     }
     
     fileprivate var frontRightSensors: [CGPoint] {
-        let rightDiagUP = CGPoint(x: position.x+(size.width*1.5), y: position.y+(size.height*2.5))//250)
-        let rightDiagC = CGPoint(x: position.x+(size.width*1.5), y: position.y+(size.height*1.5))//150)
+        let rightDiagUP = CGPoint(x: position.x+(size.width*1.5), y: position.y+(size.height*2.5))
+        let rightDiagC = CGPoint(x: position.x+(size.width*1.5), y: position.y+(size.height*1.5))
         return [rightDiagUP,rightDiagC]
     }
     

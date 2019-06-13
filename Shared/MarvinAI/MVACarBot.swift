@@ -2,8 +2,8 @@
 //  MVACarBot.swift
 //  unPredictable
 //
-//  Created by Majo on 18/08/2017.
-//  Copyright © 2017 MarVin. All rights reserved.
+//  Created by Marian Vinicay on 18/08/2017.
+//  Copyright © 2017 Marvin. All rights reserved.
 //
 
 import SpriteKit
@@ -26,18 +26,6 @@ class MVACarBot: MVACar {
         newCar.zPosition = 4.0
         
         newCar.physicsBody = newCar.createPhysicsBody(withCategoryBitmask: MVAPhysicsCategory.car.rawValue, collisionBitmask: MVAPhysicsCategory.car.rawValue, contactTestBitmask: MVAPhysicsCategory.car.rawValue)
-        
-        /*newCar.physicsBody = SKPhysicsBody(texture: newCar.skin.normal, size: CGSize(width: carSize.width-6, height: carSize.height-6))
-        newCar.physicsBody?.mass = 0.05
-        newCar.physicsBody?.friction = 0.0
-        newCar.physicsBody?.categoryBitMask = MVAPhysicsCategory.car.rawValue
-        newCar.physicsBody?.collisionBitMask = MVAPhysicsCategory.car.rawValue
-        newCar.physicsBody?.contactTestBitMask = MVAPhysicsCategory.car.rawValue
-        newCar.physicsBody?.isDynamic = true
-        newCar.physicsBody?.linearDamping = 0.0
-        newCar.physicsBody?.angularDamping = 0.1
-        newCar.physicsBody?.affectedByGravity = false
-        newCar.physicsBody?.allowsRotation = true*/
         
         return newCar
     }
@@ -71,7 +59,7 @@ class MVACarBot: MVACar {
     
     func changeLane(inDirection dir: MVAPosition, AndPlayer player: MVACar) -> Bool {
         if cantMoveForTime <= 0 {
-            let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond):CGFloat(player.pointsPerSecond)*1.3// !!!
+            let reactionDistance = self.hasPriority ? CGFloat(player.pointsPerSecond):CGFloat(player.pointsPerSecond)*1.3
             let heightDifference = abs(player.position.y-self.position.y) //changes difficulty
             
             let newLane = dir == .left ? currentLane-1:currentLane+1
